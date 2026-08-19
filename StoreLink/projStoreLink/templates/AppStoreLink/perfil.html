@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StoreLink</title>
+<link rel="icon" type="image/png" href="images/icon-dark.png">
+<link rel="stylesheet" href="perfil.css">
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="logo-icon"><img src="images/icon-dark.png" alt="StoreLink"></div>
+    <button class="nav-btn" onclick="window.location.href='index.html'">Início</button>
+    <button class="nav-btn active" onclick="window.location.href='perfil.html'">Perfil</button>
+    <button class="nav-btn" onclick="setActiveNav(this)">Suporte</button>
+    <button class="nav-btn" onclick="setActiveNav(this)">Como navegar?</button>
+    <button class="theme-toggle" onclick="toggleTheme(this)">🌙 Modo escuro</button>
+  </div>
+
+  <div class="sidebar-trigger"></div>
+  <div class="sidebar">
+    <button class="cat-btn cat-alimentos">Alimentos</button>
+    <button class="cat-btn cat-moda">Moda</button>
+    <button class="cat-btn cat-esportes">Esportes</button>
+    <button class="cat-btn cat-construcao">Construção</button>
+    <button class="cat-btn cat-saude">Saúde</button>
+    <button class="cat-btn cat-pets">Pets</button>
+    <button class="cat-btn cat-ambiente">Ambiente</button>
+    <button class="cat-btn cat-tecnologia">Tecnologia</button>
+    <button class="cat-btn cat-beleza">Beleza</button>
+    <button class="cat-btn cat-outros">Outros</button>
+  </div>
+
+  <div class="page-perfil">
+    <div class="perfil-wrapper">
+
+      <div class="perfil-left">
+        <div class="perfil-badge">Estabelecimento</div>
+
+        <div class="perfil-avatar-wrap">
+          <div class="perfil-avatar">
+            <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/></svg>
+          </div>
+          <div class="perfil-camera-badge">📷</div>
+        </div>
+
+        <div class="perfil-field-left">
+          <label>Nome do responsável</label>
+          <input type="text" value="Ruan Carlos">
+        </div>
+        <div class="perfil-field-left">
+          <label>Sobrenome</label>
+          <input type="text" value="Pereira">
+        </div>
+
+        <button class="perfil-logout-btn">Fazer Logout ⏪</button>
+      </div>
+
+      <div class="perfil-card">
+        <div class="perfil-card-left">
+          <div class="perfil-cover"></div>
+
+          <div class="perfil-edit-label">Editar fotos e informações dos produtos</div>
+          <button class="perfil-action-btn">PRODUTOS 🛍️</button>
+
+          <div class="perfil-edit-label">Editar fotos e informações dos serviços</div>
+          <button class="perfil-action-btn">SERVIÇOS 💲</button>
+
+          <button class="perfil-delete-btn">Excluir Loja 🗑️</button>
+        </div>
+
+        <div class="perfil-card-middle">
+          <h3>Nome</h3>
+          <div class="perfil-field">
+            <label>Nome do Estabelecimento</label>
+            <input type="text" value="Nome do estabelecimento">
+          </div>
+
+          <h3>Localização</h3>
+          <div class="perfil-field">
+            <label>Rua</label>
+            <input type="text" value="Rua do estabelecimento">
+          </div>
+          <div class="perfil-row">
+            <div class="perfil-field">
+              <label>Número</label>
+              <input type="text" value="198">
+            </div>
+            <div class="perfil-field">
+              <label>CEP</label>
+              <input type="text" value="13871-099">
+            </div>
+          </div>
+
+          <h3>Informações</h3>
+          <div class="perfil-field">
+            <label>E-mail</label>
+            <input type="text" value="emailDaLoja@gmail.com">
+          </div>
+          <div class="perfil-field">
+            <label>Telefone</label>
+            <div class="perfil-phone">
+              <span>(+55)</span>
+              <input type="text" value="19 99475-8383">
+            </div>
+          </div>
+          <div class="perfil-field">
+            <label>CNPJ</label>
+            <input type="text" value="12.334.567/0001-89">
+          </div>
+          <div class="perfil-field">
+            <label>Link de Loja virtual (Opcional)</label>
+            <input type="text" value="https://www.linkdaloja.com">
+          </div>
+        </div>
+
+        <div class="perfil-card-right">
+          <div class="perfil-classif-wrap">
+            <label>Classificação da Loja</label>
+            <button type="button" class="perfil-classif-btn" id="classifBtn">
+              <span id="classifName">Alimentos</span> ▾
+            </button>
+            <div class="perfil-classif-dropdown" id="classifDropdown"></div>
+          </div>
+
+          <div>
+            <label>CNPJ Anônimo</label>
+            <div class="perfil-toggle">
+              <button type="button" class="perfil-toggle-btn active">Sim</button>
+              <button type="button" class="perfil-toggle-btn">Não</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function setActiveNav(btn) {
+      document.querySelectorAll('.nav-btn').forEach(function (b) {
+        b.classList.remove('active');
+      });
+      btn.classList.add('active');
+    }
+
+    function toggleTheme(btn) {
+      document.body.classList.toggle('dark');
+      if (document.body.classList.contains('dark')) {
+        btn.textContent = '☀️ Modo claro';
+      } else {
+        btn.textContent = '🌙 Modo escuro';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var classifBtn = document.getElementById('classifBtn');
+      var classifName = document.getElementById('classifName');
+      var dropdown = document.getElementById('classifDropdown');
+
+      if (!classifBtn || !dropdown) return;
+
+      function lightenColor(color, amount) {
+        var r, g, b;
+        var match = color.match(/\d+/g);
+        if (match) {
+          r = parseInt(match[0], 10);
+          g = parseInt(match[1], 10);
+          b = parseInt(match[2], 10);
+        } else {
+          var hex = color.replace('#', '');
+          r = parseInt(hex.substring(0, 2), 16);
+          g = parseInt(hex.substring(2, 4), 16);
+          b = parseInt(hex.substring(4, 6), 16);
+        }
+        r = Math.min(255, Math.round(r + (255 - r) * amount));
+        g = Math.min(255, Math.round(g + (255 - g) * amount));
+        b = Math.min(255, Math.round(b + (255 - b) * amount));
+        return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+      }
+
+      function applyClassification(name, bgColor) {
+        classifName.textContent = name;
+        document.documentElement.style.setProperty('--brand-red', bgColor);
+        document.documentElement.style.setProperty('--brand-red-light', lightenColor(bgColor, 0.18));
+      }
+
+      function closeDropdown() {
+        dropdown.classList.remove('open');
+      }
+
+      var sidebarButtons = document.querySelectorAll('.sidebar .cat-btn');
+      sidebarButtons.forEach(function (catBtn) {
+        var name = catBtn.textContent.trim();
+        var style = window.getComputedStyle(catBtn);
+        var bgColor = style.backgroundColor;
+        var textColor = style.color;
+
+        var option = document.createElement('button');
+        option.type = 'button';
+        option.className = 'perfil-classif-option';
+        option.textContent = name;
+        option.style.background = bgColor;
+        option.style.color = textColor;
+
+        option.addEventListener('click', function (e) {
+          e.stopPropagation();
+
+          if (name === 'Outros') {
+            var custom = window.prompt('Digite o nome da classificação da loja:');
+            if (custom && custom.trim() !== '') {
+              applyClassification(custom.trim(), bgColor);
+            }
+          } else {
+            applyClassification(name, bgColor);
+          }
+
+          closeDropdown();
+        });
+
+        dropdown.appendChild(option);
+      });
+
+      classifBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        dropdown.classList.toggle('open');
+      });
+
+      document.addEventListener('click', function () {
+        closeDropdown();
+      });
+
+      document.querySelectorAll('.perfil-toggle-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          document.querySelectorAll('.perfil-toggle-btn').forEach(function (b) {
+            b.classList.remove('active');
+          });
+          btn.classList.add('active');
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
