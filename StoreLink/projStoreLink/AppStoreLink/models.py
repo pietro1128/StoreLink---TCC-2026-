@@ -21,10 +21,8 @@ class Usuario(models.Model):
     )
 
     def __str__(self):
-        return f"{self.nome} {self.sobrenome}"
+        return f"{self.nome} {self.sobrenome}" 
 
-
-# 1. TABELAS DE SUPORTE (Criadas primeiro para servirem de Foreign Key)
 class Endereco(models.Model):
     id_endereco = models.AutoField(primary_key=True)
     rua = models.CharField(max_length=100)
@@ -52,8 +50,9 @@ class TipoUsuario(models.Model):
 
 
 # 2. USUÁRIO E LOJA
+
 class Usuario(models.Model):
-    id_usuario = models.AutoField(primary_key=True)
+    id_categoria = models.AutoField(primary_key=True)
     nome = models.CharField(max_length=50)
     sobrenome = models.CharField(max_length=100)
     email = models.EmailField(max_length=100, unique=True)
@@ -66,7 +65,6 @@ class Usuario(models.Model):
 
     def __str__(self):
         return f"{self.nome} {self.sobrenome}"
-
 
 class Loja(models.Model):
     id_loja = models.AutoField(primary_key=True)

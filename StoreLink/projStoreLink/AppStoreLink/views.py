@@ -2,4 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 def index(request):
-    return HttpResponse ('<h1>Hello Word!!</h1>')
+    return render(renquest, 'AppStoreLink/index.html')
+
+def perfil(request):
+    return render(renquest, 'AppStoreLink/perfil.html')
