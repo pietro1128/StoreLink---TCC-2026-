@@ -72,7 +72,7 @@ class Loja(models.Model):
     categoria = models.CharField(max_length=50, blank=True, null=True)
     telefone_loja = models.CharField(max_length=15, blank=True, null=True)
     email_loja = models.EmailField(max_length=100)
-    cnpj = models.CharField(max_length=18, unique=True)
+    cnpj = models.CharField(max_length=18, unique=True) # !--!--!--!--!--!--!--! {{MUDAR PARA RECEBER TAMBEM CARACTERES "pois o CNPJ atual recebe letras tembem"}}  !--!--!--!--!--!--!--!
     foto_estabelecimento = models.CharField(max_length=255, blank=True, null=True)
     link = models.URLField(max_length=255, blank=True, null=True)
     id_endereco = models.ForeignKey(
