@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StoreLink - Criar Conta</title>
+<link rel="icon" type="image/png" href="{% static 'AppStoreLink/assets/icon-dark.png' %}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'AppStoreLink/css/cadastro.css' %}">
+</head>
+<body>
+
+  <button class="theme-toggle" onclick="toggleTheme(this)">🌙 Modo escuro</button>
+
+  <div class="auth-wrapper">
+
+    <!-- Painel colorido: chama para o login -->
+    <div class="auth-side">
+      <div class="auth-side-icon">
+        <img src="{% static 'AppStoreLink/assets/icon-dark.png' %}" alt="StoreLink">
+      </div>
+
+      <div class="auth-side-content">
+        <h1>Bem Vindo de Volta !</h1>
+        <p>Insira seus dados pessoais para acessar sua conta</p>
+        <a class="auth-btn-outline" href="{% url 'login' %}">ENTRAR</a>
+      </div>
+    </div>
+
+    <!-- Formulário de cadastro -->
+    <div class="auth-form-side">
+      <div class="auth-form-box">
+        <h2>Criar Conta</h2>
+
+        <button type="button" class="auth-google-btn" aria-label="Cadastrar com Google">
+          <img src="{% static 'AppStoreLink/assets/google-plus.png' %}" alt="Google+">
+        </button>
+
+        <form class="auth-form" method="post" action="">
+          {% csrf_token %}
+
+          <label class="auth-field">
+            <img src="{% static 'AppStoreLink/assets/do-utilizador.png' %}" alt="">
+            <input type="text" name="nome" placeholder="Nome" required>
+          </label>
+
+          <label class="auth-field">
+            <img src="{% static 'AppStoreLink/assets/e-mail.png' %}" alt="">
+            <input type="email" name="email" placeholder="E-mail" required>
+          </label>
+
+          <label class="auth-field">
+            <img src="{% static 'AppStoreLink/assets/bloqueado.png' %}" alt="">
+            <input type="password" name="senha" placeholder="Senha" required>
+          </label>
+
+          <button type="submit" class="auth-submit-btn">CRIAR</button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function toggleTheme(btn) {
+      document.body.classList.toggle('dark');
+      if (document.body.classList.contains('dark')) {
+        btn.textContent = '☀️ Modo claro';
+      } else {
+        btn.textContent = '🌙 Modo escuro';
+      }
+    }
+  </script>
+
+</body>
+</html>
