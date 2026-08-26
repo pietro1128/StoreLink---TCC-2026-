@@ -6,3 +6,6 @@ def index(request):
 
 def perfil(request):
     return render(renquest, 'AppStoreLink/perfil.html')
+
+def cadastro(request):
+    return render(renquest, 'AppStoreLink/cadastro.html')
