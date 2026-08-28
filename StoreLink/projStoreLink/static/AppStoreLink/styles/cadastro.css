@@ -9,11 +9,11 @@
 }
 
 body.dark {
-  --bg-page: #141414;
-  --text-color: #f0f0f0;
+  --bg-page: #000000;
+  --text-color: #f5f5f5;
   --field-bg: #232323;
-  --field-placeholder: #7d7d7d;
-  --auth-gradient: linear-gradient(160deg, #a83531 0%, #b8672a 100%);
+  --field-placeholder: #c9c9c9;
+  --auth-gradient: linear-gradient(160deg, #e8534f 0%, #f5943a 100%);
 }
 
 body {
@@ -125,6 +125,22 @@ body {
   color: #e8534f;
 }
 
+/* No modo escuro, o texto do painel colorido fica preto (igual ao protótipo) */
+body.dark .auth-side-content h1,
+body.dark .auth-side-content p,
+body.dark .auth-btn-outline {
+  color: #1c1c1c;
+}
+
+body.dark .auth-btn-outline {
+  border-color: #1c1c1c;
+}
+
+body.dark .auth-btn-outline:hover {
+  background: #1c1c1c;
+  color: #fff;
+}
+
 /* ---------- LADO DO FORMULÁRIO ---------- */
 .auth-form-side {
   flex: 1;
@@ -156,7 +172,7 @@ body {
   height: 46px;
   border-radius: 50%;
   border: 1px solid #d8d8d8;
-  background: var(--bg-page);
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -197,6 +213,19 @@ body {
   height: 20px;
   flex-shrink: 0;
   object-fit: contain;
+}
+
+/* Ícones dos campos: versão clara por padrão, escura no modo escuro */
+.field-icon-dark {
+  display: none;
+}
+
+body.dark .field-icon-light {
+  display: none;
+}
+
+body.dark .field-icon-dark {
+  display: block;
 }
 
 .auth-field input {
