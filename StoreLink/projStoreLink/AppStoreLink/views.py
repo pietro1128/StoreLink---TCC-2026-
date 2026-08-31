@@ -2,10 +2,13 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 def index(request):
-    return render(renquest, 'AppStoreLink/index.html')
+    return render(request, 'AppStoreLink/index.html')
 
 def perfil(request):
-    return render(renquest, 'AppStoreLink/perfil.html')
+    return render(request, 'AppStoreLink/perfil.html')
 
 def cadastro(request):
-    return render(renquest, 'AppStoreLink/cadastro.html')
+    return render(request, 'AppStoreLink/cadastro.html')
+
+def login(request):
+    return render(request, 'AppStoreLink/login.html')

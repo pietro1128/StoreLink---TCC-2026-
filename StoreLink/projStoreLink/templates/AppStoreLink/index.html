@@ -1,12 +1,15 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StoreLink</title>
-<link rel="icon" type="image/png" href="images/icon-dark.png">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StoreLink</title>
+  <link rel="icon" type="image/png" href="images/icon-dark.png">
+  <link rel="stylesheet" href="{% static '/AppStoreLink/styles/style.css '%}">
 </head>
+
 <body>
 
   <div class="topbar">
@@ -17,6 +20,7 @@
     <button class="nav-btn" onclick="setActiveNav(this)">Como navegar?</button>
     <button class="theme-toggle" onclick="toggleTheme(this)">🌙 Modo escuro</button>
   </div>
+    
 
   <div class="sidebar-trigger"></div>
   <div class="sidebar">
@@ -33,7 +37,8 @@
   </div>
 
   <div class="main">
-    <img class="logo-img logo-light" src="images/logo-light.png" alt="StoreLink"><img class="logo-img logo-dark" src="images/logo-dark.png" alt="StoreLink">
+    <img class="logo-img logo-light" src="images/logo-light.png" alt="StoreLink"><img class="logo-img logo-dark"
+      src="images/logo-dark.png" alt="StoreLink">
     <div class="search-container">
       <button class="search-icon-btn">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -66,4 +71,5 @@
   </script>
 
 </body>
+
 </html>
