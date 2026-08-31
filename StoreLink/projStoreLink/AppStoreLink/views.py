@@ -8,7 +8,7 @@ def perfil(request):
     return render(request, 'AppStoreLink/perfil.html')
 
 def cadastro(request):
-    return render(request, 'AppStoreLink/cadastro.html')
+    return render(request, 'registration/cadastro.html')
 
 def login(request):
-    return render(request, 'AppStoreLink/login.html')
+    return render(request, 'registration/login.html')
