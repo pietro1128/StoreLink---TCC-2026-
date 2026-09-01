@@ -23,7 +23,6 @@ body {
   transition: background 0.25s ease, color 0.25s ease;
 }
 
-/* ---------- TOPBAR ---------- */
 .topbar {
   background: var(--topbar-bg);
   display: flex;
@@ -86,8 +85,32 @@ body {
   transform: translateY(-1px);
 }
 
-.theme-toggle {
+.nav-account-btn {
   margin-left: auto;
+  background: #fff;
+  color: #000;
+  border: none;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 9px 18px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.nav-account-btn:hover {
+  filter: brightness(0.94);
+  transform: translateY(-1px);
+}
+
+.nav-account-btn.active {
+  box-shadow: 0 0 0 2px #fff inset;
+}
+
+.theme-toggle {
   background: #2a2a2a;
   border: 1px solid #444;
   color: #fff;
@@ -104,7 +127,6 @@ body {
   background: #3a3a3a;
 }
 
-/* ---------- SIDEBAR (retrátil, aparece ao passar o mouse) ---------- */
 .sidebar-trigger {
   position: fixed;
   top: 58px;
@@ -168,7 +190,6 @@ body.dark .sidebar {
   filter: brightness(0.92);
 }
 
-/* ---------- MAIN CONTENT (tela inicial) ---------- */
 .main {
   display: flex;
   flex-direction: column;

@@ -23,7 +23,6 @@ body {
   transition: background 0.25s ease, color 0.25s ease;
 }
 
-/* ---------- TOPBAR ---------- */
 .topbar {
   background: var(--topbar-bg);
   display: flex;
@@ -128,7 +127,6 @@ body {
   background: #3a3a3a;
 }
 
-/* ---------- SIDEBAR (retrátil, aparece ao passar o mouse) ---------- */
 .sidebar-trigger {
   position: fixed;
   top: 58px;
@@ -192,7 +190,6 @@ body.dark .sidebar {
   filter: brightness(0.92);
 }
 
-/* ---------- MAIN CONTENT (tela inicial) ---------- */
 .main {
   display: flex;
   flex-direction: column;
@@ -276,7 +273,6 @@ body.dark .logo-dark {
   white-space: nowrap;
   text-align: left;
 }
-/* ---------- PERFIL ---------- */
 :root {
   --brand-red: #e8534f;
   --brand-red-light: #f36a63;
@@ -295,7 +291,6 @@ body.dark .logo-dark {
   margin: 0 auto;
 }
 
-/* Coluna esquerda: Estabelecimento */
 .perfil-left {
   width: 220px;
   flex-shrink: 0;
@@ -397,7 +392,6 @@ body.dark .logo-dark {
   background: #333;
 }
 
-/* Card colorido principal (cor muda conforme a classificação) */
 .perfil-card {
   background: var(--brand-red);
   border-radius: 24px;
@@ -555,7 +549,6 @@ body.dark .logo-dark {
   margin-bottom: 8px;
 }
 
-/* Bloco da classificação, precisa de position:relative para o dropdown */
 .perfil-classif-wrap {
   position: relative;
 }
@@ -576,7 +569,6 @@ body.dark .logo-dark {
   width: 100%;
 }
 
-/* Lista suspensa de classificações, gerada a partir da própria sidebar */
 .perfil-classif-dropdown {
   display: none;
   position: absolute;

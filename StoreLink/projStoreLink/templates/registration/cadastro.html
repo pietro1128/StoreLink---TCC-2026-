@@ -13,17 +13,23 @@
 </head>
 <body>
 
+  <script>
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+    }
+  </script>
+
   <button class="theme-toggle" onclick="toggleTheme(this)">🌙 Modo escuro</button>
 
   <div class="auth-wrapper">
 
     <div class="auth-side">
-      <div class="auth-side-icon">
-        <img src="{% static 'AppStoreLink/images/icon.png' %}" alt="StoreLink">
-      </div>
+      <button type="button" class="auth-side-icon" data-url="{% url 'index' %}" onclick="location.href=this.dataset.url" aria-label="Voltar para o início">
+        <img class="side-icon-light" src="{% static 'AppStoreLink/images/icon.png' %}" alt="StoreLink"><img class="side-icon-dark" src="{% static 'AppStoreLink/images/icon-dark.png' %}" alt="StoreLink">
+      </button>
 
       <div class="auth-side-content">
-        <h1>Bem Vindo de Volta !</h1>
+        <h1>Bem Vindo de Volta&nbsp;!</h1>
         <p>Insira seus dados pessoais para acessar sua conta</p>
         <a class="auth-btn-outline" href="{% url 'login' %}">ENTRAR</a>
       </div>
@@ -65,12 +71,21 @@
   <script>
     function toggleTheme(btn) {
       document.body.classList.toggle('dark');
-      if (document.body.classList.contains('dark')) {
+      var isDark = document.body.classList.contains('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      if (isDark) {
         btn.textContent = '☀️ Modo claro';
       } else {
         btn.textContent = '🌙 Modo escuro';
       }
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var themeBtn = document.querySelector('.theme-toggle');
+      if (themeBtn && document.body.classList.contains('dark')) {
+        themeBtn.textContent = '☀️ Modo claro';
+      }
+    });
   </script>
 
 </body>

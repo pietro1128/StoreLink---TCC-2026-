@@ -24,7 +24,6 @@ body {
   min-height: 100vh;
 }
 
-/* ---------- BOTÃO DE MODO ESCURO ---------- */
 .theme-toggle {
   position: fixed;
   top: 20px;
@@ -46,13 +45,11 @@ body {
   background: #3a3a3a;
 }
 
-/* ---------- LAYOUT GERAL ---------- */
 .auth-wrapper {
   display: flex;
   min-height: 100vh;
 }
 
-/* ---------- PAINEL COLORIDO (chamada para login) ---------- */
 .auth-side {
   width: 42%;
   min-width: 340px;
@@ -61,9 +58,11 @@ body {
   padding: 40px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
   position: relative;
   color: #fff;
+  container-type: inline-size;
 }
 
 .auth-side-icon {
@@ -73,12 +72,36 @@ body {
   width: 46px;
   height: 46px;
   background: #fff;
+  border: none;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 6px;
   overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.auth-side-icon:hover {
+  filter: brightness(0.95);
+  transform: translateY(-1px);
+}
+
+.side-icon-dark {
+  display: none;
+}
+
+body.dark .auth-side-icon {
+  background: #000;
+}
+
+body.dark .side-icon-light {
+  display: none;
+}
+
+body.dark .side-icon-dark {
+  display: block;
 }
 
 .auth-side-icon img {
@@ -89,13 +112,15 @@ body {
 
 .auth-side-content {
   max-width: 420px;
+  text-align: center;
 }
 
 .auth-side-content h1 {
   font-family: 'Yeseva One', Georgia, serif;
-  font-size: 42px;
+  font-size: clamp(20px, 6cqw, 42px);
   line-height: 1.15;
   margin-bottom: 24px;
+  white-space: nowrap;
 }
 
 .auth-side-content p {
@@ -125,7 +150,6 @@ body {
   color: #e8534f;
 }
 
-/* ---------- LADO DO FORMULÁRIO ---------- */
 .auth-form-side {
   flex: 1;
   display: flex;
@@ -156,7 +180,7 @@ body {
   height: 46px;
   border-radius: 50%;
   border: 1px solid #d8d8d8;
-  background: var(--bg-page);
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -203,6 +227,14 @@ body {
   display: none;
 }
 
+body.dark .field-icon-light {
+  display: none;
+}
+
+body.dark .field-icon-dark {
+  display: block;
+}
+
 .auth-field input {
   flex: 1;
   border: none;
@@ -235,7 +267,6 @@ body {
   filter: brightness(1.05);
 }
 
-/* ---------- RESPONSIVO ---------- */
 @media (max-width: 800px) {
   .auth-wrapper {
     flex-direction: column;
