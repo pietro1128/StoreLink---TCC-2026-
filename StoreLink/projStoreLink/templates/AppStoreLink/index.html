@@ -6,18 +6,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>StoreLink</title>
-  <link rel="icon" type="image/png" href="images/icon-dark.png">
-  <link rel="stylesheet" href="{% static '/AppStoreLink/styles/style.css '%}">
+  <link rel="icon" type="image/png" href="{% static 'AppStoreLink/images/icon-dark.png' %}">
+  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/style.css' %}">
 </head>
 
 <body>
 
   <div class="topbar">
-    <div class="logo-icon"><img src="images/icon-dark.png" alt="StoreLink"></div>
-    <button class="nav-btn active" onclick="window.location.href='index.html'">Início</button>
-    <button class="nav-btn" onclick="window.location.href='perfil.html'">Perfil</button>
+    <div class="logo-icon"><img src="{% static 'AppStoreLink/images/icon-dark.png' %}" alt="StoreLink"></div>
+    <button class="nav-btn active" data-url="{% url 'index' %}" onclick="location.href=this.dataset.url">Início</button>
+    <button class="nav-btn" data-url="{% url 'perfil-loja' %}" onclick="location.href=this.dataset.url">Sua loja</button>
     <button class="nav-btn" onclick="setActiveNav(this)">Suporte</button>
     <button class="nav-btn" onclick="setActiveNav(this)">Como navegar?</button>
+    {% if request.user.is_authenticated %}
+    <button class="nav-account-btn" data-url="{% url 'perfil-consumidor' %}" onclick="location.href=this.dataset.url">👤 Minha conta</button>
+    {% else %}
+    <button class="nav-account-btn" data-url="{% url 'cadastro' %}" onclick="location.href=this.dataset.url">Criar conta ou Entrar</button>
+    {% endif %}
     <button class="theme-toggle" onclick="toggleTheme(this)">🌙 Modo escuro</button>
   </div>
     
@@ -37,8 +42,8 @@
   </div>
 
   <div class="main">
-    <img class="logo-img logo-light" src="images/logo-light.png" alt="StoreLink"><img class="logo-img logo-dark"
-      src="images/logo-dark.png" alt="StoreLink">
+    <img class="logo-img logo-light" src="{% static 'AppStoreLink/images/logo-light.png' %}" alt="StoreLink"><img class="logo-img logo-dark"
+      src="{% static 'AppStoreLink/images/logo-dark.png' %}" alt="StoreLink">
     <div class="search-container">
       <button class="search-icon-btn">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

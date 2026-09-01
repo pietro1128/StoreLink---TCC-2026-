@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StoreLink - Minha Conta</title>
+<link rel="icon" type="image/png" href="{% static 'AppStoreLink/images/icon-dark.png' %}">
+<link rel="stylesheet" href="{% static 'AppStoreLink/styles/style.css' %}">
+<link rel="stylesheet" href="{% static 'AppStoreLink/styles/consumidor.css' %}">
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="logo-icon"><img src="{% static 'AppStoreLink/images/icon-dark.png' %}" alt="StoreLink"></div>
+    <button class="nav-btn" data-url="{% url 'index' %}" onclick="location.href=this.dataset.url">Início</button>
+    <button class="nav-btn active" data-url="{% url 'perfil-loja' %}" onclick="location.href=this.dataset.url">Sua loja</button>
+    <button class="nav-btn" onclick="setActiveNav(this)">Suporte</button>
+    <button class="nav-btn" onclick="setActiveNav(this)">Como navegar?</button>
+    {% if request.user.is_authenticated %}
+    <button class="nav-account-btn" data-url="{% url 'perfil-consumidor' %}" onclick="location.href=this.dataset.url">👤 Minha conta</button>
+    {% else %}
+    <button class="nav-account-btn" data-url="{% url 'cadastro' %}" onclick="location.href=this.dataset.url">Criar conta ou Entrar</button>
+    {% endif %}
+    <button class="theme-toggle" onclick="toggleTheme(this)">🌙 Modo escuro</button>
+  </div>
+
+  <div class="sidebar-trigger"></div>
+  <div class="sidebar">
+    <button class="cat-btn cat-alimentos">Alimentos</button>
+    <button class="cat-btn cat-moda">Moda</button>
+    <button class="cat-btn cat-esportes">Esportes</button>
+    <button class="cat-btn cat-construcao">Construção</button>
+    <button class="cat-btn cat-saude">Saúde</button>
+    <button class="cat-btn cat-pets">Pets</button>
+    <button class="cat-btn cat-ambiente">Ambiente</button>
+    <button class="cat-btn cat-tecnologia">Tecnologia</button>
+    <button class="cat-btn cat-beleza">Beleza</button>
+    <button class="cat-btn cat-outros">Outros</button>
+  </div>
+
+  <div class="page-consumidor">
+    <div class="consumidor-wrapper">
+
+      <div class="consumidor-left">
+        <div class="consumidor-badge">Consumidor</div>
+
+        <div class="consumidor-avatar-wrap">
+          <div class="consumidor-avatar">
+            <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/></svg>
+          </div>
+          <div class="consumidor-camera-badge">📷</div>
+        </div>
+
+        <div class="consumidor-field-left">
+          <label>Nome</label>
+          <input type="text" value="Ruan Carlos">
+        </div>
+        <div class="consumidor-field-left">
+          <label>Sobrenome</label>
+          <input type="text" value="Pereira">
+        </div>
+
+        <button class="consumidor-logout-btn">Sair ⏪</button>
+      </div>
+
+      <div class="consumidor-card">
+        <h3>Informações</h3>
+        <div class="consumidor-field">
+          <label>E-mail</label>
+          <input type="text" value="consumidor@gmail.com">
+        </div>
+        <div class="consumidor-field">
+          <label>Telefone</label>
+          <div class="consumidor-phone">
+            <span>(+55)</span>
+            <input type="text" value="19 99475-8383">
+          </div>
+        </div>
+
+        <h3>Endereço</h3>
+        <div class="consumidor-field">
+          <label>Rua</label>
+          <input type="text" value="Rua Exemplo">
+        </div>
+        <div class="consumidor-row">
+          <div class="consumidor-field">
+            <label>Número</label>
+            <input type="text" value="198">
+          </div>
+          <div class="consumidor-field">
+            <label>CEP</label>
+            <input type="text" value="13871-099">
+          </div>
+        </div>
+
+        <div class="consumidor-cta">
+          <div class="consumidor-cta-text">
+            <strong>Quer vender no StoreLink?</strong>
+            <span>Crie sua loja e comece a divulgar seus produtos ou serviços.</span>
+          </div>
+          <button class="consumidor-cta-btn" data-url="{% url 'perfil-loja' %}" onclick="location.href=this.dataset.url">Criar minha loja 🏪</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function setActiveNav(btn) {
+      document.querySelectorAll('.nav-btn').forEach(function (b) {
+        b.classList.remove('active');
+      });
+      btn.classList.add('active');
+    }
+
+    function toggleTheme(btn) {
+      document.body.classList.toggle('dark');
+      if (document.body.classList.contains('dark')) {
+        btn.textContent = '☀️ Modo claro';
+      } else {
+        btn.textContent = '🌙 Modo escuro';
+      }
+    }
+  </script>
+
+</body>
+</html>

@@ -53,6 +53,7 @@ body {
 }
 
 .nav-btn {
+  position: relative;
   background: transparent;
   border: none;
   color: #fff;
@@ -61,15 +62,28 @@ body {
   padding: 10px 16px;
   border-radius: 6px;
   cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease, background 0.2s ease;
 }
 
 .nav-btn.active {
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.nav-btn.active::after {
+  content: "";
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 2px;
+  height: 2px;
+  border-radius: 2px;
   background: #fff;
-  color: #000000;
 }
 
 .nav-btn:hover:not(.active) {
   background: #333;
+  transform: translateY(-1px);
 }
 
 .theme-toggle {

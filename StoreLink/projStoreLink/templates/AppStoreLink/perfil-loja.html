@@ -5,17 +5,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>StoreLink</title>
-<link rel="icon" type="image/png" href="{% static 'AppStoreLink/assets/icon-dark.png' %}">
-<link rel="stylesheet" href="{% static '/AppStoreLink/styles/perfil.css' %}">
+<link rel="icon" type="image/png" href="{% static 'AppStoreLink/images/icon-dark.png' %}">
+<link rel="stylesheet" href="{% static 'AppStoreLink/styles/perfil-loja.css' %}">
 </head>
 <body>
 
   <div class="topbar">
-    <div class="logo-icon"><img src="{% static 'AppStoreLink/assets/icon-dark.png' %} " alt="StoreLink"></div>
-    <button class="nav-btn" onclick="window.location.href='index.html'">Início</button>
-    <button class="nav-btn active" onclick="window.location.href='perfil.html'">Perfil</button>
+    <div class="logo-icon"><img src="{% static 'AppStoreLink/images/icon-dark.png' %}" alt="StoreLink"></div>
+    <button class="nav-btn" data-url="{% url 'index' %}" onclick="location.href=this.dataset.url">Início</button>
+    <button class="nav-btn active" data-url="{% url 'perfil-loja' %}" onclick="location.href=this.dataset.url">Sua loja</button>
     <button class="nav-btn" onclick="setActiveNav(this)">Suporte</button>
     <button class="nav-btn" onclick="setActiveNav(this)">Como navegar?</button>
+    {% if request.user.is_authenticated %}
+    <button class="nav-account-btn" data-url="{% url 'perfil-consumidor' %}" onclick="location.href=this.dataset.url">👤 Minha conta</button>
+    {% else %}
+    <button class="nav-account-btn" data-url="{% url 'cadastro' %}" onclick="location.href=this.dataset.url">Criar conta ou Entrar</button>
+    {% endif %}
     <button class="theme-toggle" onclick="toggleTheme(this)">🌙 Modo escuro</button>
   </div>
 
