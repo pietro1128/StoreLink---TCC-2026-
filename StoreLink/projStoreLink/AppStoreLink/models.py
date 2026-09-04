@@ -8,21 +8,6 @@ class TipoUsuario(models.Model):
     def __str__(self):
         return self.nome_tipo
 
-class Usuario(models.Model):
-    id_usuario = models.AutoField(primary_key=True)
-    nome = models.CharField(max_length=50)
-    sobrenome = models.CharField(max_length=100)
-    email = models.EmailField(max_length=100, unique=True)
-    senha = models.CharField(max_length=255)
-    telefone = models.CharField(max_length=15, blank=True, null=True)
-    cpf = models.CharField(max_length=11, unique=True)
-    id_tipo_usuario = models.ForeignKey(
-        TipoUsuario, on_delete=models.CASCADE, db_column="id_tipo_usuario"
-    )
-
-    def __str__(self):
-        return f"{self.nome} {self.sobrenome}" 
-
 class Endereco(models.Model):
     id_endereco = models.AutoField(primary_key=True)
     rua = models.CharField(max_length=100)

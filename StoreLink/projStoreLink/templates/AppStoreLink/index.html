@@ -20,10 +20,10 @@
 
   <div class="topbar">
     <div class="logo-icon"><img src="{% static 'AppStoreLink/images/icon-dark.png' %}" alt="StoreLink"></div>
-    <button class="nav-btn active" data-url="{% url 'index' %}" onclick="location.href=this.dataset.url">Início</button>
-    <button class="nav-btn" data-url="{% url 'perfil-loja' %}" onclick="location.href=this.dataset.url">Sua loja</button>
-    <button class="nav-btn" onclick="setActiveNav(this)">Suporte</button>
-    <button class="nav-btn" onclick="setActiveNav(this)">Como navegar?</button>
+    <a class="nav-btn active" href="{% url 'index' %}" onclick="location.href=this.dataset.url">Início</a>    
+    <a class="nav-btn" href="{% url 'perfil-loja' %}">Sua loja</a>
+    <a class="nav-btn" id="suporte">Suporte</a>
+    <a class="nav-btn" onclick="setActiveNav(this)">Como navegar?</a>
     {% if request.user.is_authenticated %}
     <button class="nav-account-btn" data-url="{% url 'perfil-consumidor' %}" onclick="location.href=this.dataset.url">👤 Minha conta</button>
     {% else %}
@@ -61,32 +61,7 @@
     <div class="hint-text">Pesquise alguma loja ou produto que deseje...</div>
   </div>
 
-  <script>
-    function setActiveNav(btn) {
-      document.querySelectorAll('.nav-btn').forEach(function (b) {
-        b.classList.remove('active');
-      });
-      btn.classList.add('active');
-    }
-
-    function toggleTheme(btn) {
-      document.body.classList.toggle('dark');
-      var isDark = document.body.classList.contains('dark');
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-      if (isDark) {
-        btn.textContent = '☀️ Modo claro';
-      } else {
-        btn.textContent = '🌙 Modo escuro';
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-      var themeBtn = document.querySelector('.theme-toggle');
-      if (themeBtn && document.body.classList.contains('dark')) {
-        themeBtn.textContent = '☀️ Modo claro';
-      }
-    });
-  </script>
+  <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
 
 </body>
 

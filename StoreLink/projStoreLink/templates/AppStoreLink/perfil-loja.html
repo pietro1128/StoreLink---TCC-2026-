@@ -59,11 +59,11 @@
 
         <div class="perfil-field-left">
           <label>Nome do responsável</label>
-          <input type="text" value="Ruan Carlos">
+          <input type="text" value="{{ request.user.first_name }}">
         </div>
         <div class="perfil-field-left">
           <label>Sobrenome</label>
-          <input type="text" value="Pereira">
+          <input type="text" value="{{ request.user.last_name }}">
         </div>
 
         <button class="perfil-logout-btn">Fazer Logout ⏪</button>
@@ -86,7 +86,7 @@
           <h3>Nome</h3>
           <div class="perfil-field">
             <label>Nome do Estabelecimento</label>
-            <input type="text" value="Nome do estabelecimento">
+            <input type="text" value="{{ request.user.username }}">
           </div>
 
           <h3>Localização</h3>
