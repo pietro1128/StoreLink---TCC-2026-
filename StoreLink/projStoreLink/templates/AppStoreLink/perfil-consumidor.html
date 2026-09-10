@@ -60,11 +60,11 @@
         
         <div class="consumidor-field-left">
           <label>Nome</label>
-                  <input type="text" value="Ruan Carlos">
+                  <input type="text" value="{{ request.user.first_name }}">
         </div>
         <div class="consumidor-field-left">
           <label>Sobrenome</label>
-          <input type="text" value="Pereira">
+          <input type="text" value="{{ request.user.last_name }}">
         </div>
 
         <button class="consumidor-logout-btn">Sair ⏪</button>

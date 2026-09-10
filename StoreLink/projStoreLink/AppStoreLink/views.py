@@ -1,8 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from AppStoreLink.models import Usuario
-
-#ERRO ------->
+from AppStoreLink.models import Usuario, Loja, Endereco, Produto, Servico, LojaFavoritas
 
 
 def index(request):
