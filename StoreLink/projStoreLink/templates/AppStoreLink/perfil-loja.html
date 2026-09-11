@@ -98,38 +98,38 @@
           <h3>Localização</h3>
           <div class="perfil-field">
             <label>Rua</label>
-            <input type="text" value="Rua do estabelecimento">
+            <input type="text" value="{{ request.AppStoreLink_endereco.rua }}">
           </div>
           <div class="perfil-row">
             <div class="perfil-field">
               <label>Número</label>
-              <input type="text" value="198">
+              <input type="text" value="{{ request.AppStoreLink_endereco.numero_estabelecimento }}">
             </div>
             <div class="perfil-field">
               <label>CEP</label>
-              <input type="text" value="13871-099">
+              <input type="text" value="{{ request.AppStoreLink_endereco.cep }}">
             </div>
           </div>
 
           <h3>Informações</h3>
           <div class="perfil-field">
             <label>E-mail</label>
-            <input type="text" value="emailDaLoja@gmail.com">
+            <input type="text" value="{{ request.AppStoreLink_loja.email_loja }}">
           </div>
           <div class="perfil-field">
             <label>Telefone</label>
             <div class="perfil-phone">
               <span>(+55)</span>
-              <input type="text" value="19 99475-8383">
+              <input type="text" value="{{ request.AppStoreLink_loja.telefone_loja }}">
             </div>
           </div>
           <div class="perfil-field">
             <label>CNPJ</label>
-            <input type="text" value="12.334.567/0001-89">
+            <input type="text" value="{{ request.AppStoreLink_loja.cnpj }}">
           </div>
           <div class="perfil-field">
             <label>Link de Loja virtual (Opcional)</label>
-            <input type="text" value="https://www.linkdaloja.com">
+            <input type="text" value="{{ request.AppStoreLink_loja.link }}">
           </div>
         </div>
 

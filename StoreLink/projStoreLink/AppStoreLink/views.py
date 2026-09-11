@@ -7,7 +7,9 @@ from django.contrib.auth.decorators import login_required
 def index(request):
     return render(request, 'AppStoreLink/index.html')
 
-@login_required
+# |  Para testar a pagina SEM CONTA, voce precisa transformar
+# V  a linha de baixo em um comentario: "#@login_required"
+#@login_required
 def perfil_loja(request):
     if request.method == 'POST':
         request.user.first_name = request.POST.get('first_name', '')
