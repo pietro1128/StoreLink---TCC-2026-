@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StoreLink - Resultados da busca</title>
+  <link rel="icon" type="image/png" href="{% static 'AppStoreLink/images/icon-dark.png' %}">
+  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/style.css' %}">
+</head>
+
+<body>
+
+  <script>
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+    }
+  </script>
+
+  <div class="topbar">
+    <div class="logo-icon"><img src="{% static 'AppStoreLink/images/icon-dark.png' %}" alt="StoreLink"></div>
+    <a class="nav-btn" href="{% url 'index' %}">Início</a>
+    <a class="nav-btn" href="{% url 'perfil-loja' %}">Sua loja</a>
+    <a class="nav-btn" id="suporte">Suporte</a>
+    <a class="nav-btn" onclick="setActiveNav(this)">Como navegar?</a>
+    {% if request.user.is_authenticated %}
+    <button class="nav-account-btn" data-url="{% url 'perfil-consumidor' %}" onclick="location.href=this.dataset.url">👤 Minha conta</button>
+    {% else %}
+    <button class="nav-account-btn" data-url="{% url 'cadastro' %}" onclick="location.href=this.dataset.url">Criar conta ou Entrar</button>
+    {% endif %}
+    <button class="theme-toggle" onclick="toggleTheme(this)">🌙 Modo escuro</button>
+  </div>
+
+  <div class="resultados-container">
+    <h2>Resultados para "{{ query }}"</h2>
+
+    {% if total_resultados == 0 %}
+      <p class="hint-text">Nenhum resultado encontrado para sua busca.</p>
+    {% else %}
+
+      {% if lojas %}
+        <h3>Lojas</h3>
+        {% for loja in lojas %}
+          <div class="resultado-item">
+            <strong>{{ loja.nome_loja }}</strong> — {{ loja.id_categoria.tipo_categoria }}
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      {% if produtos %}
+        <h3>Produtos</h3>
+        {% for produto in produtos %}
+          <div class="resultado-item">
+            <strong>{{ produto.nome_produto }}</strong> — R$ {{ produto.preco }}
+            <br><small>Vendido em: {{ produto.id_loja.nome_loja }}</small>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      {% if servicos %}
+        <h3>Serviços</h3>
+        {% for servico in servicos %}
+          <div class="resultado-item">
+            <strong>{{ servico.nome_servico }}</strong> — R$ {{ servico.preco }}
+            <br><small>Oferecido por: {{ servico.id_loja.nome_loja }}</small>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+    {% endif %}
+  </div>
+
+</body>
+</html>

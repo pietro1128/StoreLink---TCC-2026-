@@ -54,7 +54,6 @@ class Usuario(models.Model):
 class Loja(models.Model):
     id_loja = models.AutoField(primary_key=True)
     nome_loja = models.CharField(max_length=100)
-    categoria = models.CharField(max_length=50, blank=True, null=True)
     telefone_loja = models.CharField(max_length=15, blank=True, null=True)
     email_loja = models.EmailField(max_length=100)
     cnpj = models.CharField(max_length=18, unique=True) # !--!--!--!--!--!--!--! {{MUDAR PARA RECEBER TAMBEM CARACTERES "pois o CNPJ atual recebe letras tembem"}}  !--!--!--!--!--!--!--!

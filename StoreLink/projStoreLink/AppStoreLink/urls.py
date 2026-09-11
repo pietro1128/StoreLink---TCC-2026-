@@ -1,4 +1,5 @@
 from django.urls import path
+from . import views
 from AppStoreLink.views import index, perfil_loja, perfil_consumidor, cadastro, login
 
 urlpatterns = [
@@ -12,4 +13,7 @@ urlpatterns = [
     #paginas de Autenticação
     path('cadastro', cadastro,  name= 'cadastro'),
     path('login', login,  name= 'login'),
+    
+    #campo de busca
+    path('buscar/', views.buscar, name='buscar'),
 ]

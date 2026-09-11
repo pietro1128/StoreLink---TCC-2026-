@@ -48,20 +48,24 @@
 
   <div class="main">
     <img class="logo-img logo-light" src="{% static 'AppStoreLink/images/logo-light.png' %}" alt="StoreLink"><img class="logo-img logo-dark" src="{% static 'AppStoreLink/images/logo-dark.png' %}" alt="StoreLink">
-    <div class="search-container">
-      <button class="search-icon-btn">
+    <form class="search-container" action="{% url 'buscar' %}" method="GET">
+      <button type="submit" class="search-icon-btn">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="7"></circle>
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
       </button>
-      <input type="text" class="search-input" placeholder="Pesquisar...">
-    </div>
+      <input type="text" name="q" class="search-input" placeholder="Pesquisar..." autocomplete="off">
+    </form>
 
     <div class="hint-text">Pesquise alguma loja ou produto que deseje...</div>
   </div>
 
   <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
+  <!--É BOM TIRAR ESSA LINHA, PQ COMO O ARQUIVO "index.js" NÃO EXISTE O NAVEGADOR 
+  VAI DAR UM ERRO 404 (não quebra a pagina mas é inutil, sujeira)
+  OU ENT CRIA ESSE ARQUIVO E DEIXA VAZIO.
+  ASSINADO: MUSGO-->
 
 </body>
 
