@@ -56,15 +56,21 @@
           </div>
           <div class="perfil-camera-badge">📷</div>
         </div>
+        
+        <form method="POST">
+          {% csrf_token %}
 
-        <div class="perfil-field-left">
-          <label>Nome do responsável</label>
-          <input type="text" value="{{ request.user.first_name }}">
-        </div>
-        <div class="perfil-field-left">
-          <label>Sobrenome</label>
-          <input type="text" value="{{ request.user.last_name }}">
-        </div>
+          <div class="perfil-field-left">
+            <label>Nome do responsável</label>
+            <input type="text" value="{{ request.user.first_name }}">
+          </div>
+          <div class="perfil-field-left">
+            <label>Sobrenome</label>
+            <input type="text" value="{{ request.user.last_name }}">
+          </div>
+
+          <button type="submit">Salvar</button>
+        </form>
 
         <button class="perfil-logout-btn">Fazer Logout ⏪</button>
       </div>

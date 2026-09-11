@@ -25,15 +25,6 @@ class Categoria(models.Model):
     def __str__(self):
         return self.tipo_categoria
 
-
-class TipoUsuario(models.Model):
-    id_tipo_usuario = models.AutoField(primary_key=True)
-    tipo_usuario = models.CharField(max_length=12)
-
-    def __str__(self):
-        return self.tipo_usuario
-
-
 # 2. USUÁRIO E LOJA
 
 class Usuario(models.Model):

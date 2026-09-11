@@ -2,12 +2,18 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.db.models import Q
 from AppStoreLink.models import Usuario, Loja, Endereco, Produto, Servico, LojaFavoritas
-
+from django.contrib.auth.decorators import login_required
 
 def index(request):
     return render(request, 'AppStoreLink/index.html')
 
+@login_required
 def perfil_loja(request):
+    if request.method == 'POST':
+        request.user.first_name = request.POST.get('first_name', '')
+        request.user.last_name = request.POST.get('last_name', '')
+        request.user.save()
+
     loja = Loja.objects.all()
     usuario = Usuario.objects.all()
     endereco = Endereco.objects.all()

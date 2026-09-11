@@ -7,12 +7,12 @@ urlpatterns = [
     path('', index, name= 'index'),
 
     #paginas de perfil
-    path('perfil-loja', perfil_loja,  name= 'perfil-loja'),
-    path('perfil-consumidor', perfil_consumidor,  name= 'perfil-consumidor'),
+    path('perfil-loja/', perfil_loja,  name= 'perfil-loja'),
+    path('perfil-consumidor/', perfil_consumidor,  name= 'perfil-consumidor'),
 
     #paginas de Autenticação
-    path('cadastro', cadastro,  name= 'cadastro'),
-    path('login', login,  name= 'login'),
+    path('cadastro/', cadastro,  name= 'cadastro'),
+    path('login/', login,  name= 'login'),
     
     #campo de busca
     path('buscar/', views.buscar, name='buscar'),

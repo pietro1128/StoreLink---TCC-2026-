@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+#colocar o decorator
+@
+class ProdutoAdmin():
+    pass
