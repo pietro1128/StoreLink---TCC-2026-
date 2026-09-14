@@ -1,0 +1,239 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-page: #e5e5e5;
+  --card-bg: #ffffff;
+  --text-color: #1c1c1c;
+  --subtitle-color: #444444;
+  --field-placeholder: #9a9a9a;
+  --field-border: #d8d8d8;
+}
+
+body.dark {
+  --bg-page: #000000;
+  --card-bg: #1c1c1c;
+  --text-color: #f5f5f5;
+  --subtitle-color: #cfcfcf;
+  --field-placeholder: #9a9a9a;
+  --field-border: #3a3a3a;
+}
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: var(--bg-page);
+  color: var(--text-color);
+  min-height: 100vh;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 300;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  color: #fff;
+  font-size: 15px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.theme-toggle:hover {
+  background: #3a3a3a;
+}
+
+
+.login-page-icon {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 56px;
+  height: 56px;
+  display: block;
+  z-index: 250;
+}
+
+.login-page-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: none;
+}
+
+.login-page-icon .icon-light {
+  display: block;
+}
+
+body.dark .login-page-icon .icon-light {
+  display: none;
+}
+
+body.dark .login-page-icon .icon-dark {
+  display: block;
+}
+
+
+.login-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.login-welcome {
+  font-family: 'Yeseva One', Georgia, serif;
+  font-weight: 400;
+  font-size: 30px;
+  margin-bottom: 40px;
+  color: var(--text-color);
+  text-align: center;
+}
+
+
+.login-card {
+  width: 100%;
+  max-width: 480px;
+  background: var(--card-bg);
+  border-radius: 24px;
+  padding: 40px 50px 44px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+  text-align: center;
+  transition: background 0.25s ease;
+}
+
+body.dark .login-card {
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.login-card h2 {
+  font-family: 'Yeseva One', Georgia, serif;
+  font-weight: 400;
+  font-size: 32px;
+  color: var(--text-color);
+}
+
+.login-subtitle {
+  font-family: 'Yeseva One', Georgia, serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--subtitle-color);
+  margin-bottom: 40px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+}
+
+
+.login-field {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+  color: var(--field-placeholder);
+}
+
+.login-field img {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  object-fit: contain;
+  display: none;
+}
+
+.login-field .field-icon-light {
+  display: block;
+}
+
+body.dark .login-field .field-icon-light {
+  display: none;
+}
+
+body.dark .login-field .field-icon-dark {
+  display: block;
+}
+
+.login-field input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 16px;
+  color: var(--text-color);
+}
+
+.login-field input::placeholder {
+  color: var(--field-placeholder);
+}
+
+.login-forgot {
+  font-size: 13px;
+  color: var(--text-color);
+  margin-top: -10px;
+}
+
+.login-forgot a {
+  color: var(--text-color);
+  text-decoration: underline;
+}
+
+.login-forgot a:hover {
+  opacity: 0.8;
+}
+
+
+.login-submit-btn {
+  margin: 6px auto 0;
+  width: 220px;
+  padding: 14px;
+  border: 2px solid var(--text-color);
+  border-radius: 30px;
+  background: transparent;
+  color: var(--text-color);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.login-submit-btn:hover {
+  background: var(--text-color);
+  color: var(--card-bg);
+}
+
+
+.login-signup {
+  font-size: 13px;
+  color: var(--text-color);
+}
+
+.login-signup a {
+  color: var(--text-color);
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.login-signup a:hover {
+  opacity: 0.8;
+}
+
+
+@media (max-width: 560px) {
+  .login-card {
+    padding: 34px 26px 36px;
+  }
+
+  .login-welcome {
+    font-size: 24px;
+  }
+}
