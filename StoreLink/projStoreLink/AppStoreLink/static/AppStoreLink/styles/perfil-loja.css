@@ -414,9 +414,39 @@ body.dark .logo-dark {
 .perfil-cover {
   height: 150px;
   border-radius: 12px;
-  background: linear-gradient(180deg, #bfe3f7 0%, #bfe3f7 55%, #8fcf7a 55%, #8fcf7a 100%);
+  background: #e4e4e4;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.perfil-cover:hover {
+  filter: brightness(0.95);
+}
+
+.perfil-cover-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
+#texto-adicionar-imagem {
+  color: #222;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.perfil-cover.tem-imagem #texto-adicionar-imagem {
+  display: none;
+}
+
+.perfil-cover.tem-imagem .perfil-cover-image {
+  display: block;
 }
 
 .perfil-edit-label {

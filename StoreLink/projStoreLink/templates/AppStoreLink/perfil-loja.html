@@ -47,17 +47,35 @@
   <div class="page-perfil">
     <div class="perfil-wrapper">
 
-      <div class="perfil-left">
+        <div class="perfil-left">
         <div class="perfil-badge">Estabelecimento</div>
 
         <div class="perfil-avatar-wrap">
-          <div class="perfil-avatar">
-            <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/></svg>
-          </div>
-          <div class="perfil-camera-badge">📷</div>
-        </div>
+        <label class="perfil-avatar" for="foto-responsavel">
+        <input
+       type="file"
+       id="foto-responsavel"
+        accept="image/*"
+        hidden
+        >
+
+        <svg id="avatar-padrao" viewBox="0 0 24 24">
+          <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+         </svg>
+
+          <img
+         id="preview-responsavel"
+         class="perfil-avatar-image"
+        alt="Foto do responsável"
+         >
+         </label>
+
+         <label class="perfil-camera-badge" for="foto-responsavel">
+         📷
+         </label>
+         </div>
         
-        <form method="POST">
+          <form method="POST">
           {% csrf_token %}
 
           <div class="perfil-field-left">
@@ -69,23 +87,39 @@
             <input type="text" value="{{ request.user.last_name }}">
           </div>
 
-          <button type="submit">Salvar</button>
-        </form>
+          </form>
 
-        <button class="perfil-logout-btn">Fazer Logout ⏪</button>
-      </div>
+         <button class="perfil-logout-btn">Fazer Logout </button>
+         </div>
 
-      <div class="perfil-card">
-        <div class="perfil-card-left">
-          <div class="perfil-cover"></div>
+         <div class="perfil-card">
+          <div class="perfil-card-left">
+          <label class="perfil-cover" for="foto-estabelecimento">
+          <input
+          type="file"
+          id="foto-estabelecimento"
+          accept="image/*"
+          hidden
+          >
 
+          <img
+          id="preview-estabelecimento"
+          class="perfil-cover-image"
+          alt="Imagem do estabelecimento"
+          >
+
+          <span id="texto-adicionar-imagem">📷 Adicionar imagem</span>
+          </label>  
+          
           <div class="perfil-edit-label">Editar fotos e informações dos produtos</div>
-          <button class="perfil-action-btn">PRODUTOS 🛍️</button>
+          <button class="perfil-action-btn">PRODUTOS </button>
 
           <div class="perfil-edit-label">Editar fotos e informações dos serviços</div>
-          <button class="perfil-action-btn">SERVIÇOS 💲</button>
+          <button class="perfil-action-btn">SERVIÇOS </button>
 
-          <button class="perfil-delete-btn">Excluir Loja 🗑️</button>
+          <button class="perfil-delete-btn">Salvar Loja </button>
+
+          <button class="perfil-delete-btn">Excluir Loja </button>
         </div>
 
         <div class="perfil-card-middle">
@@ -267,6 +301,32 @@
         });
       });
     });
+    const fotoEstabelecimento = document.getElementById('foto-estabelecimento');
+const previewEstabelecimento = document.getElementById('preview-estabelecimento');
+const areaImagem = document.querySelector('.perfil-cover');
+
+fotoEstabelecimento.addEventListener('change', function () {
+    const arquivo = this.files[0];
+
+    if (!arquivo) {
+        return;
+    }
+
+    if (!arquivo.type.startsWith('image/')) {
+        alert('Selecione um arquivo de imagem.');
+        this.value = '';
+        return;
+    }
+
+    const imagemURL = URL.createObjectURL(arquivo);
+
+    previewEstabelecimento.src = imagemURL;
+    areaImagem.classList.add('tem-imagem');
+
+    previewEstabelecimento.onload = function () {
+        URL.revokeObjectURL(imagemURL);
+    };
+});
   </script>
 
 </body>
