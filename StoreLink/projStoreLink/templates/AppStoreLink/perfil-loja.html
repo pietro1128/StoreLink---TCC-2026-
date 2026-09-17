@@ -327,6 +327,32 @@ fotoEstabelecimento.addEventListener('change', function () {
         URL.revokeObjectURL(imagemURL);
     };
 });
+const fotoResponsavel = document.getElementById('foto-responsavel');
+const previewResponsavel = document.getElementById('preview-responsavel');
+const avatarResponsavel = document.querySelector('.perfil-avatar');
+
+fotoResponsavel.addEventListener('change', function () {
+  const arquivo = this.files[0];
+
+  if (!arquivo) {
+    return;
+  }
+
+  if (!arquivo.type.startsWith('image/')) {
+    alert('Selecione um arquivo de imagem.');
+    this.value = '';
+    return;
+  }
+
+  const imagemURL = URL.createObjectURL(arquivo);
+
+  previewResponsavel.src = imagemURL;
+  avatarResponsavel.classList.add('tem-imagem');
+
+  previewResponsavel.onload = function () {
+    URL.revokeObjectURL(imagemURL);
+  };
+});
   </script>
 
 </body>

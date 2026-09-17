@@ -333,6 +333,21 @@ body.dark .logo-dark {
   fill: #2c2c2c;
 }
 
+.perfil-avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
+.perfil-avatar.tem-imagem #avatar-padrao {
+  display: none;
+}
+
+.perfil-avatar.tem-imagem .perfil-avatar-image {
+  display: block;
+}
+
 .perfil-camera-badge {
   position: absolute;
   bottom: 0;
