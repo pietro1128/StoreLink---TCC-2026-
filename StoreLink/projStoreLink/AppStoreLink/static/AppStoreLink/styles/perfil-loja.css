@@ -5,10 +5,6 @@
 }
 
 
-/* ================================= */
-/* VARIÁVEIS */
-/* ================================= */
-
 :root {
   --bg-page: #ffffff;
   --text-color: #222222;
@@ -30,10 +26,6 @@ body.dark {
 }
 
 
-/* ================================= */
-/* BODY */
-/* ================================= */
-
 body {
   font-family: 'Segoe UI', Arial, sans-serif;
   background: var(--bg-page);
@@ -45,11 +37,6 @@ body {
 
   min-height: 100vh;
 }
-
-
-/* ================================= */
-/* BARRA SUPERIOR */
-/* ================================= */
 
 .topbar {
   background: var(--topbar-bg);
@@ -68,10 +55,6 @@ body {
   z-index: 200;
 }
 
-
-/* ================================= */
-/* LOGO */
-/* ================================= */
 
 .logo-icon {
   width: 38px;
@@ -98,10 +81,6 @@ body {
   object-fit: contain;
 }
 
-
-/* ================================= */
-/* BOTÕES DO MENU */
-/* ================================= */
 
 .nav-btn {
   position: relative;
@@ -161,10 +140,6 @@ body {
 }
 
 
-/* ================================= */
-/* BOTÃO CONTA */
-/* ================================= */
-
 .nav-account-btn {
   margin-left: auto;
 
@@ -203,10 +178,6 @@ body {
 }
 
 
-/* ================================= */
-/* BOTÃO TEMA */
-/* ================================= */
-
 .theme-toggle {
   background: #2a2a2a;
 
@@ -234,10 +205,6 @@ body {
   background: #3a3a3a;
 }
 
-
-/* ================================= */
-/* MENU LATERAL */
-/* ================================= */
 
 .sidebar {
   position: fixed;
@@ -293,10 +260,6 @@ body.dark .sidebar {
     translateY(-50%);
 }
 
-
-/* ================================= */
-/* CATEGORIAS */
-/* ================================= */
 
 .cat-btn {
   border: none;
@@ -376,10 +339,6 @@ body.dark .sidebar {
 }
 
 
-/* ================================= */
-/* MENSAGEM PARA USUÁRIO NÃO LOGADO */
-/* ================================= */
-
 .acesso-loja {
 
   position: fixed;
@@ -408,8 +367,6 @@ body.dark .sidebar {
 }
 
 
-/* TÍTULO */
-
 .acesso-loja h1 {
 
   margin: 0 0 12px;
@@ -423,7 +380,6 @@ body.dark .sidebar {
 }
 
 
-/* TEXTO */
 
 .acesso-loja p {
 
@@ -436,7 +392,6 @@ body.dark .sidebar {
 }
 
 
-/* LINK */
 
 .acesso-loja a {
 
@@ -462,10 +417,6 @@ body.dark .sidebar {
 }
 
 
-/* ================================= */
-/* PÁGINA DO PERFIL */
-/* ================================= */
-
 .page-perfil {
 
   display: block;
@@ -489,11 +440,6 @@ body.dark .sidebar {
 
   margin: 0 auto;
 }
-
-
-/* ================================= */
-/* LADO ESQUERDO */
-/* ================================= */
 
 .perfil-left {
 
@@ -523,11 +469,6 @@ body.dark .sidebar {
 
   color: #222;
 }
-
-
-/* ================================= */
-/* AVATAR */
-/* ================================= */
 
 .perfil-avatar-wrap {
 
@@ -627,10 +568,6 @@ body.dark .sidebar {
 }
 
 
-/* ================================= */
-/* CAMPOS ESQUERDA */
-/* ================================= */
-
 .perfil-field-left {
 
   display: flex;
@@ -667,11 +604,6 @@ body.dark .sidebar {
 
   color: #222;
 }
-
-
-/* ================================= */
-/* LOGOUT */
-/* ================================= */
 
 .perfil-logout-btn {
 
@@ -711,10 +643,6 @@ body.dark .sidebar {
 }
 
 
-/* ================================= */
-/* CARD DA LOJA */
-/* ================================= */
-
 .perfil-card {
 
   background: var(--brand-red);
@@ -736,10 +664,6 @@ body.dark .sidebar {
 }
 
 
-/* ================================= */
-/* LADO ESQUERDO DO CARD */
-/* ================================= */
-
 .perfil-card-left {
 
   width: 220px;
@@ -753,10 +677,6 @@ body.dark .sidebar {
   gap: 6px;
 }
 
-
-/* ================================= */
-/* FOTO DO ESTABELECIMENTO */
-/* ================================= */
 
 .perfil-cover {
 
@@ -822,10 +742,6 @@ body.dark .sidebar {
 }
 
 
-/* ================================= */
-/* BOTÕES PRODUTOS/SERVIÇOS */
-/* ================================= */
-
 .perfil-edit-label {
 
   color: #fff;
@@ -874,10 +790,6 @@ body.dark .sidebar {
 }
 
 
-/* ================================= */
-/* BOTÕES SALVAR / EXCLUIR */
-/* ================================= */
-
 .perfil-delete-btn {
 
   margin-top: 28px;
@@ -915,10 +827,6 @@ body.dark .sidebar {
   background: #333;
 }
 
-
-/* ================================= */
-/* MEIO DO CARD */
-/* ================================= */
 
 .perfil-card-middle {
 
@@ -995,10 +903,6 @@ body.dark .sidebar {
 }
 
 
-/* ================================= */
-/* LINHA DE CAMPOS */
-/* ================================= */
-
 .perfil-row {
 
   display: flex;
@@ -1013,10 +917,6 @@ body.dark .sidebar {
   flex: 1;
 }
 
-
-/* ================================= */
-/* TELEFONE */
-/* ================================= */
 
 .perfil-phone {
 
@@ -1053,10 +953,6 @@ body.dark .sidebar {
 }
 
 
-/* ================================= */
-/* LADO DIREITO */
-/* ================================= */
-
 .perfil-card-right {
 
   width: 170px;
@@ -1083,11 +979,6 @@ body.dark .sidebar {
 
   margin-bottom: 8px;
 }
-
-
-/* ================================= */
-/* CLASSIFICAÇÃO */
-/* ================================= */
 
 .perfil-classif-wrap {
 
@@ -1186,10 +1077,6 @@ body.dark .sidebar {
 }
 
 
-/* ================================= */
-/* CNPJ ANÔNIMO */
-/* ================================= */
-
 .perfil-toggle {
 
   display: flex;
@@ -1230,10 +1117,6 @@ body.dark .sidebar {
   color: #fff;
 }
 
-
-/* ================================= */
-/* RESPONSIVIDADE */
-/* ================================= */
 
 @media (max-width: 900px) {
 

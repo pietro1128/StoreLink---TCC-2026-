@@ -20,6 +20,7 @@
   >
 </head>
 
+<!-- #region modo escuro -->
 <body>
 
   <script>
@@ -27,11 +28,9 @@
       document.body.classList.add('dark');
     }
   </script>
+<!-- #endregion -->
 
-
-  <!-- ========================= -->
-  <!-- BARRA SUPERIOR -->
-  <!-- ========================= -->
+<!-- #region navbar -->
 
   <div class="topbar">
 
@@ -109,12 +108,9 @@
 
   </div>
 
+<!-- #endregion -->
 
-
-  <!-- ========================= -->
-  <!-- MENU LATERAL -->
-  <!-- ========================= -->
-
+<!-- #region sidebar -->
   <div class="sidebar">
 
     <a
@@ -162,22 +158,14 @@
 
   </div>
 
+<!-- #endregion -->
 
-
-  <!-- ===================================================== -->
-  <!-- USUÁRIO LOGADO -->
-  <!-- ===================================================== -->
-
+<!-- #region usuario logado -->
   {% if request.user.is_authenticated %}
 
   <div class="page-perfil">
 
     <div class="perfil-wrapper">
-
-
-      <!-- ========================= -->
-      <!-- LADO ESQUERDO -->
-      <!-- ========================= -->
 
       <div class="perfil-left">
 
@@ -269,18 +257,7 @@
 
       </div>
 
-
-
-      <!-- ========================= -->
-      <!-- CARD DA LOJA -->
-      <!-- ========================= -->
-
       <div class="perfil-card">
-
-
-        <!-- ========================= -->
-        <!-- ESQUERDA DO CARD -->
-        <!-- ========================= -->
 
         <div class="perfil-card-left">
 
@@ -342,11 +319,6 @@
 
         </div>
 
-
-
-        <!-- ========================= -->
-        <!-- MEIO DO CARD -->
-        <!-- ========================= -->
 
         <div class="perfil-card-middle">
 
@@ -492,11 +464,6 @@
         </div>
 
 
-
-        <!-- ========================= -->
-        <!-- DIREITA DO CARD -->
-        <!-- ========================= -->
-
         <div class="perfil-card-right">
 
           <div class="perfil-classif-wrap">
@@ -566,12 +533,9 @@
 
   </div>
 
+<!-- #endregion -->
 
-
-  <!-- ===================================================== -->
-  <!-- USUÁRIO NÃO LOGADO -->
-  <!-- ===================================================== -->
-
+<!-- #region usuario não logado -->
   {% else %}
 
   <div class="acesso-loja">
@@ -594,12 +558,9 @@
 
   {% endif %}
 
+<!-- #endregion -->
 
-
-  <!-- ========================= -->
-  <!-- JAVASCRIPT -->
-  <!-- ========================= -->
-
+<!-- #region js -->
   <script>
 
     function setActiveNav(btn) {
@@ -669,11 +630,7 @@
       }
     );
 
-
-
-    /* ========================= */
-    /* CLASSIFICAÇÃO DA LOJA */
-    /* ========================= */
+    /* classificação da loja */
 
     document.addEventListener(
       'DOMContentLoaded',
@@ -961,11 +918,7 @@
       }
     );
 
-
-
-    /* ========================= */
-    /* FOTO DO ESTABELECIMENTO */
-    /* ========================= */
+    /* foto do estabelecimento */
 
     const fotoEstabelecimento =
       document.getElementById(
@@ -1048,11 +1001,7 @@
 
     }
 
-
-
-    /* ========================= */
-    /* FOTO DO RESPONSÁVEL */
-    /* ========================= */
+    /* foto do responsavel */
 
     const fotoResponsavel =
       document.getElementById(
@@ -1136,6 +1085,8 @@
     }
 
   </script>
+
+<!-- #endregion -->
 
 </body>
 </html>

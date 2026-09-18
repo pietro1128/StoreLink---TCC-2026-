@@ -12,6 +12,8 @@
 <link rel="stylesheet" href="{% static 'AppStoreLink/styles/login.css' %}">
 
 </head>
+
+<!-- #region modo escuro -->
 <body>
 
   <button class="theme-toggle" onclick="toggleTheme(this)">🌙 Modo escuro</button>
@@ -20,6 +22,9 @@
     <img class="icon-dark" src="{% static 'AppStoreLink/images/icon-dark.png' %}" alt="StoreLink">
   </a>
 
+  <!-- #endregion -->
+
+<!-- #region login -->
   <div class="login-wrapper">
     <h1 class="login-welcome">Bem vindo de volta !</h1>
 
@@ -53,6 +58,9 @@
     </div>
   </div>
 
+  <!-- #endregion -->
+
+<!-- #region modo escuro js -->
   <script>
     function toggleTheme(btn) {
       document.body.classList.toggle('dark');
@@ -63,6 +71,8 @@
       }
     }
   </script>
+
+<!-- #endregion -->
 
 </body>
 </html>

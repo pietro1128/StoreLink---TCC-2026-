@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="{% static 'AppStoreLink/styles/style.css' %}">
 </head>
 
+<!-- #region Modo escuro -->
+
 <body>
 
   <script>
@@ -17,6 +19,9 @@
       document.body.classList.add('dark');
     }
   </script>
+<!-- #endregion -->
+
+<!-- #region navbar -->
 
   <div class="topbar">
     <div class="logo-icon"><img src="{% static 'AppStoreLink/images/icon-dark.png' %}" alt="StoreLink"></div>
@@ -32,6 +37,10 @@
     <button class="theme-toggle" onclick="toggleTheme(this)">🌙 Modo escuro</button>
   </div>
 
+  <!-- #endregion -->
+
+<!-- #region sidebar -->
+
 <div class="sidebar">
   <a class="cat-btn cat-alimentos" href="{% url 'CatAlimentos' %}">Alimentos</a>
   <a class="cat-btn cat-moda" href="#">Moda</a>
@@ -44,6 +53,9 @@
   <a class="cat-btn cat-beleza" href="#">Beleza</a>
   <a class="cat-btn cat-outros" href="#">Outros</a>
 </div>
+  <!-- #endregion -->
+
+<!-- #region pesquisa -->
 
   <div class="main">
     <img class="logo-img logo-light" src="{% static 'AppStoreLink/images/logo-light.png' %}" alt="StoreLink"><img class="logo-img logo-dark" src="{% static 'AppStoreLink/images/logo-dark.png' %}" alt="StoreLink">
@@ -59,6 +71,7 @@
 
     <div class="hint-text">Pesquise alguma loja ou produto que deseje...</div>
   </div>
+<!-- #endregion -->
 
   <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
   <!--É BOM TIRAR ESSA LINHA, PQ COMO O ARQUIVO "index.js" NÃO EXISTE O NAVEGADOR 

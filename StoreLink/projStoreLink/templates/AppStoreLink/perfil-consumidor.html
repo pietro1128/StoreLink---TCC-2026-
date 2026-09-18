@@ -10,12 +10,18 @@
 <link rel="stylesheet" href="{% static 'AppStoreLink/styles/consumidor.css' %}">
 </head>
 <body>
-/*         if ERRO == MANINHO :       */
+
+<!-- #region modo escuro -->
+
   <script>
     if (localStorage.getItem('theme') === 'dark') {
       document.body.classList.add('dark');
     }
   </script>
+
+<!-- #endregion -->
+
+<!-- #region navbar -->
 
   <div class="topbar">
     <div class="logo-icon"><img src="{% static 'AppStoreLink/images/icon-dark.png' %}" alt="StoreLink"></div>
@@ -31,6 +37,9 @@
     <button class="theme-toggle" onclick="toggleTheme(this)">🌙 Modo escuro</button>
   </div>
 
+<!-- #endregion -->
+
+<!-- #region sidebar -->
 <div class="sidebar">
   <a class="cat-btn cat-alimentos" href="{% url 'CatAlimentos' %}">Alimentos</a>
   <a class="cat-btn cat-moda" href="#">Moda</a>
@@ -43,7 +52,9 @@
   <a class="cat-btn cat-beleza" href="#">Beleza</a>
   <a class="cat-btn cat-outros" href="#">Outros</a>
 </div>
+<!-- #endregion -->
 
+<!-- #region pagina da loja -->
   <div class="page-consumidor">
     <div class="consumidor-wrapper">
 
@@ -110,7 +121,9 @@
 
     </div>
   </div>
+<!-- #endregion -->
 
+<!-- #region modo escuro -->
   <script>
     function setActiveNav(btn) {
       document.querySelectorAll('.nav-btn').forEach(function (b) {
@@ -137,6 +150,8 @@
       }
     });
   </script>
+
+<!-- #endregion -->
 
 </body>
 </html>
