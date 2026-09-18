@@ -30,19 +30,18 @@
     <button class="theme-toggle" onclick="toggleTheme(this)">🌙 Modo escuro</button>
   </div>
 
-  <div class="sidebar-trigger"></div>
-  <div class="sidebar">
-    <button class="cat-btn cat-alimentos">Alimentos</button>
-    <button class="cat-btn cat-moda">Moda</button>
-    <button class="cat-btn cat-esportes">Esportes</button>
-    <button class="cat-btn cat-construcao">Construção</button>
-    <button class="cat-btn cat-saude">Saúde</button>
-    <button class="cat-btn cat-pets">Pets</button>
-    <button class="cat-btn cat-ambiente">Ambiente</button>
-    <button class="cat-btn cat-tecnologia">Tecnologia</button>
-    <button class="cat-btn cat-beleza">Beleza</button>
-    <button class="cat-btn cat-outros">Outros</button>
-  </div>
+ <div class="sidebar">
+  <a class="cat-btn cat-alimentos" href="{% url 'CatAlimentos' %}">Alimentos</a>
+  <a class="cat-btn cat-moda" href="#">Moda</a>
+  <a class="cat-btn cat-esportes" href="#">Esportes</a>
+  <a class="cat-btn cat-construcao" href="#">Construção</a>
+  <a class="cat-btn cat-saude" href="#">Saúde</a>
+  <a class="cat-btn cat-pets" href="#">Pets</a>
+  <a class="cat-btn cat-ambiente" href="#">Ambiente</a>
+  <a class="cat-btn cat-tecnologia" href="#">Tecnologia</a>
+  <a class="cat-btn cat-beleza" href="#">Beleza</a>
+  <a class="cat-btn cat-outros" href="#">Outros</a>
+</div>
 
   <div class="page-perfil">
     <div class="perfil-wrapper">

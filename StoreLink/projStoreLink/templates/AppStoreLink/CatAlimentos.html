@@ -1,0 +1,231 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>StoreLink - Alimentos</title>
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="{% static 'AppStoreLink/images/icon-dark.png' %}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/style.css' %}"
+  >
+</head>
+
+<body>
+
+  <script>
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+    }
+  </script>
+
+
+  <!-- =========================
+       BARRA SUPERIOR
+  ========================== -->
+
+  <div class="topbar">
+
+    <div class="logo-icon">
+      <img
+        src="{% static 'AppStoreLink/images/icon-dark.png' %}"
+        alt="StoreLink"
+      >
+    </div>
+
+    <a class="nav-btn" href="{% url 'index' %}">
+      Início
+    </a>
+
+    <a class="nav-btn" href="{% url 'perfil-loja' %}">
+      Sua loja
+    </a>
+
+    <a class="nav-btn" id="suporte">
+      Suporte
+    </a>
+
+    <a class="nav-btn" onclick="setActiveNav(this)">
+      Como navegar?
+    </a>
+
+    {% if request.user.is_authenticated %}
+
+      <button
+        class="nav-account-btn"
+        data-url="{% url 'perfil-consumidor' %}"
+        onclick="location.href=this.dataset.url"
+      >
+        👤 Minha conta
+      </button>
+
+    {% else %}
+
+      <button
+        class="nav-account-btn"
+        data-url="{% url 'cadastro' %}"
+        onclick="location.href=this.dataset.url"
+      >
+        Criar conta ou Entrar
+      </button>
+
+    {% endif %}
+
+    <button
+      class="theme-toggle"
+      onclick="toggleTheme(this)"
+    >
+      🌙 Modo escuro
+    </button>
+
+  </div>
+
+
+  <!-- =========================
+       SIDEBAR
+  ========================== -->
+
+  <div class="sidebar-trigger"></div>
+
+  <div class="sidebar">
+
+    <a
+      class="cat-btn cat-alimentos {% if categoria == 'Alimentos' %}cat-active{% endif %}"
+      href="{% url 'CatAlimentos' %}"
+    >
+      Alimentos
+    </a>
+
+    <a class="cat-btn cat-moda" href="#">
+      Moda
+    </a>
+
+    <a class="cat-btn cat-esportes" href="#">
+      Esportes
+    </a>
+
+    <a class="cat-btn cat-construcao" href="#">
+      Construção
+    </a>
+
+    <a class="cat-btn cat-saude" href="#">
+      Saúde
+    </a>
+
+    <a class="cat-btn cat-pets" href="#">
+      Pets
+    </a>
+
+    <a class="cat-btn cat-ambiente" href="#">
+      Ambiente
+    </a>
+
+    <a class="cat-btn cat-tecnologia" href="#">
+      Tecnologia
+    </a>
+
+    <a class="cat-btn cat-beleza" href="#">
+      Beleza
+    </a>
+
+    <a class="cat-btn cat-outros" href="#">
+      Outros
+    </a>
+
+  </div>
+
+
+  <!-- =========================
+       CONTEÚDO
+  ========================== -->
+
+  <div class="categoria-container">
+
+    <h1 class="categoria-titulo">
+      Lojas de Alimentos
+    </h1>
+
+    {% if lojas %}
+
+      <div class="loja-grid">
+
+        {% for loja in lojas %}
+
+          <div class="loja-card">
+
+            <div class="loja-card-capa">
+
+              <button
+                class="loja-card-fav"
+                aria-label="Favoritar"
+              >
+                ♡
+              </button>
+
+            </div>
+
+            <div class="loja-card-corpo">
+
+              <h3>
+                {{ loja.nome_loja }}
+              </h3>
+
+              {% if loja.telefone_loja %}
+
+                <p class="loja-card-label">
+                  Telefone:
+                </p>
+
+                <p>
+                  {{ loja.telefone_loja }}
+                </p>
+
+              {% endif %}
+
+              {% if loja.id_endereco %}
+
+                <p class="loja-card-label">
+                  Localização:
+
+                  <span class="loja-card-endereco">
+                    {{ loja.id_endereco.rua }},
+                    {{ loja.id_endereco.numero_estabelecimento }}
+                  </span>
+
+                </p>
+
+              {% endif %}
+
+            </div>
+
+          </div>
+
+        {% endfor %}
+
+      </div>
+
+    {% else %}
+
+      <p class="hint-text categoria-vazio">
+        Nenhuma loja encontrada nessa categoria ainda.
+      </p>
+
+    {% endif %}
+
+  </div>
+
+
+  <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
+
+</body>
+
+</html>
