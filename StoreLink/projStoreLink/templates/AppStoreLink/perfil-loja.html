@@ -1,13 +1,25 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StoreLink</title>
-<link rel="icon" type="image/png" href="{% static 'AppStoreLink/images/icon-dark.png' %}">
-<link rel="stylesheet" href="{% static 'AppStoreLink/styles/perfil-loja.css' %}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>StoreLink</title>
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="{% static 'AppStoreLink/images/icon-dark.png' %}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/perfil-loja.css' %}"
+  >
 </head>
+
 <body>
 
   <script>
@@ -16,342 +28,1113 @@
     }
   </script>
 
+
+  <!-- ========================= -->
+  <!-- BARRA SUPERIOR -->
+  <!-- ========================= -->
+
   <div class="topbar">
-    <div class="logo-icon"><img src="{% static 'AppStoreLink/images/icon-dark.png' %}" alt="StoreLink"></div>
-    <button class="nav-btn" data-url="{% url 'index' %}" onclick="location.href=this.dataset.url">Início</button>
-    <button class="nav-btn active" data-url="{% url 'perfil-loja' %}" onclick="location.href=this.dataset.url">Sua loja</button>
-    <button class="nav-btn" onclick="setActiveNav(this)">Suporte</button>
-    <button class="nav-btn" onclick="setActiveNav(this)">Como navegar?</button>
+
+    <div class="logo-icon">
+      <img
+        src="{% static 'AppStoreLink/images/icon-dark.png' %}"
+        alt="StoreLink"
+      >
+    </div>
+
+
+    <button
+      class="nav-btn"
+      data-url="{% url 'index' %}"
+      onclick="location.href=this.dataset.url"
+    >
+      Início
+    </button>
+
+
+    <button
+      class="nav-btn active"
+      data-url="{% url 'perfil-loja' %}"
+      onclick="location.href=this.dataset.url"
+    >
+      Sua loja
+    </button>
+
+
+    <button
+      class="nav-btn"
+      onclick="setActiveNav(this)"
+    >
+      Suporte
+    </button>
+
+
+    <button
+      class="nav-btn"
+      onclick="setActiveNav(this)"
+    >
+      Como navegar?
+    </button>
+
+
     {% if request.user.is_authenticated %}
-    <button class="nav-account-btn" data-url="{% url 'perfil-consumidor' %}" onclick="location.href=this.dataset.url">👤 Minha conta</button>
+
+      <button
+        class="nav-account-btn"
+        data-url="{% url 'perfil-consumidor' %}"
+        onclick="location.href=this.dataset.url"
+      >
+        👤 Minha conta
+      </button>
+
     {% else %}
-    <button class="nav-account-btn" data-url="{% url 'cadastro' %}" onclick="location.href=this.dataset.url">Criar conta ou Entrar</button>
+
+      <button
+        class="nav-account-btn"
+        data-url="{% url 'cadastro' %}"
+        onclick="location.href=this.dataset.url"
+      >
+        Criar conta ou Entrar
+      </button>
+
     {% endif %}
-    <button class="theme-toggle" onclick="toggleTheme(this)">🌙 Modo escuro</button>
+
+
+    <button
+      class="theme-toggle"
+      onclick="toggleTheme(this)"
+    >
+      🌙 Modo escuro
+    </button>
+
   </div>
 
- <div class="sidebar">
-  <a class="cat-btn cat-alimentos" href="{% url 'CatAlimentos' %}">Alimentos</a>
-  <a class="cat-btn cat-moda" href="#">Moda</a>
-  <a class="cat-btn cat-esportes" href="#">Esportes</a>
-  <a class="cat-btn cat-construcao" href="#">Construção</a>
-  <a class="cat-btn cat-saude" href="#">Saúde</a>
-  <a class="cat-btn cat-pets" href="#">Pets</a>
-  <a class="cat-btn cat-ambiente" href="#">Ambiente</a>
-  <a class="cat-btn cat-tecnologia" href="#">Tecnologia</a>
-  <a class="cat-btn cat-beleza" href="#">Beleza</a>
-  <a class="cat-btn cat-outros" href="#">Outros</a>
-</div>
+
+
+  <!-- ========================= -->
+  <!-- MENU LATERAL -->
+  <!-- ========================= -->
+
+  <div class="sidebar">
+
+    <a
+      class="cat-btn cat-alimentos"
+      href="{% url 'CatAlimentos' %}"
+    >
+      Alimentos
+    </a>
+
+    <a class="cat-btn cat-moda" href="#">
+      Moda
+    </a>
+
+    <a class="cat-btn cat-esportes" href="#">
+      Esportes
+    </a>
+
+    <a class="cat-btn cat-construcao" href="#">
+      Construção
+    </a>
+
+    <a class="cat-btn cat-saude" href="#">
+      Saúde
+    </a>
+
+    <a class="cat-btn cat-pets" href="#">
+      Pets
+    </a>
+
+    <a class="cat-btn cat-ambiente" href="#">
+      Ambiente
+    </a>
+
+    <a class="cat-btn cat-tecnologia" href="#">
+      Tecnologia
+    </a>
+
+    <a class="cat-btn cat-beleza" href="#">
+      Beleza
+    </a>
+
+    <a class="cat-btn cat-outros" href="#">
+      Outros
+    </a>
+
+  </div>
+
+
+
+  <!-- ===================================================== -->
+  <!-- USUÁRIO LOGADO -->
+  <!-- ===================================================== -->
+
+  {% if request.user.is_authenticated %}
 
   <div class="page-perfil">
+
     <div class="perfil-wrapper">
 
-        <div class="perfil-left">
-        <div class="perfil-badge">Estabelecimento</div>
+
+      <!-- ========================= -->
+      <!-- LADO ESQUERDO -->
+      <!-- ========================= -->
+
+      <div class="perfil-left">
+
+        <div class="perfil-badge">
+          Estabelecimento
+        </div>
+
 
         <div class="perfil-avatar-wrap">
-        <label class="perfil-avatar" for="foto-responsavel">
-        <input
-       type="file"
-       id="foto-responsavel"
-        accept="image/*"
-        hidden
-        >
 
-        <svg id="avatar-padrao" viewBox="0 0 24 24">
-          <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
-         </svg>
+          <label
+            class="perfil-avatar"
+            for="foto-responsavel"
+          >
 
-          <img
-         id="preview-responsavel"
-         class="perfil-avatar-image"
-        alt="Foto do responsável"
-         >
-         </label>
+            <input
+              type="file"
+              id="foto-responsavel"
+              accept="image/*"
+              hidden
+            >
 
-         <label class="perfil-camera-badge" for="foto-responsavel">
-         📷
-         </label>
-         </div>
-        
-          <form method="POST">
+
+            <svg
+              id="avatar-padrao"
+              viewBox="0 0 24 24"
+            >
+              <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+            </svg>
+
+
+            <img
+              id="preview-responsavel"
+              class="perfil-avatar-image"
+              alt="Foto do responsável"
+            >
+
+          </label>
+
+
+          <label
+            class="perfil-camera-badge"
+            for="foto-responsavel"
+          >
+            📷
+          </label>
+
+        </div>
+
+
+        <form method="POST">
+
           {% csrf_token %}
 
+
           <div class="perfil-field-left">
-            <label>Nome do responsável</label>
-            <input type="text" value="{{ request.user.first_name }}">
+
+            <label>
+              Nome do responsável
+            </label>
+
+            <input
+              type="text"
+              value="{{ request.user.first_name }}"
+            >
+
           </div>
+
+
           <div class="perfil-field-left">
-            <label>Sobrenome</label>
-            <input type="text" value="{{ request.user.last_name }}">
+
+            <label>
+              Sobrenome
+            </label>
+
+            <input
+              type="text"
+              value="{{ request.user.last_name }}"
+            >
+
           </div>
 
-          </form>
+        </form>
 
-         <button class="perfil-logout-btn">Fazer Logout </button>
-         </div>
 
-         <div class="perfil-card">
-          <div class="perfil-card-left">
-          <label class="perfil-cover" for="foto-estabelecimento">
-          <input
-          type="file"
-          id="foto-estabelecimento"
-          accept="image/*"
-          hidden
+        <button class="perfil-logout-btn">
+          Fazer Logout
+        </button>
+
+      </div>
+
+
+
+      <!-- ========================= -->
+      <!-- CARD DA LOJA -->
+      <!-- ========================= -->
+
+      <div class="perfil-card">
+
+
+        <!-- ========================= -->
+        <!-- ESQUERDA DO CARD -->
+        <!-- ========================= -->
+
+        <div class="perfil-card-left">
+
+          <label
+            class="perfil-cover"
+            for="foto-estabelecimento"
           >
 
-          <img
-          id="preview-estabelecimento"
-          class="perfil-cover-image"
-          alt="Imagem do estabelecimento"
-          >
+            <input
+              type="file"
+              id="foto-estabelecimento"
+              accept="image/*"
+              hidden
+            >
 
-          <span id="texto-adicionar-imagem">📷 Adicionar imagem</span>
-          </label>  
-          
-          <div class="perfil-edit-label">Editar fotos e informações dos produtos</div>
-          <button class="perfil-action-btn">PRODUTOS </button>
 
-          <div class="perfil-edit-label">Editar fotos e informações dos serviços</div>
-          <button class="perfil-action-btn">SERVIÇOS </button>
+            <img
+              id="preview-estabelecimento"
+              class="perfil-cover-image"
+              alt="Imagem do estabelecimento"
+            >
 
-          <button class="perfil-delete-btn">Salvar Loja </button>
 
-          <button class="perfil-delete-btn">Excluir Loja </button>
+            <span id="texto-adicionar-imagem">
+              📷 Adicionar imagem
+            </span>
+
+          </label>
+
+
+          <div class="perfil-edit-label">
+            Editar fotos e informações dos produtos
+          </div>
+
+
+          <button class="perfil-action-btn">
+            PRODUTOS
+          </button>
+
+
+          <div class="perfil-edit-label">
+            Editar fotos e informações dos serviços
+          </div>
+
+
+          <button class="perfil-action-btn">
+            SERVIÇOS
+          </button>
+
+
+          <button class="perfil-delete-btn">
+            Salvar Loja
+          </button>
+
+
+          <button class="perfil-delete-btn">
+            Excluir Loja
+          </button>
+
         </div>
+
+
+
+        <!-- ========================= -->
+        <!-- MEIO DO CARD -->
+        <!-- ========================= -->
 
         <div class="perfil-card-middle">
-          <h3>Nome</h3>
+
+          <h3>
+            Nome
+          </h3>
+
+
           <div class="perfil-field">
-            <label>Nome do Estabelecimento</label>
-            <input type="text" value="{{ request.user.username }}">
+
+            <label>
+              Nome do Estabelecimento
+            </label>
+
+            <input
+              type="text"
+              value="{{ request.user.username }}"
+            >
+
           </div>
 
-          <h3>Localização</h3>
+
+          <h3>
+            Localização
+          </h3>
+
+
           <div class="perfil-field">
-            <label>Rua</label>
-            <input type="text" value="{{ request.AppStoreLink_endereco.rua }}">
+
+            <label>
+              Rua
+            </label>
+
+            <input
+              type="text"
+              value="{{ request.AppStoreLink_endereco.rua }}"
+            >
+
           </div>
+
+
           <div class="perfil-row">
+
             <div class="perfil-field">
-              <label>Número</label>
-              <input type="text" value="{{ request.AppStoreLink_endereco.numero_estabelecimento }}">
+
+              <label>
+                Número
+              </label>
+
+              <input
+                type="text"
+                value="{{ request.AppStoreLink_endereco.numero_estabelecimento }}"
+              >
+
             </div>
+
+
             <div class="perfil-field">
-              <label>CEP</label>
-              <input type="text" value="{{ request.AppStoreLink_endereco.cep }}">
+
+              <label>
+                CEP
+              </label>
+
+              <input
+                type="text"
+                value="{{ request.AppStoreLink_endereco.cep }}"
+              >
+
             </div>
+
           </div>
 
-          <h3>Informações</h3>
+
+          <h3>
+            Informações
+          </h3>
+
+
           <div class="perfil-field">
-            <label>E-mail</label>
-            <input type="text" value="{{ request.AppStoreLink_loja.email_loja }}">
+
+            <label>
+              E-mail
+            </label>
+
+            <input
+              type="text"
+              value="{{ request.AppStoreLink_loja.email_loja }}"
+            >
+
           </div>
+
+
           <div class="perfil-field">
-            <label>Telefone</label>
+
+            <label>
+              Telefone
+            </label>
+
+
             <div class="perfil-phone">
-              <span>(+55)</span>
-              <input type="text" value="{{ request.AppStoreLink_loja.telefone_loja }}">
+
+              <span>
+                (+55)
+              </span>
+
+              <input
+                type="text"
+                value="{{ request.AppStoreLink_loja.telefone_loja }}"
+              >
+
             </div>
+
           </div>
+
+
           <div class="perfil-field">
-            <label>CNPJ</label>
-            <input type="text" value="{{ request.AppStoreLink_loja.cnpj }}">
+
+            <label>
+              CNPJ
+            </label>
+
+            <input
+              type="text"
+              value="{{ request.AppStoreLink_loja.cnpj }}"
+            >
+
           </div>
+
+
           <div class="perfil-field">
-            <label>Link de Loja virtual (Opcional)</label>
-            <input type="text" value="{{ request.AppStoreLink_loja.link }}">
+
+            <label>
+              Link de Loja virtual (Opcional)
+            </label>
+
+            <input
+              type="text"
+              value="{{ request.AppStoreLink_loja.link }}"
+            >
+
           </div>
+
         </div>
+
+
+
+        <!-- ========================= -->
+        <!-- DIREITA DO CARD -->
+        <!-- ========================= -->
 
         <div class="perfil-card-right">
+
           <div class="perfil-classif-wrap">
-            <label>Classificação da Loja</label>
-            <button type="button" class="perfil-classif-btn" id="classifBtn">
-              <span id="classifName">Alimentos</span> ▾
+
+            <label>
+              Classificação da Loja
+            </label>
+
+
+            <button
+              type="button"
+              class="perfil-classif-btn"
+              id="classifBtn"
+            >
+
+              <span id="classifName">
+                Alimentos
+              </span>
+
+              ▾
+
             </button>
-            <div class="perfil-classif-dropdown" id="classifDropdown"></div>
+
+
+            <div
+              class="perfil-classif-dropdown"
+              id="classifDropdown"
+            ></div>
+
           </div>
 
+
           <div>
-            <label>CNPJ Anônimo</label>
+
+            <label>
+              CNPJ Anônimo
+            </label>
+
+
             <div class="perfil-toggle">
-              <button type="button" class="perfil-toggle-btn active">Sim</button>
-              <button type="button" class="perfil-toggle-btn">Não</button>
+
+              <button
+                type="button"
+                class="perfil-toggle-btn active"
+              >
+                Sim
+              </button>
+
+
+              <button
+                type="button"
+                class="perfil-toggle-btn"
+              >
+                Não
+              </button>
+
             </div>
+
           </div>
+
         </div>
+
+
       </div>
 
     </div>
+
   </div>
 
+
+
+  <!-- ===================================================== -->
+  <!-- USUÁRIO NÃO LOGADO -->
+  <!-- ===================================================== -->
+
+  {% else %}
+
+  <div class="acesso-loja">
+
+    <h1>
+      Para criar sua loja você precisa fazer login ou cadastrar-se.
+    </h1>
+
+
+    <p>
+      Cadastre-se ou realize login para poder criar e administrar sua loja.
+    </p>
+
+
+    <a href="{% url 'cadastro' %}">
+      Cadastre-se ou realize login aqui
+    </a>
+
+  </div>
+
+  {% endif %}
+
+
+
+  <!-- ========================= -->
+  <!-- JAVASCRIPT -->
+  <!-- ========================= -->
+
   <script>
+
     function setActiveNav(btn) {
-      document.querySelectorAll('.nav-btn').forEach(function (b) {
-        b.classList.remove('active');
-      });
+
+      document
+        .querySelectorAll('.nav-btn')
+        .forEach(function (b) {
+
+          b.classList.remove('active');
+
+        });
+
       btn.classList.add('active');
+
     }
+
+
 
     function toggleTheme(btn) {
+
       document.body.classList.toggle('dark');
-      var isDark = document.body.classList.contains('dark');
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+
+      var isDark =
+        document.body.classList.contains('dark');
+
+
+      localStorage.setItem(
+        'theme',
+        isDark ? 'dark' : 'light'
+      );
+
+
       if (isDark) {
-        btn.textContent = '☀️ Modo claro';
+
+        btn.textContent =
+          '☀️ Modo claro';
+
       } else {
-        btn.textContent = '🌙 Modo escuro';
+
+        btn.textContent =
+          '🌙 Modo escuro';
+
       }
+
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-      var themeBtn = document.querySelector('.theme-toggle');
-      if (themeBtn && document.body.classList.contains('dark')) {
-        themeBtn.textContent = '☀️ Modo claro';
-      }
-    });
 
-    document.addEventListener('DOMContentLoaded', function () {
-      var classifBtn = document.getElementById('classifBtn');
-      var classifName = document.getElementById('classifName');
-      var dropdown = document.getElementById('classifDropdown');
 
-      if (!classifBtn || !dropdown) return;
+    document.addEventListener(
+      'DOMContentLoaded',
+      function () {
 
-      function lightenColor(color, amount) {
-        var r, g, b;
-        var match = color.match(/\d+/g);
-        if (match) {
-          r = parseInt(match[0], 10);
-          g = parseInt(match[1], 10);
-          b = parseInt(match[2], 10);
-        } else {
-          var hex = color.replace('#', '');
-          r = parseInt(hex.substring(0, 2), 16);
-          g = parseInt(hex.substring(2, 4), 16);
-          b = parseInt(hex.substring(4, 6), 16);
+        var themeBtn =
+          document.querySelector('.theme-toggle');
+
+
+        if (
+          themeBtn &&
+          document.body.classList.contains('dark')
+        ) {
+
+          themeBtn.textContent =
+            '☀️ Modo claro';
+
         }
-        r = Math.min(255, Math.round(r + (255 - r) * amount));
-        g = Math.min(255, Math.round(g + (255 - g) * amount));
-        b = Math.min(255, Math.round(b + (255 - b) * amount));
-        return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+
       }
+    );
 
-      function applyClassification(name, bgColor) {
-        classifName.textContent = name;
-        document.documentElement.style.setProperty('--brand-red', bgColor);
-        document.documentElement.style.setProperty('--brand-red-light', lightenColor(bgColor, 0.18));
-      }
 
-      function closeDropdown() {
-        dropdown.classList.remove('open');
-      }
 
-      var sidebarButtons = document.querySelectorAll('.sidebar .cat-btn');
-      sidebarButtons.forEach(function (catBtn) {
-        var name = catBtn.textContent.trim();
-        var style = window.getComputedStyle(catBtn);
-        var bgColor = style.backgroundColor;
-        var textColor = style.color;
+    /* ========================= */
+    /* CLASSIFICAÇÃO DA LOJA */
+    /* ========================= */
 
-        var option = document.createElement('button');
-        option.type = 'button';
-        option.className = 'perfil-classif-option';
-        option.textContent = name;
-        option.style.background = bgColor;
-        option.style.color = textColor;
+    document.addEventListener(
+      'DOMContentLoaded',
+      function () {
 
-        option.addEventListener('click', function (e) {
-          e.stopPropagation();
+        var classifBtn =
+          document.getElementById('classifBtn');
 
-          if (name === 'Outros') {
-            var custom = window.prompt('Digite o nome da classificação da loja:');
-            if (custom && custom.trim() !== '') {
-              applyClassification(custom.trim(), bgColor);
-            }
+        var classifName =
+          document.getElementById('classifName');
+
+        var dropdown =
+          document.getElementById('classifDropdown');
+
+
+        if (!classifBtn || !dropdown) {
+          return;
+        }
+
+
+        function lightenColor(color, amount) {
+
+          var r, g, b;
+
+          var match =
+            color.match(/\d+/g);
+
+
+          if (match) {
+
+            r = parseInt(match[0], 10);
+            g = parseInt(match[1], 10);
+            b = parseInt(match[2], 10);
+
           } else {
-            applyClassification(name, bgColor);
+
+            var hex =
+              color.replace('#', '');
+
+            r =
+              parseInt(
+                hex.substring(0, 2),
+                16
+              );
+
+            g =
+              parseInt(
+                hex.substring(2, 4),
+                16
+              );
+
+            b =
+              parseInt(
+                hex.substring(4, 6),
+                16
+              );
+
           }
 
-          closeDropdown();
-        });
 
-        dropdown.appendChild(option);
-      });
+          r = Math.min(
+            255,
+            Math.round(
+              r + (255 - r) * amount
+            )
+          );
 
-      classifBtn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        dropdown.classList.toggle('open');
-      });
 
-      document.addEventListener('click', function () {
-        closeDropdown();
-      });
+          g = Math.min(
+            255,
+            Math.round(
+              g + (255 - g) * amount
+            )
+          );
 
-      document.querySelectorAll('.perfil-toggle-btn').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          document.querySelectorAll('.perfil-toggle-btn').forEach(function (b) {
-            b.classList.remove('active');
-          });
-          btn.classList.add('active');
-        });
-      });
-    });
-    const fotoEstabelecimento = document.getElementById('foto-estabelecimento');
-const previewEstabelecimento = document.getElementById('preview-estabelecimento');
-const areaImagem = document.querySelector('.perfil-cover');
 
-fotoEstabelecimento.addEventListener('change', function () {
-    const arquivo = this.files[0];
+          b = Math.min(
+            255,
+            Math.round(
+              b + (255 - b) * amount
+            )
+          );
 
-    if (!arquivo) {
-        return;
+
+          return 'rgb(' +
+            r + ', ' +
+            g + ', ' +
+            b +
+            ')';
+
+        }
+
+
+
+        function applyClassification(
+          name,
+          bgColor
+        ) {
+
+          classifName.textContent =
+            name;
+
+
+          document.documentElement.style.setProperty(
+            '--brand-red',
+            bgColor
+          );
+
+
+          document.documentElement.style.setProperty(
+            '--brand-red-light',
+            lightenColor(
+              bgColor,
+              0.18
+            )
+          );
+
+        }
+
+
+
+        function closeDropdown() {
+
+          dropdown.classList.remove('open');
+
+        }
+
+
+
+        var sidebarButtons =
+          document.querySelectorAll(
+            '.sidebar .cat-btn'
+          );
+
+
+        sidebarButtons.forEach(
+          function (catBtn) {
+
+            var name =
+              catBtn.textContent.trim();
+
+
+            var style =
+              window.getComputedStyle(catBtn);
+
+
+            var bgColor =
+              style.backgroundColor;
+
+
+            var textColor =
+              style.color;
+
+
+            var option =
+              document.createElement('button');
+
+
+            option.type =
+              'button';
+
+
+            option.className =
+              'perfil-classif-option';
+
+
+            option.textContent =
+              name;
+
+
+            option.style.background =
+              bgColor;
+
+
+            option.style.color =
+              textColor;
+
+
+            option.addEventListener(
+              'click',
+              function (e) {
+
+                e.stopPropagation();
+
+
+                if (name === 'Outros') {
+
+                  var custom =
+                    window.prompt(
+                      'Digite o nome da classificação da loja:'
+                    );
+
+
+                  if (
+                    custom &&
+                    custom.trim() !== ''
+                  ) {
+
+                    applyClassification(
+                      custom.trim(),
+                      bgColor
+                    );
+
+                  }
+
+                } else {
+
+                  applyClassification(
+                    name,
+                    bgColor
+                  );
+
+                }
+
+
+                closeDropdown();
+
+              }
+            );
+
+
+            dropdown.appendChild(option);
+
+          }
+        );
+
+
+
+        classifBtn.addEventListener(
+          'click',
+          function (e) {
+
+            e.stopPropagation();
+
+            dropdown.classList.toggle('open');
+
+          }
+        );
+
+
+
+        document.addEventListener(
+          'click',
+          function () {
+
+            closeDropdown();
+
+          }
+        );
+
+
+
+        document
+          .querySelectorAll('.perfil-toggle-btn')
+          .forEach(
+            function (btn) {
+
+              btn.addEventListener(
+                'click',
+                function () {
+
+                  document
+                    .querySelectorAll(
+                      '.perfil-toggle-btn'
+                    )
+                    .forEach(
+                      function (b) {
+
+                        b.classList.remove(
+                          'active'
+                        );
+
+                      }
+                    );
+
+
+                  btn.classList.add('active');
+
+                }
+              );
+
+            }
+          );
+
+      }
+    );
+
+
+
+    /* ========================= */
+    /* FOTO DO ESTABELECIMENTO */
+    /* ========================= */
+
+    const fotoEstabelecimento =
+      document.getElementById(
+        'foto-estabelecimento'
+      );
+
+
+    const previewEstabelecimento =
+      document.getElementById(
+        'preview-estabelecimento'
+      );
+
+
+    const areaImagem =
+      document.querySelector(
+        '.perfil-cover'
+      );
+
+
+    if (
+      fotoEstabelecimento &&
+      previewEstabelecimento &&
+      areaImagem
+    ) {
+
+      fotoEstabelecimento.addEventListener(
+        'change',
+        function () {
+
+          const arquivo =
+            this.files[0];
+
+
+          if (!arquivo) {
+            return;
+          }
+
+
+          if (
+            !arquivo.type.startsWith('image/')
+          ) {
+
+            alert(
+              'Selecione um arquivo de imagem.'
+            );
+
+            this.value = '';
+
+            return;
+
+          }
+
+
+          const imagemURL =
+            URL.createObjectURL(
+              arquivo
+            );
+
+
+          previewEstabelecimento.src =
+            imagemURL;
+
+
+          areaImagem.classList.add(
+            'tem-imagem'
+          );
+
+
+          previewEstabelecimento.onload =
+            function () {
+
+              URL.revokeObjectURL(
+                imagemURL
+              );
+
+            };
+
+        }
+      );
+
     }
 
-    if (!arquivo.type.startsWith('image/')) {
-        alert('Selecione um arquivo de imagem.');
-        this.value = '';
-        return;
+
+
+    /* ========================= */
+    /* FOTO DO RESPONSÁVEL */
+    /* ========================= */
+
+    const fotoResponsavel =
+      document.getElementById(
+        'foto-responsavel'
+      );
+
+
+    const previewResponsavel =
+      document.getElementById(
+        'preview-responsavel'
+      );
+
+
+    const avatarResponsavel =
+      document.querySelector(
+        '.perfil-avatar'
+      );
+
+
+    if (
+      fotoResponsavel &&
+      previewResponsavel &&
+      avatarResponsavel
+    ) {
+
+      fotoResponsavel.addEventListener(
+        'change',
+        function () {
+
+          const arquivo =
+            this.files[0];
+
+
+          if (!arquivo) {
+            return;
+          }
+
+
+          if (
+            !arquivo.type.startsWith('image/')
+          ) {
+
+            alert(
+              'Selecione um arquivo de imagem.'
+            );
+
+            this.value = '';
+
+            return;
+
+          }
+
+
+          const imagemURL =
+            URL.createObjectURL(
+              arquivo
+            );
+
+
+          previewResponsavel.src =
+            imagemURL;
+
+
+          avatarResponsavel.classList.add(
+            'tem-imagem'
+          );
+
+
+          previewResponsavel.onload =
+            function () {
+
+              URL.revokeObjectURL(
+                imagemURL
+              );
+
+            };
+
+        }
+      );
+
     }
 
-    const imagemURL = URL.createObjectURL(arquivo);
-
-    previewEstabelecimento.src = imagemURL;
-    areaImagem.classList.add('tem-imagem');
-
-    previewEstabelecimento.onload = function () {
-        URL.revokeObjectURL(imagemURL);
-    };
-});
-const fotoResponsavel = document.getElementById('foto-responsavel');
-const previewResponsavel = document.getElementById('preview-responsavel');
-const avatarResponsavel = document.querySelector('.perfil-avatar');
-
-fotoResponsavel.addEventListener('change', function () {
-  const arquivo = this.files[0];
-
-  if (!arquivo) {
-    return;
-  }
-
-  if (!arquivo.type.startsWith('image/')) {
-    alert('Selecione um arquivo de imagem.');
-    this.value = '';
-    return;
-  }
-
-  const imagemURL = URL.createObjectURL(arquivo);
-
-  previewResponsavel.src = imagemURL;
-  avatarResponsavel.classList.add('tem-imagem');
-
-  previewResponsavel.onload = function () {
-    URL.revokeObjectURL(imagemURL);
-  };
-});
   </script>
 
 </body>
