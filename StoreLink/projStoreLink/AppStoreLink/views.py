@@ -17,8 +17,22 @@ def perfil_loja(request):
         request.user.first_name = request.POST.get('first_name', '')
         request.user.last_name = request.POST.get('last_name', '')
         request.user.save()
+        
     elif request.method == 'POST':
-        # ! ! ! ! >>>ERRO<<< ! ! ! !
+        request.user.username = request.POST.get('nome_estabelecimento', '')
+        request.user.save
+        
+        endereco.rua = request.POST.get('rua', '')
+        endereco.numero_estabelecimento = request.POST.get('numero', '')
+        endereco.cep = request.POST.get('cep', '')
+        endereco.save()
+        
+        loja.email_loja = request.POST.get('email_loja', '')
+        loja.telefone_loja = request.POST.get('telefone_loja', '')
+        loja.cnpj = request.POST.get('cnpj', '')
+        loja.link = request.POST.get('link_loja', '')
+        loja.save()
+        
 
     loja = Loja.objects.all()
     usuario = Usuario.objects.all()
