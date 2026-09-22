@@ -220,7 +220,6 @@
 
           {% csrf_token %}
 
-
           <div class="perfil-field-left">
 
             <label>
@@ -248,6 +247,9 @@
 
           </div>
 
+          <button class="perfil-delete-btn">
+            Salvar Nome
+          </button>
         </form>
 
 
@@ -321,148 +323,153 @@
 
 
         <div class="perfil-card-middle">
+          <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="form_loja" value="1">
 
-          <h3>
-            Nome
-          </h3>
-
-
-          <div class="perfil-field">
-
-            <label>
-              Nome do Estabelecimento
-            </label>
-
-            <input
-              type="text"
-              value="{{ request.user.username }}"
-            >
-
-          </div>
-
-
-          <h3>
-            Localização
-          </h3>
-
-
-          <div class="perfil-field">
-
-            <label>
-              Rua
-            </label>
-
-            <input
-              type="text"
-              value="{{ request.AppStoreLink_endereco.rua }}"
-            >
-
-          </div>
-
-
-          <div class="perfil-row">
-
+            <h3>
+              Nome
+            </h3>
+  
+  
             <div class="perfil-field">
-
+  
               <label>
-                Número
+                Nome do Estabelecimento
               </label>
-
+  
+  
               <input
                 type="text"
-                value="{{ request.AppStoreLink_endereco.numero_estabelecimento }}"
+                value="{{ request.user.username }}"
               >
-
+  
             </div>
-
-
+  
+  
+            <h3>
+              Localização
+            </h3>
+  
+  
             <div class="perfil-field">
-
+  
               <label>
-                CEP
+                Rua
               </label>
-
+  
               <input
                 type="text"
-                value="{{ request.AppStoreLink_endereco.cep }}"
+                value="{{ request.AppStoreLink_endereco.rua }}"
               >
-
+  
             </div>
-
-          </div>
-
-
-          <h3>
-            Informações
-          </h3>
-
-
-          <div class="perfil-field">
-
-            <label>
-              E-mail
-            </label>
-
-            <input
-              type="text"
-              value="{{ request.AppStoreLink_loja.email_loja }}"
-            >
-
-          </div>
-
-
-          <div class="perfil-field">
-
-            <label>
-              Telefone
-            </label>
-
-
-            <div class="perfil-phone">
-
-              <span>
-                (+55)
-              </span>
-
+  
+  
+            <div class="perfil-row">
+  
+              <div class="perfil-field">
+  
+                <label>
+                  Número
+                </label>
+  
+                <input
+                  type="text"
+                  value="{{ request.AppStoreLink_endereco.numero_estabelecimento }}"
+                >
+  
+              </div>
+  
+  
+              <div class="perfil-field">
+  
+                <label>
+                  CEP
+                </label>
+  
+                <input
+                  type="text"
+                  value="{{ request.AppStoreLink_endereco.cep }}"
+                >
+  
+              </div>
+  
+            </div>
+  
+  
+            <h3>
+              Informações
+            </h3>
+  
+  
+            <div class="perfil-field">
+  
+              <label>
+                E-mail
+              </label>
+  
               <input
                 type="text"
-                value="{{ request.AppStoreLink_loja.telefone_loja }}"
+                value="{{ request.AppStoreLink_loja.email_loja }}"
               >
-
+  
+            </div>
+  
+  
+            <div class="perfil-field">
+  
+              <label>
+                Telefone
+              </label>
+  
+  
+              <div class="perfil-phone">
+  
+                <span>
+                  (+55)
+                </span>
+  
+                <input
+                  type="text"
+                  value="{{ request.AppStoreLink_loja.telefone_loja }}"
+                >
+  
+              </div>
+  
+            </div>
+  
+  
+            <div class="perfil-field">
+  
+              <label>
+                CNPJ
+              </label>
+  
+              <input
+                type="text"
+                value="{{ request.AppStoreLink_loja.cnpj }}"
+              >
+  
+            </div>
+  
+  
+            <div class="perfil-field">
+  
+              <label>
+                Link de Loja virtual (Opcional)
+              </label>
+  
+              <input
+                type="text"
+                value="{{ request.AppStoreLink_loja.link }}"
+              >
             </div>
 
-          </div>
-
-
-          <div class="perfil-field">
-
-            <label>
-              CNPJ
-            </label>
-
-            <input
-              type="text"
-              value="{{ request.AppStoreLink_loja.cnpj }}"
-            >
-
-          </div>
-
-
-          <div class="perfil-field">
-
-            <label>
-              Link de Loja virtual (Opcional)
-            </label>
-
-            <input
-              type="text"
-              value="{{ request.AppStoreLink_loja.link }}"
-            >
-
-          </div>
-
-        </div>
-
+            <button class="perfil-delete-btn">
+              Salvar Loja
+            </button>
+          </form>
 
         <div class="perfil-card-right">
 

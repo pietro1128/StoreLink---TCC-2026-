@@ -17,6 +17,8 @@ def perfil_loja(request):
         request.user.first_name = request.POST.get('first_name', '')
         request.user.last_name = request.POST.get('last_name', '')
         request.user.save()
+    elif request.method == 'POST':
+        # ! ! ! ! >>>ERRO<<< ! ! ! !
 
     loja = Loja.objects.all()
     usuario = Usuario.objects.all()
