@@ -228,7 +228,7 @@
 
             <input
               type="text"
-              value="{{ request.user.first_name }}"
+              value="{{ {{ request.AppStoreLink_usuario.nome }} }}"
             >
 
           </div>
@@ -242,7 +242,7 @@
 
             <input
               type="text"
-              value="{{ request.user.last_name }}"
+              value="{{ request.AppStoreLink_usuario.sobrenome }}"
             >
 
           </div>
@@ -341,7 +341,7 @@
   
               <input
                 type="text"
-                value="{{ request.user.username }}"
+                value="{{ request.AppStoreLink_loja.nome_loja }}"
               >
   
             </div>

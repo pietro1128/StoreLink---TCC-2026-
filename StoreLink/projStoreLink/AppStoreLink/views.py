@@ -14,13 +14,13 @@ def index(request):
 #@login_required
 def perfil_loja(request):
     if request.method == 'POST':
-        request.user.first_name = request.POST.get('first_name', '')
-        request.user.last_name = request.POST.get('last_name', '')
-        request.user.save()
+        usuario.nome = request.POST.get('nome', '')
+        usuario.sobrenome = request.POST.get('sobrenome', '')
+        usuario.save()
         
     elif request.method == 'POST':
-        request.user.username = request.POST.get('nome_estabelecimento', '')
-        request.user.save
+        loja.nome_loja = request.POST.get('nome_loja', '')
+        loja.save()
         
         endereco.rua = request.POST.get('rua', '')
         endereco.numero_estabelecimento = request.POST.get('numero', '')
@@ -55,6 +55,9 @@ def perfil_consumidor(request):
 
 
 def cadastro(request):
+    if request.method == 'POST':
+        request.render
+    
     usuario = Usuario.objects.all()
     return render(request, 'registration/cadastro.html')
 

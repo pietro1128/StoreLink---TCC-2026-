@@ -47,7 +47,8 @@
           <img src="{% static 'AppStoreLink/images/google-plus.png' %}" alt="Google+">
         </button>
 
-        <form class="auth-form" method="post" action="">
+        <form class="auth-form" method="POST" action=""
+        >
           {% csrf_token %}
 
           <label class="auth-field">
@@ -57,7 +58,7 @@
 
           <label class="auth-field">
             <img class="field-icon-light" src="{% static 'AppStoreLink/images/e-mail.png' %}" alt=""><img class="field-icon-dark" src="{% static 'AppStoreLink/images/e-mail-dark.png' %}" alt="">
-            <input type="email" name="email" placeholder="E-mail" required>
+            <input type="email" name="email" value="" placeholder="E-mail" required>
           </label>
 
           <label class="auth-field">
