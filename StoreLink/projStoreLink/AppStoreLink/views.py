@@ -128,3 +128,37 @@ def CatAlimentos(request):
         'AppStoreLink/CatAlimentos.html',
         contexto
     )
+
+
+def CatModa(request):
+    lojas = Loja.objects.filter(
+        id_categoria__tipo_categoria='Moda'
+    ).select_related('id_endereco', 'id_categoria')
+
+    contexto = {
+        'categoria': 'Moda',
+        'lojas': lojas,
+    }
+
+    return render(
+        request,
+        'AppStoreLink/CatModa.html',
+        contexto
+    )
+
+
+def CatEsportes(request):
+    lojas = Loja.objects.filter(
+        id_categoria__tipo_categoria='Esportes'
+    ).select_related('id_endereco', 'id_categoria')
+
+    contexto = {
+        'categoria': 'Esportes',
+        'lojas': lojas,
+    }
+
+    return render(
+        request,
+        'AppStoreLink/CatEsportes.html',
+        contexto
+    )

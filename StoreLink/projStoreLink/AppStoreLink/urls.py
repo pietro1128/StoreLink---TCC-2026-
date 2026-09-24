@@ -6,7 +6,9 @@ from AppStoreLink.views import (
     perfil_consumidor,
     cadastro,
     login,
-    CatAlimentos
+    CatAlimentos,
+    CatModa,
+    CatEsportes
 )
 
 
@@ -27,4 +29,10 @@ urlpatterns = [
 
     # categoria Alimentos
     path('CatAlimentos/', CatAlimentos, name='CatAlimentos'),
+
+    # categoria Moda
+    path('CatModa/', CatModa, name='CatModa'),
+
+    # categoria Esportes
+    path('CatEsportes/', CatEsportes, name='CatEsportes'),
 ]

@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>StoreLink - Alimentos</title>
+  <title>StoreLink - Moda</title>
 
   <link
     rel="icon"
@@ -17,6 +17,11 @@
   <link
     rel="stylesheet"
     href="{% static 'AppStoreLink/styles/style.css' %}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/catmoda.css' %}"
   >
 </head>
 
@@ -92,7 +97,7 @@
 
   <div class="sidebar">
 
-     <a
+    <a
       class="cat-btn cat-alimentos {% if categoria == 'Alimentos' %}cat-active{% endif %}"
       href="{% url 'CatAlimentos' %}"
     >
@@ -149,7 +154,7 @@
   <div class="categoria-container">
 
     <h1 class="categoria-titulo">
-      Lojas de Alimentos
+      Lojas de Moda
     </h1>
 
     {% if lojas %}
