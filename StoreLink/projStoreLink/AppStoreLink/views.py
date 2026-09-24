@@ -54,11 +54,16 @@ def perfil_consumidor(request):
     )
 
 
+# >>>>>>>>>>>>> ERRO <<<<<<<<<<<<<<<<<
 def cadastro(request):
     if request.method == 'POST':
-        request.render
+        usuario.nome = request.POST.get('nome', '')
+        usuario.email = request.POST.get('email', '')
+        usuario.senha = request.POST.get('senha', '')
+        usuario.save()
     
     usuario = Usuario.objects.all()
+
     return render(request, 'registration/cadastro.html')
 
 
