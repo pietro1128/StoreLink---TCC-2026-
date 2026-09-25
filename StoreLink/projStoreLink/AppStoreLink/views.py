@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.db.models import Q
-from AppStoreLink.models import Usuario, Loja, Endereco, Produto, Servico, LojaFavoritas
+from django.contrib import messages
+from django.contrib.auth.hashers import make_password, check_password
+from AppStoreLink.models import Usuario, Loja, Endereco, Produto, Servico, LojaFavoritas, TipoUsuario
 from django.contrib.auth.decorators import login_required
 
 
@@ -54,22 +56,59 @@ def perfil_consumidor(request):
     )
 
 
-# >>>>>>>>>>>>> ERRO <<<<<<<<<<<<<<<<<
 def cadastro(request):
     if request.method == 'POST':
-        usuario.nome = request.POST.get('nome', '')
-        usuario.email = request.POST.get('email', '')
-        usuario.senha = request.POST.get('senha', '')
-        usuario.save()
+        nome = request.POST.get('nome', '').strip()
+        sobrenome = request.POST.get('sobrenome', '').strip()
+        email = request.POST.get('email', '').strip()
+        senha = request.POST.get('senha', '')
+        telefone = request.POST.get('telefone', '').strip()
+        cpf = request.POST.get('cpf', '').strip()
+        id_tipo_usuario = request.POST.get('id_tipo_usuario')  # ex: valor vindo de um <select>    
     
-    usuario = Usuario.objects.all()
+        if Usuario.objects.filter(email=email).exists():
+            messages.error(request, 'Este e-mail já está cadastrado.')
+            return render(request, 'registration/cadastro.html')
+
+        if Usuario.objects.filter(cpf=cpf).exists():
+            messages.error(request, 'Este CPF já está cadastrado.')
+            return render(request, 'registration/cadastro.html')
+
+        usuario = Usuario(
+            nome=nome,
+            sobrenome=sobrenome,
+            email=email,
+            senha=make_password(senha),  # ← aqui a senha vira um hash, nunca texto puro
+            telefone=telefone,
+            cpf=cpf,
+            id_tipo_usuario_id=id_tipo_usuario,
+        )
+        usuario.save()
+
+        messages.success(request, 'Cadastro realizado com sucesso! Faça login para continuar.')
+        return redirect('login')
 
     return render(request, 'registration/cadastro.html')
 
-
+    
 def login(request):
-    usuario = Usuario.objects.all()
-    loja = Loja.objects.all()
+    if request.method == 'POST':
+        email = request.POST.get('email', '').strip()
+        senha = request.POST.get('senha', '')
+
+        try:
+            usuario = Usuario.objects.get(email=email)
+        except Usuario.DoesNotExist:
+            messages.error(request, 'E-mail ou senha inválidos.')
+            return render(request, 'registration/login.html')
+
+        if check_password(senha, usuario.senha):
+            # Login bem-sucedido: guarda o ID do usuário na sessão
+            request.session['usuario_id'] = usuario.id_categoria
+            messages.success(request, f'Bem-vindo, {usuario.nome}!')
+            return redirect('index')
+        else:
+            messages.error(request, 'E-mail ou senha inválidos.')
 
     return render(request, 'registration/login.html')
 

@@ -3,10 +3,10 @@ from django.db import models
 
 class TipoUsuario(models.Model):
     id_tipo_usuario = models.AutoField(primary_key=True)
-    nome_tipo = models.CharField(max_length=50)
+    nome_tipo = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
-        return self.nome_tipo
+        return self.nome_tipo or "Sem tipo definido"
 
 class Endereco(models.Model):
     id_endereco = models.AutoField(primary_key=True)
@@ -30,17 +30,18 @@ class Categoria(models.Model):
 class Usuario(models.Model):
     id_categoria = models.AutoField(primary_key=True)
     nome = models.CharField(max_length=50)
-    sobrenome = models.CharField(max_length=100)
+    sobrenome = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField(max_length=100, unique=True)
     senha = models.CharField(max_length=255)
     telefone = models.CharField(max_length=15, blank=True, null=True)
-    cpf = models.CharField(max_length=11, unique=True)
+    cpf = models.CharField(max_length=11, unique=True, blank=True, null=True)
     id_tipo_usuario = models.ForeignKey(
-        TipoUsuario, on_delete=models.CASCADE, db_column="id_tipo_usuario"
+        TipoUsuario, on_delete=models.CASCADE, db_column="id_tipo_usuario",
+        blank=True, null=True
     )
 
     def __str__(self):
-        return f"{self.nome} {self.sobrenome}"
+        return f"{self.nome} {self.sobrenome or ''}".strip()
 
 class Loja(models.Model):
     id_loja = models.AutoField(primary_key=True)
