@@ -8,31 +8,45 @@ from AppStoreLink.views import (
     login,
     CatAlimentos,
     CatModa,
-    CatEsportes
+    CatEsportes,
+    CatConstrucao,
+    CatSaude,
+    CatPets,
+    CatAmbiente,
+    CatTecnologia,
+    CatBeleza,
+    CatOutros
 )
 
 
 urlpatterns = [
-    # pagina inicial
     path('', index, name='index'),
 
-    # paginas de perfil
     path('perfil-loja/', perfil_loja, name='perfil-loja'),
     path('perfil-consumidor/', perfil_consumidor, name='perfil-consumidor'),
 
-    # paginas de Autenticação
     path('cadastro/', cadastro, name='cadastro'),
     path('login/', login, name='login'),
 
-    # campo de busca
     path('buscar/', views.buscar, name='buscar'),
 
-    # categoria Alimentos
     path('CatAlimentos/', CatAlimentos, name='CatAlimentos'),
 
-    # categoria Moda
     path('CatModa/', CatModa, name='CatModa'),
 
-    # categoria Esportes
     path('CatEsportes/', CatEsportes, name='CatEsportes'),
+
+    path('CatConstrucao/', CatConstrucao, name='CatConstrucao'),
+
+    path('CatSaude/', CatSaude, name='CatSaude'),
+
+    path('CatPets/', CatPets, name='CatPets'),
+
+    path('CatAmbiente/', CatAmbiente, name='CatAmbiente'),
+
+    path('CatTecnologia/', CatTecnologia, name='CatTecnologia'),
+
+    path('CatBeleza/', CatBeleza, name='CatBeleza'),
+
+    path('CatOutros/', CatOutros, name='CatOutros'),
 ]

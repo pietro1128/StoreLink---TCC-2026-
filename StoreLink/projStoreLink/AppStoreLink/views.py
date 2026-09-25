@@ -197,3 +197,120 @@ def CatEsportes(request):
         'AppStoreLink/CatEsportes.html',
         contexto
     )
+def CatConstrucao(request):
+    lojas = Loja.objects.filter(
+        id_categoria__tipo_categoria='Construção'
+    ).select_related('id_endereco', 'id_categoria')
+
+    contexto = {
+        'categoria': 'Construção',
+        'lojas': lojas,
+    }
+
+    return render(
+        request,
+        'AppStoreLink/CatConstrucao.html',
+        contexto
+    )
+
+
+def CatSaude(request):
+    lojas = Loja.objects.filter(
+        id_categoria__tipo_categoria='Saúde'
+    ).select_related('id_endereco', 'id_categoria')
+
+    contexto = {
+        'categoria': 'Saúde',
+        'lojas': lojas,
+    }
+
+    return render(
+        request,
+        'AppStoreLink/CatSaude.html',
+        contexto
+    )
+
+
+def CatPets(request):
+    lojas = Loja.objects.filter(
+        id_categoria__tipo_categoria='Pets'
+    ).select_related('id_endereco', 'id_categoria')
+
+    contexto = {
+        'categoria': 'Pets',
+        'lojas': lojas,
+    }
+
+    return render(
+        request,
+        'AppStoreLink/CatPets.html',
+        contexto
+    )
+
+
+def CatAmbiente(request):
+    lojas = Loja.objects.filter(
+        id_categoria__tipo_categoria='Ambiente'
+    ).select_related('id_endereco', 'id_categoria')
+
+    contexto = {
+        'categoria': 'Ambiente',
+        'lojas': lojas,
+    }
+
+    return render(
+        request,
+        'AppStoreLink/CatAmbiente.html',
+        contexto
+    )
+
+
+def CatTecnologia(request):
+    lojas = Loja.objects.filter(
+        id_categoria__tipo_categoria='Tecnologia'
+    ).select_related('id_endereco', 'id_categoria')
+
+    contexto = {
+        'categoria': 'Tecnologia',
+        'lojas': lojas,
+    }
+
+    return render(
+        request,
+        'AppStoreLink/CatTecnologia.html',
+        contexto
+    )
+
+
+def CatBeleza(request):
+    lojas = Loja.objects.filter(
+        id_categoria__tipo_categoria='Beleza'
+    ).select_related('id_endereco', 'id_categoria')
+
+    contexto = {
+        'categoria': 'Beleza',
+        'lojas': lojas,
+    }
+
+    return render(
+        request,
+        'AppStoreLink/CatBeleza.html',
+        contexto
+    )
+
+
+def CatOutros(request):
+    lojas = Loja.objects.filter(
+        id_categoria__tipo_categoria='Outros'
+    ).select_related('id_endereco', 'id_categoria')
+
+    contexto = {
+        'categoria': 'Outros',
+        'lojas': lojas,
+    }
+
+    return render(
+        request,
+        'AppStoreLink/CatOutros.html',
+        contexto
+    )
