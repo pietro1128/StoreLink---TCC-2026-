@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 from AppStoreLink.models import Usuario, Loja, Endereco, Produto, Servico, LojaFavoritas, TipoUsuario
 from django.contrib.auth.decorators import login_required
+import re #importa regex
 
 
 def index(request):
@@ -15,26 +16,21 @@ def index(request):
 # V  a linha de baixo em um comentario: "#@login_required"
 #@login_required
 def perfil_loja(request):
-    if request.method == 'POST':
-        usuario.nome = request.POST.get('nome', '')
-        usuario.sobrenome = request.POST.get('sobrenome', '')
-        usuario.save()
-        
-    elif request.method == 'POST':
-        loja.nome_loja = request.POST.get('nome_loja', '')
-        loja.save()
-        
-        endereco.rua = request.POST.get('rua', '')
-        endereco.numero_estabelecimento = request.POST.get('numero', '')
-        endereco.cep = request.POST.get('cep', '')
-        endereco.save()
-        
-        loja.email_loja = request.POST.get('email_loja', '')
-        loja.telefone_loja = request.POST.get('telefone_loja', '')
-        loja.cnpj = request.POST.get('cnpj', '')
-        loja.link = request.POST.get('link_loja', '')
-        loja.save()
-        
+    if request.method == 'POST': 
+
+        nome = request.POST.get('nome-loja')  
+
+        rua = request.POST.get('rua')
+        numero = request.POST.get('numero')
+        cep = request.POST.get('cep')
+        endereco = Endereco.objects.create(rua = rua, numero = numero, cep = cep)
+
+        email = request.POST.get('email_loja')
+        telefone = request.POST.get('telefone_loja')
+        cnpj = request.POST.get('cnpj')
+        #foto_estabelecimento = request.POST.get('')
+        link = request.POST.get('link_loja')
+        Loja.objects.create(nome = nome, endereco = endereco, email_loja = email )
 
     loja = Loja.objects.all()
     usuario = Usuario.objects.all()
@@ -58,14 +54,15 @@ def perfil_consumidor(request):
 
 def cadastro(request):
     if request.method == 'POST':
-        nome = request.POST.get('nome', '').strip()
-        sobrenome = request.POST.get('sobrenome', '').strip()
-        email = request.POST.get('email', '').strip()
-        senha = request.POST.get('senha', '')
-        telefone = request.POST.get('telefone', '').strip()
-        cpf = request.POST.get('cpf', '').strip()
+        nome = request.POST.get('nome').strip()
+        sobrenome = request.POST.get('sobrenome').strip()
+        email = request.POST.get('email').strip()
+        senha = request.POST.get('senha')
+        telefone = request.POST.get('telefone').strip()
+        cpf = request.POST.get('cpf').strip()
         id_tipo_usuario = request.POST.get('id_tipo_usuario')  # ex: valor vindo de um <select>    
-    
+            
+
         if Usuario.objects.filter(email=email).exists():
             messages.error(request, 'Este e-mail já está cadastrado.')
             return render(request, 'registration/cadastro.html')
