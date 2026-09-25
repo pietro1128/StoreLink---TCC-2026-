@@ -5,7 +5,6 @@ from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 from AppStoreLink.models import Usuario, Loja, Endereco, Produto, Servico, LojaFavoritas, TipoUsuario
 from django.contrib.auth.decorators import login_required
-import re #importa regex
 
 
 def index(request):
@@ -18,12 +17,12 @@ def index(request):
 def perfil_loja(request):
     if request.method == 'POST': 
 
-        nome = request.POST.get('nome-loja')  
-
+        nome = request.POST.get('nome_loja')  # -> Cria uma variavel puxando o valor do bando
+        #                          L> este campo ('nome-loja'): tem que ser igual ao 'name' do html
         rua = request.POST.get('rua')
         numero = request.POST.get('numero')
         cep = request.POST.get('cep')
-        endereco = Endereco.objects.create(rua = rua, numero = numero, cep = cep)
+        endereco = Endereco.objects.create(rua = rua, numero = numero, cep = cep)# -> 
 
         email = request.POST.get('email_loja')
         telefone = request.POST.get('telefone_loja')
