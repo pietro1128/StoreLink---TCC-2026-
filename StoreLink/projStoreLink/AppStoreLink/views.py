@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.db.models import Q
-from django.contrib import messages
+from django.contrib import messages # importa comandos para mensagens de erro
 from django.contrib.auth.hashers import make_password, check_password
 from AppStoreLink.models import Usuario, Loja, Endereco, Produto, Servico, LojaFavoritas, TipoUsuario
 from django.contrib.auth.decorators import login_required
+import re # importa o regex (uma biblioteca para validações)
 
 
 def index(request):
@@ -54,30 +55,39 @@ def perfil_consumidor(request):
 def cadastro(request):
     if request.method == 'POST':
         nome = request.POST.get('nome').strip()
-        sobrenome = request.POST.get('sobrenome').strip()
+        #sobrenome = request.POST.get('sobrenome').strip()
         email = request.POST.get('email').strip()
         senha = request.POST.get('senha')
-        telefone = request.POST.get('telefone').strip()
-        cpf = request.POST.get('cpf').strip()
-        id_tipo_usuario = request.POST.get('id_tipo_usuario')  # ex: valor vindo de um <select>    
-            
+        #telefone = request.POST.get('telefone').strip()
+        #cpf = request.POST.get('cpf').strip()
+        #id_tipo_usuario = request.POST.get('id_tipo_usuario')  # ex: valor vindo de um <select>    
 
+# Validações de E-mail para cadastro:
+        padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$' # -> Argumenta um padrão com characteres finais nos emails
+        if not re.match(padrao_email, email): # -> Verifica se estão nos padões argumentados
+            messages.error(request, 'O campo E-mail deve ser um Gmail válido (exemplo: email@gmail.com).')
+            return render(request, 'registration/cadastro.html')
+        
         if Usuario.objects.filter(email=email).exists():
             messages.error(request, 'Este e-mail já está cadastrado.')
             return render(request, 'registration/cadastro.html')
+        
+# Validações de Senha para cadastro:
 
-        if Usuario.objects.filter(cpf=cpf).exists():
-            messages.error(request, 'Este CPF já está cadastrado.')
-            return render(request, 'registration/cadastro.html')
+# Validações de CPF para cadastro:
+        #if Usuario.objects.filter(cpf=cpf).exists():
+         #   messages.error(request, 'Este CPF já está cadastrado.')
+          #  return render(request, 'registration/cadastro.html')
+
 
         usuario = Usuario(
             nome=nome,
-            sobrenome=sobrenome,
+            #sobrenome=sobrenome,
             email=email,
             senha=make_password(senha),  # ← aqui a senha vira um hash, nunca texto puro
-            telefone=telefone,
-            cpf=cpf,
-            id_tipo_usuario_id=id_tipo_usuario,
+            #telefone=telefone,
+            #cpf=cpf,
+            #id_tipo_usuario_id=id_tipo_usuario,
         )
         usuario.save()
 
@@ -98,6 +108,11 @@ def login(request):
             messages.error(request, 'E-mail ou senha inválidos.')
             return render(request, 'registration/login.html')
 
+        padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$'# -> Argumenta um padrão com characteres finais nos emails
+        if not re.match(padrao_email, email): # -> Verifica se estão nos padões argumentados
+            messages.error(request, 'O campo E-mail deve ser um Gmail válido (exemplo: email@gmail.com).')
+            return render(request, 'registration/login.html')
+                
         if check_password(senha, usuario.senha):
             # Login bem-sucedido: guarda o ID do usuário na sessão
             request.session['usuario_id'] = usuario.id_categoria
