@@ -73,6 +73,16 @@ def cadastro(request):
             return render(request, 'registration/cadastro.html')
         
 # Validações de Senha para cadastro:
+        padrao_senha = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}' 
+        """
+        >> r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}' <<: Esta linha exige pelo menos (8 char, letra min, letra max e um num)
+        >> ^ <<: começa a str
+        >> (?=.*...) <<: Lookahead 'verifica se a condição CHAR escrita esta em algum lugar no texto'
+        """
+        if not re.match(padrao_senha, senha):
+            messages.error(request, 'A senha precisa conter no mínimo 8 caracteres, letra maiúscula, minúscula e número')
+            return render (request, 'registration/cadastro.html')
+        
 
 # Validações de CPF para cadastro:
         #if Usuario.objects.filter(cpf=cpf).exists():
@@ -108,11 +118,13 @@ def login(request):
             messages.error(request, 'E-mail ou senha inválidos.')
             return render(request, 'registration/login.html')
 
+# Validações de E-mail para Login
         padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$'# -> Argumenta um padrão com characteres finais nos emails
         if not re.match(padrao_email, email): # -> Verifica se estão nos padões argumentados
             messages.error(request, 'O campo E-mail deve ser um Gmail válido (exemplo: email@gmail.com).')
             return render(request, 'registration/login.html')
-                
+
+# Validações de Senha para Login
         if check_password(senha, usuario.senha):
             # Login bem-sucedido: guarda o ID do usuário na sessão
             request.session['usuario_id'] = usuario.id_categoria
@@ -120,6 +132,11 @@ def login(request):
             return redirect('index')
         else:
             messages.error(request, 'E-mail ou senha inválidos.')
+            
+        padrao_senha = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}'
+        if not re.match(padrao_senha, senha):
+            messages.error(request, 'A senha precisa conter no mínimo 8 caracteres, letra maiúscula, minúscula e número')
+            return render (request, 'registration/login.html')
 
     return render(request, 'registration/login.html')
 
