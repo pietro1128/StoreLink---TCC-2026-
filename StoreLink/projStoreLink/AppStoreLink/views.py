@@ -85,11 +85,17 @@ def cadastro(request):
         
 
 # Validações de CPF para cadastro:
-        #if Usuario.objects.filter(cpf=cpf).exists():
-         #   messages.error(request, 'Este CPF já está cadastrado.')
-          #  return render(request, 'registration/cadastro.html')
-
-
+        """
+        padrao_cpf = r'^.{11,11}$'
+        if not re.match(padrao_cpf, cpf):
+            messages.error(request, 'O CPF deve ter exatamente 11 caracteres.')
+            return render (request, 'registration/cadastro.html')
+                
+        
+        if Usuario.objects.filter(cpf=cpf).exists():
+            messages.error(request, 'Este CPF já está cadastrado.')
+            return render(request, 'registration/cadastro.html')
+        """
         usuario = Usuario(
             nome=nome,
             #sobrenome=sobrenome,
