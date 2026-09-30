@@ -30,6 +30,28 @@ def perfil_loja(request):
         cnpj = request.POST.get('cnpj')
         #foto_estabelecimento = request.POST.get('')
         link = request.POST.get('link_loja')
+        
+# Validações de E-mail para loja: 
+        padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$' # -> Argumenta um padrão com characteres finais nos emails
+        if not re.match(padrao_email, email): # -> Verifica se estão nos padões argumentados
+            messages.error(request, 'O campo E-mail deve ser um Gmail válido (exemplo: email@gmail.com).')
+            return render(request, 'templates/perfil-loja.html')
+                
+        if Loja.objects.filter(email=email).exists():
+            messages.error(request, 'Este e-mail já está cadastrado.')
+            return render(request, 'templates/perfil-loja.html')
+
+# Validações de CNPJ para :
+        padrao_cnpj = r'^.{14,14}$'
+        if not re.match(padrao_cnpj, cnpj):
+            messages.error(request, 'Este CNPJ deve conter exatamente 14 caracteres.')
+            return render(request, 'templates/perfil-loja.html')
+ 
+# Validações de CEP para loja:
+
+# Validações de Telefone para loja:  
+        
+        
         Loja.objects.create(nome = nome, endereco = endereco, email_loja = email )
 
     loja = Loja.objects.all()
@@ -80,13 +102,14 @@ def cadastro(request):
         >> (?=.*...) <<: Lookahead 'verifica se a condição CHAR escrita esta em algum lugar no texto'
         """
         if not re.match(padrao_senha, senha):
-            messages.error(request, 'A senha precisa conter no mínimo 8 caracteres, letra maiúscula, minúscula e número')
+            messages.error(request, 'A senha precisa conter no mínimo 8 caracteres, letra maiúscula, minúscula e número.')
             return render (request, 'registration/cadastro.html')
         
 
 # Validações de CPF para cadastro:
         """
         padrao_cpf = r'^.{11,11}$'
+        # >> .{??,??}$ <<: exige que o texto tenha EXATAMENTE o numero de characteres argumentados
         if not re.match(padrao_cpf, cpf):
             messages.error(request, 'O CPF deve ter exatamente 11 caracteres.')
             return render (request, 'registration/cadastro.html')
