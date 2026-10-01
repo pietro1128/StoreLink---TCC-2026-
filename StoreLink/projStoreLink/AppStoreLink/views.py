@@ -44,21 +44,29 @@ def perfil_loja(request):
 # Validações de CNPJ para :
         padrao_cnpj = r'^.{14,14}$'
         if not re.match(padrao_cnpj, cnpj):
-            messages.error(request, 'Este CNPJ deve conter exatamente 14 caracteres.')
+            messages.error(request, 'Este CNPJ deve conter exatamente 14 números.')
+            return render(request, 'templates/perfil-loja.html')
+
+        if Loja.objects.filter(cnpj=cnpj).exists():
+            messages.error(request, 'Este CNPJ ja foi cadastrado.')
             return render(request, 'templates/perfil-loja.html')
  
 # Validações de CEP para loja:
         padrao_cep = r'^.{8,8}$'
         if not re.match(padrao_cep, cep):
-            messages.error(request, 'Este CEP está incorreto, ele deve ter pelo menos 8 caracteres.')
+            messages.error(request, 'Este CEP está incorreto, ele deve ter pelo exatamente 8 números.')
             return render(request, 'templates/perfil-loja.html')
 
 # Validações de Telefone para loja:  
         padrao_telefone = r'^.{11,11}$'
         if not re.match(padrao_telefone, telefone):
-            messages.error(request, 'Este número esta incorreto, ele deve ter exatamente')
-        
-        #-------------------------------------------------------------------------------
+            messages.error(request, 'Este número esta incorreto, ele deve ter exatamente 11 números.')
+            return render(request, 'templates/perfil-loja.html')
+
+        if Loja.objects.filter(telefone=telefone).exists():
+            messages.error(request, 'Este telefone ja foi cadastrado.')
+            return render(request, 'templates/perfil-loja.html')
+
         
         Loja.objects.create(nome = nome, endereco = endereco, email_loja = email )
 
@@ -127,6 +135,19 @@ def cadastro(request):
             messages.error(request, 'Este CPF já está cadastrado.')
             return render(request, 'registration/cadastro.html')
         """
+
+# Validações de Telefone para cadastro:
+        """
+        padrao_telefone = r'^.{11,11}$'
+        if not re.match(padrao_telefone, telefone):
+            messages.error(request, 'Este número esta incorreto, ele deve ter exatamente 11 números.')
+            return render(request, 'registration/cadastro.html')
+
+        if Usuario.objects.filter(telefone=telefone).exists():
+            messages.error(request, 'Este telefone ja foi cadastrado.')
+            return render(request, 'registration/cadastro.html')
+        """
+
         usuario = Usuario(
             nome=nome,
             #sobrenome=sobrenome,
