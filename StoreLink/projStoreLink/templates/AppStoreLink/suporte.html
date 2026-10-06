@@ -1,0 +1,279 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>StoreLink - Suporte</title>
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="{% static 'AppStoreLink/images/icon-dark.png' %}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/style.css' %}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/suporte.css' %}"
+  >
+</head>
+
+<body>
+
+  <script>
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+    }
+  </script>
+
+
+  <!-- #region Topbar -->
+
+  <div class="topbar">
+
+    <div class="logo-icon">
+
+      <img
+        src="{% static 'AppStoreLink/images/icon-dark.png' %}"
+        alt="StoreLink"
+      >
+
+    </div>
+
+
+    <a
+      class="nav-btn"
+      href="{% url 'index' %}"
+    >
+      Início
+    </a>
+
+
+    <a
+      class="nav-btn"
+      href="{% url 'perfil-loja' %}"
+    >
+      Sua loja
+    </a>
+
+
+    <a
+      class="nav-btn active"
+      href="{% url 'suporte' %}"
+    >
+      Suporte
+    </a>
+
+
+    <a
+      class="nav-btn"
+      onclick="setActiveNav(this)"
+    >
+      Como navegar?
+    </a>
+
+
+    {% if request.user.is_authenticated %}
+
+      <button
+        class="nav-account-btn"
+        data-url="{% url 'perfil-consumidor' %}"
+        onclick="location.href=this.dataset.url"
+      >
+        👤 Minha conta
+      </button>
+
+    {% else %}
+
+      <button
+        class="nav-account-btn"
+        data-url="{% url 'cadastro' %}"
+        onclick="location.href=this.dataset.url"
+      >
+        Criar conta ou Entrar
+      </button>
+
+    {% endif %}
+
+
+    <button
+      class="theme-toggle"
+      onclick="toggleTheme(this)"
+    >
+      🌙 Modo escuro
+    </button>
+
+  </div>
+
+  <!-- #endregion -->
+
+
+  <!-- #region Sidebar -->
+
+  <div class="sidebar-trigger"></div>
+
+
+  <div class="sidebar">
+
+    <a
+      class="cat-btn cat-alimentos"
+      href="{% url 'CatAlimentos' %}"
+    >
+      Alimentos
+    </a>
+
+
+    <a
+      class="cat-btn cat-moda"
+      href="{% url 'CatModa' %}"
+    >
+      Moda
+    </a>
+
+
+    <a
+      class="cat-btn cat-esportes"
+      href="{% url 'CatEsportes' %}"
+    >
+      Esportes
+    </a>
+
+
+    <a
+      class="cat-btn cat-construcao"
+      href="{% url 'CatConstrucao' %}"
+    >
+      Construção
+    </a>
+
+
+    <a
+      class="cat-btn cat-saude"
+      href="{% url 'CatSaude' %}"
+    >
+      Saúde
+    </a>
+
+
+    <a
+      class="cat-btn cat-pets"
+      href="{% url 'CatPets' %}"
+    >
+      Pets
+    </a>
+
+
+    <a
+      class="cat-btn cat-ambiente"
+      href="{% url 'CatAmbiente' %}"
+    >
+      Ambiente
+    </a>
+
+
+    <a
+      class="cat-btn cat-tecnologia"
+      href="{% url 'CatTecnologia' %}"
+    >
+      Tecnologia
+    </a>
+
+
+    <a
+      class="cat-btn cat-beleza"
+      href="{% url 'CatBeleza' %}"
+    >
+      Beleza
+    </a>
+
+
+    <a
+      class="cat-btn cat-outros"
+      href="{% url 'CatOutros' %}"
+    >
+      Outros
+    </a>
+
+  </div>
+
+  <!-- #endregion -->
+
+
+  <!-- #region Conteúdo -->
+
+  <main class="suporte-container">
+
+
+    <!-- IMAGEM DE ALERTA -->
+
+    <div class="suporte-imagens">
+
+      <!-- MODO CLARO -->
+
+      <img
+        class="suporte-alerta suporte-alerta-light"
+        src="{% static 'AppStoreLink/images/suporte alerta.png' %}"
+        alt="Símbolo de alerta"
+      >
+
+
+      <!-- MODO ESCURO -->
+
+      <img
+        class="suporte-alerta suporte-alerta-dark"
+        src="{% static 'AppStoreLink/images/suporte alerta modo escuro.png' %}"
+        alt="Símbolo de alerta"
+      >
+
+    </div>
+
+
+    <!-- TÍTULO -->
+
+    <h1 class="suporte-titulo">
+      Está com <span>problemas?</span>
+    </h1>
+
+
+    <!-- TEXTO -->
+
+    <p class="suporte-texto">
+
+      Reporte qualquer problema ou dúvida não
+
+      <br>
+
+      esclarecida para nosso e-mail de suporte
+
+    </p>
+
+
+    <!-- EMAIL -->
+
+    <a
+      class="suporte-email"
+      href="mailto:StoreLinkOficialSuporte@gmail.com"
+    >
+      StoreLinkOficialSuporte@gmail.com
+    </a>
+
+
+  </main>
+
+  <!-- #endregion -->
+
+
+  <script
+    src="{% static 'AppStoreLink/scripts/index.js' %}"
+  ></script>
+
+</body>
+
+</html>

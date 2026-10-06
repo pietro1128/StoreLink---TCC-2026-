@@ -1,0 +1,170 @@
+/* #region Container principal */
+
+.suporte-container {
+  min-height: calc(100vh - 58px);
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 30px 20px 60px;
+}
+
+/* #endregion */
+
+
+/* #region Imagem de alerta */
+
+.suporte-imagens {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 15px;
+}
+
+.suporte-alerta {
+  width: 220px;
+  height: auto;
+
+  object-fit: contain;
+
+  margin: 0 auto;
+}
+
+.suporte-alerta-light {
+  display: block;
+}
+
+.suporte-alerta-dark {
+  display: none;
+}
+
+body.dark .suporte-alerta-light {
+  display: none;
+}
+
+body.dark .suporte-alerta-dark {
+  display: block;
+}
+
+/* #endregion */
+
+
+/* #region Título */
+
+.suporte-titulo {
+  margin: 0 0 6px;
+
+  color: var(--text-color);
+
+  font-size: 36px;
+  font-weight: 800;
+}
+
+.suporte-titulo span {
+  color: #ff9800;
+}
+
+/* #endregion */
+
+
+/* #region Texto */
+
+.suporte-texto {
+  margin: 0 0 52px;
+
+  color: #777777;
+
+  font-size: 29px;
+
+  line-height: 1.45;
+}
+
+body.dark .suporte-texto {
+  color: #b8b8b8;
+}
+
+/* #endregion */
+
+
+/* #region Email */
+
+.suporte-email {
+  display: inline-block;
+
+  background: #f8f8f8;
+
+  color: #444444;
+
+  font-size: 30px;
+  font-weight: 800;
+
+  padding: 12px 16px;
+
+  border-radius: 12px;
+
+  text-decoration: none;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.suporte-email:hover {
+  background: #eeeeee;
+
+  transform: translateY(-2px);
+}
+
+body.dark .suporte-email {
+  background: #2a2a2a;
+
+  color: #f0f0f0;
+}
+
+body.dark .suporte-email:hover {
+  background: #353535;
+}
+
+/* #endregion */
+
+
+/* #region Responsividade */
+
+@media (max-width: 700px) {
+
+  .suporte-container {
+    padding: 25px 15px 40px;
+  }
+
+  .suporte-alerta {
+    width: 180px;
+  }
+
+  .suporte-titulo {
+    font-size: 29px;
+  }
+
+  .suporte-texto {
+    font-size: 21px;
+
+    margin-bottom: 35px;
+  }
+
+  .suporte-email {
+    font-size: 20px;
+
+    padding: 10px 14px;
+  }
+
+}
+
+/* #endregion */

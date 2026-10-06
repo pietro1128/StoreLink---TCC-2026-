@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 from AppStoreLink.models import Usuario, Loja, Endereco, Produto, Servico, LojaFavoritas, TipoUsuario
 from django.contrib.auth.decorators import login_required
+import re
 
 
 def index(request):
@@ -16,25 +17,55 @@ def index(request):
 #@login_required
 def perfil_loja(request):
     if request.method == 'POST':
-        usuario.nome = request.POST.get('nome', '')
-        usuario.sobrenome = request.POST.get('sobrenome', '')
-        usuario.save()
-        
-    elif request.method == 'POST':
-        loja.nome_loja = request.POST.get('nome_loja', '')
-        loja.save()
-        
-        endereco.rua = request.POST.get('rua', '')
-        endereco.numero_estabelecimento = request.POST.get('numero', '')
-        endereco.cep = request.POST.get('cep', '')
-        endereco.save()
-        
-        loja.email_loja = request.POST.get('email_loja', '')
-        loja.telefone_loja = request.POST.get('telefone_loja', '')
-        loja.cnpj = request.POST.get('cnpj', '')
-        loja.link = request.POST.get('link_loja', '')
-        loja.save()
-        
+
+        nome = request.POST.get('nome_loja')
+        rua = request.POST.get('rua')
+        numero = request.POST.get('numero')
+        cep = request.POST.get('cep')
+        endereco = Endereco.objects.create(rua=rua, numero=numero, cep=cep)
+
+        email = request.POST.get('email_loja')
+        telefone = request.POST.get('telefone_loja')
+        cnpj = request.POST.get('cnpj')
+        link = request.POST.get('link_loja')
+
+        # Validações de E-mail para loja:
+        padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$'
+        if not re.match(padrao_email, email):
+            messages.error(request, 'O campo E-mail deve ser um Gmail válido (exemplo: email@gmail.com).')
+            return render(request, 'templates/perfil-loja.html')
+
+        if Loja.objects.filter(email=email).exists():
+            messages.error(request, 'Este e-mail já está cadastrado.')
+            return render(request, 'templates/perfil-loja.html')
+
+        # Validações de CNPJ:
+        padrao_cnpj = r'^.{14,14}$'
+        if not re.match(padrao_cnpj, cnpj):
+            messages.error(request, 'Este CNPJ deve conter exatamente 14 números.')
+            return render(request, 'templates/perfil-loja.html')
+
+        if Loja.objects.filter(cnpj=cnpj).exists():
+            messages.error(request, 'Este CNPJ ja foi cadastrado.')
+            return render(request, 'templates/perfil-loja.html')
+
+        # Validações de CEP para loja:
+        padrao_cep = r'^.{8,8}$'
+        if not re.match(padrao_cep, cep):
+            messages.error(request, 'Este CEP está incorreto, ele deve ter exatamente 8 números.')
+            return render(request, 'templates/perfil-loja.html')
+
+        # Validações de Telefone para loja:
+        padrao_telefone = r'^.{11,11}$'
+        if not re.match(padrao_telefone, telefone):
+            messages.error(request, 'Este número esta incorreto, ele deve ter exatamente 11 números.')
+            return render(request, 'templates/perfil-loja.html')
+
+        if Loja.objects.filter(telefone=telefone).exists():
+            messages.error(request, 'Este telefone ja foi cadastrado.')
+            return render(request, 'templates/perfil-loja.html')
+
+        Loja.objects.create(nome=nome, endereco=endereco, email_loja=email)
 
     loja = Loja.objects.all()
     usuario = Usuario.objects.all()
@@ -72,13 +103,32 @@ def cadastro(request):
         cpf = request.POST.get('cpf', '').strip() or None
         id_tipo_usuario = request.POST.get('id_tipo_usuario')
 
+        # Validação de e-mail (somente Gmail)
+        padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$'
+        if not re.match(padrao_email, email):
+            messages.error(request, 'O campo E-mail deve ser um Gmail válido (exemplo: email@gmail.com).')
+            return render(request, 'registration/cadastro.html')
+
         if Usuario.objects.filter(email=email).exists():
             messages.error(request, 'Este e-mail já está cadastrado.')
             return render(request, 'registration/cadastro.html')
 
-        if cpf and Usuario.objects.filter(cpf=cpf).exists():
-            messages.error(request, 'Este CPF já está cadastrado.')
+        # Validação de senha (mínimo 8 caracteres, maiúscula, minúscula e número)
+        padrao_senha = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}'
+        if not re.match(padrao_senha, senha):
+            messages.error(request, 'A senha precisa conter no mínimo 8 caracteres, letra maiúscula, minúscula e número.')
             return render(request, 'registration/cadastro.html')
+
+        # Validação de CPF (só roda se o usuário informou, já que é opcional)
+        if cpf:
+            padrao_cpf = r'^\d{11}$'
+            if not re.match(padrao_cpf, cpf):
+                messages.error(request, 'O CPF deve ter exatamente 11 números.')
+                return render(request, 'registration/cadastro.html')
+
+            if Usuario.objects.filter(cpf=cpf).exists():
+                messages.error(request, 'Este CPF já está cadastrado.')
+                return render(request, 'registration/cadastro.html')
 
         usuario = Usuario(
             nome=nome,
@@ -96,11 +146,16 @@ def cadastro(request):
 
     return render(request, 'registration/cadastro.html')
 
-    
+
 def login(request):
     if request.method == 'POST':
         email = request.POST.get('email', '').strip()
         senha = request.POST.get('senha', '')
+
+        padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$'
+        if not re.match(padrao_email, email):
+            messages.error(request, 'O campo E-mail deve ser um Gmail válido (exemplo: email@gmail.com).')
+            return render(request, 'registration/login.html')
 
         try:
             usuario = Usuario.objects.get(email=email)
@@ -109,7 +164,6 @@ def login(request):
             return render(request, 'registration/login.html')
 
         if check_password(senha, usuario.senha):
-            # Login bem-sucedido: guarda o ID do usuário na sessão
             request.session['usuario_id'] = usuario.id_categoria
             messages.success(request, f'Bem-vindo, {usuario.nome}!')
             return redirect('perfil-consumidor')
@@ -137,13 +191,13 @@ def buscar(request):
             Q(descricao__icontains=query) |
             Q(id_categoria__tipo_categoria__icontains=query) |
             Q(id_loja__nome_loja__icontains=query)
-        ).select_related('id.loja', 'id_categoria')
+        ).select_related('id_loja', 'id_categoria')
 
         servicos = Servico.objects.filter(
             Q(nome_servico__icontains=query) |
             Q(descricao__icontains=query) |
             Q(id_loja__nome_loja__icontains=query)
-        ).select_related('id.loja')
+        ).select_related('id_loja')
 
     total_resultados = lojas.count() + produtos.count() + servicos.count()
 
@@ -168,11 +222,7 @@ def CatAlimentos(request):
         'lojas': lojas,
     }
 
-    return render(
-        request,
-        'AppStoreLink/CatAlimentos.html',
-        contexto
-    )
+    return render(request, 'AppStoreLink/CatAlimentos.html', contexto)
 
 
 def CatModa(request):
@@ -185,11 +235,7 @@ def CatModa(request):
         'lojas': lojas,
     }
 
-    return render(
-        request,
-        'AppStoreLink/CatModa.html',
-        contexto
-    )
+    return render(request, 'AppStoreLink/CatModa.html', contexto)
 
 
 def CatEsportes(request):
@@ -202,8 +248,107 @@ def CatEsportes(request):
         'lojas': lojas,
     }
 
-    return render(
-        request,
-        'AppStoreLink/CatEsportes.html',
-        contexto
-    )
+    return render(request, 'AppStoreLink/CatEsportes.html', contexto)
+
+
+def CatConstrucao(request):
+    lojas = Loja.objects.filter(
+        id_categoria__tipo_categoria='Construção'
+    ).select_related('id_endereco', 'id_categoria')
+
+    contexto = {
+        'categoria': 'Construção',
+        'lojas': lojas,
+    }
+
+    return render(request, 'AppStoreLink/CatConstrucao.html', contexto)
+
+
+def CatSaude(request):
+    lojas = Loja.objects.filter(
+        id_categoria__tipo_categoria='Saúde'
+    ).select_related('id_endereco', 'id_categoria')
+
+    contexto = {
+        'categoria': 'Saúde',
+        'lojas': lojas,
+    }
+
+    return render(request, 'AppStoreLink/CatSaude.html', contexto)
+
+
+def CatPets(request):
+    lojas = Loja.objects.filter(
+        id_categoria__tipo_categoria='Pets'
+    ).select_related('id_endereco', 'id_categoria')
+
+    contexto = {
+        'categoria': 'Pets',
+        'lojas': lojas,
+    }
+
+    return render(request, 'AppStoreLink/CatPets.html', contexto)
+
+
+def CatAmbiente(request):
+    lojas = Loja.objects.filter(
+        id_categoria__tipo_categoria='Ambiente'
+    ).select_related('id_endereco', 'id_categoria')
+
+    contexto = {
+        'categoria': 'Ambiente',
+        'lojas': lojas,
+    }
+
+    return render(request, 'AppStoreLink/CatAmbiente.html', contexto)
+
+
+def CatTecnologia(request):
+    lojas = Loja.objects.filter(
+        id_categoria__tipo_categoria='Tecnologia'
+    ).select_related('id_endereco', 'id_categoria')
+
+    contexto = {
+        'categoria': 'Tecnologia',
+        'lojas': lojas,
+    }
+
+    return render(request, 'AppStoreLink/CatTecnologia.html', contexto)
+
+
+def CatBeleza(request):
+    lojas = Loja.objects.filter(
+        id_categoria__tipo_categoria='Beleza'
+    ).select_related('id_endereco', 'id_categoria')
+
+    contexto = {
+        'categoria': 'Beleza',
+        'lojas': lojas,
+    }
+
+    return render(request, 'AppStoreLink/CatBeleza.html', contexto)
+
+
+def CatOutros(request):
+    lojas = Loja.objects.filter(
+        id_categoria__tipo_categoria='Outros'
+    ).select_related('id_endereco', 'id_categoria')
+
+    contexto = {
+        'categoria': 'Outros',
+        'lojas': lojas,
+    }
+
+    return render(request, 'AppStoreLink/CatOutros.html', contexto)
+
+
+def suporte(request):
+    return render(request, 'AppStoreLink/suporte.html')
+
+
+def produtos_loja(request):
+    return render(request, 'AppStoreLink/produtos-loja.html')
+
+
+def servicos_loja(request):
+    return render(request, 'AppStoreLink/servicos-loja.html')

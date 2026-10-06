@@ -1,17 +1,19 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StoreLink - Minha Conta</title>
-<link rel="icon" type="image/png" href="{% static 'AppStoreLink/images/icon-dark.png' %}">
-<link rel="stylesheet" href="{% static 'AppStoreLink/styles/style.css' %}">
-<link rel="stylesheet" href="{% static 'AppStoreLink/styles/consumidor.css' %}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StoreLink - Minha Conta</title>
+  <link rel="icon" type="image/png" href="{% static 'AppStoreLink/images/icon-dark.png' %}">
+  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/style.css' %}">
+  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/consumidor.css' %}">
 </head>
+
 <body>
 
-<!-- #region modo escuro -->
+  <!-- #region modo escuro -->
 
   <script>
     if (localStorage.getItem('theme') === 'dark') {
@@ -19,16 +21,16 @@
     }
   </script>
 
-<!-- #endregion -->
+  <!-- #endregion -->
 
-<!-- #region navbar -->
+  <!-- #region navbar -->
 
   <div class="topbar">
     <div class="logo-icon"><img src="{% static 'AppStoreLink/images/icon-dark.png' %}" alt="StoreLink"></div>
-    <button class="nav-btn" data-url="{% url 'index' %}" onclick="location.href=this.dataset.url">Início</button>
-    <button class="nav-btn active" data-url="{% url 'perfil-loja' %}" onclick="location.href=this.dataset.url">Sua loja</button>
-    <button class="nav-btn" onclick="setActiveNav(this)">Suporte</button>
-    <button class="nav-btn" onclick="setActiveNav(this)">Como navegar?</button>
+    <a class="nav-btn active" href="{% url 'index' %}" onclick="location.href=this.dataset.url">Início</a>    
+    <a class="nav-btn" href="{% url 'perfil-loja' %}">Sua loja</a>
+    <a class="nav-btn" href="{% url 'suporte' %}">Suporte</a>
+    <a class="nav-btn" onclick="setActiveNav(this)">Como navegar?</a>
     {% if request.user.is_authenticated %}
     <button class="nav-account-btn" data-url="{% url 'perfil-consumidor' %}" onclick="location.href=this.dataset.url">👤 Minha conta</button>
     {% else %}
@@ -37,24 +39,37 @@
     <button class="theme-toggle" onclick="toggleTheme(this)">🌙 Modo escuro</button>
   </div>
 
-<!-- #endregion -->
+  <!-- #endregion -->
 
-<!-- #region sidebar -->
-<div class="sidebar">
-  <a class="cat-btn cat-alimentos" href="{% url 'CatAlimentos' %}">Alimentos</a>
-  <a class="cat-btn cat-moda" href="{% url 'CatModa' %}">Moda</a>
-  <a class="cat-btn cat-esportes" href="{% url 'CatEsportes' %}">Esportes</a>
-  <a class="cat-btn cat-construcao" href="#">Construção</a>
-  <a class="cat-btn cat-saude" href="#">Saúde</a>
-  <a class="cat-btn cat-pets" href="#">Pets</a>
-  <a class="cat-btn cat-ambiente" href="#">Ambiente</a>
-  <a class="cat-btn cat-tecnologia" href="#">Tecnologia</a>
-  <a class="cat-btn cat-beleza" href="#">Beleza</a>
-  <a class="cat-btn cat-outros" href="#">Outros</a>
-</div>
-<!-- #endregion -->
+  <!-- #region sidebar -->
+  <div class="sidebar-trigger"></div>
 
-<!-- #region pagina da loja -->
+  <div class="sidebar">
+
+    <a class="cat-btn cat-alimentos {% if categoria == 'Alimentos' %}cat-active{% endif %}" href="{% url 'CatAlimentos' %}">Alimentos</a>
+
+    <a class="cat-btn cat-moda {% if categoria == 'Moda' %}cat-active{% endif %}" href="{% url 'CatModa' %}">Moda</a>
+
+    <a class="cat-btn cat-esportes {% if categoria == 'Esportes' %}cat-active{% endif %}" href="{% url 'CatEsportes' %}">Esportes</a>
+
+    <a class="cat-btn cat-construcao {% if categoria == 'Construção' %}cat-active{% endif %}" href="{% url 'CatConstrucao' %}">Construção</a>
+
+    <a class="cat-btn cat-saude {% if categoria == 'Saúde' %}cat-active{% endif %}" href="{% url 'CatSaude' %}">Saúde</a>
+
+    <a class="cat-btn cat-pets {% if categoria == 'Pets' %}cat-active{% endif %}" href="{% url 'CatPets' %}">Pets</a>
+
+    <a class="cat-btn cat-ambiente {% if categoria == 'Ambiente' %}cat-active{% endif %}" href="{% url 'CatAmbiente' %}">Ambiente</a>
+
+    <a class="cat-btn cat-tecnologia {% if categoria == 'Tecnologia' %}cat-active{% endif %}" href="{% url 'CatTecnologia' %}">Tecnologia</a>
+
+    <a class="cat-btn cat-beleza {% if categoria == 'Beleza' %}cat-active{% endif %}" href="{% url 'CatBeleza' %}">Beleza</a>
+
+    <a class="cat-btn cat-outros {% if categoria == 'Outros' %}cat-active{% endif %}" href="{% url 'CatOutros' %}">Outros</a>
+
+  </div>
+  <!-- #endregion -->
+
+  <!-- #region pagina da loja -->
   <div class="page-consumidor">
     <div class="consumidor-wrapper">
 
@@ -63,15 +78,18 @@
 
         <div class="consumidor-avatar-wrap">
           <div class="consumidor-avatar">
-            <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/></svg>
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z" />
+            </svg>
           </div>
           <div class="consumidor-camera-badge">📷</div>
         </div>
-        
-        
+
+
         <div class="consumidor-field-left">
           <label>Nome</label>
-                  <input type="text" value="{{ request.user.first_name }}">
+          <input type="text" value="{{ request.user.first_name }}">
         </div>
         <div class="consumidor-field-left">
           <label>Sobrenome</label>
@@ -80,7 +98,7 @@
 
         <button class="consumidor-logout-btn">Sair ⏪</button>
       </div>
-           
+
       <div class="consumidor-card">
         <h3>Informações</h3>
         <div class="consumidor-field">
@@ -116,15 +134,16 @@
             <strong>Quer vender no StoreLink?</strong>
             <span>Crie sua loja e comece a divulgar seus produtos ou serviços.</span>
           </div>
-          <button class="consumidor-cta-btn" data-url="{% url 'perfil-loja' %}" onclick="location.href=this.dataset.url">Criar minha loja 🏪</button>
+          <button class="consumidor-cta-btn" data-url="{% url 'perfil-loja' %}"
+            onclick="location.href=this.dataset.url">Criar minha loja 🏪</button>
         </div>
       </div>
 
     </div>
   </div>
-<!-- #endregion -->
+  <!-- #endregion -->
 
-<!-- #region modo escuro -->
+  <!-- #region modo escuro -->
   <script>
     function setActiveNav(btn) {
       document.querySelectorAll('.nav-btn').forEach(function (b) {
@@ -152,7 +171,8 @@
     });
   </script>
 
-<!-- #endregion -->
+  <!-- #endregion -->
 
 </body>
+
 </html>
