@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.db.models import Q
 from django.contrib import messages
@@ -46,31 +46,37 @@ def perfil_loja(request):
 
 
 def perfil_consumidor(request):
-    usuario = Usuario.objects.all()
-    loja_fav = LojaFavoritas.objects.all()
+    usuario_id = request.session.get('usuario_id')
+
+    if not usuario_id:
+        messages.error(request, 'Você precisa fazer login para acessar esta página.')
+        return redirect('login')
+
+    usuario = get_object_or_404(Usuario, id_categoria=usuario_id)
+    loja_fav = LojaFavoritas.objects.filter(id_usuario=usuario).select_related('id_loja')
 
     return render(
         request,
         'AppStoreLink/perfil-consumidor.html',
-        {'chave_perf_consm': usuario}
+        {'chave_perf_consm': usuario, 'loja_fav': loja_fav}
     )
 
 
 def cadastro(request):
     if request.method == 'POST':
         nome = request.POST.get('nome', '').strip()
-        sobrenome = request.POST.get('sobrenome', '').strip()
+        sobrenome = request.POST.get('sobrenome', '').strip() or None
         email = request.POST.get('email', '').strip()
         senha = request.POST.get('senha', '')
-        telefone = request.POST.get('telefone', '').strip()
-        cpf = request.POST.get('cpf', '').strip()
-        id_tipo_usuario = request.POST.get('id_tipo_usuario')  # ex: valor vindo de um <select>    
-    
+        telefone = request.POST.get('telefone', '').strip() or None
+        cpf = request.POST.get('cpf', '').strip() or None
+        id_tipo_usuario = request.POST.get('id_tipo_usuario')
+
         if Usuario.objects.filter(email=email).exists():
             messages.error(request, 'Este e-mail já está cadastrado.')
             return render(request, 'registration/cadastro.html')
 
-        if Usuario.objects.filter(cpf=cpf).exists():
+        if cpf and Usuario.objects.filter(cpf=cpf).exists():
             messages.error(request, 'Este CPF já está cadastrado.')
             return render(request, 'registration/cadastro.html')
 
@@ -78,7 +84,7 @@ def cadastro(request):
             nome=nome,
             sobrenome=sobrenome,
             email=email,
-            senha=make_password(senha),  # ← aqui a senha vira um hash, nunca texto puro
+            senha=make_password(senha),
             telefone=telefone,
             cpf=cpf,
             id_tipo_usuario_id=id_tipo_usuario,
@@ -106,7 +112,7 @@ def login(request):
             # Login bem-sucedido: guarda o ID do usuário na sessão
             request.session['usuario_id'] = usuario.id_categoria
             messages.success(request, f'Bem-vindo, {usuario.nome}!')
-            return redirect('index')
+            return redirect('perfil-consumidor')
         else:
             messages.error(request, 'E-mail ou senha inválidos.')
 

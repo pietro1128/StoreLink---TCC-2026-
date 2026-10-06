@@ -276,3 +276,39 @@ body.dark .field-icon-dark {
     padding: 50px 20px;
   }
 }
+
+/* ---------- MENSAGENS (alertas de sucesso/erro) ---------- */
+.messages-container {
+  max-width: 600px;
+  margin: 16px auto;
+  padding: 0 20px;
+}
+
+.alert {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  text-align: center;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.alert-error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+body.dark .alert-success {
+  background-color: #1e3a24;
+  color: #8fd19e;
+}
+
+body.dark .alert-error {
+  background-color: #3a1e1e;
+  color: #f5a3a3;
+}

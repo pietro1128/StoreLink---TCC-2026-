@@ -24,6 +24,16 @@
 
   <!-- #endregion -->
 
+<!-- #region mensagens -->
+  {% if messages %}
+    <div class="messages-container">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+  <!-- #endregion -->
+
 <!-- #region login -->
   <div class="login-wrapper">
     <h1 class="login-welcome">Bem vindo de volta !</h1>

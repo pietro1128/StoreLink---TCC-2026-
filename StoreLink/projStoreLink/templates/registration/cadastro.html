@@ -24,6 +24,16 @@
 
   <!-- #endregion -->
 
+<!-- #region mensagens -->
+  {% if messages %}
+    <div class="messages-container">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+  <!-- #endregion -->
+
 <!-- #region cadastro -->
   <div class="auth-wrapper">
 
@@ -47,23 +57,22 @@
           <img src="{% static 'AppStoreLink/images/google-plus.png' %}" alt="Google+">
         </button>
 
-        <form class="auth-form" method="POST" action=""
-        >
+        <form class="auth-form" method="POST" action="">
           {% csrf_token %}
 
           <label class="auth-field">
             <img class="field-icon-light" src="{% static 'AppStoreLink/images/do-utilizador.png' %}" alt=""><img class="field-icon-dark" src="{% static 'AppStoreLink/images/do-utilizador-dark.png' %}" alt="">
-            <input type="text" name="nome" value="{{ request.AppStoreLink_usuario.nome }}" placeholder="Nome" required>
+            <input type="text" name="nome" placeholder="Nome" required>
           </label>
 
           <label class="auth-field">
             <img class="field-icon-light" src="{% static 'AppStoreLink/images/e-mail.png' %}" alt=""><img class="field-icon-dark" src="{% static 'AppStoreLink/images/e-mail-dark.png' %}" alt="">
-            <input type="email" name="email" value="{{ request.AppStoreLink_usuario.email }}" placeholder="E-mail" required>
+            <input type="email" name="email" placeholder="E-mail" required>
           </label>
 
           <label class="auth-field">
             <img class="field-icon-light" src="{% static 'AppStoreLink/images/bloqueado.png' %}" alt=""><img class="field-icon-dark" src="{% static 'AppStoreLink/images/bloqueado-dark.png' %}" alt="">
-            <input type="password" name="senha" value="{{ request.AppStoreLink_usuario.senha }}" placeholder="Senha" required>
+            <input type="password" name="senha" placeholder="Senha" required>
           </label>
 
           <button type="submit" class="auth-submit-btn">CRIAR</button>
