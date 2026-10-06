@@ -404,3 +404,20 @@ def CatOutros(request):
         'AppStoreLink/CatOutros.html',
         contexto
     )
+def suporte(request):
+    return render(
+        request,
+        'AppStoreLink/suporte.html'
+    )
+def produtos_loja(request):
+    return render(
+        request,
+        'AppStoreLink/produtos-loja.html'
+    )
+
+
+def servicos_loja(request):
+    return render(
+        request,
+        'AppStoreLink/servicos-loja.html'
+    )

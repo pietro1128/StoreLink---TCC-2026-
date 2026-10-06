@@ -1,0 +1,726 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>StoreLink - Serviços</title>
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="{% static 'AppStoreLink/images/icon-dark.png' %}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/style.css' %}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/servicos-loja.css' %}"
+  >
+</head>
+
+<body>
+
+  <script>
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+    }
+  </script>
+
+
+  <!-- #region navbar -->
+
+  <div class="topbar">
+
+    <div class="logo-icon">
+      <img
+        src="{% static 'AppStoreLink/images/icon-dark.png' %}"
+        alt="StoreLink"
+      >
+    </div>
+
+    <a
+      class="nav-btn"
+      href="{% url 'index' %}"
+    >
+      Início
+    </a>
+
+    <a
+      class="nav-btn active"
+      href="{% url 'perfil-loja' %}"
+    >
+      Sua loja
+    </a>
+
+    <a
+      class="nav-btn"
+      href="{% url 'suporte' %}"
+    >
+      Suporte
+    </a>
+
+    <a
+      class="nav-btn"
+      onclick="setActiveNav(this)"
+    >
+      Como navegar?
+    </a>
+
+
+    {% if request.user.is_authenticated %}
+
+      <button
+        class="nav-account-btn"
+        data-url="{% url 'perfil-consumidor' %}"
+        onclick="location.href=this.dataset.url"
+      >
+        👤 Minha conta
+      </button>
+
+    {% else %}
+
+      <button
+        class="nav-account-btn"
+        data-url="{% url 'cadastro' %}"
+        onclick="location.href=this.dataset.url"
+      >
+        Criar conta ou Entrar
+      </button>
+
+    {% endif %}
+
+
+    <button
+      class="theme-toggle"
+      onclick="toggleTheme(this)"
+    >
+      🌙 Modo escuro
+    </button>
+
+  </div>
+
+  <!-- #endregion -->
+
+
+  <!-- #region pagina -->
+
+  <main class="servico-page">
+
+
+    <!-- #region perfil lateral -->
+
+    <aside class="servico-perfil">
+
+      <div class="servico-badge">
+        Estabelecimento
+      </div>
+
+
+      <div class="servico-avatar-wrap">
+
+        <label
+          class="servico-avatar"
+          for="foto-responsavel-servico"
+        >
+
+          <input
+            type="file"
+            id="foto-responsavel-servico"
+            accept="image/*"
+            hidden
+          >
+
+
+          <svg
+            id="avatar-padrao-servico"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"
+            />
+          </svg>
+
+
+          <img
+            id="preview-responsavel-servico"
+            class="servico-avatar-image"
+            alt="Foto do responsável"
+          >
+
+        </label>
+
+
+        <label
+          class="servico-camera-badge"
+          for="foto-responsavel-servico"
+        >
+          📷
+        </label>
+
+      </div>
+
+
+      <div class="servico-perfil-fields">
+
+        <div class="servico-perfil-field">
+
+          <label>
+            Nome do responsável
+          </label>
+
+          <input
+            type="text"
+            value="{{ request.AppStoreLink_usuario.nome }}"
+          >
+
+        </div>
+
+
+        <div class="servico-perfil-field">
+
+          <label>
+            Sobrenome
+          </label>
+
+          <input
+            type="text"
+            value="{{ request.AppStoreLink_usuario.sobrenome }}"
+          >
+
+        </div>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="servico-logout"
+      >
+        Fazer Logout
+
+        <span>
+          ≪
+        </span>
+      </button>
+
+    </aside>
+
+    <!-- #endregion -->
+
+
+    <!-- #region conteudo -->
+
+    <section class="servico-conteudo">
+
+
+      <!-- #region cabecalho -->
+
+      <div class="servico-topo">
+
+        <a
+          class="servico-voltar"
+          href="{% url 'perfil-loja' %}"
+          aria-label="Voltar"
+        >
+          ←
+        </a>
+
+
+        <div class="servico-topo-info">
+
+          <p class="servico-editar-texto">
+            Editar fotos e informações dos serviços
+          </p>
+
+
+          <div class="servico-titulo-box">
+
+            <h1>
+              SERVIÇOS
+            </h1>
+
+
+            <div class="servico-dinheiro">
+              $
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- #endregion -->
+
+
+      <!-- #region cards -->
+
+      <div class="servico-cards-scroll">
+
+
+        <!-- #region servico 1 -->
+
+        <div class="servico-card">
+
+          <div class="servico-imagem">
+
+            <input
+              class="servico-imagem-input"
+              type="file"
+              accept="image/*"
+              hidden
+            >
+
+
+            <div class="servico-imagem-placeholder">
+
+              <div class="servico-nuvem servico-nuvem-1"></div>
+
+              <div class="servico-nuvem servico-nuvem-2"></div>
+
+              <div class="servico-grama"></div>
+
+            </div>
+
+
+            <img
+              class="servico-preview"
+              alt="Imagem do serviço"
+            >
+
+
+            <button
+              type="button"
+              class="servico-editar-imagem"
+              aria-label="Editar imagem"
+            >
+              ✎
+            </button>
+
+          </div>
+
+
+          <div class="servico-card-conteudo">
+
+            <button
+              type="button"
+              class="servico-editar-info"
+              aria-label="Editar informações"
+            >
+              ✎
+            </button>
+
+
+            <label>
+              Nome do serviço:
+            </label>
+
+            <input
+              type="text"
+              value="Nome do serviço"
+            >
+
+
+            <label>
+              Preço do serviço:
+            </label>
+
+            <input
+              type="text"
+              value="R$00,00"
+            >
+
+
+            <label>
+              Descrição do serviço:
+            </label>
+
+            <textarea
+              placeholder="Descrição do serviço...."
+            ></textarea>
+
+          </div>
+
+        </div>
+
+        <!-- #endregion -->
+
+
+        <!-- #region servico 2 -->
+
+        <div class="servico-card">
+
+          <div class="servico-imagem">
+
+            <input
+              class="servico-imagem-input"
+              type="file"
+              accept="image/*"
+              hidden
+            >
+
+
+            <div class="servico-imagem-placeholder">
+
+              <div class="servico-nuvem servico-nuvem-1"></div>
+
+              <div class="servico-nuvem servico-nuvem-2"></div>
+
+              <div class="servico-grama"></div>
+
+            </div>
+
+
+            <img
+              class="servico-preview"
+              alt="Imagem do serviço"
+            >
+
+
+            <button
+              type="button"
+              class="servico-editar-imagem"
+              aria-label="Editar imagem"
+            >
+              ✎
+            </button>
+
+          </div>
+
+
+          <div class="servico-card-conteudo">
+
+            <button
+              type="button"
+              class="servico-editar-info"
+              aria-label="Editar informações"
+            >
+              ✎
+            </button>
+
+
+            <label>
+              Nome do serviço:
+            </label>
+
+            <input
+              type="text"
+              value="Nome do serviço"
+            >
+
+
+            <label>
+              Preço do serviço:
+            </label>
+
+            <input
+              type="text"
+              value="R$00,00"
+            >
+
+
+            <label>
+              Descrição do serviço:
+            </label>
+
+            <textarea
+              placeholder="Descrição do serviço...."
+            ></textarea>
+
+          </div>
+
+        </div>
+
+        <!-- #endregion -->
+
+
+        <!-- #region servico 3 -->
+
+        <div class="servico-card">
+
+          <div class="servico-imagem">
+
+            <input
+              class="servico-imagem-input"
+              type="file"
+              accept="image/*"
+              hidden
+            >
+
+
+            <div class="servico-imagem-placeholder">
+
+              <div class="servico-nuvem servico-nuvem-1"></div>
+
+              <div class="servico-nuvem servico-nuvem-2"></div>
+
+              <div class="servico-grama"></div>
+
+            </div>
+
+
+            <img
+              class="servico-preview"
+              alt="Imagem do serviço"
+            >
+
+
+            <button
+              type="button"
+              class="servico-editar-imagem"
+              aria-label="Editar imagem"
+            >
+              ✎
+            </button>
+
+          </div>
+
+
+          <div class="servico-card-conteudo">
+
+            <button
+              type="button"
+              class="servico-editar-info"
+              aria-label="Editar informações"
+            >
+              ✎
+            </button>
+
+
+            <label>
+              Nome do serviço:
+            </label>
+
+            <input
+              type="text"
+              value="Nome do serviço"
+            >
+
+
+            <label>
+              Preço do serviço:
+            </label>
+
+            <input
+              type="text"
+              value="R$00,00"
+            >
+
+
+            <label>
+              Descrição do serviço:
+            </label>
+
+            <textarea
+              placeholder="Descrição do serviço...."
+            ></textarea>
+
+          </div>
+
+        </div>
+
+        <!-- #endregion -->
+
+
+      </div>
+
+      <!-- #endregion -->
+
+
+    </section>
+
+    <!-- #endregion -->
+
+
+  </main>
+
+  <!-- #endregion -->
+
+
+  <!-- #region javascript -->
+
+  <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
+
+
+  <script>
+
+    document
+      .querySelectorAll('.servico-imagem')
+      .forEach(function (areaImagem) {
+
+        const input =
+          areaImagem.querySelector(
+            '.servico-imagem-input'
+          );
+
+        const preview =
+          areaImagem.querySelector(
+            '.servico-preview'
+          );
+
+        const botao =
+          areaImagem.querySelector(
+            '.servico-editar-imagem'
+          );
+
+
+        botao.addEventListener(
+          'click',
+          function () {
+
+            input.click();
+
+          }
+        );
+
+
+        input.addEventListener(
+          'change',
+          function () {
+
+            const arquivo =
+              this.files[0];
+
+
+            if (!arquivo) {
+              return;
+            }
+
+
+            if (!arquivo.type.startsWith('image/')) {
+
+              alert(
+                'Selecione um arquivo de imagem.'
+              );
+
+              this.value = '';
+
+              return;
+
+            }
+
+
+            const imagemURL =
+              URL.createObjectURL(
+                arquivo
+              );
+
+
+            preview.src =
+              imagemURL;
+
+
+            areaImagem.classList.add(
+              'tem-imagem'
+            );
+
+
+            preview.onload =
+              function () {
+
+                URL.revokeObjectURL(
+                  imagemURL
+                );
+
+              };
+
+          }
+        );
+
+      });
+
+
+
+    const fotoResponsavelServico =
+      document.getElementById(
+        'foto-responsavel-servico'
+      );
+
+
+    const previewResponsavelServico =
+      document.getElementById(
+        'preview-responsavel-servico'
+      );
+
+
+    const avatarResponsavelServico =
+      document.querySelector(
+        '.servico-avatar'
+      );
+
+
+    if (
+      fotoResponsavelServico &&
+      previewResponsavelServico &&
+      avatarResponsavelServico
+    ) {
+
+      fotoResponsavelServico.addEventListener(
+        'change',
+        function () {
+
+          const arquivo =
+            this.files[0];
+
+
+          if (!arquivo) {
+            return;
+          }
+
+
+          if (!arquivo.type.startsWith('image/')) {
+
+            alert(
+              'Selecione um arquivo de imagem.'
+            );
+
+            this.value = '';
+
+            return;
+
+          }
+
+
+          const imagemURL =
+            URL.createObjectURL(
+              arquivo
+            );
+
+
+          previewResponsavelServico.src =
+            imagemURL;
+
+
+          avatarResponsavelServico.classList.add(
+            'tem-imagem'
+          );
+
+
+          previewResponsavelServico.onload =
+            function () {
+
+              URL.revokeObjectURL(
+                imagemURL
+              );
+
+            };
+
+        }
+      );
+
+    }
+
+  </script>
+
+  <!-- #endregion -->
+
+
+</body>
+</html>

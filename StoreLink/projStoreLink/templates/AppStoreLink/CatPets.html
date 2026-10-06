@@ -27,37 +27,18 @@
   </script>
 
   <div class="topbar">
-
-    <div class="logo-icon">
-      <img src="{% static 'AppStoreLink/images/icon-dark.png' %}" alt="StoreLink">
-    </div>
-
-    <a class="nav-btn" href="{% url 'index' %}">Início</a>
+    <div class="logo-icon"><img src="{% static 'AppStoreLink/images/icon-dark.png' %}" alt="StoreLink"></div>
+    <a class="nav-btn active" href="{% url 'index' %}" onclick="location.href=this.dataset.url">Início</a>    
     <a class="nav-btn" href="{% url 'perfil-loja' %}">Sua loja</a>
-    <a class="nav-btn" id="suporte">Suporte</a>
+    <a class="nav-btn" href="{% url 'suporte' %}">Suporte</a>
     <a class="nav-btn" onclick="setActiveNav(this)">Como navegar?</a>
-
     {% if request.user.is_authenticated %}
-
-      <button class="nav-account-btn"
-        data-url="{% url 'perfil-consumidor' %}"
-        onclick="location.href=this.dataset.url">
-        👤 Minha conta
-      </button>
-
+    <button class="nav-account-btn" data-url="{% url 'perfil-consumidor' %}" onclick="location.href=this.dataset.url">👤 Minha conta</button>
     {% else %}
-
-      <button class="nav-account-btn"
-        data-url="{% url 'cadastro' %}"
-        onclick="location.href=this.dataset.url">
-        Criar conta ou Entrar
-      </button>
-
+    <button class="nav-account-btn" data-url="{% url 'cadastro' %}" onclick="location.href=this.dataset.url">Criar conta ou Entrar</button>
     {% endif %}
-
-    <button class="theme-toggle" onclick="toggleTheme(this)">
-      🌙 Modo escuro
-    </button>
+    <button class="theme-toggle" onclick="toggleTheme(this)">🌙 Modo escuro</button>
+  </div>
 
   </div>
 

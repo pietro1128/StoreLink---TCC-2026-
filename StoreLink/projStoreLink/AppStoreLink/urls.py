@@ -15,7 +15,10 @@ from AppStoreLink.views import (
     CatAmbiente,
     CatTecnologia,
     CatBeleza,
-    CatOutros
+    CatOutros,
+    suporte,
+    produtos_loja,
+    servicos_loja
 )
 
 
@@ -49,4 +52,10 @@ urlpatterns = [
     path('CatBeleza/', CatBeleza, name='CatBeleza'),
 
     path('CatOutros/', CatOutros, name='CatOutros'),
+
+    path('suporte/', suporte, name='suporte'),
+
+    path('produtos-loja/',produtos_loja,name='produtos-loja'),
+
+    path('servicos-loja/', servicos_loja,name='servicos-loja'),
 ]

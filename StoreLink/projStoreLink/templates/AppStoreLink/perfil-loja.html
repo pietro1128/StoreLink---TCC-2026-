@@ -20,7 +20,9 @@
   >
 </head>
 
+
 <!-- #region modo escuro -->
+
 <body>
 
   <script>
@@ -28,7 +30,9 @@
       document.body.classList.add('dark');
     }
   </script>
+
 <!-- #endregion -->
+
 
 <!-- #region navbar -->
 
@@ -41,39 +45,34 @@
       >
     </div>
 
-
-    <button
-      class="nav-btn"
-      data-url="{% url 'index' %}"
+    <a
+      class="nav-btn active"
+      href="{% url 'index' %}"
       onclick="location.href=this.dataset.url"
     >
       Início
-    </button>
+    </a>
 
-
-    <button
-      class="nav-btn active"
-      data-url="{% url 'perfil-loja' %}"
-      onclick="location.href=this.dataset.url"
+    <a
+      class="nav-btn"
+      href="{% url 'perfil-loja' %}"
     >
       Sua loja
-    </button>
+    </a>
 
-
-    <button
+    <a
       class="nav-btn"
-      onclick="setActiveNav(this)"
+      href="{% url 'suporte' %}"
     >
       Suporte
-    </button>
+    </a>
 
-
-    <button
+    <a
       class="nav-btn"
       onclick="setActiveNav(this)"
     >
       Como navegar?
-    </button>
+    </a>
 
 
     {% if request.user.is_authenticated %}
@@ -110,40 +109,94 @@
 
 <!-- #endregion -->
 
+
 <!-- #region sidebar -->
-<div class="sidebar-trigger"></div>
 
-<div class="sidebar">
+  <div class="sidebar-trigger"></div>
 
-  <a class="cat-btn cat-alimentos {% if categoria == 'Alimentos' %}cat-active{% endif %}" href="{% url 'CatAlimentos' %}">Alimentos</a>
+  <div class="sidebar">
 
-  <a class="cat-btn cat-moda {% if categoria == 'Moda' %}cat-active{% endif %}" href="{% url 'CatModa' %}">Moda</a>
+    <a
+      class="cat-btn cat-alimentos {% if categoria == 'Alimentos' %}cat-active{% endif %}"
+      href="{% url 'CatAlimentos' %}"
+    >
+      Alimentos
+    </a>
 
-  <a class="cat-btn cat-esportes {% if categoria == 'Esportes' %}cat-active{% endif %}" href="{% url 'CatEsportes' %}">Esportes</a>
+    <a
+      class="cat-btn cat-moda {% if categoria == 'Moda' %}cat-active{% endif %}"
+      href="{% url 'CatModa' %}"
+    >
+      Moda
+    </a>
 
-  <a class="cat-btn cat-construcao {% if categoria == 'Construção' %}cat-active{% endif %}" href="{% url 'CatConstrucao' %}">Construção</a>
+    <a
+      class="cat-btn cat-esportes {% if categoria == 'Esportes' %}cat-active{% endif %}"
+      href="{% url 'CatEsportes' %}"
+    >
+      Esportes
+    </a>
 
-  <a class="cat-btn cat-saude {% if categoria == 'Saúde' %}cat-active{% endif %}" href="{% url 'CatSaude' %}">Saúde</a>
+    <a
+      class="cat-btn cat-construcao {% if categoria == 'Construção' %}cat-active{% endif %}"
+      href="{% url 'CatConstrucao' %}"
+    >
+      Construção
+    </a>
 
-  <a class="cat-btn cat-pets {% if categoria == 'Pets' %}cat-active{% endif %}" href="{% url 'CatPets' %}">Pets</a>
+    <a
+      class="cat-btn cat-saude {% if categoria == 'Saúde' %}cat-active{% endif %}"
+      href="{% url 'CatSaude' %}"
+    >
+      Saúde
+    </a>
 
-  <a class="cat-btn cat-ambiente {% if categoria == 'Ambiente' %}cat-active{% endif %}" href="{% url 'CatAmbiente' %}">Ambiente</a>
+    <a
+      class="cat-btn cat-pets {% if categoria == 'Pets' %}cat-active{% endif %}"
+      href="{% url 'CatPets' %}"
+    >
+      Pets
+    </a>
 
-  <a class="cat-btn cat-tecnologia {% if categoria == 'Tecnologia' %}cat-active{% endif %}" href="{% url 'CatTecnologia' %}">Tecnologia</a>
+    <a
+      class="cat-btn cat-ambiente {% if categoria == 'Ambiente' %}cat-active{% endif %}"
+      href="{% url 'CatAmbiente' %}"
+    >
+      Ambiente
+    </a>
 
-  <a class="cat-btn cat-beleza {% if categoria == 'Beleza' %}cat-active{% endif %}" href="{% url 'CatBeleza' %}">Beleza</a>
+    <a
+      class="cat-btn cat-tecnologia {% if categoria == 'Tecnologia' %}cat-active{% endif %}"
+      href="{% url 'CatTecnologia' %}"
+    >
+      Tecnologia
+    </a>
 
-  <a class="cat-btn cat-outros {% if categoria == 'Outros' %}cat-active{% endif %}" href="{% url 'CatOutros' %}">Outros</a>
+    <a
+      class="cat-btn cat-beleza {% if categoria == 'Beleza' %}cat-active{% endif %}"
+      href="{% url 'CatBeleza' %}"
+    >
+      Beleza
+    </a>
 
-</div>
+    <a
+      class="cat-btn cat-outros {% if categoria == 'Outros' %}cat-active{% endif %}"
+      href="{% url 'CatOutros' %}"
+    >
+      Outros
+    </a>
+
+  </div>
+
 <!-- #endregion -->
 
-<!-- #region usuario logado -->
-  {% if request.user.is_authenticated %}
 
+<!-- #region usuario logado -->
+{% if request.user.is_authenticated %}
   <div class="page-perfil">
 
     <div class="perfil-wrapper">
+
 
       <div class="perfil-left">
 
@@ -225,9 +278,11 @@
 
           </div>
 
+
           <button class="perfil-delete-btn">
             Salvar Nome
           </button>
+
         </form>
 
 
@@ -237,7 +292,9 @@
 
       </div>
 
+
       <div class="perfil-card">
+
 
         <div class="perfil-card-left">
 
@@ -273,7 +330,12 @@
           </div>
 
 
-          <button class="perfil-action-btn">
+          <button
+            type="button"
+            class="perfil-action-btn"
+            data-url="{% url 'produtos-loja' %}"
+            onclick="location.href=this.dataset.url"
+          >
             PRODUTOS
           </button>
 
@@ -283,7 +345,12 @@
           </div>
 
 
-          <button class="perfil-action-btn">
+          <button
+            type="button"
+            class="perfil-action-btn"
+            data-url="{% url 'servicos-loja' %}"
+            onclick="location.href=this.dataset.url"
+          >
             SERVIÇOS
           </button>
 
@@ -301,231 +368,260 @@
 
 
         <div class="perfil-card-middle">
+
           <form method="POST">
+
             {% csrf_token %}
-            <input type="hidden" name="form_loja" value="1">
+
+            <input
+              type="hidden"
+              name="form_loja"
+              value="1"
+            >
+
 
             <h3>
               Nome
             </h3>
-  
-  
+
+
             <div class="perfil-field">
-  
+
               <label>
                 Nome do Estabelecimento
               </label>
-  
-  
+
+
               <input
                 name="nome_loja"
                 type="text"
-                value="{{ request.AppStoreLink_loja.nome_loja }}" >
-  
+                value="{{ request.AppStoreLink_loja.nome_loja }}"
+              >
+
             </div>
-  
-  
+
+
             <h3>
               Localização
             </h3>
-  
-  
+
+
             <div class="perfil-field">
-  
+
               <label>
                 Rua
               </label>
-  
+
+
               <input
                 name="rua"
                 type="text"
                 value="{{ request.AppStoreLink_endereco.rua }}"
               >
-  
+
             </div>
-  
-  
+
+
             <div class="perfil-row">
-  
+
+
               <div class="perfil-field">
-  
+
                 <label>
                   Número
                 </label>
-  
+
+
                 <input
                   name="numero"
                   type="text"
                   value="{{ request.AppStoreLink_endereco.numero_estabelecimento }}"
                 >
-  
+
               </div>
-  
-  
+
+
               <div class="perfil-field">
-  
+
                 <label>
                   CEP
                 </label>
-  
+
+
                 <input
-                  name="cep" 
+                  name="cep"
                   type="text"
                   value="{{ request.AppStoreLink_endereco.cep }}"
                 >
-  
+
               </div>
-  
+
+
             </div>
-  
-  
+
+
             <h3>
               Informações
             </h3>
-  
-  
+
+
             <div class="perfil-field">
-  
+
               <label>
                 E-mail
               </label>
-  
+
+
               <input
                 name="email_loja"
                 type="text"
                 value="{{ request.AppStoreLink_loja.email_loja }}"
               >
-  
+
             </div>
-  
-  
+
+
             <div class="perfil-field">
-  
+
               <label>
                 Telefone
               </label>
-  
-  
+
+
               <div class="perfil-phone">
-  
+
                 <span>
                   (+55)
                 </span>
-  
+
+
                 <input
                   name="telefone_loja"
                   type="text"
                   value="{{ request.AppStoreLink_loja.telefone_loja }}"
                 >
-  
+
               </div>
-  
+
             </div>
-  
-  
+
+
             <div class="perfil-field">
-  
+
               <label>
                 CNPJ
               </label>
-  
+
+
               <input
                 name="cnpj"
                 type="text"
                 value="{{ request.AppStoreLink_loja.cnpj }}"
               >
-  
+
             </div>
-  
-  
+
+
             <div class="perfil-field">
-  
+
               <label>
                 Link de Loja virtual (Opcional)
               </label>
-  
+
+
               <input
                 name="link_loja"
                 type="text"
                 value="{{ request.AppStoreLink_loja.link }}"
               >
+
             </div>
+
 
             <button class="perfil-delete-btn">
               Salvar Loja
             </button>
+
           </form>
 
-        <div class="perfil-card-right">
 
-          <div class="perfil-classif-wrap">
-
-            <label>
-              Classificação da Loja
-            </label>
+          <div class="perfil-card-right">
 
 
-            <button
-              type="button"
-              class="perfil-classif-btn"
-              id="classifBtn"
-            >
+            <div class="perfil-classif-wrap">
 
-              <span id="classifName">
-                Alimentos
-              </span>
-
-              ▾
-
-            </button>
-
-
-            <div
-              class="perfil-classif-dropdown"
-              id="classifDropdown"
-            ></div>
-
-          </div>
-
-
-          <div>
-
-            <label>
-              CNPJ Anônimo
-            </label>
-
-
-            <div class="perfil-toggle">
-
-              <button
-                type="button"
-                class="perfil-toggle-btn active"
-              >
-                Sim
-              </button>
+              <label>
+                Classificação da Loja
+              </label>
 
 
               <button
                 type="button"
-                class="perfil-toggle-btn"
+                class="perfil-classif-btn"
+                id="classifBtn"
               >
-                Não
+
+                <span id="classifName">
+                  Alimentos
+                </span>
+
+                ▾
+
               </button>
+
+
+              <div
+                class="perfil-classif-dropdown"
+                id="classifDropdown"
+              ></div>
 
             </div>
 
+
+            <div>
+
+              <label>
+                CNPJ Anônimo
+              </label>
+
+
+              <div class="perfil-toggle">
+
+                <button
+                  type="button"
+                  class="perfil-toggle-btn active"
+                >
+                  Sim
+                </button>
+
+
+                <button
+                  type="button"
+                  class="perfil-toggle-btn"
+                >
+                  Não
+                </button>
+
+              </div>
+
+            </div>
+
+
           </div>
+
 
         </div>
 
 
       </div>
 
+
     </div>
 
   </div>
 
 <!-- #endregion -->
+
 
 <!-- #region usuario não logado -->
   {% else %}
@@ -549,10 +645,11 @@
   </div>
 
   {% endif %}
-
 <!-- #endregion -->
 
+
 <!-- #region js -->
+
   <script>
 
     function setActiveNav(btn) {
@@ -621,6 +718,8 @@
 
       }
     );
+
+
 
     /* classificação da loja */
 
@@ -907,8 +1006,11 @@
             }
           );
 
+
       }
     );
+
+
 
     /* foto do estabelecimento */
 
@@ -992,6 +1094,8 @@
       );
 
     }
+
+
 
     /* foto do responsavel */
 
@@ -1079,6 +1183,7 @@
   </script>
 
 <!-- #endregion -->
+
 
 </body>
 </html>

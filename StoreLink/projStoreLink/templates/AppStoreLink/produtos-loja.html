@@ -1,0 +1,742 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>StoreLink - Produtos</title>
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="{% static 'AppStoreLink/images/icon-dark.png' %}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/style.css' %}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/produtos-loja.css' %}"
+  >
+</head>
+
+<body>
+
+  <script>
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+    }
+  </script>
+
+
+  <!-- #region navbar -->
+
+  <div class="topbar">
+
+    <div class="logo-icon">
+      <img
+        src="{% static 'AppStoreLink/images/icon-dark.png' %}"
+        alt="StoreLink"
+      >
+    </div>
+
+    <a
+      class="nav-btn"
+      href="{% url 'index' %}"
+    >
+      Início
+    </a>
+
+    <a
+      class="nav-btn active"
+      href="{% url 'perfil-loja' %}"
+    >
+      Sua loja
+    </a>
+
+    <a
+      class="nav-btn"
+      href="{% url 'suporte' %}"
+    >
+      Suporte
+    </a>
+
+    <a
+      class="nav-btn"
+      onclick="setActiveNav(this)"
+    >
+      Como navegar?
+    </a>
+
+
+    {% if request.user.is_authenticated %}
+
+      <button
+        class="nav-account-btn"
+        data-url="{% url 'perfil-consumidor' %}"
+        onclick="location.href=this.dataset.url"
+      >
+        👤 Minha conta
+      </button>
+
+    {% else %}
+
+      <button
+        class="nav-account-btn"
+        data-url="{% url 'cadastro' %}"
+        onclick="location.href=this.dataset.url"
+      >
+        Criar conta ou Entrar
+      </button>
+
+    {% endif %}
+
+
+    <button
+      class="theme-toggle"
+      onclick="toggleTheme(this)"
+    >
+      🌙 Modo escuro
+    </button>
+
+  </div>
+
+  <!-- #endregion -->
+
+
+  <!-- #region pagina -->
+
+  <main class="produto-page">
+
+
+    <!-- #region perfil lateral -->
+
+    <aside class="produto-perfil">
+
+      <div class="produto-badge">
+        Estabelecimento
+      </div>
+
+
+      <div class="produto-avatar-wrap">
+
+        <label
+          class="produto-avatar"
+          for="foto-responsavel-produto"
+        >
+
+          <input
+            type="file"
+            id="foto-responsavel-produto"
+            accept="image/*"
+            hidden
+          >
+
+
+          <svg
+            id="avatar-padrao-produto"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"
+            />
+          </svg>
+
+
+          <img
+            id="preview-responsavel-produto"
+            class="produto-avatar-image"
+            alt="Foto do responsável"
+          >
+
+        </label>
+
+
+        <label
+          class="produto-camera-badge"
+          for="foto-responsavel-produto"
+        >
+          📷
+        </label>
+
+      </div>
+
+
+      <div class="produto-perfil-fields">
+
+        <div class="produto-perfil-field">
+
+          <label>
+            Nome do responsável
+          </label>
+
+          <input
+            type="text"
+            value="{{ request.AppStoreLink_usuario.nome }}"
+          >
+
+        </div>
+
+
+        <div class="produto-perfil-field">
+
+          <label>
+            Sobrenome
+          </label>
+
+          <input
+            type="text"
+            value="{{ request.AppStoreLink_usuario.sobrenome }}"
+          >
+
+        </div>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="produto-logout"
+      >
+        Fazer Logout
+
+        <span>
+          ≪
+        </span>
+      </button>
+
+    </aside>
+
+    <!-- #endregion -->
+
+
+    <!-- #region conteudo -->
+
+    <section class="produto-conteudo">
+
+
+      <!-- #region cabecalho -->
+
+      <div class="produto-topo">
+
+        <a
+          class="produto-voltar"
+          href="{% url 'perfil-loja' %}"
+          aria-label="Voltar"
+        >
+          ←
+        </a>
+
+
+        <div class="produto-topo-info">
+
+          <p class="produto-editar-texto">
+            Editar fotos e informações dos produtos
+          </p>
+
+
+          <div class="produto-titulo-box">
+
+            <h1>
+              PRODUTOS
+            </h1>
+
+
+            <svg
+              class="produto-sacola"
+              viewBox="0 0 64 64"
+              fill="none"
+            >
+
+              <path
+                d="M16 22H48L52 56H12L16 22Z"
+                stroke="currentColor"
+                stroke-width="3"
+              />
+
+              <path
+                d="M23 23V17C23 11 27 7 32 7C37 7 41 11 41 17V23"
+                stroke="currentColor"
+                stroke-width="3"
+              />
+
+            </svg>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- #endregion -->
+
+
+      <!-- #region cards -->
+
+      <div class="produto-cards-scroll">
+
+
+        <!-- #region produto 1 -->
+
+        <div class="produto-card">
+
+          <div class="produto-imagem">
+
+            <input
+              class="produto-imagem-input"
+              type="file"
+              accept="image/*"
+              hidden
+            >
+
+
+            <div class="produto-imagem-placeholder">
+
+              <div class="produto-nuvem produto-nuvem-1"></div>
+
+              <div class="produto-nuvem produto-nuvem-2"></div>
+
+              <div class="produto-grama"></div>
+
+            </div>
+
+
+            <img
+              class="produto-preview"
+              alt="Imagem do produto"
+            >
+
+
+            <button
+              type="button"
+              class="produto-editar-imagem"
+              aria-label="Editar imagem"
+            >
+              ✎
+            </button>
+
+          </div>
+
+
+          <div class="produto-card-conteudo">
+
+            <button
+              type="button"
+              class="produto-editar-info"
+              aria-label="Editar informações"
+            >
+              ✎
+            </button>
+
+
+            <label>
+              Nome do produto:
+            </label>
+
+            <input
+              type="text"
+              value="Nome do produto"
+            >
+
+
+            <label>
+              Preço do produto:
+            </label>
+
+            <input
+              type="text"
+              value="R$00,00"
+            >
+
+
+            <label>
+              Descrição do produto:
+            </label>
+
+            <textarea
+              placeholder="Descrição do produto...."
+            ></textarea>
+
+          </div>
+
+        </div>
+
+        <!-- #endregion -->
+
+
+        <!-- #region produto 2 -->
+
+        <div class="produto-card">
+
+          <div class="produto-imagem">
+
+            <input
+              class="produto-imagem-input"
+              type="file"
+              accept="image/*"
+              hidden
+            >
+
+
+            <div class="produto-imagem-placeholder">
+
+              <div class="produto-nuvem produto-nuvem-1"></div>
+
+              <div class="produto-nuvem produto-nuvem-2"></div>
+
+              <div class="produto-grama"></div>
+
+            </div>
+
+
+            <img
+              class="produto-preview"
+              alt="Imagem do produto"
+            >
+
+
+            <button
+              type="button"
+              class="produto-editar-imagem"
+              aria-label="Editar imagem"
+            >
+              ✎
+            </button>
+
+          </div>
+
+
+          <div class="produto-card-conteudo">
+
+            <button
+              type="button"
+              class="produto-editar-info"
+              aria-label="Editar informações"
+            >
+              ✎
+            </button>
+
+
+            <label>
+              Nome do produto:
+            </label>
+
+            <input
+              type="text"
+              value="Nome do produto"
+            >
+
+
+            <label>
+              Preço do produto:
+            </label>
+
+            <input
+              type="text"
+              value="R$00,00"
+            >
+
+
+            <label>
+              Descrição do produto:
+            </label>
+
+            <textarea
+              placeholder="Descrição do produto...."
+            ></textarea>
+
+          </div>
+
+        </div>
+
+        <!-- #endregion -->
+
+
+        <!-- #region produto 3 -->
+
+        <div class="produto-card">
+
+          <div class="produto-imagem">
+
+            <input
+              class="produto-imagem-input"
+              type="file"
+              accept="image/*"
+              hidden
+            >
+
+
+            <div class="produto-imagem-placeholder">
+
+              <div class="produto-nuvem produto-nuvem-1"></div>
+
+              <div class="produto-nuvem produto-nuvem-2"></div>
+
+              <div class="produto-grama"></div>
+
+            </div>
+
+
+            <img
+              class="produto-preview"
+              alt="Imagem do produto"
+            >
+
+
+            <button
+              type="button"
+              class="produto-editar-imagem"
+              aria-label="Editar imagem"
+            >
+              ✎
+            </button>
+
+          </div>
+
+
+          <div class="produto-card-conteudo">
+
+            <button
+              type="button"
+              class="produto-editar-info"
+              aria-label="Editar informações"
+            >
+              ✎
+            </button>
+
+
+            <label>
+              Nome do produto:
+            </label>
+
+            <input
+              type="text"
+              value="Nome do produto"
+            >
+
+
+            <label>
+              Preço do produto:
+            </label>
+
+            <input
+              type="text"
+              value="R$00,00"
+            >
+
+
+            <label>
+              Descrição do produto:
+            </label>
+
+            <textarea
+              placeholder="Descrição do produto...."
+            ></textarea>
+
+          </div>
+
+        </div>
+
+        <!-- #endregion -->
+
+
+      </div>
+
+      <!-- #endregion -->
+
+
+    </section>
+
+    <!-- #endregion -->
+
+
+  </main>
+
+  <!-- #endregion -->
+
+
+  <!-- #region javascript -->
+
+  <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
+
+
+  <script>
+
+    document
+      .querySelectorAll('.produto-imagem')
+      .forEach(function (areaImagem) {
+
+        const input =
+          areaImagem.querySelector(
+            '.produto-imagem-input'
+          );
+
+        const preview =
+          areaImagem.querySelector(
+            '.produto-preview'
+          );
+
+        const botao =
+          areaImagem.querySelector(
+            '.produto-editar-imagem'
+          );
+
+
+        botao.addEventListener(
+          'click',
+          function () {
+
+            input.click();
+
+          }
+        );
+
+
+        input.addEventListener(
+          'change',
+          function () {
+
+            const arquivo =
+              this.files[0];
+
+
+            if (!arquivo) {
+              return;
+            }
+
+
+            if (!arquivo.type.startsWith('image/')) {
+
+              alert(
+                'Selecione um arquivo de imagem.'
+              );
+
+              this.value = '';
+
+              return;
+
+            }
+
+
+            const imagemURL =
+              URL.createObjectURL(
+                arquivo
+              );
+
+
+            preview.src =
+              imagemURL;
+
+
+            areaImagem.classList.add(
+              'tem-imagem'
+            );
+
+
+            preview.onload =
+              function () {
+
+                URL.revokeObjectURL(
+                  imagemURL
+                );
+
+              };
+
+          }
+        );
+
+      });
+
+
+
+    const fotoResponsavelProduto =
+      document.getElementById(
+        'foto-responsavel-produto'
+      );
+
+
+    const previewResponsavelProduto =
+      document.getElementById(
+        'preview-responsavel-produto'
+      );
+
+
+    const avatarResponsavelProduto =
+      document.querySelector(
+        '.produto-avatar'
+      );
+
+
+    if (
+      fotoResponsavelProduto &&
+      previewResponsavelProduto &&
+      avatarResponsavelProduto
+    ) {
+
+      fotoResponsavelProduto.addEventListener(
+        'change',
+        function () {
+
+          const arquivo =
+            this.files[0];
+
+
+          if (!arquivo) {
+            return;
+          }
+
+
+          if (!arquivo.type.startsWith('image/')) {
+
+            alert(
+              'Selecione um arquivo de imagem.'
+            );
+
+            this.value = '';
+
+            return;
+
+          }
+
+
+          const imagemURL =
+            URL.createObjectURL(
+              arquivo
+            );
+
+
+          previewResponsavelProduto.src =
+            imagemURL;
+
+
+          avatarResponsavelProduto.classList.add(
+            'tem-imagem'
+          );
+
+
+          previewResponsavelProduto.onload =
+            function () {
+
+              URL.revokeObjectURL(
+                imagemURL
+              );
+
+            };
+
+        }
+      );
+
+    }
+
+  </script>
+
+  <!-- #endregion -->
+
+
+</body>
+</html>
