@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 from AppStoreLink.models import Usuario, Loja, Endereco, Produto, Servico, LojaFavoritas, TipoUsuario
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
 import re
 
 
@@ -16,6 +17,9 @@ def index(request):
 # V  a linha de baixo em um comentario: "#@login_required"
 #@login_required
 def perfil_loja(request):
+    #if request.user.roler != 'admin':
+        #return HttpResponseForbidden("Você não tem permição para acessar está página.") 
+    
     if request.method == 'POST':
 
         nome = request.POST.get('nome_loja')
