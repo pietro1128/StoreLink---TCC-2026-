@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.db.models import Q
-from django.contrib import messages
+from django.contrib import messages # importa mensagens de erro e sucesso
 from django.contrib.auth.hashers import make_password, check_password
-from AppStoreLink.models import Usuario, Loja, Endereco, Produto, Servico, LojaFavoritas, TipoUsuario
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden
-import re
+from AppStoreLink.models import Usuario, Loja, Endereco, Produto, Servico, LojaFavoritas, TipoUsuario # importação das classes em models
+from django.contrib.auth.decorators import login_required # @login_required -> usado para privar apenas usuarios loggados
+from django.http import HttpResponseForbidden #
+import re # importação de Regex: biblioteca de validações
 
 
 def index(request):
@@ -22,11 +22,13 @@ def perfil_loja(request):
     
     if request.method == 'POST':
 
-        nome = request.POST.get('nome_loja')
+        nome = request.POST.get('nome_loja')# -> cria uma variavel puxando o valor do banco
+#                                   L> este valor tem que ser exatamente igual ao 'name' em perfil-loja.html
         rua = request.POST.get('rua')
         numero = request.POST.get('numero')
         cep = request.POST.get('cep')
         endereco = Endereco.objects.create(rua=rua, numero=numero, cep=cep)
+        # guarda os valores das variaveis dentro da tabela 'Endereco' que esta guardada dentro da variavel 'endereco'
 
         email = request.POST.get('email_loja')
         telefone = request.POST.get('telefone_loja')
@@ -34,17 +36,18 @@ def perfil_loja(request):
         link = request.POST.get('link_loja')
 
         # Validações de E-mail para loja:
-        padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$'
-        if not re.match(padrao_email, email):
-            messages.error(request, 'O campo E-mail deve ser um Gmail válido (exemplo: email@gmail.com).')
+        padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$'# -> Argumenta um padrão com characteres finais nos emails
+        if not re.match(padrao_email, email): # -> Verifica se estão nos padões argumentados estao coecidindo com as variaveis 
+            messages.error(request, 'O campo E-mail deve ser um Gmail válido (exemplo: email@gmail.com).')# -> cria uma mensagens
             return render(request, 'templates/perfil-loja.html')
 
-        if Loja.objects.filter(email=email).exists():
+        if Loja.objects.filter(email=email).exists():# -> ???.objects.filter(???=???) --> busca valores por filtros argumentados
+                                                     # -> .exists() --> verifica se ja existe 
             messages.error(request, 'Este e-mail já está cadastrado.')
             return render(request, 'templates/perfil-loja.html')
 
         # Validações de CNPJ:
-        padrao_cnpj = r'^.{14,14}$'
+        padrao_cnpj = r'^.{14,14}$'# ^.{??,??}$ -> diz que o texton precisa ter exatamente o numero de letras argumantadas
         if not re.match(padrao_cnpj, cnpj):
             messages.error(request, 'Este CNPJ deve conter exatamente 14 números.')
             return render(request, 'templates/perfil-loja.html')
@@ -71,7 +74,7 @@ def perfil_loja(request):
 
         Loja.objects.create(nome=nome, endereco=endereco, email_loja=email)
 
-    loja = Loja.objects.all()
+    loja = Loja.objects.all()# -> '???.objects.all()': Busca todos os registros salvos no banco sobre a tabela argumentada
     usuario = Usuario.objects.all()
     endereco = Endereco.objects.all()
     produto = Produto.objects.all()
@@ -100,7 +103,7 @@ def perfil_consumidor(request):
 def cadastro(request):
     if request.method == 'POST':
         nome = request.POST.get('nome', '').strip()
-        sobrenome = request.POST.get('sobrenome', '').strip() or None
+        sobrenome = request.POST.get('sobrenome', '').strip() or None # -> 'or None': diz que pode *também* receber valores vazios/'None'
         email = request.POST.get('email', '').strip()
         senha = request.POST.get('senha', '')
         telefone = request.POST.get('telefone', '').strip() or None
@@ -119,6 +122,11 @@ def cadastro(request):
 
         # Validação de senha (mínimo 8 caracteres, maiúscula, minúscula e número)
         padrao_senha = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}'
+        """
+        >> r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}' <<: Esta linha exige pelo menos (8 char, letra min, letra max e um num)
+        >> ^ <<: começa a str
+        >> (?=.*...) <<: Lookahead 'verifica se a condição CHAR escrita esta em algum lugar no texto'
+        """
         if not re.match(padrao_senha, senha):
             messages.error(request, 'A senha precisa conter no mínimo 8 caracteres, letra maiúscula, minúscula e número.')
             return render(request, 'registration/cadastro.html')
@@ -134,7 +142,7 @@ def cadastro(request):
                 messages.error(request, 'Este CPF já está cadastrado.')
                 return render(request, 'registration/cadastro.html')
 
-        usuario = Usuario(
+        usuario = Usuario( # -> Esta criando um objeto a partir do modelo do banco
             nome=nome,
             sobrenome=sobrenome,
             email=email,
@@ -143,9 +151,9 @@ def cadastro(request):
             cpf=cpf,
             id_tipo_usuario_id=id_tipo_usuario,
         )
-        usuario.save()
+        usuario.save()# -> Salva os valores concedidos dentro do banco 
 
-        messages.success(request, 'Cadastro realizado com sucesso! Faça login para continuar.')
+        messages.success(request, 'Cadastro realizado com sucesso! Faça login para continuar.')# -> retorna uma mensagem de sucesso caso passe por todos os campos
         return redirect('login')
 
     return render(request, 'registration/cadastro.html')
