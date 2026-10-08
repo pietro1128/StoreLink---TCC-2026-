@@ -60,9 +60,11 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'AppStoreLink.context_processors.usuario_logado', # -> Lê: 'AppStoreLink' arquivo 'context_processors.py' com a função 'usuario_logado'
             ],
         },
     },

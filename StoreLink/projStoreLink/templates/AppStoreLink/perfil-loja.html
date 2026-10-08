@@ -75,7 +75,7 @@
     </a>
 
 
-    {% if request.user.is_authenticated %}
+    {% if usuario_logado %}
 
       <button
         class="nav-account-btn"
@@ -192,7 +192,7 @@
 
 
 <!-- #region usuario logado -->
-{% if request.user.is_authenticated %}
+{% if usuario_logado %}
   <div class="page-perfil">
 
     <div class="perfil-wrapper">
