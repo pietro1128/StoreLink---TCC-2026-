@@ -9,6 +9,7 @@ from django.http import HttpResponseForbidden # ->
 import re # importação de Regex: biblioteca de validações
 
 
+
 def index(request):
     return render(request, 'AppStoreLink/index.html')
 
@@ -20,7 +21,7 @@ def perfil_loja(request):
     #if request.user.roler != 'admin':
         #return HttpResponseForbidden("Você não tem permição para acessar está página.") 
     
-    if request.method == 'POST':
+    if request.method == 'POST': # -> verifica se o usuario enviou os dados usando o metodo HTTP 'POST'
 
         nome = request.POST.get('nome_loja')# -> cria uma variavel puxando o valor do banco
 #                                   L> este valor tem que ser exatamente igual ao 'name' em perfil-loja.html
@@ -366,15 +367,26 @@ def servicos_loja(request):
     
     if request.method == 'POST':
 
-        nome_servico = request.POST.get('nome_servico')
-        preco = models.POST.get('preco')
-        descricao = models.POST.get('descricao')
+        nome_servico = request.POST.get('nome_servico', '').strip() # 'strip()': exclui espaços
+        preco = request.POST.get('preco', '').strip()
+        descricao = request.POST.get('descricao', '').strip()
         #foto = models.POST.get('foto')
-        Servicos.objects.create(nome_servico=nome_servico, preco=preco, descricao=descricao)
+        
+        loja = Loja.objects.first() # -> vai buscar o primeiro registro da tabela 'Loja'
+        if loja is None: # -> verifica se ele encontrou apenas nulos
+            messages.error(request, 'Cadastre uma loja antes de cadastrar serviço.')
+            return redirect('servicos-loja') # -> isso encerra a execução da função, 'redirect()': redireciona para a rota que voce definiu EX: "servicos-loja"
+        
+        Servico.objects.create(
+            nome_servico=nome_servico, 
+            preco=preco, 
+            descricao=descricao,
+            id_loja=loja, # usamos apenas para verificar se existe loja
+            )
         
         messages.success(request, 'Serviço cadastrado com sucesso!')
         return redirect('servicos-loja')
 
-        servicos = Servicos.objects.all()
+    servicos = Servico.objects.all()
 
-        return render(request, 'AppStoreLink/servicos-loja.html')
+    return render(request, 'AppStoreLink/servicos-loja.html', {'servicos': servicos})

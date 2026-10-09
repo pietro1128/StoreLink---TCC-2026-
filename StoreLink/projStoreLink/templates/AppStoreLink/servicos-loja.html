@@ -334,7 +334,12 @@
 
       <!-- #endregion -->
 
-
+      {# Mensagens de sucesso e erro #}
+      {% if messages %}
+        {% for message in messages %}
+          <p>{{ message }}</p>
+        {% endfor %}
+      {% endif %}
 
       <!-- #region CARDS -->
 
@@ -460,6 +465,10 @@
               </button>
 
 
+              <!-- ALTERADO: este form agora só EXIBE os dados do serviço salvo.
+                   Corrigi os value (servico.xxx em vez de request.AppStoreLink_servico.xxx)
+                   e o textarea ganhou name="descricao".
+                   Ele NÃO deve criar nada: a criação fica no card "Novo serviço" lá embaixo. -->
               <form method="POST">
                 {% csrf_token %}
                 <label>
@@ -470,9 +479,9 @@
 
 
                 <input
-                  name = "nome_servico"
+                  name="nome_servico"
                   type="text"
-                  value="{{ request.AppStoreLink_servico.nome_servico }}"
+                  value="{{ servico.nome_servico }}"
                   placeholder="Nome do serviço"
                 >
 
@@ -486,9 +495,9 @@
 
 
                 <input
-                  name = "preco"
+                  name="preco"
                   type="text"
-                  value="{{ request.AppStoreLink_servico.preco }}"
+                  value="{{ servico.preco }}"
                   placeholder="R$ 00,00"
                 >
 
@@ -502,6 +511,7 @@
 
 
                 <textarea
+                  name="descricao"
                   placeholder="Descrição do serviço..."
                 >{{ servico.descricao|default:'' }}</textarea>
               </form>
@@ -516,6 +526,66 @@
 
 
         {% endfor %}
+
+
+
+        <!-- #region NOVO SERVIÇO (FORMULÁRIO DE CADASTRO) -->
+
+        <!-- NOVO: este card fica FORA do FOR, então aparece sempre,
+             mesmo quando ainda não existe nenhum serviço no banco.
+             É o único form que cria um serviço novo (POST -> view servicos_loja). -->
+        <div class="servico-card">
+
+          <div class="servico-card-conteudo">
+
+            <form method="POST">
+              {% csrf_token %}
+
+              <label>
+                Nome do serviço:
+              </label>
+
+              <input
+                name="nome_servico"
+                type="text"
+                placeholder="Nome do serviço"
+                required
+              >
+
+
+              <label>
+                Preço do serviço:
+              </label>
+
+              <input
+                name="preco"
+                type="text"
+                placeholder="R$ 00,00"
+                required
+              >
+
+
+              <label>
+                Descrição do serviço:
+              </label>
+
+              <textarea
+                name="descricao"
+                placeholder="Descrição do serviço..."
+              ></textarea>
+
+
+              <button type="submit">
+                Salvar serviço
+              </button>
+
+            </form>
+
+          </div>
+
+        </div>
+
+        <!-- #endregion -->
 
 
 
