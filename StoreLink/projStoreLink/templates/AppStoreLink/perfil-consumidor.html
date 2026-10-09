@@ -4,14 +4,34 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
   <title>StoreLink - Minha Conta</title>
-  <link rel="icon" type="image/png" href="{% static 'AppStoreLink/images/icon-dark.png' %}">
-  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/style.css' %}">
-  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/consumidor.css' %}">
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="{% static 'AppStoreLink/images/icon-dark.png' %}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/style.css' %}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/consumidor.css' %}"
+  >
 </head>
 
+
 <body>
+
 
   <!-- #region modo escuro -->
 
@@ -23,155 +43,743 @@
 
   <!-- #endregion -->
 
+
   <!-- #region navbar -->
 
   <div class="topbar">
-    <div class="logo-icon"><img src="{% static 'AppStoreLink/images/icon-dark.png' %}" alt="StoreLink"></div>
-    <a class="nav-btn active" href="{% url 'index' %}" onclick="location.href=this.dataset.url">Início</a>    
-    <a class="nav-btn" href="{% url 'perfil-loja' %}">Sua loja</a>
-    <a class="nav-btn" href="{% url 'suporte' %}">Suporte</a>
-    <a class="nav-btn" onclick="setActiveNav(this)">Como navegar?</a>
+
+    <div class="logo-icon">
+
+      <img
+        src="{% static 'AppStoreLink/images/icon-dark.png' %}"
+        alt="StoreLink"
+      >
+
+    </div>
+
+
+    <a
+      class="nav-btn"
+      href="{% url 'index' %}"
+    >
+      Início
+    </a>
+
+
+    <a
+      class="nav-btn"
+      href="{% url 'perfil-loja' %}"
+    >
+      Sua loja
+    </a>
+
+
+    <a
+      class="nav-btn"
+      href="{% url 'suporte' %}"
+    >
+      Suporte
+    </a>
+
+
+    <a
+      class="nav-btn"
+      onclick="setActiveNav(this)"
+    >
+      Como navegar?
+    </a>
+
+
     {% if request.user.is_authenticated %}
-    <button class="nav-account-btn" data-url="{% url 'perfil-consumidor' %}" onclick="location.href=this.dataset.url">👤 Minha conta</button>
+
+      <button
+        class="nav-account-btn consumidor-conta-ativa"
+        data-url="{% url 'perfil-consumidor' %}"
+        onclick="location.href=this.dataset.url"
+      >
+        👤 Minha conta
+      </button>
+
     {% else %}
-    <button class="nav-account-btn" data-url="{% url 'cadastro' %}" onclick="location.href=this.dataset.url">Criar conta ou Entrar</button>
+
+      <button
+        class="nav-account-btn"
+        data-url="{% url 'cadastro' %}"
+        onclick="location.href=this.dataset.url"
+      >
+        Criar conta ou Entrar
+      </button>
+
     {% endif %}
-    <button class="theme-toggle" onclick="toggleTheme(this)">🌙 Modo escuro</button>
+
+
+    <button
+      class="theme-toggle"
+      onclick="toggleTheme(this)"
+    >
+      🌙 Modo escuro
+    </button>
+
   </div>
 
   <!-- #endregion -->
 
+
   <!-- #region sidebar -->
+
   <div class="sidebar-trigger"></div>
+
 
   <div class="sidebar">
 
-    <a class="cat-btn cat-alimentos {% if categoria == 'Alimentos' %}cat-active{% endif %}" href="{% url 'CatAlimentos' %}">Alimentos</a>
+    <a
+      class="cat-btn cat-alimentos"
+      href="{% url 'CatAlimentos' %}"
+    >
+      Alimentos
+    </a>
 
-    <a class="cat-btn cat-moda {% if categoria == 'Moda' %}cat-active{% endif %}" href="{% url 'CatModa' %}">Moda</a>
+    <a
+      class="cat-btn cat-moda"
+      href="{% url 'CatModa' %}"
+    >
+      Moda
+    </a>
 
-    <a class="cat-btn cat-esportes {% if categoria == 'Esportes' %}cat-active{% endif %}" href="{% url 'CatEsportes' %}">Esportes</a>
+    <a
+      class="cat-btn cat-esportes"
+      href="{% url 'CatEsportes' %}"
+    >
+      Esportes
+    </a>
 
-    <a class="cat-btn cat-construcao {% if categoria == 'Construção' %}cat-active{% endif %}" href="{% url 'CatConstrucao' %}">Construção</a>
+    <a
+      class="cat-btn cat-construcao"
+      href="{% url 'CatConstrucao' %}"
+    >
+      Construção
+    </a>
 
-    <a class="cat-btn cat-saude {% if categoria == 'Saúde' %}cat-active{% endif %}" href="{% url 'CatSaude' %}">Saúde</a>
+    <a
+      class="cat-btn cat-saude"
+      href="{% url 'CatSaude' %}"
+    >
+      Saúde
+    </a>
 
-    <a class="cat-btn cat-pets {% if categoria == 'Pets' %}cat-active{% endif %}" href="{% url 'CatPets' %}">Pets</a>
+    <a
+      class="cat-btn cat-pets"
+      href="{% url 'CatPets' %}"
+    >
+      Pets
+    </a>
 
-    <a class="cat-btn cat-ambiente {% if categoria == 'Ambiente' %}cat-active{% endif %}" href="{% url 'CatAmbiente' %}">Ambiente</a>
+    <a
+      class="cat-btn cat-ambiente"
+      href="{% url 'CatAmbiente' %}"
+    >
+      Ambiente
+    </a>
 
-    <a class="cat-btn cat-tecnologia {% if categoria == 'Tecnologia' %}cat-active{% endif %}" href="{% url 'CatTecnologia' %}">Tecnologia</a>
+    <a
+      class="cat-btn cat-tecnologia"
+      href="{% url 'CatTecnologia' %}"
+    >
+      Tecnologia
+    </a>
 
-    <a class="cat-btn cat-beleza {% if categoria == 'Beleza' %}cat-active{% endif %}" href="{% url 'CatBeleza' %}">Beleza</a>
+    <a
+      class="cat-btn cat-beleza"
+      href="{% url 'CatBeleza' %}"
+    >
+      Beleza
+    </a>
 
-    <a class="cat-btn cat-outros {% if categoria == 'Outros' %}cat-active{% endif %}" href="{% url 'CatOutros' %}">Outros</a>
+    <a
+      class="cat-btn cat-outros"
+      href="{% url 'CatOutros' %}"
+    >
+      Outros
+    </a>
 
   </div>
+
   <!-- #endregion -->
 
-  <!-- #region pagina da loja -->
-  <div class="page-consumidor">
+
+  <!-- #region pagina consumidor -->
+
+  <main class="page-consumidor">
+
     <div class="consumidor-wrapper">
 
-      <div class="consumidor-left">
-        <div class="consumidor-badge">Consumidor</div>
+
+      <!-- #region lateral consumidor -->
+
+      <aside class="consumidor-left">
+
+
+        <div class="consumidor-badge">
+          Consumidor
+        </div>
+
 
         <div class="consumidor-avatar-wrap">
-          <div class="consumidor-avatar">
-            <svg viewBox="0 0 24 24">
+
+
+          <label
+            class="consumidor-avatar"
+            for="foto-consumidor"
+          >
+
+            <input
+              type="file"
+              id="foto-consumidor"
+              accept="image/*"
+              hidden
+            >
+
+
+            <svg
+              id="avatar-padrao-consumidor"
+              viewBox="0 0 24 24"
+            >
+
               <path
-                d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z" />
+                d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"
+              />
+
             </svg>
-          </div>
-          <div class="consumidor-camera-badge">📷</div>
+
+
+            <img
+              id="preview-consumidor"
+              class="consumidor-avatar-image"
+              alt="Foto do consumidor"
+            >
+
+          </label>
+
+
+          <label
+            class="consumidor-camera-badge"
+            for="foto-consumidor"
+          >
+            📷
+          </label>
+
+
         </div>
 
 
         <div class="consumidor-field-left">
-          <label>Nome</label>
-          <input type="text" value="{{ request.user.first_name }}">
+
+          <label>
+            Nome
+          </label>
+
+          <input
+            type="text"
+            value="{{ request.user.first_name }}"
+          >
+
         </div>
+
+
         <div class="consumidor-field-left">
-          <label>Sobrenome</label>
-          <input type="text" value="{{ request.user.last_name }}">
+
+          <label>
+            Sobrenome
+          </label>
+
+          <input
+            type="text"
+            value="{{ request.user.last_name }}"
+          >
+
         </div>
 
-        <button class="consumidor-logout-btn">Sair ⏪</button>
-      </div>
 
-      <div class="consumidor-card">
-        <h3>Informações</h3>
-        <div class="consumidor-field">
-          <label>E-mail</label>
-          <input type="text" value="consumidor@gmail.com">
-        </div>
-        <div class="consumidor-field">
-          <label>Telefone</label>
-          <div class="consumidor-phone">
-            <span>(+55)</span>
-            <input type="text" value="19 99475-8383">
-          </div>
+        <button
+          type="button"
+          class="consumidor-logout-btn"
+        >
+
+          Fazer Logout
+
+          <span>
+            ≪
+          </span>
+
+        </button>
+
+
+      </aside>
+
+      <!-- #endregion -->
+
+
+      <!-- #region favoritos -->
+
+      <section class="favoritos-area">
+
+
+        <div class="favoritos-topo">
+
+
+          <h1>
+            FAVORITOS
+          </h1>
+
+
+          <button
+            type="button"
+            class="cadastrar-loja-btn"
+            data-url="{% url 'perfil-loja' %}"
+            onclick="location.href=this.dataset.url"
+          >
+
+            <span>
+              Cadastrar Loja
+            </span>
+
+            <span class="cadastrar-loja-icone">
+              🛒
+            </span>
+
+          </button>
+
+
         </div>
 
-        <h3>Endereço</h3>
-        <div class="consumidor-field">
-          <label>Rua</label>
-          <input type="text" value="Rua Exemplo">
-        </div>
-        <div class="consumidor-row">
-          <div class="consumidor-field">
-            <label>Número</label>
-            <input type="text" value="198">
-          </div>
-          <div class="consumidor-field">
-            <label>CEP</label>
-            <input type="text" value="13871-099">
-          </div>
+
+        <div class="favoritos-scroll">
+
+
+          <!-- #region card alimentos -->
+
+          <article class="favorito-card favorito-alimentos">
+
+
+            <div class="favorito-capa favorito-capa-alimentos">
+
+
+              <div class="favorito-capa-placeholder">
+
+                <span>
+                  Imagem da loja
+                </span>
+
+              </div>
+
+
+              <button
+                type="button"
+                class="favorito-coracao"
+                aria-label="Remover dos favoritos"
+              >
+                ♥
+              </button>
+
+
+            </div>
+
+
+            <div class="favorito-conteudo">
+
+
+              <h2>
+                Rota do Lanche
+              </h2>
+
+
+              <div class="favorito-bloco">
+
+                <span class="favorito-label">
+                  Telefone:
+                </span>
+
+                <span>
+                  19 92018-5358
+                </span>
+
+              </div>
+
+
+              <div class="favorito-localizacao">
+
+                <span class="favorito-label">
+                  Localização:
+                </span>
+
+                <span class="favorito-endereco">
+                  Praça Inácio Zurita, 385 - Vila
+                  Pastorello (Praça da Paróquia São
+                  Benedito), Araras
+                </span>
+
+              </div>
+
+
+            </div>
+
+
+          </article>
+
+          <!-- #endregion -->
+
+
+          <!-- #region card tecnologia -->
+
+          <article class="favorito-card favorito-tecnologia">
+
+
+            <div class="favorito-capa favorito-capa-tecnologia">
+
+
+              <div class="favorito-capa-placeholder">
+
+                <span>
+                  Imagem da loja
+                </span>
+
+              </div>
+
+
+              <button
+                type="button"
+                class="favorito-coracao"
+                aria-label="Remover dos favoritos"
+              >
+                ♥
+              </button>
+
+
+            </div>
+
+
+            <div class="favorito-conteudo">
+
+
+              <h2>
+                Soma Soluções em T.I.
+              </h2>
+
+
+              <div class="favorito-bloco">
+
+                <span class="favorito-label">
+                  Telefone:
+                </span>
+
+                <span>
+                  19 3547-2050
+                </span>
+
+              </div>
+
+
+              <div class="favorito-localizacao">
+
+                <span class="favorito-label">
+                  Localização:
+                </span>
+
+                <span class="favorito-endereco">
+                  Rua Nações Unidas, 90 - Vila
+                  Queiroz, São Paulo, Araras - SP,
+                  13600-460
+                </span>
+
+              </div>
+
+
+            </div>
+
+
+          </article>
+
+          <!-- #endregion -->
+
+
+          <!-- #region card construcao -->
+
+          <article class="favorito-card favorito-construcao">
+
+
+            <div class="favorito-capa favorito-capa-construcao">
+
+
+              <div class="favorito-capa-placeholder">
+
+                <span>
+                  Imagem da loja
+                </span>
+
+              </div>
+
+
+              <button
+                type="button"
+                class="favorito-coracao"
+                aria-label="Remover dos favoritos"
+              >
+                ♥
+              </button>
+
+
+            </div>
+
+
+            <div class="favorito-conteudo">
+
+
+              <h2>
+                Ribeirão Materiais
+              </h2>
+
+
+              <div class="favorito-bloco">
+
+                <span class="favorito-label">
+                  Telefone:
+                </span>
+
+                <span>
+                  19 3544-0000
+                </span>
+
+              </div>
+
+
+              <div class="favorito-localizacao">
+
+                <span class="favorito-label">
+                  Localização:
+                </span>
+
+                <span class="favorito-endereco">
+                  Morumbi, Araras - SP
+                </span>
+
+              </div>
+
+
+            </div>
+
+
+          </article>
+
+          <!-- #endregion -->
+
+
         </div>
 
-        <div class="consumidor-cta">
-          <div class="consumidor-cta-text">
-            <strong>Quer vender no StoreLink?</strong>
-            <span>Crie sua loja e comece a divulgar seus produtos ou serviços.</span>
-          </div>
-          <button class="consumidor-cta-btn" data-url="{% url 'perfil-loja' %}"
-            onclick="location.href=this.dataset.url">Criar minha loja 🏪</button>
-        </div>
-      </div>
+
+      </section>
+
+      <!-- #endregion -->
+
 
     </div>
-  </div>
+
+  </main>
+
   <!-- #endregion -->
 
-  <!-- #region modo escuro -->
+
+  <!-- #region javascript -->
+
   <script>
+
+
     function setActiveNav(btn) {
-      document.querySelectorAll('.nav-btn').forEach(function (b) {
-        b.classList.remove('active');
-      });
+
+      document
+        .querySelectorAll('.nav-btn')
+        .forEach(function (b) {
+
+          b.classList.remove('active');
+
+        });
+
+
       btn.classList.add('active');
+
     }
+
+
 
     function toggleTheme(btn) {
+
       document.body.classList.toggle('dark');
-      var isDark = document.body.classList.contains('dark');
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+
+
+      var isDark =
+        document.body.classList.contains('dark');
+
+
+      localStorage.setItem(
+        'theme',
+        isDark ? 'dark' : 'light'
+      );
+
+
       if (isDark) {
-        btn.textContent = '☀️ Modo claro';
+
+        btn.textContent =
+          '☀️ Modo claro';
+
       } else {
-        btn.textContent = '🌙 Modo escuro';
+
+        btn.textContent =
+          '🌙 Modo escuro';
+
       }
+
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-      var themeBtn = document.querySelector('.theme-toggle');
-      if (themeBtn && document.body.classList.contains('dark')) {
-        themeBtn.textContent = '☀️ Modo claro';
+
+
+    document.addEventListener(
+      'DOMContentLoaded',
+      function () {
+
+        var themeBtn =
+          document.querySelector(
+            '.theme-toggle'
+          );
+
+
+        if (
+          themeBtn &&
+          document.body.classList.contains('dark')
+        ) {
+
+          themeBtn.textContent =
+            '☀️ Modo claro';
+
+        }
+
       }
-    });
+    );
+
+
+
+    const fotoConsumidor =
+      document.getElementById(
+        'foto-consumidor'
+      );
+
+
+    const previewConsumidor =
+      document.getElementById(
+        'preview-consumidor'
+      );
+
+
+    const avatarConsumidor =
+      document.querySelector(
+        '.consumidor-avatar'
+      );
+
+
+
+    if (
+      fotoConsumidor &&
+      previewConsumidor &&
+      avatarConsumidor
+    ) {
+
+      fotoConsumidor.addEventListener(
+        'change',
+        function () {
+
+          const arquivo =
+            this.files[0];
+
+
+          if (!arquivo) {
+
+            return;
+
+          }
+
+
+          if (
+            !arquivo.type.startsWith('image/')
+          ) {
+
+            alert(
+              'Selecione um arquivo de imagem.'
+            );
+
+
+            this.value = '';
+
+
+            return;
+
+          }
+
+
+          const imagemURL =
+            URL.createObjectURL(
+              arquivo
+            );
+
+
+          previewConsumidor.src =
+            imagemURL;
+
+
+          avatarConsumidor.classList.add(
+            'tem-imagem'
+          );
+
+
+          previewConsumidor.onload =
+            function () {
+
+              URL.revokeObjectURL(
+                imagemURL
+              );
+
+            };
+
+        }
+      );
+
+    }
+
+
+
+    document
+      .querySelectorAll(
+        '.favorito-coracao'
+      )
+      .forEach(
+        function (botao) {
+
+          botao.addEventListener(
+            'click',
+            function () {
+
+              this.classList.toggle(
+                'removido'
+              );
+
+            }
+          );
+
+        }
+      );
+
+
   </script>
 
   <!-- #endregion -->
+
 
 </body>
 

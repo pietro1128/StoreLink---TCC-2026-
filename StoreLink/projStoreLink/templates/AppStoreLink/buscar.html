@@ -3,83 +3,693 @@
 <html lang="pt-BR">
 
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
   <title>StoreLink - Resultados da busca</title>
-  <link rel="icon" type="image/png" href="{% static 'AppStoreLink/images/icon-dark.png' %}">
-  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/style.css' %}">
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="{% static 'AppStoreLink/images/icon-dark.png' %}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/style.css' %}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/buscar.css' %}"
+  >
+
 </head>
 
-<!-- #region modo escuro -->
+
 <body>
 
+
+  <!-- #region modo escuro -->
+
   <script>
+
     if (localStorage.getItem('theme') === 'dark') {
       document.body.classList.add('dark');
     }
-  </script>
-<!-- #endregion -->
 
-<!-- #region navbar -->
+  </script>
+
+  <!-- #endregion -->
+
+
+  <!-- #region navbar -->
 
   <div class="topbar">
-    <div class="logo-icon"><img src="{% static 'AppStoreLink/images/icon-dark.png' %}" alt="StoreLink"></div>
-    <a class="nav-btn active" href="{% url 'index' %}" onclick="location.href=this.dataset.url">Início</a>    
-    <a class="nav-btn" href="{% url 'perfil-loja' %}">Sua loja</a>
-    <a class="nav-btn" href="{% url 'suporte' %}">Suporte</a>
-    <a class="nav-btn" onclick="setActiveNav(this)">Como navegar?</a>
+
+    <div class="logo-icon">
+
+      <img
+        src="{% static 'AppStoreLink/images/icon-dark.png' %}"
+        alt="StoreLink"
+      >
+
+    </div>
+
+
+    <a
+      class="nav-btn active"
+      href="{% url 'index' %}"
+    >
+      Início
+    </a>
+
+
+    <a
+      class="nav-btn"
+      href="{% url 'perfil-loja' %}"
+    >
+      Sua loja
+    </a>
+
+
+    <a
+      class="nav-btn"
+      href="{% url 'suporte' %}"
+    >
+      Suporte
+    </a>
+
+
+    <a
+      class="nav-btn"
+      onclick="setActiveNav(this)"
+    >
+      Como navegar?
+    </a>
+
+
     {% if request.user.is_authenticated %}
-    <button class="nav-account-btn" data-url="{% url 'perfil-consumidor' %}" onclick="location.href=this.dataset.url">👤 Minha conta</button>
+
+      <button
+        class="nav-account-btn"
+        data-url="{% url 'perfil-consumidor' %}"
+        onclick="location.href=this.dataset.url"
+      >
+        👤 Minha conta
+      </button>
+
     {% else %}
-    <button class="nav-account-btn" data-url="{% url 'cadastro' %}" onclick="location.href=this.dataset.url">Criar conta ou Entrar</button>
+
+      <button
+        class="nav-account-btn"
+        data-url="{% url 'cadastro' %}"
+        onclick="location.href=this.dataset.url"
+      >
+        Criar conta ou Entrar
+      </button>
+
     {% endif %}
-    <button class="theme-toggle" onclick="toggleTheme(this)">🌙 Modo escuro</button>
+
+
+    <button
+      class="theme-toggle"
+      onclick="toggleTheme(this)"
+    >
+      🌙 Modo escuro
+    </button>
+
   </div>
 
   <!-- #endregion -->
 
-<!-- #region pesquisa -->
 
-  <div class="resultados-container">
-    <h2>Resultados para "{{ query }}"</h2>
+  <!-- #region sidebar -->
+
+  <div class="sidebar-trigger"></div>
+
+
+  <div class="sidebar">
+
+    <a
+      class="cat-btn cat-alimentos"
+      href="{% url 'CatAlimentos' %}"
+    >
+      Alimentos
+    </a>
+
+    <a
+      class="cat-btn cat-moda"
+      href="{% url 'CatModa' %}"
+    >
+      Moda
+    </a>
+
+    <a
+      class="cat-btn cat-esportes"
+      href="{% url 'CatEsportes' %}"
+    >
+      Esportes
+    </a>
+
+    <a
+      class="cat-btn cat-construcao"
+      href="{% url 'CatConstrucao' %}"
+    >
+      Construção
+    </a>
+
+    <a
+      class="cat-btn cat-saude"
+      href="{% url 'CatSaude' %}"
+    >
+      Saúde
+    </a>
+
+    <a
+      class="cat-btn cat-pets"
+      href="{% url 'CatPets' %}"
+    >
+      Pets
+    </a>
+
+    <a
+      class="cat-btn cat-ambiente"
+      href="{% url 'CatAmbiente' %}"
+    >
+      Ambiente
+    </a>
+
+    <a
+      class="cat-btn cat-tecnologia"
+      href="{% url 'CatTecnologia' %}"
+    >
+      Tecnologia
+    </a>
+
+    <a
+      class="cat-btn cat-beleza"
+      href="{% url 'CatBeleza' %}"
+    >
+      Beleza
+    </a>
+
+    <a
+      class="cat-btn cat-outros"
+      href="{% url 'CatOutros' %}"
+    >
+      Outros
+    </a>
+
+  </div>
+
+  <!-- #endregion -->
+
+
+  <!-- #region resultados -->
+
+  <main class="resultados-container">
+
+
+    <div class="resultados-topo">
+
+      <h1>
+        Resultados para "{{ query }}"
+      </h1>
+
+      <p>
+        {{ total_resultados }} resultado{{ total_resultados|pluralize }}
+      </p>
+
+    </div>
+
 
     {% if total_resultados == 0 %}
-      <p class="hint-text">Nenhum resultado encontrado para sua busca.</p>
+
+      <div class="resultado-vazio">
+
+        <h2>
+          Nenhum resultado encontrado
+        </h2>
+
+        <p>
+          Não encontramos lojas, produtos ou serviços
+          relacionados a "{{ query }}".
+        </p>
+
+      </div>
+
     {% else %}
 
+
+      <!-- #region lojas -->
+
       {% if lojas %}
-        <h3>Lojas</h3>
-        {% for loja in lojas %}
-          <div class="resultado-item">
-            <strong>{{ loja.nome_loja }}</strong> — {{ loja.id_categoria.tipo_categoria }}
+
+        <section class="resultado-secao">
+
+          <h2 class="resultado-secao-titulo">
+            Lojas
+          </h2>
+
+
+          <div class="resultado-grid">
+
+
+            {% for loja in lojas %}
+
+              <article
+                class="
+                  resultado-card
+
+                  {% if loja.id_categoria.tipo_categoria == 'Alimentos' %}
+                    resultado-alimentos
+
+                  {% elif loja.id_categoria.tipo_categoria == 'Moda' %}
+                    resultado-moda
+
+                  {% elif loja.id_categoria.tipo_categoria == 'Esportes' %}
+                    resultado-esportes
+
+                  {% elif loja.id_categoria.tipo_categoria == 'Construção' %}
+                    resultado-construcao
+
+                  {% elif loja.id_categoria.tipo_categoria == 'Saúde' %}
+                    resultado-saude
+
+                  {% elif loja.id_categoria.tipo_categoria == 'Pets' %}
+                    resultado-pets
+
+                  {% elif loja.id_categoria.tipo_categoria == 'Ambiente' %}
+                    resultado-ambiente
+
+                  {% elif loja.id_categoria.tipo_categoria == 'Tecnologia' %}
+                    resultado-tecnologia
+
+                  {% elif loja.id_categoria.tipo_categoria == 'Beleza' %}
+                    resultado-beleza
+
+                  {% else %}
+                    resultado-outros
+
+                  {% endif %}
+                "
+              >
+
+
+                <div class="resultado-card-capa">
+
+
+                  {% if loja.foto_estabelecimento %}
+
+                    <img
+                      src="{{ loja.foto_estabelecimento }}"
+                      alt="{{ loja.nome_loja }}"
+                      class="resultado-card-imagem"
+                      onerror="this.style.display='none'"
+                    >
+
+                  {% endif %}
+
+
+                  <button
+                    type="button"
+                    class="resultado-card-fav"
+                    aria-label="Favoritar loja"
+                  >
+                    ♡
+                  </button>
+
+
+                </div>
+
+
+                <div class="resultado-card-corpo">
+
+
+                  <h3>
+                    {{ loja.nome_loja }}
+                  </h3>
+
+
+                  {% if loja.telefone_loja %}
+
+                    <div class="resultado-info">
+
+                      <span class="resultado-label">
+                        Telefone:
+                      </span>
+
+                      <span>
+                        {{ loja.telefone_loja }}
+                      </span>
+
+                    </div>
+
+                  {% endif %}
+
+
+                  {% if loja.id_endereco %}
+
+                    <div class="resultado-localizacao">
+
+                      <strong>
+                        Localização:
+                      </strong>
+
+                      <span class="resultado-endereco">
+
+                        {{ loja.id_endereco.rua }},
+                        {{ loja.id_endereco.numero_estabelecimento }}
+
+                      </span>
+
+                    </div>
+
+                  {% endif %}
+
+
+                  <span class="resultado-categoria">
+
+                    {{ loja.id_categoria.tipo_categoria }}
+
+                  </span>
+
+
+                </div>
+
+
+              </article>
+
+            {% endfor %}
+
+
           </div>
-        {% endfor %}
+
+        </section>
+
       {% endif %}
+
+      <!-- #endregion -->
+
+
+      <!-- #region produtos -->
 
       {% if produtos %}
-        <h3>Produtos</h3>
-        {% for produto in produtos %}
-          <div class="resultado-item">
-            <strong>{{ produto.nome_produto }}</strong> — R$ {{ produto.preco }}
-            <br><small>Vendido em: {{ produto.id_loja.nome_loja }}</small>
+
+        <section class="resultado-secao">
+
+          <h2 class="resultado-secao-titulo">
+            Produtos
+          </h2>
+
+
+          <div class="resultado-grid">
+
+
+            {% for produto in produtos %}
+
+              <article
+                class="
+                  resultado-card
+
+                  {% if produto.id_categoria.tipo_categoria == 'Alimentos' %}
+                    resultado-alimentos
+
+                  {% elif produto.id_categoria.tipo_categoria == 'Moda' %}
+                    resultado-moda
+
+                  {% elif produto.id_categoria.tipo_categoria == 'Esportes' %}
+                    resultado-esportes
+
+                  {% elif produto.id_categoria.tipo_categoria == 'Construção' %}
+                    resultado-construcao
+
+                  {% elif produto.id_categoria.tipo_categoria == 'Saúde' %}
+                    resultado-saude
+
+                  {% elif produto.id_categoria.tipo_categoria == 'Pets' %}
+                    resultado-pets
+
+                  {% elif produto.id_categoria.tipo_categoria == 'Ambiente' %}
+                    resultado-ambiente
+
+                  {% elif produto.id_categoria.tipo_categoria == 'Tecnologia' %}
+                    resultado-tecnologia
+
+                  {% elif produto.id_categoria.tipo_categoria == 'Beleza' %}
+                    resultado-beleza
+
+                  {% else %}
+                    resultado-outros
+
+                  {% endif %}
+                "
+              >
+
+
+                <div class="resultado-card-capa">
+
+
+                  {% if produto.foto %}
+
+                    <img
+                      src="{{ produto.foto }}"
+                      alt="{{ produto.nome_produto }}"
+                      class="resultado-card-imagem"
+                      onerror="this.style.display='none'"
+                    >
+
+                  {% endif %}
+
+
+                </div>
+
+
+                <div class="resultado-card-corpo">
+
+
+                  <h3>
+                    {{ produto.nome_produto }}
+                  </h3>
+
+
+                  <div class="resultado-info">
+
+                    <span class="resultado-label">
+                      Preço:
+                    </span>
+
+                    <span class="resultado-preco">
+                      R$ {{ produto.preco }}
+                    </span>
+
+                  </div>
+
+
+                  {% if produto.descricao %}
+
+                    <div class="resultado-descricao">
+
+                      {{ produto.descricao }}
+
+                    </div>
+
+                  {% endif %}
+
+
+                  <div class="resultado-loja">
+
+                    <strong>
+                      Vendido em:
+                    </strong>
+
+                    <span>
+                      {{ produto.id_loja.nome_loja }}
+                    </span>
+
+                  </div>
+
+
+                  <span class="resultado-categoria">
+
+                    {{ produto.id_categoria.tipo_categoria }}
+
+                  </span>
+
+
+                </div>
+
+
+              </article>
+
+            {% endfor %}
+
+
           </div>
-        {% endfor %}
+
+        </section>
+
       {% endif %}
+
+      <!-- #endregion -->
+
+
+      <!-- #region servicos -->
 
       {% if servicos %}
-        <h3>Serviços</h3>
-        {% for servico in servicos %}
-          <div class="resultado-item">
-            <strong>{{ servico.nome_servico }}</strong> — R$ {{ servico.preco }}
-            <br><small>Oferecido por: {{ servico.id_loja.nome_loja }}</small>
+
+        <section class="resultado-secao">
+
+          <h2 class="resultado-secao-titulo">
+            Serviços
+          </h2>
+
+
+          <div class="resultado-grid">
+
+
+            {% for servico in servicos %}
+
+              <article
+                class="
+                  resultado-card
+
+                  {% if servico.id_loja.id_categoria.tipo_categoria == 'Alimentos' %}
+                    resultado-alimentos
+
+                  {% elif servico.id_loja.id_categoria.tipo_categoria == 'Moda' %}
+                    resultado-moda
+
+                  {% elif servico.id_loja.id_categoria.tipo_categoria == 'Esportes' %}
+                    resultado-esportes
+
+                  {% elif servico.id_loja.id_categoria.tipo_categoria == 'Construção' %}
+                    resultado-construcao
+
+                  {% elif servico.id_loja.id_categoria.tipo_categoria == 'Saúde' %}
+                    resultado-saude
+
+                  {% elif servico.id_loja.id_categoria.tipo_categoria == 'Pets' %}
+                    resultado-pets
+
+                  {% elif servico.id_loja.id_categoria.tipo_categoria == 'Ambiente' %}
+                    resultado-ambiente
+
+                  {% elif servico.id_loja.id_categoria.tipo_categoria == 'Tecnologia' %}
+                    resultado-tecnologia
+
+                  {% elif servico.id_loja.id_categoria.tipo_categoria == 'Beleza' %}
+                    resultado-beleza
+
+                  {% else %}
+                    resultado-outros
+
+                  {% endif %}
+                "
+              >
+
+
+                <div class="resultado-card-capa">
+
+
+                  {% if servico.foto %}
+
+                    <img
+                      src="{{ servico.foto }}"
+                      alt="{{ servico.nome_servico }}"
+                      class="resultado-card-imagem"
+                      onerror="this.style.display='none'"
+                    >
+
+                  {% endif %}
+
+
+                </div>
+
+
+                <div class="resultado-card-corpo">
+
+
+                  <h3>
+                    {{ servico.nome_servico }}
+                  </h3>
+
+
+                  <div class="resultado-info">
+
+                    <span class="resultado-label">
+                      Preço:
+                    </span>
+
+                    <span class="resultado-preco">
+                      R$ {{ servico.preco }}
+                    </span>
+
+                  </div>
+
+
+                  {% if servico.descricao %}
+
+                    <div class="resultado-descricao">
+
+                      {{ servico.descricao }}
+
+                    </div>
+
+                  {% endif %}
+
+
+                  <div class="resultado-loja">
+
+                    <strong>
+                      Oferecido por:
+                    </strong>
+
+                    <span>
+                      {{ servico.id_loja.nome_loja }}
+                    </span>
+
+                  </div>
+
+
+                </div>
+
+
+              </article>
+
+            {% endfor %}
+
+
           </div>
-        {% endfor %}
+
+        </section>
+
       {% endif %}
 
+      <!-- #endregion -->
+
+
     {% endif %}
-  </div>
+
+
+  </main>
 
   <!-- #endregion -->
-  
+
+
+  <!-- #region javascript -->
+
+  <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
+
+  <!-- #endregion -->
+
+
 </body>
+
 </html>
