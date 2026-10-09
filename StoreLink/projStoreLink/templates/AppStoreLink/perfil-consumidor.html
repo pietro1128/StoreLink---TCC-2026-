@@ -32,7 +32,6 @@
 
 <body>
 
-
   <!-- #region modo escuro -->
 
   <script>
@@ -89,9 +88,6 @@
       Como navegar?
     </a>
 
-
-    {% if request.user.is_authenticated %}
-
       <button
         class="nav-account-btn consumidor-conta-ativa"
         data-url="{% url 'perfil-consumidor' %}"
@@ -100,107 +96,12 @@
         👤 Minha conta
       </button>
 
-    {% else %}
-
-      <button
-        class="nav-account-btn"
-        data-url="{% url 'cadastro' %}"
-        onclick="location.href=this.dataset.url"
-      >
-        Criar conta ou Entrar
-      </button>
-
-    {% endif %}
-
-
     <button
       class="theme-toggle"
       onclick="toggleTheme(this)"
     >
       🌙 Modo escuro
     </button>
-
-  </div>
-
-  <!-- #endregion -->
-
-
-  <!-- #region sidebar -->
-
-  <div class="sidebar-trigger"></div>
-
-
-  <div class="sidebar">
-
-    <a
-      class="cat-btn cat-alimentos"
-      href="{% url 'CatAlimentos' %}"
-    >
-      Alimentos
-    </a>
-
-    <a
-      class="cat-btn cat-moda"
-      href="{% url 'CatModa' %}"
-    >
-      Moda
-    </a>
-
-    <a
-      class="cat-btn cat-esportes"
-      href="{% url 'CatEsportes' %}"
-    >
-      Esportes
-    </a>
-
-    <a
-      class="cat-btn cat-construcao"
-      href="{% url 'CatConstrucao' %}"
-    >
-      Construção
-    </a>
-
-    <a
-      class="cat-btn cat-saude"
-      href="{% url 'CatSaude' %}"
-    >
-      Saúde
-    </a>
-
-    <a
-      class="cat-btn cat-pets"
-      href="{% url 'CatPets' %}"
-    >
-      Pets
-    </a>
-
-    <a
-      class="cat-btn cat-ambiente"
-      href="{% url 'CatAmbiente' %}"
-    >
-      Ambiente
-    </a>
-
-    <a
-      class="cat-btn cat-tecnologia"
-      href="{% url 'CatTecnologia' %}"
-    >
-      Tecnologia
-    </a>
-
-    <a
-      class="cat-btn cat-beleza"
-      href="{% url 'CatBeleza' %}"
-    >
-      Beleza
-    </a>
-
-    <a
-      class="cat-btn cat-outros"
-      href="{% url 'CatOutros' %}"
-    >
-      Outros
-    </a>
 
   </div>
 
@@ -268,7 +169,6 @@
             📷
           </label>
 
-
         </div>
 
 
@@ -280,7 +180,7 @@
 
           <input
             type="text"
-            value="{{ request.user.first_name }}"
+            value="{{ chave_perf_consm.nome }}"
           >
 
         </div>
@@ -294,7 +194,7 @@
 
           <input
             type="text"
-            value="{{ request.user.last_name }}"
+            value="{{ chave_perf_consm.sobrenome }}"
           >
 
         </div>
@@ -356,221 +256,179 @@
         <div class="favoritos-scroll">
 
 
-          <!-- #region card alimentos -->
-
-          <article class="favorito-card favorito-alimentos">
+          {% for favorita in loja_fav %}
 
 
-            <div class="favorito-capa favorito-capa-alimentos">
+            <article
+              class="
+                favorito-card
+
+                {% if favorita.id_loja.id_categoria.tipo_categoria == 'Alimentos' %}
+                  favorito-alimentos
+
+                {% elif favorita.id_loja.id_categoria.tipo_categoria == 'Moda' %}
+                  favorito-moda
+
+                {% elif favorita.id_loja.id_categoria.tipo_categoria == 'Esportes' %}
+                  favorito-esportes
+
+                {% elif favorita.id_loja.id_categoria.tipo_categoria == 'Construção' %}
+                  favorito-construcao
+
+                {% elif favorita.id_loja.id_categoria.tipo_categoria == 'Saúde' %}
+                  favorito-saude
+
+                {% elif favorita.id_loja.id_categoria.tipo_categoria == 'Pets' %}
+                  favorito-pets
+
+                {% elif favorita.id_loja.id_categoria.tipo_categoria == 'Ambiente' %}
+                  favorito-ambiente
+
+                {% elif favorita.id_loja.id_categoria.tipo_categoria == 'Tecnologia' %}
+                  favorito-tecnologia
+
+                {% elif favorita.id_loja.id_categoria.tipo_categoria == 'Beleza' %}
+                  favorito-beleza
+
+                {% else %}
+                  favorito-outros
+
+                {% endif %}
+              "
+            >
 
 
-              <div class="favorito-capa-placeholder">
+              <!-- #region capa -->
 
-                <span>
-                  Imagem da loja
-                </span>
+              <div class="favorito-capa">
+
+
+                {% if favorita.id_loja.foto_estabelecimento %}
+
+                  <img
+                    src="{{ favorita.id_loja.foto_estabelecimento }}"
+                    alt="{{ favorita.id_loja.nome_loja }}"
+                    class="favorito-imagem"
+                  >
+
+                {% else %}
+
+                  <div class="favorito-capa-placeholder">
+
+                    <span>
+                      Imagem da loja
+                    </span>
+
+                  </div>
+
+                {% endif %}
+
+
+                <div
+                  class="favorito-coracao"
+                  title="Loja favoritada"
+                >
+                  ♥
+                </div>
+
 
               </div>
+
+              <!-- #endregion -->
+
+
+              <!-- #region informacoes -->
+
+              <div class="favorito-conteudo">
+
+
+                <h2>
+                  {{ favorita.id_loja.nome_loja }}
+                </h2>
+
+
+                {% if favorita.id_loja.telefone_loja %}
+
+                  <div class="favorito-bloco">
+
+                    <span class="favorito-label">
+                      Telefone:
+                    </span>
+
+                    <span>
+                      {{ favorita.id_loja.telefone_loja }}
+                    </span>
+
+                  </div>
+
+                {% endif %}
+
+
+                {% if favorita.id_loja.id_endereco %}
+
+                  <div class="favorito-localizacao">
+
+                    <span class="favorito-label">
+                      Localização:
+                    </span>
+
+
+                    <span class="favorito-endereco">
+
+                      {{ favorita.id_loja.id_endereco.rua }},
+
+                      {{ favorita.id_loja.id_endereco.numero_estabelecimento }}
+
+                    </span>
+
+                  </div>
+
+                {% endif %}
+
+
+              </div>
+
+              <!-- #endregion -->
+
+
+            </article>
+
+
+          {% empty %}
+
+
+            <!-- #region nenhum favorito -->
+
+            <div class="favoritos-vazio">
 
 
               <button
                 type="button"
-                class="favorito-coracao"
-                aria-label="Remover dos favoritos"
+                class="favoritos-adicionar"
+                data-url="{% url 'index' %}"
+                onclick="location.href=this.dataset.url"
+                aria-label="Procurar lojas"
               >
-                ♥
+                +
               </button>
 
 
-            </div>
-
-
-            <div class="favorito-conteudo">
-
-
               <h2>
-                Rota do Lanche
+                Nenhuma loja favoritada
               </h2>
 
 
-              <div class="favorito-bloco">
-
-                <span class="favorito-label">
-                  Telefone:
-                </span>
-
-                <span>
-                  19 92018-5358
-                </span>
-
-              </div>
-
-
-              <div class="favorito-localizacao">
-
-                <span class="favorito-label">
-                  Localização:
-                </span>
-
-                <span class="favorito-endereco">
-                  Praça Inácio Zurita, 385 - Vila
-                  Pastorello (Praça da Paróquia São
-                  Benedito), Araras
-                </span>
-
-              </div>
+              <p>
+                As lojas que você favoritar aparecerão aqui.
+              </p>
 
 
             </div>
 
+            <!-- #endregion -->
 
-          </article>
 
-          <!-- #endregion -->
-
-
-          <!-- #region card tecnologia -->
-
-          <article class="favorito-card favorito-tecnologia">
-
-
-            <div class="favorito-capa favorito-capa-tecnologia">
-
-
-              <div class="favorito-capa-placeholder">
-
-                <span>
-                  Imagem da loja
-                </span>
-
-              </div>
-
-
-              <button
-                type="button"
-                class="favorito-coracao"
-                aria-label="Remover dos favoritos"
-              >
-                ♥
-              </button>
-
-
-            </div>
-
-
-            <div class="favorito-conteudo">
-
-
-              <h2>
-                Soma Soluções em T.I.
-              </h2>
-
-
-              <div class="favorito-bloco">
-
-                <span class="favorito-label">
-                  Telefone:
-                </span>
-
-                <span>
-                  19 3547-2050
-                </span>
-
-              </div>
-
-
-              <div class="favorito-localizacao">
-
-                <span class="favorito-label">
-                  Localização:
-                </span>
-
-                <span class="favorito-endereco">
-                  Rua Nações Unidas, 90 - Vila
-                  Queiroz, São Paulo, Araras - SP,
-                  13600-460
-                </span>
-
-              </div>
-
-
-            </div>
-
-
-          </article>
-
-          <!-- #endregion -->
-
-
-          <!-- #region card construcao -->
-
-          <article class="favorito-card favorito-construcao">
-
-
-            <div class="favorito-capa favorito-capa-construcao">
-
-
-              <div class="favorito-capa-placeholder">
-
-                <span>
-                  Imagem da loja
-                </span>
-
-              </div>
-
-
-              <button
-                type="button"
-                class="favorito-coracao"
-                aria-label="Remover dos favoritos"
-              >
-                ♥
-              </button>
-
-
-            </div>
-
-
-            <div class="favorito-conteudo">
-
-
-              <h2>
-                Ribeirão Materiais
-              </h2>
-
-
-              <div class="favorito-bloco">
-
-                <span class="favorito-label">
-                  Telefone:
-                </span>
-
-                <span>
-                  19 3544-0000
-                </span>
-
-              </div>
-
-
-              <div class="favorito-localizacao">
-
-                <span class="favorito-label">
-                  Localização:
-                </span>
-
-                <span class="favorito-endereco">
-                  Morumbi, Araras - SP
-                </span>
-
-              </div>
-
-
-            </div>
-
-
-          </article>
-
-          <!-- #endregion -->
+          {% endfor %}
 
 
         </div>
@@ -751,29 +609,6 @@
       );
 
     }
-
-
-
-    document
-      .querySelectorAll(
-        '.favorito-coracao'
-      )
-      .forEach(
-        function (botao) {
-
-          botao.addEventListener(
-            'click',
-            function () {
-
-              this.classList.toggle(
-                'removido'
-              );
-
-            }
-          );
-
-        }
-      );
 
 
   </script>

@@ -28,6 +28,7 @@ body.dark {
 
 body {
   font-family: 'Segoe UI', Arial, sans-serif;
+
   background: var(--bg-page);
   color: var(--text-color);
 
@@ -37,6 +38,9 @@ body {
 
   min-height: 100vh;
 }
+
+
+/* #region navbar */
 
 .topbar {
   background: var(--topbar-bg);
@@ -89,7 +93,7 @@ body {
 
   border: none;
 
-  color: #fff;
+  color: #ffffff;
 
   font-weight: 600;
 
@@ -101,6 +105,8 @@ body {
 
   cursor: pointer;
 
+  text-decoration: none;
+
   transition:
     transform 0.2s ease,
     color 0.2s ease,
@@ -109,7 +115,7 @@ body {
 
 
 .nav-btn.active {
-  color: #fff;
+  color: #ffffff;
 
   transform: translateY(-2px);
 }
@@ -129,12 +135,12 @@ body {
 
   border-radius: 2px;
 
-  background: #fff;
+  background: #ffffff;
 }
 
 
 .nav-btn:hover:not(.active) {
-  background: #333;
+  background: #333333;
 
   transform: translateY(-1px);
 }
@@ -143,9 +149,9 @@ body {
 .nav-account-btn {
   margin-left: auto;
 
-  background: #fff;
+  background: #ffffff;
 
-  color: #000;
+  color: #000000;
 
   border: none;
 
@@ -181,9 +187,9 @@ body {
 .theme-toggle {
   background: #2a2a2a;
 
-  border: 1px solid #444;
+  border: 1px solid #444444;
 
-  color: #fff;
+  color: #ffffff;
 
   font-size: 15px;
 
@@ -205,6 +211,10 @@ body {
   background: #3a3a3a;
 }
 
+/* #endregion */
+
+
+/* #region sidebar */
 
 .sidebar {
   position: fixed;
@@ -264,7 +274,7 @@ body.dark .sidebar {
 .cat-btn {
   border: none;
 
-  color: #fff;
+  color: #ffffff;
 
   font-weight: 700;
 
@@ -319,7 +329,8 @@ body.dark .sidebar {
 
 .cat-tecnologia {
   background: #7c5cf0;
-  color: #fff;
+
+  color: #ffffff;
 }
 
 
@@ -330,7 +341,8 @@ body.dark .sidebar {
 
 .cat-outros {
   background: #cfcfcf;
-  color: #333;
+
+  color: #333333;
 }
 
 
@@ -338,17 +350,17 @@ body.dark .sidebar {
   filter: brightness(0.92);
 }
 
+/* #endregion */
+
+
+/* #region acesso loja */
 
 .acesso-loja {
-
   position: fixed;
 
   top: 58px;
-
   left: 0;
-
   right: 0;
-
   bottom: 0;
 
   display: flex;
@@ -356,7 +368,6 @@ body.dark .sidebar {
   flex-direction: column;
 
   align-items: center;
-
   justify-content: center;
 
   text-align: center;
@@ -368,7 +379,6 @@ body.dark .sidebar {
 
 
 .acesso-loja h1 {
-
   margin: 0 0 12px;
 
   font-size: 32px;
@@ -376,25 +386,19 @@ body.dark .sidebar {
   font-weight: 700;
 
   color: var(--text-color);
-
 }
 
 
-
 .acesso-loja p {
-
   margin: 0 0 12px;
 
   font-size: 18px;
 
   color: var(--text-color);
-
 }
 
 
-
 .acesso-loja a {
-
   color: #5b35d5;
 
   font-size: 18px;
@@ -411,14 +415,15 @@ body.dark .sidebar {
 
 
 .acesso-loja a:hover {
-
   color: #3d219c;
-
 }
 
+/* #endregion */
+
+
+/* #region pagina perfil */
 
 .page-perfil {
-
   display: block;
 
   padding:
@@ -429,7 +434,6 @@ body.dark .sidebar {
 
 
 .perfil-wrapper {
-
   display: flex;
 
   gap: 24px;
@@ -441,8 +445,12 @@ body.dark .sidebar {
   margin: 0 auto;
 }
 
-.perfil-left {
+/* #endregion */
 
+
+/* #region perfil lateral */
+
+.perfil-left {
   width: 220px;
 
   flex-shrink: 0;
@@ -456,7 +464,6 @@ body.dark .sidebar {
 
 
 .perfil-badge {
-
   background: #e4e4e4;
 
   border-radius: 12px;
@@ -467,11 +474,11 @@ body.dark .sidebar {
 
   font-size: 19px;
 
-  color: #222;
+  color: #222222;
 }
 
-.perfil-avatar-wrap {
 
+.perfil-avatar-wrap {
   position: relative;
 
   width: 110px;
@@ -484,7 +491,6 @@ body.dark .sidebar {
 
 
 .perfil-avatar {
-
   width: 110px;
   height: 110px;
 
@@ -504,7 +510,6 @@ body.dark .sidebar {
 
 
 .perfil-avatar svg {
-
   width: 62%;
   height: 62%;
 
@@ -513,7 +518,6 @@ body.dark .sidebar {
 
 
 .perfil-avatar-image {
-
   width: 100%;
   height: 100%;
 
@@ -525,20 +529,17 @@ body.dark .sidebar {
 
 .perfil-avatar.tem-imagem
 #avatar-padrao {
-
   display: none;
 }
 
 
 .perfil-avatar.tem-imagem
 .perfil-avatar-image {
-
   display: block;
 }
 
 
 .perfil-camera-badge {
-
   position: absolute;
 
   bottom: 0;
@@ -556,7 +557,7 @@ body.dark .sidebar {
   align-items: center;
   justify-content: center;
 
-  color: #fff;
+  color: #ffffff;
 
   font-size: 15px;
 
@@ -569,7 +570,6 @@ body.dark .sidebar {
 
 
 .perfil-field-left {
-
   display: flex;
 
   flex-direction: column;
@@ -579,7 +579,6 @@ body.dark .sidebar {
 
 
 .perfil-field-left label {
-
   font-weight: 700;
 
   font-size: 13px;
@@ -589,7 +588,6 @@ body.dark .sidebar {
 
 
 .perfil-field-left input {
-
   width: 100%;
 
   background: #e4e4e4;
@@ -602,16 +600,16 @@ body.dark .sidebar {
 
   font-size: 14px;
 
-  color: #222;
+  color: #222222;
 }
 
-.perfil-logout-btn {
 
+.perfil-logout-btn {
   margin-top: auto;
 
   background: #1c1c1c;
 
-  color: #fff;
+  color: #ffffff;
 
   border: none;
 
@@ -626,7 +624,6 @@ body.dark .sidebar {
   display: flex;
 
   align-items: center;
-
   justify-content: center;
 
   gap: 8px;
@@ -638,13 +635,15 @@ body.dark .sidebar {
 
 
 .perfil-logout-btn:hover {
-
-  background: #333;
+  background: #333333;
 }
 
+/* #endregion */
+
+
+/* #region card */
 
 .perfil-card {
-
   background: var(--brand-red);
 
   border-radius: 24px;
@@ -665,7 +664,6 @@ body.dark .sidebar {
 
 
 .perfil-card-left {
-
   width: 220px;
 
   flex-shrink: 0;
@@ -679,7 +677,6 @@ body.dark .sidebar {
 
 
 .perfil-cover {
-
   height: 150px;
 
   border-radius: 12px;
@@ -700,13 +697,11 @@ body.dark .sidebar {
 
 
 .perfil-cover:hover {
-
   filter: brightness(0.95);
 }
 
 
 .perfil-cover-image {
-
   width: 100%;
   height: 100%;
 
@@ -717,8 +712,7 @@ body.dark .sidebar {
 
 
 #texto-adicionar-imagem {
-
-  color: #222;
+  color: #222222;
 
   font-size: 14px;
 
@@ -730,21 +724,18 @@ body.dark .sidebar {
 
 .perfil-cover.tem-imagem
 #texto-adicionar-imagem {
-
   display: none;
 }
 
 
 .perfil-cover.tem-imagem
 .perfil-cover-image {
-
   display: block;
 }
 
 
 .perfil-edit-label {
-
-  color: #fff;
+  color: #ffffff;
 
   font-size: 11px;
 
@@ -755,11 +746,10 @@ body.dark .sidebar {
 
 
 .perfil-action-btn {
-
   background:
     var(--brand-red-light);
 
-  color: #fff;
+  color: #ffffff;
 
   border: none;
 
@@ -785,18 +775,16 @@ body.dark .sidebar {
 
 
 .perfil-action-btn:hover {
-
   filter: brightness(1.08);
 }
 
 
 .perfil-delete-btn {
-
   margin-top: 28px;
 
   background: #1c1c1c;
 
-  color: #fff;
+  color: #ffffff;
 
   border: none;
 
@@ -811,7 +799,6 @@ body.dark .sidebar {
   display: flex;
 
   align-items: center;
-
   justify-content: center;
 
   gap: 8px;
@@ -823,14 +810,16 @@ body.dark .sidebar {
 
 
 .perfil-delete-btn:hover {
-
-  background: #333;
+  background: #333333;
 }
 
+/* #endregion */
+
+
+/* #region card central */
 
 .perfil-card-middle {
-
-  background: #fff;
+  background: #ffffff;
 
   border-radius: 16px;
 
@@ -843,7 +832,6 @@ body.dark .sidebar {
 
 
 .perfil-card-middle h3 {
-
   color:
     var(--brand-red);
 
@@ -863,18 +851,16 @@ body.dark .sidebar {
 
 
 .perfil-card-middle h3:first-child {
-
   margin-top: 0;
 }
 
 
 .perfil-field label {
-
   font-size: 13px;
 
   font-weight: 700;
 
-  color: #222;
+  color: #222222;
 
   display: block;
 
@@ -883,7 +869,6 @@ body.dark .sidebar {
 
 
 .perfil-field input {
-
   width: 100%;
 
   background: #e4e4e4;
@@ -893,18 +878,18 @@ body.dark .sidebar {
   border-radius: 8px;
 
   padding:
-    10px 12px;
+    10px
+    12px;
 
   font-size: 14px;
 
-  color: #222;
+  color: #222222;
 
   margin-bottom: 12px;
 }
 
 
 .perfil-row {
-
   display: flex;
 
   gap: 16px;
@@ -913,13 +898,11 @@ body.dark .sidebar {
 
 .perfil-row >
 .perfil-field {
-
   flex: 1;
 }
 
 
 .perfil-phone {
-
   display: flex;
 
   gap: 8px;
@@ -931,30 +914,32 @@ body.dark .sidebar {
 
 
 .perfil-phone span {
-
   background: #e4e4e4;
 
   border-radius: 8px;
 
   padding:
-    10px 12px;
+    10px
+    12px;
 
   font-size: 14px;
 
-  color: #222;
+  color: #222222;
 
   flex-shrink: 0;
 }
 
 
 .perfil-phone input {
-
   margin-bottom: 0;
 }
 
+/* #endregion */
+
+
+/* #region card direito */
 
 .perfil-card-right {
-
   width: 170px;
 
   flex-shrink: 0;
@@ -968,8 +953,7 @@ body.dark .sidebar {
 
 
 .perfil-card-right label {
-
-  color: #fff;
+  color: #ffffff;
 
   font-weight: 700;
 
@@ -980,24 +964,24 @@ body.dark .sidebar {
   margin-bottom: 8px;
 }
 
-.perfil-classif-wrap {
 
+.perfil-classif-wrap {
   position: relative;
 }
 
 
 .perfil-classif-btn {
-
   background: #1c1c1c;
 
-  color: #fff;
+  color: #ffffff;
 
   border: none;
 
   border-radius: 10px;
 
   padding:
-    10px 14px;
+    10px
+    14px;
 
   font-weight: 800;
 
@@ -1018,7 +1002,6 @@ body.dark .sidebar {
 
 
 .perfil-classif-dropdown {
-
   display: none;
 
   position: absolute;
@@ -1030,7 +1013,7 @@ body.dark .sidebar {
 
   width: 190px;
 
-  background: #fff;
+  background: #ffffff;
 
   border-radius: 12px;
 
@@ -1045,13 +1028,11 @@ body.dark .sidebar {
 
 
 .perfil-classif-dropdown.open {
-
   display: block;
 }
 
 
 .perfil-classif-option {
-
   display: block;
 
   width: 100%;
@@ -1061,7 +1042,8 @@ body.dark .sidebar {
   text-align: left;
 
   padding:
-    10px 14px;
+    10px
+    14px;
 
   font-weight: 700;
 
@@ -1072,16 +1054,14 @@ body.dark .sidebar {
 
 
 .perfil-classif-option:hover {
-
   filter: brightness(0.92);
 }
 
 
 .perfil-toggle {
-
   display: flex;
 
-  background: #fff;
+  background: #ffffff;
 
   border-radius: 20px;
 
@@ -1092,9 +1072,9 @@ body.dark .sidebar {
 
 
 .perfil-toggle-btn {
-
   padding:
-    8px 18px;
+    8px
+    18px;
 
   font-weight: 700;
 
@@ -1104,31 +1084,142 @@ body.dark .sidebar {
 
   background: transparent;
 
-  color: #222;
+  color: #222222;
 
   cursor: pointer;
 }
 
 
 .perfil-toggle-btn.active {
-
   background: #1c1c1c;
 
-  color: #fff;
+  color: #ffffff;
 }
 
+/* #endregion */
+
+
+/* #region modo escuro */
+
+body.dark .perfil-badge {
+  background: #1f1f1f;
+
+  color: #ffffff;
+}
+
+
+body.dark .perfil-avatar {
+  background: #1f1f1f;
+}
+
+
+body.dark .perfil-avatar svg {
+  fill: #ffffff;
+}
+
+
+body.dark .perfil-field-left input {
+  background: #1f1f1f;
+
+  color: #ffffff;
+}
+
+
+body.dark .perfil-cover {
+  background: #000000;
+
+  border: 1px solid #333333;
+}
+
+
+body.dark #texto-adicionar-imagem {
+  color: #ffffff;
+}
+
+
+body.dark .perfil-card-middle {
+  background: #000000;
+}
+
+
+body.dark .perfil-field label {
+  color: #ffffff;
+}
+
+
+body.dark .perfil-field input {
+  background: #1f1f1f;
+
+  color: #ffffff;
+}
+
+
+body.dark .perfil-phone span {
+  background: #1f1f1f;
+
+  color: #ffffff;
+}
+
+
+body.dark .perfil-phone input {
+  background: #1f1f1f;
+
+  color: #ffffff;
+}
+
+
+body.dark .perfil-classif-dropdown {
+  background: #000000;
+
+  border: 1px solid #333333;
+}
+
+
+body.dark .perfil-toggle {
+  background: #000000;
+
+  border: 1px solid #333333;
+}
+
+
+body.dark .perfil-toggle-btn {
+  color: #ffffff;
+}
+
+
+body.dark .perfil-toggle-btn.active {
+  background: #2a2a2a;
+
+  color: #ffffff;
+}
+
+
+body.dark .nav-account-btn {
+  background: #000000;
+
+  color: #ffffff;
+
+  border: 1px solid #444444;
+}
+
+/* #endregion */
+
+
+/* #region responsividade */
 
 @media (max-width: 900px) {
 
   .topbar {
     gap: 4px;
+
     padding: 10px;
   }
 
 
   .nav-btn {
     padding:
-      10px 8px;
+      10px
+      8px;
 
     font-size: 13px;
   }
@@ -1138,12 +1229,12 @@ body.dark .sidebar {
     font-size: 13px;
 
     padding:
-      8px 10px;
+      8px
+      10px;
   }
 
 
   .perfil-wrapper {
-
     flex-direction: column;
 
     align-items: stretch;
@@ -1151,38 +1242,33 @@ body.dark .sidebar {
 
 
   .perfil-left {
-
     width: 100%;
   }
 
 
   .perfil-card {
-
     flex-wrap: wrap;
   }
 
 
   .perfil-card-middle {
-
     min-width: 300px;
   }
 
 
   .perfil-card-right {
-
     width: 100%;
   }
 
 
   .acesso-loja {
-
     padding:
-      30px 20px;
+      30px
+      20px;
   }
 
 
   .acesso-loja h1 {
-
     font-size: 26px;
   }
 
@@ -1193,35 +1279,33 @@ body.dark .sidebar {
 
   .nav-btn:nth-of-type(3),
   .nav-btn:nth-of-type(4) {
-
     display: none;
   }
 
 
   .nav-account-btn {
-
     font-size: 12px;
 
     padding:
-      8px 12px;
+      8px
+      12px;
   }
 
 
   .acesso-loja h1 {
-
     font-size: 23px;
   }
 
 
   .acesso-loja p {
-
     font-size: 16px;
   }
 
 
   .acesso-loja a {
-
     font-size: 16px;
   }
 
 }
+
+/* #endregion */

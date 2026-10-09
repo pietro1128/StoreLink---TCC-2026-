@@ -27,11 +27,15 @@
 
 <body>
 
+  <!-- #region modo escuro -->
+
   <script>
     if (localStorage.getItem('theme') === 'dark') {
       document.body.classList.add('dark');
     }
   </script>
+
+  <!-- #endregion -->
 
 
   <!-- #region navbar -->
@@ -73,7 +77,6 @@
       Como navegar?
     </a>
 
-
     {% if request.user.is_authenticated %}
 
       <button
@@ -95,7 +98,6 @@
       </button>
 
     {% endif %}
-
 
     <button
       class="theme-toggle"
@@ -137,7 +139,6 @@
             hidden
           >
 
-
           <svg
             id="avatar-padrao-produto"
             viewBox="0 0 24 24"
@@ -146,7 +147,6 @@
               d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"
             />
           </svg>
-
 
           <img
             id="preview-responsavel-produto"
@@ -278,274 +278,234 @@
 
       <!-- #region cards -->
 
-      <div class="produto-cards-scroll">
+      <div
+        class="produto-cards-scroll"
+        id="produtoCards"
+      >
+
+        {% if produtos %}
+
+          {% for produto in produtos %}
+
+            <div class="produto-card">
+
+              <div class="produto-imagem">
+
+                <input
+                  class="produto-imagem-input"
+                  type="file"
+                  accept="image/*"
+                  hidden
+                >
 
 
-        <!-- #region produto 1 -->
+                {% if produto.foto %}
 
-        <div class="produto-card">
+                  <img
+                    class="produto-preview produto-preview-existente"
+                    src="{{ produto.foto }}"
+                    alt="{{ produto.nome_produto }}"
+                  >
 
-          <div class="produto-imagem">
+                {% else %}
 
-            <input
-              class="produto-imagem-input"
-              type="file"
-              accept="image/*"
-              hidden
-            >
+                  <div class="produto-imagem-placeholder">
 
+                    <div class="produto-nuvem produto-nuvem-1"></div>
 
-            <div class="produto-imagem-placeholder">
+                    <div class="produto-nuvem produto-nuvem-2"></div>
 
-              <div class="produto-nuvem produto-nuvem-1"></div>
+                    <div class="produto-grama"></div>
 
-              <div class="produto-nuvem produto-nuvem-2"></div>
-
-              <div class="produto-grama"></div>
-
-            </div>
+                  </div>
 
 
-            <img
-              class="produto-preview"
-              alt="Imagem do produto"
-            >
+                  <img
+                    class="produto-preview"
+                    alt="Imagem do produto"
+                  >
+
+                {% endif %}
 
 
-            <button
-              type="button"
-              class="produto-editar-imagem"
-              aria-label="Editar imagem"
-            >
-              ✎
-            </button>
+                <button
+                  type="button"
+                  class="produto-editar-imagem"
+                  aria-label="Editar imagem"
+                >
+                  ✎
+                </button>
 
-          </div>
-
-
-          <div class="produto-card-conteudo">
-
-            <button
-              type="button"
-              class="produto-editar-info"
-              aria-label="Editar informações"
-            >
-              ✎
-            </button>
+              </div>
 
 
-            <label>
-              Nome do produto:
-            </label>
+              <div class="produto-card-conteudo">
 
-            <input
-              type="text"
-              value="Nome do produto"
-            >
-
-
-            <label>
-              Preço do produto:
-            </label>
-
-            <input
-              type="text"
-              value="R$00,00"
-            >
+                <button
+                  type="button"
+                  class="produto-editar-info"
+                  aria-label="Editar informações"
+                >
+                  ✎
+                </button>
 
 
-            <label>
-              Descrição do produto:
-            </label>
+                <label>
+                  Nome do produto:
+                </label>
 
-            <textarea
-              placeholder="Descrição do produto...."
-            ></textarea>
-
-          </div>
-
-        </div>
-
-        <!-- #endregion -->
+                <input
+                  type="text"
+                  value="{{ produto.nome_produto }}"
+                >
 
 
-        <!-- #region produto 2 -->
+                <label>
+                  Preço do produto:
+                </label>
 
-        <div class="produto-card">
-
-          <div class="produto-imagem">
-
-            <input
-              class="produto-imagem-input"
-              type="file"
-              accept="image/*"
-              hidden
-            >
+                <input
+                  type="text"
+                  value="{{ produto.preco }}"
+                >
 
 
-            <div class="produto-imagem-placeholder">
+                <label>
+                  Descrição do produto:
+                </label>
 
-              <div class="produto-nuvem produto-nuvem-1"></div>
+                <textarea>{{ produto.descricao|default:'' }}</textarea>
 
-              <div class="produto-nuvem produto-nuvem-2"></div>
-
-              <div class="produto-grama"></div>
+              </div>
 
             </div>
 
-
-            <img
-              class="produto-preview"
-              alt="Imagem do produto"
-            >
+          {% endfor %}
 
 
-            <button
-              type="button"
-              class="produto-editar-imagem"
-              aria-label="Editar imagem"
-            >
-              ✎
-            </button>
+        {% else %}
 
-          </div>
-
-
-          <div class="produto-card-conteudo">
+          <div
+            class="produto-vazio"
+            id="produtoVazio"
+          >
 
             <button
               type="button"
-              class="produto-editar-info"
-              aria-label="Editar informações"
+              class="produto-adicionar"
+              onclick="adicionarProduto()"
+              aria-label="Adicionar produto"
             >
-              ✎
+              +
             </button>
 
 
-            <label>
-              Nome do produto:
-            </label>
-
-            <input
-              type="text"
-              value="Nome do produto"
-            >
+            <h2>
+              Nenhum produto cadastrado
+            </h2>
 
 
-            <label>
-              Preço do produto:
-            </label>
-
-            <input
-              type="text"
-              value="R$00,00"
-            >
-
-
-            <label>
-              Descrição do produto:
-            </label>
-
-            <textarea
-              placeholder="Descrição do produto...."
-            ></textarea>
+            <p>
+              Clique no + para adicionar seu primeiro produto.
+            </p>
 
           </div>
 
-        </div>
-
-        <!-- #endregion -->
-
-
-        <!-- #region produto 3 -->
-
-        <div class="produto-card">
-
-          <div class="produto-imagem">
-
-            <input
-              class="produto-imagem-input"
-              type="file"
-              accept="image/*"
-              hidden
-            >
-
-
-            <div class="produto-imagem-placeholder">
-
-              <div class="produto-nuvem produto-nuvem-1"></div>
-
-              <div class="produto-nuvem produto-nuvem-2"></div>
-
-              <div class="produto-grama"></div>
-
-            </div>
-
-
-            <img
-              class="produto-preview"
-              alt="Imagem do produto"
-            >
-
-
-            <button
-              type="button"
-              class="produto-editar-imagem"
-              aria-label="Editar imagem"
-            >
-              ✎
-            </button>
-
-          </div>
-
-
-          <div class="produto-card-conteudo">
-
-            <button
-              type="button"
-              class="produto-editar-info"
-              aria-label="Editar informações"
-            >
-              ✎
-            </button>
-
-
-            <label>
-              Nome do produto:
-            </label>
-
-            <input
-              type="text"
-              value="Nome do produto"
-            >
-
-
-            <label>
-              Preço do produto:
-            </label>
-
-            <input
-              type="text"
-              value="R$00,00"
-            >
-
-
-            <label>
-              Descrição do produto:
-            </label>
-
-            <textarea
-              placeholder="Descrição do produto...."
-            ></textarea>
-
-          </div>
-
-        </div>
-
-        <!-- #endregion -->
-
+        {% endif %}
 
       </div>
+
+      <!-- #endregion -->
+
+
+      <!-- #region template novo produto -->
+
+      <template id="produtoCardTemplate">
+
+        <div class="produto-card">
+
+          <div class="produto-imagem">
+
+            <input
+              class="produto-imagem-input"
+              type="file"
+              accept="image/*"
+              hidden
+            >
+
+
+            <div class="produto-imagem-placeholder">
+
+              <div class="produto-nuvem produto-nuvem-1"></div>
+
+              <div class="produto-nuvem produto-nuvem-2"></div>
+
+              <div class="produto-grama"></div>
+
+            </div>
+
+
+            <img
+              class="produto-preview"
+              alt="Imagem do produto"
+            >
+
+
+            <button
+              type="button"
+              class="produto-editar-imagem"
+              aria-label="Adicionar imagem"
+            >
+              ✎
+            </button>
+
+          </div>
+
+
+          <div class="produto-card-conteudo">
+
+            <button
+              type="button"
+              class="produto-editar-info"
+              aria-label="Editar informações"
+            >
+              ✎
+            </button>
+
+
+            <label>
+              Nome do produto:
+            </label>
+
+            <input
+              type="text"
+              placeholder="Nome do produto"
+            >
+
+
+            <label>
+              Preço do produto:
+            </label>
+
+            <input
+              type="text"
+              placeholder="R$ 00,00"
+            >
+
+
+            <label>
+              Descrição do produto:
+            </label>
+
+            <textarea
+              placeholder="Descrição do produto..."
+            ></textarea>
+
+          </div>
+
+        </div>
+
+      </template>
 
       <!-- #endregion -->
 
@@ -567,90 +527,172 @@
 
   <script>
 
-    document
-      .querySelectorAll('.produto-imagem')
-      .forEach(function (areaImagem) {
+    function prepararProdutoCard(card) {
 
-        const input =
-          areaImagem.querySelector(
-            '.produto-imagem-input'
-          );
-
-        const preview =
-          areaImagem.querySelector(
-            '.produto-preview'
-          );
-
-        const botao =
-          areaImagem.querySelector(
-            '.produto-editar-imagem'
-          );
+      const areaImagem =
+        card.querySelector('.produto-imagem');
 
 
-        botao.addEventListener(
-          'click',
-          function () {
+      if (!areaImagem) {
+        return;
+      }
 
-            input.click();
 
-          }
+      const input =
+        areaImagem.querySelector(
+          '.produto-imagem-input'
         );
 
 
-        input.addEventListener(
-          'change',
-          function () {
-
-            const arquivo =
-              this.files[0];
+      const preview =
+        areaImagem.querySelector(
+          '.produto-preview'
+        );
 
 
-            if (!arquivo) {
-              return;
-            }
+      const botao =
+        areaImagem.querySelector(
+          '.produto-editar-imagem'
+        );
 
 
-            if (!arquivo.type.startsWith('image/')) {
-
-              alert(
-                'Selecione um arquivo de imagem.'
-              );
-
-              this.value = '';
-
-              return;
-
-            }
+      if (
+        !input ||
+        !preview ||
+        !botao
+      ) {
+        return;
+      }
 
 
-            const imagemURL =
-              URL.createObjectURL(
-                arquivo
-              );
+      botao.addEventListener(
+        'click',
+        function () {
+
+          input.click();
+
+        }
+      );
 
 
-            preview.src =
-              imagemURL;
+      input.addEventListener(
+        'change',
+        function () {
+
+          const arquivo =
+            this.files[0];
 
 
-            areaImagem.classList.add(
-              'tem-imagem'
+          if (!arquivo) {
+            return;
+          }
+
+
+          if (
+            !arquivo.type.startsWith('image/')
+          ) {
+
+            alert(
+              'Selecione um arquivo de imagem.'
+            );
+
+            this.value = '';
+
+            return;
+          }
+
+
+          const imagemURL =
+            URL.createObjectURL(
+              arquivo
             );
 
 
-            preview.onload =
-              function () {
+          preview.src =
+            imagemURL;
 
-                URL.revokeObjectURL(
-                  imagemURL
-                );
 
-              };
+          areaImagem.classList.add(
+            'tem-imagem'
+          );
 
-          }
+
+          preview.onload =
+            function () {
+
+              URL.revokeObjectURL(
+                imagemURL
+              );
+
+            };
+
+        }
+      );
+
+    }
+
+
+
+    document
+      .querySelectorAll('.produto-card')
+      .forEach(prepararProdutoCard);
+
+
+
+    function adicionarProduto() {
+
+      const container =
+        document.getElementById(
+          'produtoCards'
         );
 
-      });
+
+      const vazio =
+        document.getElementById(
+          'produtoVazio'
+        );
+
+
+      const template =
+        document.getElementById(
+          'produtoCardTemplate'
+        );
+
+
+      if (vazio) {
+        vazio.remove();
+      }
+
+
+      const clone =
+        template.content.cloneNode(true);
+
+
+      const novoCard =
+        clone.querySelector(
+          '.produto-card'
+        );
+
+
+      container.appendChild(clone);
+
+
+      prepararProdutoCard(
+        novoCard
+      );
+
+
+      const primeiroInput =
+        novoCard.querySelector(
+          'input[type="text"]'
+        );
+
+
+      if (primeiroInput) {
+        primeiroInput.focus();
+      }
+
+    }
 
 
 
@@ -691,7 +733,9 @@
           }
 
 
-          if (!arquivo.type.startsWith('image/')) {
+          if (
+            !arquivo.type.startsWith('image/')
+          ) {
 
             alert(
               'Selecione um arquivo de imagem.'
@@ -700,7 +744,6 @@
             this.value = '';
 
             return;
-
           }
 
 
@@ -739,4 +782,5 @@
 
 
 </body>
+
 </html>

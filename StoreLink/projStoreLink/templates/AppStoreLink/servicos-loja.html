@@ -27,11 +27,15 @@
 
 <body>
 
+  <!-- #region modo escuro -->
+
   <script>
     if (localStorage.getItem('theme') === 'dark') {
       document.body.classList.add('dark');
     }
   </script>
+
+  <!-- #endregion -->
 
 
   <!-- #region navbar -->
@@ -39,11 +43,14 @@
   <div class="topbar">
 
     <div class="logo-icon">
+
       <img
         src="{% static 'AppStoreLink/images/icon-dark.png' %}"
         alt="StoreLink"
       >
+
     </div>
+
 
     <a
       class="nav-btn"
@@ -52,6 +59,7 @@
       Início
     </a>
 
+
     <a
       class="nav-btn active"
       href="{% url 'perfil-loja' %}"
@@ -59,12 +67,14 @@
       Sua loja
     </a>
 
+
     <a
       class="nav-btn"
       href="{% url 'suporte' %}"
     >
       Suporte
     </a>
+
 
     <a
       class="nav-btn"
@@ -142,9 +152,11 @@
             id="avatar-padrao-servico"
             viewBox="0 0 24 24"
           >
+
             <path
               d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"
             />
+
           </svg>
 
 
@@ -262,274 +274,234 @@
 
       <!-- #region cards -->
 
-      <div class="servico-cards-scroll">
+      <div
+        class="servico-cards-scroll"
+        id="servicoCards"
+      >
+
+        {% if servicos %}
+
+          {% for servico in servicos %}
+
+            <div class="servico-card">
+
+              <div class="servico-imagem">
+
+                <input
+                  class="servico-imagem-input"
+                  type="file"
+                  accept="image/*"
+                  hidden
+                >
 
 
-        <!-- #region servico 1 -->
+                {% if servico.foto %}
 
-        <div class="servico-card">
+                  <img
+                    class="servico-preview servico-preview-existente"
+                    src="{{ servico.foto }}"
+                    alt="{{ servico.nome_servico }}"
+                  >
 
-          <div class="servico-imagem">
+                {% else %}
 
-            <input
-              class="servico-imagem-input"
-              type="file"
-              accept="image/*"
-              hidden
-            >
+                  <div class="servico-imagem-placeholder">
 
+                    <div class="servico-nuvem servico-nuvem-1"></div>
 
-            <div class="servico-imagem-placeholder">
+                    <div class="servico-nuvem servico-nuvem-2"></div>
 
-              <div class="servico-nuvem servico-nuvem-1"></div>
+                    <div class="servico-grama"></div>
 
-              <div class="servico-nuvem servico-nuvem-2"></div>
-
-              <div class="servico-grama"></div>
-
-            </div>
+                  </div>
 
 
-            <img
-              class="servico-preview"
-              alt="Imagem do serviço"
-            >
+                  <img
+                    class="servico-preview"
+                    alt="Imagem do serviço"
+                  >
+
+                {% endif %}
 
 
-            <button
-              type="button"
-              class="servico-editar-imagem"
-              aria-label="Editar imagem"
-            >
-              ✎
-            </button>
+                <button
+                  type="button"
+                  class="servico-editar-imagem"
+                  aria-label="Editar imagem"
+                >
+                  ✎
+                </button>
 
-          </div>
-
-
-          <div class="servico-card-conteudo">
-
-            <button
-              type="button"
-              class="servico-editar-info"
-              aria-label="Editar informações"
-            >
-              ✎
-            </button>
+              </div>
 
 
-            <label>
-              Nome do serviço:
-            </label>
+              <div class="servico-card-conteudo">
 
-            <input
-              type="text"
-              value="Nome do serviço"
-            >
-
-
-            <label>
-              Preço do serviço:
-            </label>
-
-            <input
-              type="text"
-              value="R$00,00"
-            >
+                <button
+                  type="button"
+                  class="servico-editar-info"
+                  aria-label="Editar informações"
+                >
+                  ✎
+                </button>
 
 
-            <label>
-              Descrição do serviço:
-            </label>
+                <label>
+                  Nome do serviço:
+                </label>
 
-            <textarea
-              placeholder="Descrição do serviço...."
-            ></textarea>
-
-          </div>
-
-        </div>
-
-        <!-- #endregion -->
+                <input
+                  type="text"
+                  value="{{ servico.nome_servico }}"
+                >
 
 
-        <!-- #region servico 2 -->
+                <label>
+                  Preço do serviço:
+                </label>
 
-        <div class="servico-card">
-
-          <div class="servico-imagem">
-
-            <input
-              class="servico-imagem-input"
-              type="file"
-              accept="image/*"
-              hidden
-            >
+                <input
+                  type="text"
+                  value="{{ servico.preco }}"
+                >
 
 
-            <div class="servico-imagem-placeholder">
+                <label>
+                  Descrição do serviço:
+                </label>
 
-              <div class="servico-nuvem servico-nuvem-1"></div>
+                <textarea>{{ servico.descricao|default:'' }}</textarea>
 
-              <div class="servico-nuvem servico-nuvem-2"></div>
-
-              <div class="servico-grama"></div>
+              </div>
 
             </div>
 
-
-            <img
-              class="servico-preview"
-              alt="Imagem do serviço"
-            >
+          {% endfor %}
 
 
-            <button
-              type="button"
-              class="servico-editar-imagem"
-              aria-label="Editar imagem"
-            >
-              ✎
-            </button>
+        {% else %}
 
-          </div>
-
-
-          <div class="servico-card-conteudo">
+          <div
+            class="servico-vazio"
+            id="servicoVazio"
+          >
 
             <button
               type="button"
-              class="servico-editar-info"
-              aria-label="Editar informações"
+              class="servico-adicionar"
+              onclick="adicionarServico()"
+              aria-label="Adicionar serviço"
             >
-              ✎
+              +
             </button>
 
 
-            <label>
-              Nome do serviço:
-            </label>
-
-            <input
-              type="text"
-              value="Nome do serviço"
-            >
+            <h2>
+              Nenhum serviço cadastrado
+            </h2>
 
 
-            <label>
-              Preço do serviço:
-            </label>
-
-            <input
-              type="text"
-              value="R$00,00"
-            >
-
-
-            <label>
-              Descrição do serviço:
-            </label>
-
-            <textarea
-              placeholder="Descrição do serviço...."
-            ></textarea>
+            <p>
+              Clique no + para adicionar seu primeiro serviço.
+            </p>
 
           </div>
 
-        </div>
-
-        <!-- #endregion -->
-
-
-        <!-- #region servico 3 -->
-
-        <div class="servico-card">
-
-          <div class="servico-imagem">
-
-            <input
-              class="servico-imagem-input"
-              type="file"
-              accept="image/*"
-              hidden
-            >
-
-
-            <div class="servico-imagem-placeholder">
-
-              <div class="servico-nuvem servico-nuvem-1"></div>
-
-              <div class="servico-nuvem servico-nuvem-2"></div>
-
-              <div class="servico-grama"></div>
-
-            </div>
-
-
-            <img
-              class="servico-preview"
-              alt="Imagem do serviço"
-            >
-
-
-            <button
-              type="button"
-              class="servico-editar-imagem"
-              aria-label="Editar imagem"
-            >
-              ✎
-            </button>
-
-          </div>
-
-
-          <div class="servico-card-conteudo">
-
-            <button
-              type="button"
-              class="servico-editar-info"
-              aria-label="Editar informações"
-            >
-              ✎
-            </button>
-
-
-            <label>
-              Nome do serviço:
-            </label>
-
-            <input
-              type="text"
-              value="Nome do serviço"
-            >
-
-
-            <label>
-              Preço do serviço:
-            </label>
-
-            <input
-              type="text"
-              value="R$00,00"
-            >
-
-
-            <label>
-              Descrição do serviço:
-            </label>
-
-            <textarea
-              placeholder="Descrição do serviço...."
-            ></textarea>
-
-          </div>
-
-        </div>
-
-        <!-- #endregion -->
-
+        {% endif %}
 
       </div>
+
+      <!-- #endregion -->
+
+
+      <!-- #region template novo servico -->
+
+      <template id="servicoCardTemplate">
+
+        <div class="servico-card">
+
+          <div class="servico-imagem">
+
+            <input
+              class="servico-imagem-input"
+              type="file"
+              accept="image/*"
+              hidden
+            >
+
+
+            <div class="servico-imagem-placeholder">
+
+              <div class="servico-nuvem servico-nuvem-1"></div>
+
+              <div class="servico-nuvem servico-nuvem-2"></div>
+
+              <div class="servico-grama"></div>
+
+            </div>
+
+
+            <img
+              class="servico-preview"
+              alt="Imagem do serviço"
+            >
+
+
+            <button
+              type="button"
+              class="servico-editar-imagem"
+              aria-label="Adicionar imagem"
+            >
+              ✎
+            </button>
+
+          </div>
+
+
+          <div class="servico-card-conteudo">
+
+            <button
+              type="button"
+              class="servico-editar-info"
+              aria-label="Editar informações"
+            >
+              ✎
+            </button>
+
+
+            <label>
+              Nome do serviço:
+            </label>
+
+            <input
+              type="text"
+              placeholder="Nome do serviço"
+            >
+
+
+            <label>
+              Preço do serviço:
+            </label>
+
+            <input
+              type="text"
+              placeholder="R$ 00,00"
+            >
+
+
+            <label>
+              Descrição do serviço:
+            </label>
+
+            <textarea
+              placeholder="Descrição do serviço..."
+            ></textarea>
+
+          </div>
+
+        </div>
+
+      </template>
 
       <!-- #endregion -->
 
@@ -551,90 +523,174 @@
 
   <script>
 
-    document
-      .querySelectorAll('.servico-imagem')
-      .forEach(function (areaImagem) {
+    function prepararServicoCard(card) {
 
-        const input =
-          areaImagem.querySelector(
-            '.servico-imagem-input'
-          );
-
-        const preview =
-          areaImagem.querySelector(
-            '.servico-preview'
-          );
-
-        const botao =
-          areaImagem.querySelector(
-            '.servico-editar-imagem'
-          );
-
-
-        botao.addEventListener(
-          'click',
-          function () {
-
-            input.click();
-
-          }
+      const areaImagem =
+        card.querySelector(
+          '.servico-imagem'
         );
 
 
-        input.addEventListener(
-          'change',
-          function () {
-
-            const arquivo =
-              this.files[0];
+      if (!areaImagem) {
+        return;
+      }
 
 
-            if (!arquivo) {
-              return;
-            }
+      const input =
+        areaImagem.querySelector(
+          '.servico-imagem-input'
+        );
 
 
-            if (!arquivo.type.startsWith('image/')) {
-
-              alert(
-                'Selecione um arquivo de imagem.'
-              );
-
-              this.value = '';
-
-              return;
-
-            }
+      const preview =
+        areaImagem.querySelector(
+          '.servico-preview'
+        );
 
 
-            const imagemURL =
-              URL.createObjectURL(
-                arquivo
-              );
+      const botao =
+        areaImagem.querySelector(
+          '.servico-editar-imagem'
+        );
 
 
-            preview.src =
-              imagemURL;
+      if (
+        !input ||
+        !preview ||
+        !botao
+      ) {
+        return;
+      }
 
 
-            areaImagem.classList.add(
-              'tem-imagem'
+      botao.addEventListener(
+        'click',
+        function () {
+
+          input.click();
+
+        }
+      );
+
+
+      input.addEventListener(
+        'change',
+        function () {
+
+          const arquivo =
+            this.files[0];
+
+
+          if (!arquivo) {
+            return;
+          }
+
+
+          if (
+            !arquivo.type.startsWith('image/')
+          ) {
+
+            alert(
+              'Selecione um arquivo de imagem.'
+            );
+
+            this.value = '';
+
+            return;
+          }
+
+
+          const imagemURL =
+            URL.createObjectURL(
+              arquivo
             );
 
 
-            preview.onload =
-              function () {
+          preview.src =
+            imagemURL;
 
-                URL.revokeObjectURL(
-                  imagemURL
-                );
 
-              };
+          areaImagem.classList.add(
+            'tem-imagem'
+          );
 
-          }
+
+          preview.onload =
+            function () {
+
+              URL.revokeObjectURL(
+                imagemURL
+              );
+
+            };
+
+        }
+      );
+
+    }
+
+
+
+    document
+      .querySelectorAll('.servico-card')
+      .forEach(prepararServicoCard);
+
+
+
+    function adicionarServico() {
+
+      const container =
+        document.getElementById(
+          'servicoCards'
         );
 
-      });
+
+      const vazio =
+        document.getElementById(
+          'servicoVazio'
+        );
+
+
+      const template =
+        document.getElementById(
+          'servicoCardTemplate'
+        );
+
+
+      if (vazio) {
+        vazio.remove();
+      }
+
+
+      const clone =
+        template.content.cloneNode(true);
+
+
+      const novoCard =
+        clone.querySelector(
+          '.servico-card'
+        );
+
+
+      container.appendChild(clone);
+
+
+      prepararServicoCard(
+        novoCard
+      );
+
+
+      const primeiroInput =
+        novoCard.querySelector(
+          'input[type="text"]'
+        );
+
+
+      if (primeiroInput) {
+        primeiroInput.focus();
+      }
+
+    }
 
 
 
@@ -675,7 +731,9 @@
           }
 
 
-          if (!arquivo.type.startsWith('image/')) {
+          if (
+            !arquivo.type.startsWith('image/')
+          ) {
 
             alert(
               'Selecione um arquivo de imagem.'
@@ -684,7 +742,6 @@
             this.value = '';
 
             return;
-
           }
 
 
@@ -723,4 +780,5 @@
 
 
 </body>
+
 </html>
