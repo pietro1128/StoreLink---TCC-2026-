@@ -363,4 +363,18 @@ def produtos_loja(request):
 
 
 def servicos_loja(request):
-    return render(request, 'AppStoreLink/servicos-loja.html')
+    
+    if request.method == 'POST':
+
+        nome_servico = request.POST.get('nome_servico')
+        preco = models.POST.get('preco')
+        descricao = models.POST.get('descricao')
+        #foto = models.POST.get('foto')
+        Servicos.objects.create(nome_servico=nome_servico, preco=preco, descricao=descricao)
+        
+        messages.success(request, 'Serviço cadastrado com sucesso!')
+        return redirect('servicos-loja')
+
+        servicos = Servicos.objects.all()
+
+        return render(request, 'AppStoreLink/servicos-loja.html')

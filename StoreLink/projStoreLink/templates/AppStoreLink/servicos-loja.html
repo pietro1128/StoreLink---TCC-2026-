@@ -460,47 +460,51 @@
               </button>
 
 
+              <form method="POST">
+                {% csrf_token %}
+                <label>
 
-              <label>
+                  Nome do serviço:
 
-                Nome do serviço:
-
-              </label>
-
-
-              <input
-                type="text"
-                value="{{ servico.nome_servico }}"
-                placeholder="Nome do serviço"
-              >
+                </label>
 
 
-
-              <label>
-
-                Preço do serviço:
-
-              </label>
-
-
-              <input
-                type="text"
-                value="{{ servico.preco }}"
-                placeholder="R$ 00,00"
-              >
+                <input
+                  name = "nome_servico"
+                  type="text"
+                  value="{{ request.AppStoreLink_servico.nome_servico }}"
+                  placeholder="Nome do serviço"
+                >
 
 
 
-              <label>
+                <label>
 
-                Descrição do serviço:
+                  Preço do serviço:
 
-              </label>
+                </label>
 
 
-              <textarea
-                placeholder="Descrição do serviço..."
-              >{{ servico.descricao|default:'' }}</textarea>
+                <input
+                  name = "preco"
+                  type="text"
+                  value="{{ request.AppStoreLink_servico.preco }}"
+                  placeholder="R$ 00,00"
+                >
+
+
+
+                <label>
+
+                  Descrição do serviço:
+
+                </label>
+
+
+                <textarea
+                  placeholder="Descrição do serviço..."
+                >{{ servico.descricao|default:'' }}</textarea>
+              </form>
 
 
             </div>
