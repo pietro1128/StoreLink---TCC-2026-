@@ -276,6 +276,10 @@ svg {
   font-weight: 900;
 
   line-height: 1;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 
@@ -349,12 +353,14 @@ svg {
 
   display: flex;
 
+  align-items: flex-start;
+
   gap: 30px;
 
   overflow-x: auto;
   overflow-y: hidden;
 
-  padding: 0 40px 18px 0;
+  padding: 0 40px 25px 0;
 
   scroll-behavior: smooth;
 }
@@ -378,6 +384,8 @@ svg {
 
 
 .produto-card {
+  position: relative;
+
   width: 350px;
   min-width: 350px;
 
@@ -390,6 +398,10 @@ svg {
   overflow: hidden;
 }
 
+/* #endregion */
+
+
+/* #region imagem */
 
 .produto-imagem {
   height: 165px;
@@ -399,96 +411,6 @@ svg {
   overflow: hidden;
 
   background: #d8d8d8;
-}
-
-
-.produto-imagem-placeholder {
-  position: absolute;
-
-  inset: 0;
-
-  overflow: hidden;
-
-  background:
-    linear-gradient(
-      to bottom,
-      #caefff 0%,
-      #ecfaff 63%,
-      #8caf00 63%,
-      #8caf00 100%
-    );
-}
-
-
-.produto-nuvem {
-  position: absolute;
-
-  width: 44px;
-  height: 15px;
-
-  background: #ffffff;
-
-  border-radius: 20px;
-}
-
-
-.produto-nuvem::before,
-.produto-nuvem::after {
-  content: "";
-
-  position: absolute;
-
-  background: #ffffff;
-
-  border-radius: 50%;
-}
-
-
-.produto-nuvem::before {
-  width: 22px;
-  height: 22px;
-
-  left: 7px;
-  top: -9px;
-}
-
-
-.produto-nuvem::after {
-  width: 18px;
-  height: 18px;
-
-  right: 4px;
-  top: -6px;
-}
-
-
-.produto-nuvem-1 {
-  top: 27px;
-  left: 35px;
-}
-
-
-.produto-nuvem-2 {
-  top: 27px;
-  left: 145px;
-
-  width: 58px;
-}
-
-
-.produto-grama {
-  position: absolute;
-
-  left: -20px;
-  right: -20px;
-
-  bottom: -18px;
-
-  height: 65px;
-
-  background: #8caf00;
-
-  border-radius: 50% 40% 0 0;
 }
 
 
@@ -517,13 +439,50 @@ svg {
 }
 
 
+.produto-botao-imagem {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  border: none;
+
+  background: #d8d8d8;
+
+  color: #222222;
+
+  font-size: 16px;
+
+  font-weight: 800;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  z-index: 2;
+
+  transition:
+    background 0.2s ease;
+}
+
+
+.produto-botao-imagem:hover {
+  background: #cccccc;
+}
+
+
 .produto-imagem.tem-imagem
-.produto-imagem-placeholder {
+.produto-botao-imagem {
   display: none;
 }
 
 
-.produto-editar-imagem {
+.produto-trocar-imagem {
   position: absolute;
 
   top: 0;
@@ -540,9 +499,53 @@ svg {
 
   color: #ff454c;
 
-  font-size: 31px;
+  font-size: 29px;
 
   font-weight: 900;
+
+  cursor: pointer;
+
+  display: none;
+
+  align-items: center;
+  justify-content: center;
+
+  z-index: 10;
+}
+
+
+.produto-imagem.tem-imagem
+.produto-trocar-imagem {
+  display: flex;
+}
+
+/* #endregion */
+
+
+/* #region excluir card */
+
+.produto-excluir-card {
+  position: absolute;
+
+  top: 7px;
+  left: 7px;
+
+  width: 40px;
+  height: 40px;
+
+  border: 3px solid #ffffff;
+
+  border-radius: 50%;
+
+  background: #ed2f36;
+
+  color: #ffffff;
+
+  font-size: 19px;
+
+  font-weight: 900;
+
+  line-height: 1;
 
   cursor: pointer;
 
@@ -551,9 +554,24 @@ svg {
   align-items: center;
   justify-content: center;
 
-  z-index: 5;
+  z-index: 30;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
 }
 
+
+.produto-excluir-card:hover {
+  transform: scale(1.1);
+
+  background: #b91e24;
+}
+
+/* #endregion */
+
+
+/* #region conteudo card */
 
 .produto-card-conteudo {
   min-height: 278px;
@@ -662,13 +680,14 @@ svg {
 /* #endregion */
 
 
-/* #region produto vazio */
+/* #region adicionar card */
 
-.produto-vazio {
+.produto-criar-card {
   width: 350px;
   min-width: 350px;
 
   display: flex;
+
   flex-direction: column;
 
   align-items: center;
@@ -677,17 +696,17 @@ svg {
 }
 
 
-.produto-adicionar {
+.produto-criar-card-btn {
   width: 350px;
-  height: 443px;
+  height: 471px;
 
-  border: 14px solid #d5d5d5;
+  border: 14px solid #ff454c;
 
   border-radius: 31px;
 
   background: #eeeeee;
 
-  color: #888888;
+  color: #ff454c;
 
   font-size: 100px;
 
@@ -704,38 +723,32 @@ svg {
 
   transition:
     transform 0.2s ease,
-    background 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease;
+    background 0.2s ease;
 }
 
 
-.produto-adicionar:hover {
+.produto-criar-card-btn:hover {
   transform: translateY(-4px);
 
-  background: #e4e4e4;
-
-  border-color: #c5c5c5;
-
-  color: #666666;
+  background: #e3e3e3;
 }
 
 
-.produto-vazio h2 {
-  margin: 18px 0 5px;
+.produto-criar-card h2 {
+  margin: 14px 0 4px;
 
   color: var(--text-color);
 
-  font-size: 20px;
+  font-size: 19px;
 
   font-weight: 800;
 }
 
 
-.produto-vazio p {
+.produto-criar-card p {
   margin: 0;
 
-  max-width: 310px;
+  max-width: 300px;
 
   color: var(--hint-color);
 
@@ -774,7 +787,7 @@ body.dark .produto-avatar svg {
 
 
 body.dark .produto-perfil-field input {
-  background: #1f1f1f;
+  background: #222222;
 
   color: #ffffff;
 }
@@ -799,32 +812,47 @@ body.dark .produto-card-conteudo {
 
 body.dark .produto-card-conteudo input,
 body.dark .produto-card-conteudo textarea {
+  background: #222222;
+
+  color: #ffffff;
+}
+
+
+body.dark .produto-botao-imagem {
   background: #1f1f1f;
 
   color: #ffffff;
 }
 
 
-body.dark .produto-editar-imagem {
+body.dark .produto-botao-imagem:hover {
+  background: #292929;
+}
+
+
+body.dark .produto-trocar-imagem {
   background: #000000;
 
   color: #ff454c;
 }
 
 
-body.dark .produto-adicionar {
-  background: #000000;
-
-  border-color: #333333;
-
-  color: #ffffff;
+body.dark .produto-excluir-card {
+  border-color: #000000;
 }
 
 
-body.dark .produto-adicionar:hover {
-  background: #111111;
+body.dark .produto-criar-card-btn {
+  background: #000000;
 
-  border-color: #555555;
+  color: #ff454c;
+
+  border-color: #ff454c;
+}
+
+
+body.dark .produto-criar-card-btn:hover {
+  background: #111111;
 }
 
 
@@ -859,19 +887,14 @@ body.dark .nav-account-btn {
   }
 
 
-  .produto-card {
+  .produto-card,
+  .produto-criar-card {
     width: 320px;
     min-width: 320px;
   }
 
 
-  .produto-vazio {
-    width: 320px;
-    min-width: 320px;
-  }
-
-
-  .produto-adicionar {
+  .produto-criar-card-btn {
     width: 320px;
   }
 
@@ -890,6 +913,7 @@ body.dark .nav-account-btn {
   .produto-perfil {
     width: 100%;
     min-width: 100%;
+
     min-height: auto;
 
     padding-bottom: 25px;
@@ -905,18 +929,6 @@ body.dark .nav-account-btn {
     width: 100%;
 
     padding: 20px;
-  }
-
-
-  .produto-vazio {
-    width: 290px;
-    min-width: 290px;
-  }
-
-
-  .produto-adicionar {
-    width: 290px;
-    height: 400px;
   }
 
 }

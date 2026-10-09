@@ -276,6 +276,10 @@ svg {
   font-weight: 900;
 
   line-height: 1;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 
@@ -362,12 +366,14 @@ svg {
 
   display: flex;
 
+  align-items: flex-start;
+
   gap: 30px;
 
   overflow-x: auto;
   overflow-y: hidden;
 
-  padding: 0 40px 18px 0;
+  padding: 0 40px 25px 0;
 
   scroll-behavior: smooth;
 }
@@ -391,6 +397,8 @@ svg {
 
 
 .servico-card {
+  position: relative;
+
   width: 350px;
   min-width: 350px;
 
@@ -403,6 +411,10 @@ svg {
   overflow: hidden;
 }
 
+/* #endregion */
+
+
+/* #region imagem */
 
 .servico-imagem {
   height: 165px;
@@ -412,96 +424,6 @@ svg {
   overflow: hidden;
 
   background: #d8d8d8;
-}
-
-
-.servico-imagem-placeholder {
-  position: absolute;
-
-  inset: 0;
-
-  overflow: hidden;
-
-  background:
-    linear-gradient(
-      to bottom,
-      #caefff 0%,
-      #ecfaff 63%,
-      #8caf00 63%,
-      #8caf00 100%
-    );
-}
-
-
-.servico-nuvem {
-  position: absolute;
-
-  width: 44px;
-  height: 15px;
-
-  background: #ffffff;
-
-  border-radius: 20px;
-}
-
-
-.servico-nuvem::before,
-.servico-nuvem::after {
-  content: "";
-
-  position: absolute;
-
-  background: #ffffff;
-
-  border-radius: 50%;
-}
-
-
-.servico-nuvem::before {
-  width: 22px;
-  height: 22px;
-
-  left: 7px;
-  top: -9px;
-}
-
-
-.servico-nuvem::after {
-  width: 18px;
-  height: 18px;
-
-  right: 4px;
-  top: -6px;
-}
-
-
-.servico-nuvem-1 {
-  top: 27px;
-  left: 35px;
-}
-
-
-.servico-nuvem-2 {
-  top: 27px;
-  left: 145px;
-
-  width: 58px;
-}
-
-
-.servico-grama {
-  position: absolute;
-
-  left: -20px;
-  right: -20px;
-
-  bottom: -18px;
-
-  height: 65px;
-
-  background: #8caf00;
-
-  border-radius: 50% 40% 0 0;
 }
 
 
@@ -530,13 +452,50 @@ svg {
 }
 
 
+.servico-botao-imagem {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  border: none;
+
+  background: #d8d8d8;
+
+  color: #222222;
+
+  font-size: 16px;
+
+  font-weight: 800;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  z-index: 2;
+
+  transition:
+    background 0.2s ease;
+}
+
+
+.servico-botao-imagem:hover {
+  background: #cccccc;
+}
+
+
 .servico-imagem.tem-imagem
-.servico-imagem-placeholder {
+.servico-botao-imagem {
   display: none;
 }
 
 
-.servico-editar-imagem {
+.servico-trocar-imagem {
   position: absolute;
 
   top: 0;
@@ -553,9 +512,53 @@ svg {
 
   color: #ff454c;
 
-  font-size: 31px;
+  font-size: 29px;
 
   font-weight: 900;
+
+  cursor: pointer;
+
+  display: none;
+
+  align-items: center;
+  justify-content: center;
+
+  z-index: 10;
+}
+
+
+.servico-imagem.tem-imagem
+.servico-trocar-imagem {
+  display: flex;
+}
+
+/* #endregion */
+
+
+/* #region excluir card */
+
+.servico-excluir-card {
+  position: absolute;
+
+  top: 7px;
+  left: 7px;
+
+  width: 40px;
+  height: 40px;
+
+  border: 3px solid #ffffff;
+
+  border-radius: 50%;
+
+  background: #ed2f36;
+
+  color: #ffffff;
+
+  font-size: 19px;
+
+  font-weight: 900;
+
+  line-height: 1;
 
   cursor: pointer;
 
@@ -564,9 +567,24 @@ svg {
   align-items: center;
   justify-content: center;
 
-  z-index: 5;
+  z-index: 30;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
 }
 
+
+.servico-excluir-card:hover {
+  transform: scale(1.1);
+
+  background: #b91e24;
+}
+
+/* #endregion */
+
+
+/* #region conteudo card */
 
 .servico-card-conteudo {
   min-height: 278px;
@@ -675,13 +693,14 @@ svg {
 /* #endregion */
 
 
-/* #region servico vazio */
+/* #region adicionar card */
 
-.servico-vazio {
+.servico-criar-card {
   width: 350px;
   min-width: 350px;
 
   display: flex;
+
   flex-direction: column;
 
   align-items: center;
@@ -690,17 +709,17 @@ svg {
 }
 
 
-.servico-adicionar {
+.servico-criar-card-btn {
   width: 350px;
-  height: 443px;
+  height: 471px;
 
-  border: 14px solid #d5d5d5;
+  border: 14px solid #ff454c;
 
   border-radius: 31px;
 
   background: #eeeeee;
 
-  color: #888888;
+  color: #ff454c;
 
   font-size: 100px;
 
@@ -717,38 +736,32 @@ svg {
 
   transition:
     transform 0.2s ease,
-    background 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease;
+    background 0.2s ease;
 }
 
 
-.servico-adicionar:hover {
+.servico-criar-card-btn:hover {
   transform: translateY(-4px);
 
-  background: #e4e4e4;
-
-  border-color: #c5c5c5;
-
-  color: #666666;
+  background: #e3e3e3;
 }
 
 
-.servico-vazio h2 {
-  margin: 18px 0 5px;
+.servico-criar-card h2 {
+  margin: 14px 0 4px;
 
   color: var(--text-color);
 
-  font-size: 20px;
+  font-size: 19px;
 
   font-weight: 800;
 }
 
 
-.servico-vazio p {
+.servico-criar-card p {
   margin: 0;
 
-  max-width: 310px;
+  max-width: 300px;
 
   color: var(--hint-color);
 
@@ -787,7 +800,7 @@ body.dark .servico-avatar svg {
 
 
 body.dark .servico-perfil-field input {
-  background: #1f1f1f;
+  background: #222222;
 
   color: #ffffff;
 }
@@ -812,32 +825,47 @@ body.dark .servico-card-conteudo {
 
 body.dark .servico-card-conteudo input,
 body.dark .servico-card-conteudo textarea {
+  background: #222222;
+
+  color: #ffffff;
+}
+
+
+body.dark .servico-botao-imagem {
   background: #1f1f1f;
 
   color: #ffffff;
 }
 
 
-body.dark .servico-editar-imagem {
+body.dark .servico-botao-imagem:hover {
+  background: #292929;
+}
+
+
+body.dark .servico-trocar-imagem {
   background: #000000;
 
   color: #ff454c;
 }
 
 
-body.dark .servico-adicionar {
-  background: #000000;
-
-  border-color: #333333;
-
-  color: #ffffff;
+body.dark .servico-excluir-card {
+  border-color: #000000;
 }
 
 
-body.dark .servico-adicionar:hover {
-  background: #111111;
+body.dark .servico-criar-card-btn {
+  background: #000000;
 
-  border-color: #555555;
+  color: #ff454c;
+
+  border-color: #ff454c;
+}
+
+
+body.dark .servico-criar-card-btn:hover {
+  background: #111111;
 }
 
 
@@ -872,19 +900,14 @@ body.dark .nav-account-btn {
   }
 
 
-  .servico-card {
+  .servico-card,
+  .servico-criar-card {
     width: 320px;
     min-width: 320px;
   }
 
 
-  .servico-vazio {
-    width: 320px;
-    min-width: 320px;
-  }
-
-
-  .servico-adicionar {
+  .servico-criar-card-btn {
     width: 320px;
   }
 
@@ -903,6 +926,7 @@ body.dark .nav-account-btn {
   .servico-perfil {
     width: 100%;
     min-width: 100%;
+
     min-height: auto;
 
     padding-bottom: 25px;
@@ -918,18 +942,6 @@ body.dark .nav-account-btn {
     width: 100%;
 
     padding: 20px;
-  }
-
-
-  .servico-vazio {
-    width: 290px;
-    min-width: 290px;
-  }
-
-
-  .servico-adicionar {
-    width: 290px;
-    height: 400px;
   }
 
 }

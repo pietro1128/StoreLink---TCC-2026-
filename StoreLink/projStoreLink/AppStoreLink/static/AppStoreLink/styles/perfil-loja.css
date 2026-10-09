@@ -30,6 +30,7 @@ body {
   font-family: 'Segoe UI', Arial, sans-serif;
 
   background: var(--bg-page);
+
   color: var(--text-color);
 
   transition:
@@ -39,8 +40,6 @@ body {
   min-height: 100vh;
 }
 
-
-/* #region navbar */
 
 .topbar {
   background: var(--topbar-bg);
@@ -93,7 +92,7 @@ body {
 
   border: none;
 
-  color: #ffffff;
+  color: #fff;
 
   font-weight: 600;
 
@@ -105,8 +104,6 @@ body {
 
   cursor: pointer;
 
-  text-decoration: none;
-
   transition:
     transform 0.2s ease,
     color 0.2s ease,
@@ -115,7 +112,7 @@ body {
 
 
 .nav-btn.active {
-  color: #ffffff;
+  color: #fff;
 
   transform: translateY(-2px);
 }
@@ -135,12 +132,12 @@ body {
 
   border-radius: 2px;
 
-  background: #ffffff;
+  background: #fff;
 }
 
 
 .nav-btn:hover:not(.active) {
-  background: #333333;
+  background: #333;
 
   transform: translateY(-1px);
 }
@@ -149,9 +146,9 @@ body {
 .nav-account-btn {
   margin-left: auto;
 
-  background: #ffffff;
+  background: #fff;
 
-  color: #000000;
+  color: #000;
 
   border: none;
 
@@ -187,9 +184,9 @@ body {
 .theme-toggle {
   background: #2a2a2a;
 
-  border: 1px solid #444444;
+  border: 1px solid #444;
 
-  color: #ffffff;
+  color: #fff;
 
   font-size: 15px;
 
@@ -211,10 +208,6 @@ body {
   background: #3a3a3a;
 }
 
-/* #endregion */
-
-
-/* #region sidebar */
 
 .sidebar {
   position: fixed;
@@ -274,7 +267,7 @@ body.dark .sidebar {
 .cat-btn {
   border: none;
 
-  color: #ffffff;
+  color: #fff;
 
   font-weight: 700;
 
@@ -330,7 +323,7 @@ body.dark .sidebar {
 .cat-tecnologia {
   background: #7c5cf0;
 
-  color: #ffffff;
+  color: #fff;
 }
 
 
@@ -342,7 +335,7 @@ body.dark .sidebar {
 .cat-outros {
   background: #cfcfcf;
 
-  color: #333333;
+  color: #333;
 }
 
 
@@ -350,15 +343,12 @@ body.dark .sidebar {
   filter: brightness(0.92);
 }
 
-/* #endregion */
-
-
-/* #region acesso loja */
 
 .acesso-loja {
   position: fixed;
 
   top: 58px;
+
   left: 0;
   right: 0;
   bottom: 0;
@@ -418,10 +408,6 @@ body.dark .sidebar {
   color: #3d219c;
 }
 
-/* #endregion */
-
-
-/* #region pagina perfil */
 
 .page-perfil {
   display: block;
@@ -445,10 +431,6 @@ body.dark .sidebar {
   margin: 0 auto;
 }
 
-/* #endregion */
-
-
-/* #region perfil lateral */
 
 .perfil-left {
   width: 220px;
@@ -474,7 +456,7 @@ body.dark .sidebar {
 
   font-size: 19px;
 
-  color: #222222;
+  color: #222;
 }
 
 
@@ -557,7 +539,7 @@ body.dark .sidebar {
   align-items: center;
   justify-content: center;
 
-  color: #ffffff;
+  color: #fff;
 
   font-size: 15px;
 
@@ -600,7 +582,7 @@ body.dark .sidebar {
 
   font-size: 14px;
 
-  color: #222222;
+  color: #222;
 }
 
 
@@ -609,7 +591,7 @@ body.dark .sidebar {
 
   background: #1c1c1c;
 
-  color: #ffffff;
+  color: #fff;
 
   border: none;
 
@@ -624,6 +606,7 @@ body.dark .sidebar {
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   gap: 8px;
@@ -635,13 +618,9 @@ body.dark .sidebar {
 
 
 .perfil-logout-btn:hover {
-  background: #333333;
+  background: #333;
 }
 
-/* #endregion */
-
-
-/* #region card */
 
 .perfil-card {
   background: var(--brand-red);
@@ -712,7 +691,7 @@ body.dark .sidebar {
 
 
 #texto-adicionar-imagem {
-  color: #222222;
+  color: #222;
 
   font-size: 14px;
 
@@ -735,7 +714,7 @@ body.dark .sidebar {
 
 
 .perfil-edit-label {
-  color: #ffffff;
+  color: #fff;
 
   font-size: 11px;
 
@@ -749,7 +728,7 @@ body.dark .sidebar {
   background:
     var(--brand-red-light);
 
-  color: #ffffff;
+  color: #fff;
 
   border: none;
 
@@ -784,7 +763,7 @@ body.dark .sidebar {
 
   background: #1c1c1c;
 
-  color: #ffffff;
+  color: #fff;
 
   border: none;
 
@@ -810,16 +789,12 @@ body.dark .sidebar {
 
 
 .perfil-delete-btn:hover {
-  background: #333333;
+  background: #333;
 }
 
-/* #endregion */
-
-
-/* #region card central */
 
 .perfil-card-middle {
-  background: #ffffff;
+  background: #fff;
 
   border-radius: 16px;
 
@@ -860,7 +835,7 @@ body.dark .sidebar {
 
   font-weight: 700;
 
-  color: #222222;
+  color: #222;
 
   display: block;
 
@@ -878,12 +853,11 @@ body.dark .sidebar {
   border-radius: 8px;
 
   padding:
-    10px
-    12px;
+    10px 12px;
 
   font-size: 14px;
 
-  color: #222222;
+  color: #222;
 
   margin-bottom: 12px;
 }
@@ -919,12 +893,11 @@ body.dark .sidebar {
   border-radius: 8px;
 
   padding:
-    10px
-    12px;
+    10px 12px;
 
   font-size: 14px;
 
-  color: #222222;
+  color: #222;
 
   flex-shrink: 0;
 }
@@ -934,10 +907,6 @@ body.dark .sidebar {
   margin-bottom: 0;
 }
 
-/* #endregion */
-
-
-/* #region card direito */
 
 .perfil-card-right {
   width: 170px;
@@ -952,8 +921,15 @@ body.dark .sidebar {
 }
 
 
+/*
+  IMPORTANTE:
+  agora o texto acompanha o tema.
+  Claro = preto.
+  Escuro = branco.
+*/
+
 .perfil-card-right label {
-  color: #ffffff;
+  color: var(--text-color);
 
   font-weight: 700;
 
@@ -973,15 +949,14 @@ body.dark .sidebar {
 .perfil-classif-btn {
   background: #1c1c1c;
 
-  color: #ffffff;
+  color: #fff;
 
   border: none;
 
   border-radius: 10px;
 
   padding:
-    10px
-    14px;
+    10px 14px;
 
   font-weight: 800;
 
@@ -1013,7 +988,7 @@ body.dark .sidebar {
 
   width: 190px;
 
-  background: #ffffff;
+  background: #fff;
 
   border-radius: 12px;
 
@@ -1042,8 +1017,7 @@ body.dark .sidebar {
   text-align: left;
 
   padding:
-    10px
-    14px;
+    10px 14px;
 
   font-weight: 700;
 
@@ -1061,7 +1035,7 @@ body.dark .sidebar {
 .perfil-toggle {
   display: flex;
 
-  background: #ffffff;
+  background: #fff;
 
   border-radius: 20px;
 
@@ -1073,8 +1047,7 @@ body.dark .sidebar {
 
 .perfil-toggle-btn {
   padding:
-    8px
-    18px;
+    8px 18px;
 
   font-weight: 700;
 
@@ -1084,7 +1057,7 @@ body.dark .sidebar {
 
   background: transparent;
 
-  color: #222222;
+  color: #222;
 
   cursor: pointer;
 }
@@ -1093,18 +1066,16 @@ body.dark .sidebar {
 .perfil-toggle-btn.active {
   background: #1c1c1c;
 
-  color: #ffffff;
+  color: #fff;
 }
 
-/* #endregion */
 
-
-/* #region modo escuro */
+/* #region modo escuro perfil */
 
 body.dark .perfil-badge {
   background: #1f1f1f;
 
-  color: #ffffff;
+  color: #fff;
 }
 
 
@@ -1114,92 +1085,86 @@ body.dark .perfil-avatar {
 
 
 body.dark .perfil-avatar svg {
-  fill: #ffffff;
+  fill: #fff;
 }
 
 
 body.dark .perfil-field-left input {
   background: #1f1f1f;
 
-  color: #ffffff;
+  color: #fff;
 }
 
 
 body.dark .perfil-cover {
-  background: #000000;
+  background: #000;
 
-  border: 1px solid #333333;
+  border: 1px solid #333;
 }
 
 
 body.dark #texto-adicionar-imagem {
-  color: #ffffff;
+  color: #fff;
 }
 
 
 body.dark .perfil-card-middle {
-  background: #000000;
+  background: #000;
 }
 
 
 body.dark .perfil-field label {
-  color: #ffffff;
+  color: #fff;
 }
 
 
 body.dark .perfil-field input {
   background: #1f1f1f;
 
-  color: #ffffff;
+  color: #fff;
 }
 
 
-body.dark .perfil-phone span {
-  background: #1f1f1f;
-
-  color: #ffffff;
-}
-
-
+body.dark .perfil-phone span,
 body.dark .perfil-phone input {
   background: #1f1f1f;
 
-  color: #ffffff;
+  color: #fff;
 }
 
 
 body.dark .perfil-classif-dropdown {
-  background: #000000;
+  background: #000;
 
-  border: 1px solid #333333;
+  border: 1px solid #333;
 }
 
 
 body.dark .perfil-toggle {
-  background: #000000;
+  background: #000;
 
-  border: 1px solid #333333;
+  border: 1px solid #333;
 }
 
 
 body.dark .perfil-toggle-btn {
-  color: #ffffff;
+  color: #fff;
 }
 
 
 body.dark .perfil-toggle-btn.active {
   background: #2a2a2a;
 
-  color: #ffffff;
+  color: #fff;
 }
 
 
 body.dark .nav-account-btn {
-  background: #000000;
+  background: #000;
 
-  color: #ffffff;
+  color: #fff;
 
-  border: 1px solid #444444;
+  border: 1px solid #444;
 }
 
 /* #endregion */
@@ -1218,8 +1183,7 @@ body.dark .nav-account-btn {
 
   .nav-btn {
     padding:
-      10px
-      8px;
+      10px 8px;
 
     font-size: 13px;
   }
@@ -1229,8 +1193,7 @@ body.dark .nav-account-btn {
     font-size: 13px;
 
     padding:
-      8px
-      10px;
+      8px 10px;
   }
 
 
@@ -1263,8 +1226,7 @@ body.dark .nav-account-btn {
 
   .acesso-loja {
     padding:
-      30px
-      20px;
+      30px 20px;
   }
 
 
@@ -1287,8 +1249,7 @@ body.dark .nav-account-btn {
     font-size: 12px;
 
     padding:
-      8px
-      12px;
+      8px 12px;
   }
 
 

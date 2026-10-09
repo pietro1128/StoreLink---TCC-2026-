@@ -1,12 +1,21 @@
 {% load static %}
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>StoreLink - Serviços</title>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    StoreLink - Serviços
+  </title>
+
 
   <link
     rel="icon"
@@ -14,33 +23,28 @@
     href="{% static 'AppStoreLink/images/icon-dark.png' %}"
   >
 
+
   <link
     rel="stylesheet"
     href="{% static 'AppStoreLink/styles/style.css' %}"
   >
 
+
   <link
     rel="stylesheet"
     href="{% static 'AppStoreLink/styles/servicos-loja.css' %}"
   >
+
 </head>
+
 
 <body>
 
-  <!-- #region modo escuro -->
 
-  <script>
-    if (localStorage.getItem('theme') === 'dark') {
-      document.body.classList.add('dark');
-    }
-  </script>
-
-  <!-- #endregion -->
-
-
-  <!-- #region navbar -->
+  <!-- #region NAVBAR -->
 
   <div class="topbar">
+
 
     <div class="logo-icon">
 
@@ -69,6 +73,7 @@
 
 
     <a
+      id="suporte"
       class="nav-btn"
       href="{% url 'suporte' %}"
     >
@@ -87,6 +92,7 @@
     {% if request.user.is_authenticated %}
 
       <button
+        type="button"
         class="nav-account-btn"
         data-url="{% url 'perfil-consumidor' %}"
         onclick="location.href=this.dataset.url"
@@ -97,6 +103,7 @@
     {% else %}
 
       <button
+        type="button"
         class="nav-account-btn"
         data-url="{% url 'cadastro' %}"
         onclick="location.href=this.dataset.url"
@@ -108,37 +115,46 @@
 
 
     <button
+      type="button"
       class="theme-toggle"
       onclick="toggleTheme(this)"
     >
       🌙 Modo escuro
     </button>
 
+
   </div>
 
   <!-- #endregion -->
 
 
-  <!-- #region pagina -->
+
+  <!-- #region PÁGINA -->
 
   <main class="servico-page">
 
 
-    <!-- #region perfil lateral -->
+    <!-- #region PERFIL LATERAL -->
 
     <aside class="servico-perfil">
 
+
       <div class="servico-badge">
+
         Estabelecimento
+
       </div>
 
 
+
       <div class="servico-avatar-wrap">
+
 
         <label
           class="servico-avatar"
           for="foto-responsavel-servico"
         >
+
 
           <input
             type="file"
@@ -149,12 +165,27 @@
 
 
           <svg
-            id="avatar-padrao-servico"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
 
             <path
-              d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"
+              d="
+                M12 12
+                c2.7 0 5-2.3 5-5
+                s-2.3-5-5-5
+                -5 2.3-5 5
+                2.3 5 5 5
+                z
+
+                m0 2
+                c-3.3 0-10 1.7-10 5
+                v3
+                h20
+                v-3
+                c0-3.3-6.7-5-10-5
+                z
+              "
             />
 
           </svg>
@@ -166,20 +197,28 @@
             alt="Foto do responsável"
           >
 
+
         </label>
+
 
 
         <label
           class="servico-camera-badge"
           for="foto-responsavel-servico"
+          title="Adicionar foto"
         >
+
           📷
+
         </label>
+
 
       </div>
 
 
+
       <div class="servico-perfil-fields">
+
 
         <div class="servico-perfil-field">
 
@@ -195,6 +234,7 @@
         </div>
 
 
+
         <div class="servico-perfil-field">
 
           <label>
@@ -208,300 +248,314 @@
 
         </div>
 
+
       </div>
+
 
 
       <button
         type="button"
         class="servico-logout"
       >
+
         Fazer Logout
 
         <span>
           ≪
         </span>
+
       </button>
+
 
     </aside>
 
     <!-- #endregion -->
 
 
-    <!-- #region conteudo -->
+
+    <!-- #region CONTEÚDO -->
 
     <section class="servico-conteudo">
 
 
-      <!-- #region cabecalho -->
+      <!-- #region CABEÇALHO -->
 
       <div class="servico-topo">
+
 
         <a
           class="servico-voltar"
           href="{% url 'perfil-loja' %}"
           aria-label="Voltar"
+          title="Voltar"
         >
+
           ←
+
         </a>
+
 
 
         <div class="servico-topo-info">
 
+
           <p class="servico-editar-texto">
+
             Editar fotos e informações dos serviços
+
           </p>
+
 
 
           <div class="servico-titulo-box">
 
+
             <h1>
+
               SERVIÇOS
+
             </h1>
 
 
             <div class="servico-dinheiro">
+
               $
+
             </div>
+
 
           </div>
 
+
         </div>
+
 
       </div>
 
       <!-- #endregion -->
 
 
-      <!-- #region cards -->
+
+      <!-- #region CARDS -->
 
       <div
         class="servico-cards-scroll"
         id="servicoCards"
       >
 
-        {% if servicos %}
 
-          {% for servico in servicos %}
+        {% for servico in servicos %}
 
-            <div class="servico-card">
 
-              <div class="servico-imagem">
+          <div class="servico-card">
 
-                <input
-                  class="servico-imagem-input"
-                  type="file"
-                  accept="image/*"
-                  hidden
+
+            <!-- #region EXCLUIR -->
+
+            <button
+              type="button"
+              class="servico-excluir-card"
+              onclick="excluirServicoCard(this)"
+              aria-label="Excluir serviço"
+              title="Excluir serviço"
+            >
+
+              ✕
+
+            </button>
+
+            <!-- #endregion -->
+
+
+
+            <!-- #region IMAGEM -->
+
+            <div class="servico-imagem">
+
+
+              <input
+                class="servico-imagem-input"
+                type="file"
+                accept="image/*"
+                hidden
+              >
+
+
+              {% if servico.foto %}
+
+
+                <img
+                  class="servico-preview servico-preview-existente"
+                  src="{{ servico.foto }}"
+                  alt="{{ servico.nome_servico }}"
                 >
-
-
-                {% if servico.foto %}
-
-                  <img
-                    class="servico-preview servico-preview-existente"
-                    src="{{ servico.foto }}"
-                    alt="{{ servico.nome_servico }}"
-                  >
-
-                {% else %}
-
-                  <div class="servico-imagem-placeholder">
-
-                    <div class="servico-nuvem servico-nuvem-1"></div>
-
-                    <div class="servico-nuvem servico-nuvem-2"></div>
-
-                    <div class="servico-grama"></div>
-
-                  </div>
-
-
-                  <img
-                    class="servico-preview"
-                    alt="Imagem do serviço"
-                  >
-
-                {% endif %}
 
 
                 <button
                   type="button"
-                  class="servico-editar-imagem"
-                  aria-label="Editar imagem"
+                  class="servico-trocar-imagem"
+                  aria-label="Trocar imagem"
+                  title="Trocar imagem"
                 >
+
                   ✎
+
                 </button>
 
-              </div>
 
+              {% else %}
 
-              <div class="servico-card-conteudo">
 
                 <button
                   type="button"
-                  class="servico-editar-info"
-                  aria-label="Editar informações"
+                  class="servico-botao-imagem"
                 >
-                  ✎
+
+                  📷 Adicionar imagem
+
                 </button>
 
 
-                <label>
-                  Nome do serviço:
-                </label>
-
-                <input
-                  type="text"
-                  value="{{ servico.nome_servico }}"
+                <img
+                  class="servico-preview"
+                  alt="Imagem do serviço"
                 >
 
 
-                <label>
-                  Preço do serviço:
-                </label>
-
-                <input
-                  type="text"
-                  value="{{ servico.preco }}"
+                <button
+                  type="button"
+                  class="servico-trocar-imagem"
+                  aria-label="Trocar imagem"
+                  title="Trocar imagem"
                 >
 
+                  ✎
 
-                <label>
-                  Descrição do serviço:
-                </label>
+                </button>
 
-                <textarea>{{ servico.descricao|default:'' }}</textarea>
 
-              </div>
+              {% endif %}
+
 
             </div>
 
-          {% endfor %}
+            <!-- #endregion -->
 
 
-        {% else %}
 
-          <div
-            class="servico-vazio"
-            id="servicoVazio"
+            <!-- #region INFORMAÇÕES -->
+
+            <div class="servico-card-conteudo">
+
+
+              <button
+                type="button"
+                class="servico-editar-info"
+                aria-label="Editar informações"
+                title="Editar informações"
+              >
+
+                ✎
+
+              </button>
+
+
+
+              <label>
+
+                Nome do serviço:
+
+              </label>
+
+
+              <input
+                type="text"
+                value="{{ servico.nome_servico }}"
+                placeholder="Nome do serviço"
+              >
+
+
+
+              <label>
+
+                Preço do serviço:
+
+              </label>
+
+
+              <input
+                type="text"
+                value="{{ servico.preco }}"
+                placeholder="R$ 00,00"
+              >
+
+
+
+              <label>
+
+                Descrição do serviço:
+
+              </label>
+
+
+              <textarea
+                placeholder="Descrição do serviço..."
+              >{{ servico.descricao|default:'' }}</textarea>
+
+
+            </div>
+
+            <!-- #endregion -->
+
+
+          </div>
+
+
+        {% endfor %}
+
+
+
+        <!-- #region ADICIONAR SERVIÇO -->
+
+        <div
+          class="servico-criar-card"
+          id="servicoCriarCard"
+        >
+
+
+          <button
+            type="button"
+            class="servico-criar-card-btn"
+            onclick="adicionarServico()"
+            aria-label="Adicionar serviço"
+            title="Adicionar serviço"
           >
 
-            <button
-              type="button"
-              class="servico-adicionar"
-              onclick="adicionarServico()"
-              aria-label="Adicionar serviço"
-            >
-              +
-            </button>
+            +
+
+          </button>
 
 
-            <h2>
-              Nenhum serviço cadastrado
-            </h2>
+          <h2>
+
+            Adicionar serviço
+
+          </h2>
 
 
-            <p>
-              Clique no + para adicionar seu primeiro serviço.
-            </p>
+          <p>
 
-          </div>
+            Clique no + para cadastrar outro serviço.
 
-        {% endif %}
+          </p>
 
-      </div>
-
-      <!-- #endregion -->
-
-
-      <!-- #region template novo servico -->
-
-      <template id="servicoCardTemplate">
-
-        <div class="servico-card">
-
-          <div class="servico-imagem">
-
-            <input
-              class="servico-imagem-input"
-              type="file"
-              accept="image/*"
-              hidden
-            >
-
-
-            <div class="servico-imagem-placeholder">
-
-              <div class="servico-nuvem servico-nuvem-1"></div>
-
-              <div class="servico-nuvem servico-nuvem-2"></div>
-
-              <div class="servico-grama"></div>
-
-            </div>
-
-
-            <img
-              class="servico-preview"
-              alt="Imagem do serviço"
-            >
-
-
-            <button
-              type="button"
-              class="servico-editar-imagem"
-              aria-label="Adicionar imagem"
-            >
-              ✎
-            </button>
-
-          </div>
-
-
-          <div class="servico-card-conteudo">
-
-            <button
-              type="button"
-              class="servico-editar-info"
-              aria-label="Editar informações"
-            >
-              ✎
-            </button>
-
-
-            <label>
-              Nome do serviço:
-            </label>
-
-            <input
-              type="text"
-              placeholder="Nome do serviço"
-            >
-
-
-            <label>
-              Preço do serviço:
-            </label>
-
-            <input
-              type="text"
-              placeholder="R$ 00,00"
-            >
-
-
-            <label>
-              Descrição do serviço:
-            </label>
-
-            <textarea
-              placeholder="Descrição do serviço..."
-            ></textarea>
-
-          </div>
 
         </div>
 
-      </template>
+        <!-- #endregion -->
+
+
+      </div>
 
       <!-- #endregion -->
 
@@ -516,265 +570,12 @@
   <!-- #endregion -->
 
 
-  <!-- #region javascript -->
 
-  <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
+  <!-- #region JAVASCRIPT -->
 
-
-  <script>
-
-    function prepararServicoCard(card) {
-
-      const areaImagem =
-        card.querySelector(
-          '.servico-imagem'
-        );
-
-
-      if (!areaImagem) {
-        return;
-      }
-
-
-      const input =
-        areaImagem.querySelector(
-          '.servico-imagem-input'
-        );
-
-
-      const preview =
-        areaImagem.querySelector(
-          '.servico-preview'
-        );
-
-
-      const botao =
-        areaImagem.querySelector(
-          '.servico-editar-imagem'
-        );
-
-
-      if (
-        !input ||
-        !preview ||
-        !botao
-      ) {
-        return;
-      }
-
-
-      botao.addEventListener(
-        'click',
-        function () {
-
-          input.click();
-
-        }
-      );
-
-
-      input.addEventListener(
-        'change',
-        function () {
-
-          const arquivo =
-            this.files[0];
-
-
-          if (!arquivo) {
-            return;
-          }
-
-
-          if (
-            !arquivo.type.startsWith('image/')
-          ) {
-
-            alert(
-              'Selecione um arquivo de imagem.'
-            );
-
-            this.value = '';
-
-            return;
-          }
-
-
-          const imagemURL =
-            URL.createObjectURL(
-              arquivo
-            );
-
-
-          preview.src =
-            imagemURL;
-
-
-          areaImagem.classList.add(
-            'tem-imagem'
-          );
-
-
-          preview.onload =
-            function () {
-
-              URL.revokeObjectURL(
-                imagemURL
-              );
-
-            };
-
-        }
-      );
-
-    }
-
-
-
-    document
-      .querySelectorAll('.servico-card')
-      .forEach(prepararServicoCard);
-
-
-
-    function adicionarServico() {
-
-      const container =
-        document.getElementById(
-          'servicoCards'
-        );
-
-
-      const vazio =
-        document.getElementById(
-          'servicoVazio'
-        );
-
-
-      const template =
-        document.getElementById(
-          'servicoCardTemplate'
-        );
-
-
-      if (vazio) {
-        vazio.remove();
-      }
-
-
-      const clone =
-        template.content.cloneNode(true);
-
-
-      const novoCard =
-        clone.querySelector(
-          '.servico-card'
-        );
-
-
-      container.appendChild(clone);
-
-
-      prepararServicoCard(
-        novoCard
-      );
-
-
-      const primeiroInput =
-        novoCard.querySelector(
-          'input[type="text"]'
-        );
-
-
-      if (primeiroInput) {
-        primeiroInput.focus();
-      }
-
-    }
-
-
-
-    const fotoResponsavelServico =
-      document.getElementById(
-        'foto-responsavel-servico'
-      );
-
-
-    const previewResponsavelServico =
-      document.getElementById(
-        'preview-responsavel-servico'
-      );
-
-
-    const avatarResponsavelServico =
-      document.querySelector(
-        '.servico-avatar'
-      );
-
-
-    if (
-      fotoResponsavelServico &&
-      previewResponsavelServico &&
-      avatarResponsavelServico
-    ) {
-
-      fotoResponsavelServico.addEventListener(
-        'change',
-        function () {
-
-          const arquivo =
-            this.files[0];
-
-
-          if (!arquivo) {
-            return;
-          }
-
-
-          if (
-            !arquivo.type.startsWith('image/')
-          ) {
-
-            alert(
-              'Selecione um arquivo de imagem.'
-            );
-
-            this.value = '';
-
-            return;
-          }
-
-
-          const imagemURL =
-            URL.createObjectURL(
-              arquivo
-            );
-
-
-          previewResponsavelServico.src =
-            imagemURL;
-
-
-          avatarResponsavelServico.classList.add(
-            'tem-imagem'
-          );
-
-
-          previewResponsavelServico.onload =
-            function () {
-
-              URL.revokeObjectURL(
-                imagemURL
-              );
-
-            };
-
-        }
-      );
-
-    }
-
-  </script>
+  <script
+    src="{% static 'AppStoreLink/scripts/index.js' %}"
+  ></script>
 
   <!-- #endregion -->
 
