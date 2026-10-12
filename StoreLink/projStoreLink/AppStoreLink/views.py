@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.db.models import Q
+from decimal import Decimal, InvalidOperation
+from django.views.decorators.http import require_POST
 from django.contrib import messages # importa mensagens de erro e sucesso
 from django.contrib.auth.hashers import make_password, check_password
-from AppStoreLink.models import Usuario, Loja, Endereco, Produto, Servico, LojaFavoritas, TipoUsuario # importação das classes em models
+from AppStoreLink.models import Usuario, Loja, Endereco, Produto, Servico, LojaFavoritas, TipoUsuario, Categoria# importação das classes em models
 from django.contrib.auth.decorators import login_required # @login_required -> usado para privar apenas usuarios loggados
 from django.http import HttpResponseForbidden # -> 
 import re # importação de Regex: biblioteca de validações
@@ -359,9 +361,101 @@ def suporte(request):
     return render(request, 'AppStoreLink/suporte.html')
 
 
-def produtos_loja(request):
-    return render(request, 'AppStoreLink/produtos-loja.html')
+def _validar_nome_preco(nome, preco_txt):
+    """Valida nome e preço. Devolve (lista_de_erros, preco_como_Decimal)."""
+    erros = []
 
+    if not nome:
+        erros.append('O nome do produto é obrigatório.')
+    elif len(nome) > 100:
+        erros.append('O nome deve ter no máximo 100 caracteres.')
+
+    preco = None
+    try:
+        preco = Decimal(preco_txt)
+        if not preco.is_finite() or preco <= 0:
+            erros.append('O preço deve ser um número maior que zero.')
+        elif preco > Decimal('99999999.99'):
+            erros.append('O preço informado é alto demais.')
+        else:
+            preco = preco.quantize(Decimal('0.01'))
+    except InvalidOperation:
+        erros.append('Informe um preço válido (exemplo: 12,50).')
+
+    return erros, preco
+
+
+def produtos_loja(request):
+    # TODO: quando existir o vínculo Usuário↔Loja, filtrar só os produtos da loja do usuário logado
+    produtos = Produto.objects.all()
+    categorias = Categoria.objects.all()
+
+    return render(request, 'AppStoreLink/produtos-loja.html', {
+        'produtos': produtos,
+        'categorias': categorias,
+    })
+
+
+@require_POST
+def produto_criar(request):
+    nome = request.POST.get('nome_produto', '').strip()
+    preco_txt = request.POST.get('preco_produto', '').strip().replace(',', '.')
+    descricao = request.POST.get('descricao_produto', '').strip()
+    id_categoria = request.POST.get('id_categoria', '')
+
+    erros, preco = _validar_nome_preco(nome, preco_txt)
+
+    # A categoria é obrigatória no model e o POST pode ser forjado, então confere no banco
+    categoria = None
+    if id_categoria.isdigit():
+        categoria = Categoria.objects.filter(id_categoria=id_categoria).first()
+    if categoria is None:
+        erros.append('Selecione uma categoria válida.')
+
+    # TODO: trocar pela loja do dono logado quando existir o vínculo Usuário↔Loja
+    loja = Loja.objects.first()
+    if loja is None:
+        erros.append('Cadastre uma loja antes de cadastrar produto.')
+
+    if erros:
+        for erro in erros:
+            messages.error(request, erro)
+        return redirect('produtos-loja')
+
+    Produto.objects.create(
+        nome_produto=nome,
+        preco=preco,
+        descricao=descricao or None,
+        id_loja=loja,
+        id_categoria=categoria,
+    )
+
+    messages.success(request, 'Produto cadastrado com sucesso!')
+    return redirect('produtos-loja')
+
+
+@require_POST
+def produto_editar(request, id_produto):
+    produto = get_object_or_404(Produto, id_produto=id_produto)
+
+    nome = request.POST.get('nome_produto', '').strip()
+    preco_txt = request.POST.get('preco_produto', '').strip().replace(',', '.')
+    descricao = request.POST.get('descricao_produto', '').strip()
+
+    erros, preco = _validar_nome_preco(nome, preco_txt)
+
+    if erros:
+        for erro in erros:
+            messages.error(request, erro)
+        return redirect('produtos-loja')
+
+    produto.nome_produto = nome
+    produto.preco = preco
+    produto.descricao = descricao or None
+    produto.save()
+
+    messages.success(request, 'Produto atualizado com sucesso!')
+    return redirect('produtos-loja')
 
 def servicos_loja(request):
     

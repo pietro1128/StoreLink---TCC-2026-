@@ -354,7 +354,14 @@
 
       <!-- #endregion -->
 
+      {# Mensagens de sucesso e erro #}
+      {% if messages %}
+        {% for message in messages %}
+          <p>{{ message }}</p>
+        {% endfor %}
+      {% endif %}
 
+      <!-- #region CARDS -->
 
       <!-- #region CARDS -->
 
@@ -479,49 +486,34 @@
 
               </button>
 
+              <form method="POST" action="{% url 'produto-editar' produto.id_produto %}">
+                {% csrf_token %}
 
+                <label>Nome do produto:</label>
+                <input
+                  type="text"
+                  name="nome_produto"
+                  value="{{ produto.nome_produto }}"
+                  placeholder="Nome do produto"
+                >
 
-              <label>
+                <label>Preço do produto:</label>
+                <input
+                  type="text"
+                  name="preco_produto"
+                  value="{{ produto.preco }}"
+                  placeholder="R$ 00,00"
+                >
 
-                Nome do produto:
+                <label>Descrição do produto:</label>
+                <textarea
+                  name="descricao_produto"
+                  placeholder="Descrição do produto..."
+                >{{ produto.descricao|default:'' }}</textarea>
 
-              </label>
+                <button type="submit" class="produto-salvar">Salvar alterações</button>
 
-
-              <input
-                type="text"
-                value="{{ produto.nome_produto }}"
-                placeholder="Nome do produto"
-              >
-
-
-
-              <label>
-
-                Preço do produto:
-
-              </label>
-
-
-              <input
-                type="text"
-                value="{{ produto.preco }}"
-                placeholder="R$ 00,00"
-              >
-
-
-
-              <label>
-
-                Descrição do produto:
-
-              </label>
-
-
-              <textarea
-                placeholder="Descrição do produto..."
-              >{{ produto.descricao|default:'' }}</textarea>
-
+              </form>
 
             </div>
 
@@ -533,7 +525,54 @@
 
         {% endfor %}
 
+        <!-- #region NOVO PRODUTO (FORMULÁRIO DE CADASTRO) -->
 
+        <div class="produto-card">
+
+          <div class="produto-card-conteudo">
+
+            <form method="POST" action="{% url 'produto-criar' %}">
+              {% csrf_token %}
+
+              <label>Nome do produto:</label>
+              <input
+                type="text"
+                name="nome_produto"
+                placeholder="Nome do produto"
+                required
+              >
+
+              <label>Preço do produto:</label>
+              <input
+                type="text"
+                name="preco_produto"
+                placeholder="R$ 00,00"
+                required
+              >
+
+              <label>Categoria:</label>
+              <select name="id_categoria" required>
+                <option value="">Selecione...</option>
+                {% for c in categorias %}
+                  <option value="{{ c.id_categoria }}">{{ c.tipo_categoria }}</option>
+                {% endfor %}
+              </select>
+
+              <label>Descrição do produto:</label>
+              <textarea
+                name="descricao_produto"
+                placeholder="Descrição do produto..."
+              ></textarea>
+
+              <button type="submit" class="produto-salvar">Cadastrar produto</button>
+
+            </form>
+
+          </div>
+
+        </div>
+
+        <!-- #endregion -->
 
         <!-- #region ADICIONAR PRODUTO -->
 
