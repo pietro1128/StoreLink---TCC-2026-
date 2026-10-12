@@ -379,17 +379,27 @@
 
             <!-- #region EXCLUIR -->
 
-            <button
-              type="button"
-              class="produto-excluir-card"
-              onclick="excluirProdutoCard(this)"
-              aria-label="Excluir produto"
-              title="Excluir produto"
+            <form
+              method="POST"
+              action="{% url 'produto-excluir' produto.id_produto %}"
+              style="display: contents;"
+              onsubmit="return confirm('Excluir o produto {{ produto.nome_produto|escapejs }}? Essa ação não pode ser desfeita.');"
             >
 
-              ✕
+              {% csrf_token %}
 
-            </button>
+              <button
+                type="submit"
+                class="produto-excluir-card"
+                aria-label="Excluir produto"
+                title="Excluir produto"
+              >
+
+                ✕
+
+              </button>
+
+            </form>
 
             <!-- #endregion -->
 

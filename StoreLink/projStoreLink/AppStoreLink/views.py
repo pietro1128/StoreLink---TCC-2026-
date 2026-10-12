@@ -395,6 +395,15 @@ def produtos_loja(request):
         'categorias': categorias,
     })
 
+@require_POST
+def produto_excluir(request, id_produto):
+    produto = get_object_or_404(Produto, id_produto=id_produto)
+    nome = produto.nome_produto
+    produto.delete()
+
+    messages.success(request, f'O produto "{nome}" foi excluído.')
+    return redirect('produtos-loja')
+
 
 @require_POST
 def produto_criar(request):
@@ -457,30 +466,105 @@ def produto_editar(request, id_produto):
     messages.success(request, 'Produto atualizado com sucesso!')
     return redirect('produtos-loja')
 
+
 def servicos_loja(request):
-    
-    if request.method == 'POST':
-
-        nome_servico = request.POST.get('nome_servico', '').strip() # 'strip()': exclui espaços
-        preco = request.POST.get('preco', '').strip()
-        descricao = request.POST.get('descricao', '').strip()
-        #foto = models.POST.get('foto')
-        
-        loja = Loja.objects.first() # -> vai buscar o primeiro registro da tabela 'Loja'
-        if loja is None: # -> verifica se ele encontrou apenas nulos
-            messages.error(request, 'Cadastre uma loja antes de cadastrar serviço.')
-            return redirect('servicos-loja') # -> isso encerra a execução da função, 'redirect()': redireciona para a rota que voce definiu EX: "servicos-loja"
-        
-        Servico.objects.create(
-            nome_servico=nome_servico, 
-            preco=preco, 
-            descricao=descricao,
-            id_loja=loja, # usamos apenas para verificar se existe loja
-            )
-        
-        messages.success(request, 'Serviço cadastrado com sucesso!')
-        return redirect('servicos-loja')
-
+    # ALTERADO: a lista de serviços foi movida para o topo da função.
+    # Antes ela ficava só no final, mas agora também precisamos dela no
+    # caso de erro de validação (para recarregar a página com os cards).
     servicos = Servico.objects.all()
 
+    if request.method == 'POST':
+        nome_servico = request.POST.get('nome_servico', '').strip()  # strip(): tira espaços
+
+        # ALTERADO: antes era só .strip(). Agora o .replace(',', '.') que corrige o erro que falei no resumo
+        # (o nome da variável mudou de 'preco' para 'preco_txt' porque aqui
+        # ela ainda é TEXTO; o número de verdade fica na variável 'preco')
+        preco_txt = request.POST.get('preco', '').strip().replace(',', '.')
+
+        descricao = request.POST.get('descricao', '').strip()
+
+        # NOVO: lista que acumula os erros encontrados. Só salvamos no banco se ela terminar vazia.
+        erros = []
+
+        if not nome_servico:
+            erros.append('O nome do serviço é obrigatório.')
+        elif len(nome_servico) > 100:
+            erros.append('O nome deve ter no máximo 100 caracteres.')
+
+        #Decimal é o tipo mais recomendado para dinheiro, e não o float  
+        preco = None
+        try:
+            preco = Decimal(preco_txt)  # levanta InvalidOperation se for "abc" ou vazio
+
+            # is_finite() barra valores como "nan" e "infinity", que o Decimal
+            # aceita como texto mas não servem como preço.
+            if not preco.is_finite() or preco <= 0:
+                erros.append('O preço deve ser um número maior que zero.')
+            # 99999999.99 é o maior valor que cabe em DecimalField(10, 2)
+            elif preco > Decimal('99999999.99'):
+                erros.append('O preço informado é alto demais.')
+            else:
+                # força exatamente 2 casas decimais (6.7 vira 6.70)
+                preco = preco.quantize(Decimal('0.01'))
+        except InvalidOperation:
+            erros.append('Informe um preço válido (exemplo: 50,00).')
+
+
+        # MANTIDO da versão original: pega a primeira loja do banco.
+        # Atenção: isso coloca TODO serviço na mesma loja, não importa quem cadastrou. É uma limitação conhecida, só dá para resolver quando existir o vínculo Usuario -> Loja no banco.
+        # TODO: trocar pela loja do usuário logado.
+        
+        loja = Loja.objects.first()
+        if loja is None:
+            erros.append('Cadastre uma loja antes de cadastrar serviço.')
+
+        # NOVO: se achou algum problema, mostra as mensagens e NÃO salva.
+        # Usamos render (e não redirect) para recarregar a página direto.
+        if erros:
+            for erro in erros:
+                messages.error(request, erro)
+            return render(request, 'AppStoreLink/servicos-loja.html', {'servicos': servicos})
+
+        Servico.objects.create(
+            nome_servico=nome_servico,
+            preco=preco,  # ALTERADO: agora é um Decimal, não mais o texto cru
+            # ALTERADO: o campo descricao aceita nulo no model; texto vazio
+            # ('') é salvo como None para manter o banco consistente.
+            descricao=descricao or None,
+            id_loja=loja,
+        )
+
+        messages.success(request, 'Serviço cadastrado com sucesso!')
+        return redirect('servicos-loja')  # redirect evita reenviar o form ao apertar F5
+
+    # IMPORTANTE: este return fica alinhado com o 'if' de cima, FORA dele.
+    # Se ele ficar dentro do 'if request.method == POST', a página não abre
+    # por GET e dá "view retornou None".
     return render(request, 'AppStoreLink/servicos-loja.html', {'servicos': servicos})
+
+# ============================================================================
+# RESUMO DAS ALTERAÇÕES 
+#
+# Problema: quando cadastra um serviço com preço "6,70", o sistema dava erro
+# de validação (ValidationError) e mostrava a tela de erro do Django.
+#
+# Causa: o preço ia direto do formulário para o banco como TEXTO. O banco
+# espera um número decimal com ponto ("6.70"), e o brasileiro digita com
+# vírgula ("6,70"). Preço vazio ou com letras quebrava do mesmo jeito.
+#
+# O que foi feito:
+#   1. Converter o preço de texto para número (Decimal) antes de salvar.
+#   2. Aceitar vírgula e ponto no preço.
+#   3. Validar nome e preço, mostrando mensagem de erro em vez de quebrar.
+#   4. Juntar todas as mensagens de erro numa lista (o usuário vê todos os
+#      problemas de uma vez, não um por vez).
+# ============================================================================
+
+@require_POST
+def servico_excluir(request, id_servico):
+    servico = get_object_or_404(Servico, id_servico=id_servico)
+    nome = servico.nome_servico
+    servico.delete()
+
+    messages.success(request, f'O serviço "{nome}" foi excluído.')
+    return redirect('servicos-loja')

@@ -357,21 +357,31 @@
 
             <!-- #region EXCLUIR -->
 
-            <button
-              type="button"
-              class="servico-excluir-card"
-              onclick="excluirServicoCard(this)"
-              aria-label="Excluir serviço"
-              title="Excluir serviço"
+            <form
+              method="POST"
+              action="{% url 'servico-excluir' servico.id_servico %}"
+              style="display: contents;"
+              onsubmit="return confirm('Excluir o serviço {{ servico.nome_servico|escapejs }}? Essa ação não pode ser desfeita.');"
             >
 
-              ✕
+              {% csrf_token %}
 
-            </button>
+              <button
+                type="submit"
+                class="servico-excluir-card"
+                aria-label="Excluir serviço"
+                title="Excluir serviço"
+              >
+
+                ✕
+
+              </button>
+
+            </form>
 
             <!-- #endregion -->
 
-
+            
 
             <!-- #region IMAGEM -->
 
