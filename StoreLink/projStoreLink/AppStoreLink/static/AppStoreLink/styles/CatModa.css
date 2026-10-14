@@ -92,3 +92,7 @@ body.dark .loja-card-capa {
   width: auto;
   white-space: normal;
 }
+
+.loja-card-capa form {
+  margin: 0;
+}

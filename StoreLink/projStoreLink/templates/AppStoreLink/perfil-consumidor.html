@@ -223,14 +223,11 @@
 
       <section class="favoritos-area">
 
-
         <div class="favoritos-topo">
-
 
           <h1>
             FAVORITOS
           </h1>
-
 
           <button
             type="button"
@@ -249,15 +246,11 @@
 
           </button>
 
-
         </div>
-
 
         <div class="favoritos-scroll">
 
-
           {% for favorita in loja_fav %}
-
 
             <article
               class="
@@ -297,11 +290,8 @@
               "
             >
 
-
               <!-- #region capa -->
-
               <div class="favorito-capa">
-
 
                 {% if favorita.id_loja.foto_estabelecimento %}
 
@@ -324,12 +314,12 @@
                 {% endif %}
 
 
-                <div
-                  class="favorito-coracao"
-                  title="Loja favoritada"
-                >
-                  ♥
-                </div>
+                <form method="post" action="{% url 'favoritar-loja' favorita.id_loja.id_loja %}">
+                  {% csrf_token %}
+                  <button type="submit" class="favorito-coracao" title="Remover dos favoritos">
+                    ♥
+                  </button>
+                </form>
 
 
               </div>

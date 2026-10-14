@@ -95,13 +95,12 @@
           <div class="loja-card">
 
             <div class="loja-card-capa">
-
-              <button
-                class="loja-card-fav"
-                aria-label="Favoritar"
-              >
-                ♡
-              </button>
+              <form method="POST" action="{% url 'favoritar-loja' loja.id_loja %}">
+                {% csrf_token %}
+                <button type="submit" class="loja-card-fav" aria-label="Favoritar">
+                  ♡
+                </button>
+              </form>
 
             </div>
 

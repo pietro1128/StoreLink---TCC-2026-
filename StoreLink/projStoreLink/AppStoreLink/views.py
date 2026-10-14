@@ -568,3 +568,24 @@ def servico_excluir(request, id_servico):
 
     messages.success(request, f'O serviço "{nome}" foi excluído.')
     return redirect('servicos-loja')
+
+@require_POST # -> so deixa executar a função se a requisição usar o metodo HTTP 'POST'
+def favoritar_loja(request, id_loja):
+    
+    usuario_id = request.session.get('usuario_id') # -> consulta a sessão para saber qual usuario esta conectado
+    if not usuario_id: # -> verifica se esta desconectado
+        messages.error(request, 'Você precisa fazer login para favorizar uma loja.')
+        return redirect('login')
+    
+    usuario = get_object_or_404(Usuario, id_categoria=usuario_id) # -> procura o usuario registrado no banco e guarda o valor na variavel 'usuario'
+    loja = get_object_or_404(Loja, id_loja=id_loja)
+    
+    favorita, criada = LojaFavoritas.objects.get_or_create( # -> verifica de o usuario ja favoritou ou não a loja
+        id_usuario=usuario, # -> indica o 'usuario' que favoritou a 'loja'
+        id_loja=loja,
+    )
+    
+    if not criada:
+        favorita.delete() # -> remove o favorito quando apertar no botao de uma loja ja favoritada
+        #           L> '.delete()': deleta o registro do banco
+    return redirect(request.META.get('HTTP_REFERER', 'perfil-consumidor')) # -> redireciona para a pagina que veio, caso contrario ele redireciona para 'perfil-consumidor'

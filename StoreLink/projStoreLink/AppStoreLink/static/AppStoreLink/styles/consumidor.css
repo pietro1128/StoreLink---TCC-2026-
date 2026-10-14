@@ -1012,4 +1012,9 @@ body.dark .favoritos-adicionar:hover {
 
 }
 
+button.favorito-coracao {
+  border: none;
+  cursor: pointer;
+}
+
 /* #endregion */

@@ -63,4 +63,5 @@ urlpatterns = [
     path('servicos-loja/', servicos_loja,name='servicos-loja'),
     path('servico/<int:id_servico>/excluir/', views.servico_excluir, name='servico-excluir'),
 
+    path('loja/<int:id_loja>/favoritar/', views.favoritar_loja, name='favoritar-loja'),
 ]
