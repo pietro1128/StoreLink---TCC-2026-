@@ -1,0 +1,97 @@
+CREATE DATABASE StoreLink;
+
+
+CREATE TABLE Usuario (
+    nome VARCHAR(50),
+    sobrenome VARCHAR(100),
+    email VARCHAR(100),
+    senha VARCHAR(255),
+    telefone VARCHAR(15),
+    cpf VARCHAR(11),
+    id_usuario INT  PRIMARY KEY
+    id_tipo_usuario INT,
+    FOREIGN KEY (id_tipo_usuario) REFERENCES TipoUsuario (id_tipo_usuario) ON DELETE CASCADE
+);
+
+
+CREATE TABLE Loja (
+    foto_estabelecimento VARCHAR(255),
+    nome_loja VARCHAR(100),
+    categoria VARCHAR(50),
+    telefone_loja VARCHAR(15),
+    email_loja VARCHAR(100),
+    cnpj VARCHAR(18),
+    id_loja INT  PRIMARY KEY,
+    link VARCHAR(255),
+    id_endereco INT,
+    id_categoria INT,
+    FOREIGN KEY (id_endereco) REFERENCES Endereco (id_endereco) ON DELETE CASCADE,
+    FOREIGN KEY (id_categoria) REFERENCES Categoria (id_categoria) ON DELETE CASCADE
+);
+
+
+CREATE TABLE Loja_Favoritas (
+    id_usuario INT ,
+    id_loja INT ,
+    PRIMARY KEY (id_usuario, id_loja),
+    FOREIGN KEY (id_usuario) REFERENCES Usuario (id_usuario) ON DELETE CASCADE,
+    FOREIGN KEY (id_loja) REFERENCES Loja (id_loja) ON DELETE CASCADE
+);
+
+
+CREATE TABLE Avaliacao (
+    usuario INT ,
+    comentario TEXT,
+    id_produto INT ,
+    id_loja INT ,
+    id_usuario INT ,
+    id_servico INT ,
+    nota INT ,
+    PRIMARY KEY (id_produto, id_loja, id_usuario, id_servico),
+    FOREIGN KEY (id_loja) REFERENCES Loja (id_loja) ON DELETE CASCADE,
+    FOREIGN KEY (id_usuario) REFERENCES Usuario (id_usuario) ON DELETE CASCADE,
+    FOREIGN KEY (id_produto) REFERENCES Produto (id_produto) ON DELETE CASCADE,
+    FOREIGN KEY (id_servico) REFERENCES Servico (id_servico) ON DELETE CASCADE
+);
+
+
+CREATE TABLE Produto (
+    nome_produto VARCHAR(100),
+    preco DECIMAL(10,2),
+    descricao TEXT,
+    foto VARCHAR(255),
+    id_produto INT  PRIMARY KEY,
+    id_loja INT,
+    id_categoria INT,  
+    FOREIGN KEY (id_loja) REFERENCES Loja (id_loja) ON DELETE CASCADE,
+    FOREIGN KEY (id_categoria) REFERENCES Categoria (id_categoria) ON DELETE CASCADE
+);
+
+
+CREATE TABLE Servico (
+    nome_servico VARCHAR(100),
+    id_servico INT  PRIMARY KEY,
+    foto VARCHAR(255),
+    descricao TEXT,
+    preco DECIMAL(10,2)
+    id_loja INT,
+    FOREIGN KEY (id_loja) REFERENCES Loja (id_loja) ON DELETE CASCADE
+);
+
+
+CREATE TABLE Endereco (
+    rua VARCHAR(100),
+    numero_estabelecimento VARCHAR(10),
+    cep VARCHAR(9),
+    id_endereco INT  PRIMARY KEY
+);
+
+CREATE TABLE Categoria (
+    id_categoria INT,
+    tipo categoria VARCHAR(20)
+);
+
+CREATE TABLE TipoUsuario (
+    id_tipo_usuario INT,
+    tipo usuario VARCHAR(12)
+);
