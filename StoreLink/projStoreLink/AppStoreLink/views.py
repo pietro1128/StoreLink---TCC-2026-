@@ -11,6 +11,11 @@ from AppStoreLink.models import Avaliacao, Usuario, Loja, Endereco, Produto, Ser
 from django.contrib.auth.decorators import login_required # @login_required -> usado para privar apenas usuarios loggados
 from django.http import HttpResponseForbidden # -> 
 import re # importação de Regex: biblioteca de validações
+from django.http import JsonResponse
+from django.views.decorators.http import require_GET
+from AppStoreLink.services import (
+    consultar_cep, CepInvalido, CepNaoEncontrado, ServicoCepIndisponivel,
+)
 
 
 
@@ -39,7 +44,21 @@ def perfil_loja(request):
         telefone = request.POST.get('telefone_loja')
         cnpj = request.POST.get('cnpj')
         link = request.POST.get('link_loja')
+        
+        try:
+            dados_cep = consultar_cep(cep)
+        except CepInvalido:
+            messages.error(request, 'CEP inválido. Digite 8 números.')
+            return render(request, 'AppStoreLink/perfil-loja.html')
+        except CepNaoEncontrado:
+            messages.error(request, 'Este CEP não existe.')
+            return render(request, 'AppStoreLink/perfil-loja.html')
+        except ServicoCepIndisponivel:
+            messages.error(request, 'Não foi possível validar o CEP agora. Tente novamente em instantes.')
+            return render(request, 'AppStoreLink/perfil-loja.html')
 
+        cep = dados_cep['cep']   # grava só os 8 dígitos, num formato único
+        
         # Validações de E-mail para loja:
         padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$'# -> Argumenta um padrão com characteres finais nos emails
         if not re.match(padrao_email, email): # -> Verifica se estão nos padões argumentados estao coecidindo com as variaveis 
@@ -59,12 +78,6 @@ def perfil_loja(request):
 
         if Loja.objects.filter(cnpj=cnpj).exists():
             messages.error(request, 'Este CNPJ ja foi cadastrado.')
-            return render(request, 'templates/perfil-loja.html')
-
-        # Validações de CEP para loja:
-        padrao_cep = r'^.{8,8}$'
-        if not re.match(padrao_cep, cep):
-            messages.error(request, 'Este CEP está incorreto, ele deve ter exatamente 8 números.')
             return render(request, 'templates/perfil-loja.html')
 
         # Validações de Telefone para loja:
@@ -159,6 +172,21 @@ def cadastro(request):
         return redirect('login')
 
     return render(request, 'registration/cadastro.html')
+
+
+@require_GET
+def api_cep(request, cep):
+    """Endpoint JSON usado pelo front-end para autocompletar o endereço."""
+    try:
+        endereco = consultar_cep(cep)
+    except CepInvalido:
+        return JsonResponse({'erro': 'CEP inválido. Digite 8 números.'}, status=400)
+    except CepNaoEncontrado:
+        return JsonResponse({'erro': 'Este CEP não existe.'}, status=404)
+    except ServicoCepIndisponivel:
+        return JsonResponse({'erro': 'Não foi possível consultar o CEP agora. Tente novamente.'}, status=503)
+
+    return JsonResponse(endereco)
 
 
 def login(request):

@@ -37,6 +37,14 @@
 
   <div class="topbar">
 
+    {% if messages %}
+      <div class="messages-container">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    
     <div class="logo-icon">
 
       <img
@@ -1218,6 +1226,38 @@
 
 <!-- #endregion -->
 
+<script>
+  const campoCep = document.querySelector('[name="cep"]');
+
+  function preencher(nome, valor) {
+    const campo = document.querySelector(`[name="${nome}"]`);
+    // só preenche se o ViaCEP trouxe o dado; .value trata o texto como texto, não como HTML
+    if (campo && valor) campo.value = valor;
+  }
+
+  // 'blur' dispara quando a pessoa sai do campo CEP
+  campoCep.addEventListener('blur', async () => {
+    const cep = campoCep.value.replace(/\D/g, '');
+    if (cep.length !== 8) return;
+
+    try {
+      const resposta = await fetch(`/api/cep/${cep}/`);
+      const dados = await resposta.json();
+
+      if (!resposta.ok) {          // 400, 404 ou 503: mostra a mensagem do servidor
+        alert(dados.erro);
+        return;
+      }
+
+      preencher('rua', dados.rua);
+
+      // se veio rua, falta o número; se não veio, falta a rua
+      document.querySelector(dados.rua ? '[name="numero"]' : '[name="rua"]').focus();
+    } catch (e) {
+      alert('Não foi possível consultar o CEP agora.');
+    }
+  });
+</script>
 
 </body>
 </html>
