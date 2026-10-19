@@ -17,6 +17,8 @@
     rel="stylesheet"
     href="{% static 'AppStoreLink/styles/perfil-loja.css' %}"
   >
+
+  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/mensagens.css' %}">
 </head>
 
 
@@ -29,6 +31,19 @@
       document.body.classList.add('dark');
     }
   </script>
+
+<!-- #endregion -->
+
+
+<!-- #region mensagens -->
+
+  {% if messages %}
+    <div class="messages-container">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
 
 <!-- #endregion -->
 

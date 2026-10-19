@@ -1,0 +1,564 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    StoreLink - {{ loja.nome_loja }}
+  </title>
+
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="{% static 'AppStoreLink/images/icon-dark.png' %}"
+  >
+
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/style.css' %}"
+  >
+
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/informacoes-loja.css' %}"
+  >
+
+</head>
+
+
+<body>
+
+
+  <script>
+
+    if (
+      localStorage.getItem('theme') === 'dark'
+    ) {
+
+      document.body.classList.add(
+        'dark'
+      );
+
+    }
+
+  </script>
+
+
+
+  <!-- #region TOPBAR -->
+
+  <div class="topbar">
+
+
+    <div class="logo-icon">
+
+      <img
+        src="{% static 'AppStoreLink/images/icon-dark.png' %}"
+        alt="StoreLink"
+      >
+
+    </div>
+
+
+    <a
+      class="nav-btn active"
+      href="{% url 'index' %}"
+    >
+      Início
+    </a>
+
+
+    <a
+      class="nav-btn"
+      href="{% url 'perfil-loja' %}"
+    >
+      Sua loja
+    </a>
+
+
+    <a
+      class="nav-btn"
+      href="{% url 'suporte' %}"
+    >
+      Suporte
+    </a>
+
+
+    <a
+      class="nav-btn"
+      onclick="setActiveNav(this)"
+    >
+      Como navegar?
+    </a>
+
+
+    {% if request.user.is_authenticated %}
+
+      <button
+        class="nav-account-btn"
+        data-url="{% url 'perfil-consumidor' %}"
+        onclick="location.href=this.dataset.url"
+      >
+        👤 Minha conta
+      </button>
+
+    {% else %}
+
+      <button
+        class="nav-account-btn"
+        data-url="{% url 'cadastro' %}"
+        onclick="location.href=this.dataset.url"
+      >
+        Criar conta ou Entrar
+      </button>
+
+    {% endif %}
+
+
+    <button
+      class="theme-toggle"
+      onclick="toggleTheme(this)"
+    >
+      🌙 Modo escuro
+    </button>
+
+
+  </div>
+
+  <!-- #endregion -->
+
+
+
+  <!-- #region CONTEÚDO -->
+
+  <main
+    class="
+      info-loja-page
+
+      {% if loja.id_categoria.tipo_categoria == 'Alimentos' %}
+        info-alimentos
+
+      {% elif loja.id_categoria.tipo_categoria == 'Moda' %}
+        info-moda
+
+      {% elif loja.id_categoria.tipo_categoria == 'Esportes' %}
+        info-esportes
+
+      {% elif loja.id_categoria.tipo_categoria == 'Construção' %}
+        info-construcao
+
+      {% elif loja.id_categoria.tipo_categoria == 'Saúde' %}
+        info-saude
+
+      {% elif loja.id_categoria.tipo_categoria == 'Pets' %}
+        info-pets
+
+      {% elif loja.id_categoria.tipo_categoria == 'Ambiente' %}
+        info-ambiente
+
+      {% elif loja.id_categoria.tipo_categoria == 'Tecnologia' %}
+        info-tecnologia
+
+      {% elif loja.id_categoria.tipo_categoria == 'Beleza' %}
+        info-beleza
+
+      {% else %}
+        info-outros
+
+      {% endif %}
+    "
+  >
+
+
+    <a
+      class="info-voltar"
+      href="{% url 'index' %}"
+      aria-label="Voltar"
+    >
+      ←
+    </a>
+
+
+
+    <div class="info-loja-layout">
+
+
+      <!-- #region LOJA -->
+
+      <section class="info-loja-card">
+
+
+        <div class="info-loja-esquerda">
+
+
+          <div class="info-loja-foto">
+
+
+            {% if loja.foto_estabelecimento %}
+
+              <img
+                src="{{ loja.foto_estabelecimento }}"
+                alt="{{ loja.nome_loja }}"
+                onerror="
+                  this.style.display='none';
+                  this.nextElementSibling.style.display='flex';
+                "
+              >
+
+
+              <div
+                class="info-sem-imagem"
+                style="display: none;"
+              >
+                Sem imagem cadastrada
+              </div>
+
+            {% else %}
+
+              <div class="info-sem-imagem">
+                Sem imagem cadastrada
+              </div>
+
+            {% endif %}
+
+
+
+            <form
+              method="POST"
+              action="{% url 'favoritar-loja' loja.id_loja %}"
+            >
+
+              {% csrf_token %}
+
+              <button
+                type="submit"
+                class="info-favoritar"
+                aria-label="Favoritar loja"
+              >
+                ♡
+              </button>
+
+            </form>
+
+
+          </div>
+
+
+
+          <p class="info-subtitulo">
+            Fotos e informações
+          </p>
+
+
+
+          <a
+            class="info-acesso-btn"
+            href="{% url 'InformacoesProduto' loja.id_loja %}"
+          >
+            PRODUTOS
+          </a>
+
+
+
+          <a
+            class="info-acesso-btn"
+            href="{% url 'InformacoesServico' loja.id_loja %}"
+          >
+            SERVIÇOS
+          </a>
+
+
+        </div>
+
+
+
+        <div class="info-loja-dados">
+
+
+          <h2>
+            NOME
+          </h2>
+
+
+          <div class="info-campo">
+
+            <strong>
+              Nome do Estabelecimento
+            </strong>
+
+            <span>
+              {{ loja.nome_loja }}
+            </span>
+
+          </div>
+
+
+
+          <h2>
+            LOCALIZAÇÃO
+          </h2>
+
+
+          <div class="info-localizacao-grid">
+
+
+            <div class="info-campo info-rua">
+
+              <strong>
+                Rua
+              </strong>
+
+              <span>
+                {{ loja.id_endereco.rua }}
+              </span>
+
+            </div>
+
+
+
+            <div class="info-campo">
+
+              <strong>
+                Número
+              </strong>
+
+              <span>
+                {{ loja.id_endereco.numero_estabelecimento }}
+              </span>
+
+            </div>
+
+
+
+            <div class="info-campo">
+
+              <strong>
+                CEP
+              </strong>
+
+              <span>
+                {{ loja.id_endereco.cep }}
+              </span>
+
+            </div>
+
+
+          </div>
+
+
+
+          <h2>
+            INFORMAÇÕES
+          </h2>
+
+
+          <div class="info-campo">
+
+            <strong>
+              E-mail
+            </strong>
+
+            <span>
+              {{ loja.email_loja }}
+            </span>
+
+          </div>
+
+
+
+          <div class="info-campo">
+
+            <strong>
+              Telefone
+            </strong>
+
+            <span>
+
+              {% if loja.telefone_loja %}
+
+                {{ loja.telefone_loja }}
+
+              {% else %}
+
+                Não informado
+
+              {% endif %}
+
+            </span>
+
+          </div>
+
+
+
+          <div class="info-campo">
+
+            <strong>
+              CNPJ
+            </strong>
+
+            <span>
+              {{ loja.cnpj }}
+            </span>
+
+          </div>
+
+
+
+          <div class="info-campo">
+
+            <strong>
+              Link de Loja virtual
+            </strong>
+
+
+            {% if loja.link %}
+
+              <a
+                href="{{ loja.link }}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {{ loja.link }}
+              </a>
+
+            {% else %}
+
+              <span>
+                Não possui
+              </span>
+
+            {% endif %}
+
+          </div>
+
+
+
+          <div class="info-classificacao">
+
+            <strong>
+              Classificação da Loja
+            </strong>
+
+            <span>
+              {{ loja.id_categoria.tipo_categoria }}
+            </span>
+
+          </div>
+
+
+        </div>
+
+
+      </section>
+
+      <!-- #endregion -->
+
+
+
+      <!-- #region COMENTÁRIOS -->
+
+      <aside class="info-comentarios">
+
+
+        <h2>
+          COMENTÁRIOS
+        </h2>
+
+
+        <div class="info-comentarios-lista">
+
+
+          {% for avaliacao in avaliacoes %}
+
+
+            <article class="info-comentario-card">
+
+
+              <div class="info-comentario-topo">
+
+
+                <div class="info-comentario-avatar">
+                  👤
+                </div>
+
+
+                <div>
+
+                  <strong>
+
+                    {{ avaliacao.id_usuario.nome }}
+
+                    {{ avaliacao.id_usuario.sobrenome|default:'' }}
+
+                  </strong>
+
+
+                  <span>
+                    Nota: {{ avaliacao.nota }}/5
+                  </span>
+
+                </div>
+
+
+              </div>
+
+
+              <p>
+                {{ avaliacao.comentario }}
+              </p>
+
+
+            </article>
+
+
+          {% empty %}
+
+
+            <div class="info-comentarios-vazio">
+
+              Nenhum comentário cadastrado
+              para esta loja ainda.
+
+            </div>
+
+
+          {% endfor %}
+
+
+        </div>
+
+
+      </aside>
+
+      <!-- #endregion -->
+
+
+    </div>
+
+
+  </main>
+
+  <!-- #endregion -->
+
+
+
+  <script
+    src="{% static 'AppStoreLink/scripts/index.js' %}"
+  ></script>
+
+
+</body>
+
+</html>

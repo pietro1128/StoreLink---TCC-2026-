@@ -35,6 +35,8 @@
     href="{% static 'AppStoreLink/styles/servicos-loja.css' %}"
   >
 
+  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/mensagens.css' %}">
+
 </head>
 
 
@@ -336,9 +338,11 @@
 
       {# Mensagens de sucesso e erro #}
       {% if messages %}
-        {% for message in messages %}
-          <p>{{ message }}</p>
-        {% endfor %}
+        <div class="messages-container">
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+          {% endfor %}
+        </div>
       {% endif %}
 
       <!-- #region CARDS -->

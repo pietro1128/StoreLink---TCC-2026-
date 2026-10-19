@@ -244,6 +244,7 @@
 
       </div>
 
+
     {% else %}
 
 
@@ -299,6 +300,10 @@
 
                   {% endif %}
                 "
+
+                data-url="{% url 'InformacoesLoja' loja.id_loja %}"
+                onclick="location.href=this.dataset.url"
+                style="cursor: pointer;"
               >
 
 
@@ -317,13 +322,23 @@
                   {% endif %}
 
 
-                  <button
-                    type="button"
-                    class="resultado-card-fav"
-                    aria-label="Favoritar loja"
+                  <form
+                    method="POST"
+                    action="{% url 'favoritar-loja' loja.id_loja %}"
+                    onclick="event.stopPropagation()"
                   >
-                    ♡
-                  </button>
+
+                    {% csrf_token %}
+
+                    <button
+                      type="submit"
+                      class="resultado-card-fav"
+                      aria-label="Favoritar loja"
+                    >
+                      ♡
+                    </button>
+
+                  </form>
 
 
                 </div>
@@ -450,6 +465,10 @@
 
                   {% endif %}
                 "
+
+                data-url="{% url 'InformacoesProduto' produto.id_loja.id_loja %}"
+                onclick="location.href=this.dataset.url"
+                style="cursor: pointer;"
               >
 
 
@@ -592,6 +611,10 @@
 
                   {% endif %}
                 "
+
+                data-url="{% url 'InformacoesServico' servico.id_loja.id_loja %}"
+                onclick="location.href=this.dataset.url"
+                style="cursor: pointer;"
               >
 
 

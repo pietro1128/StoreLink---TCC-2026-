@@ -72,4 +72,26 @@ urlpatterns = [
     path('avaliar/servico/<int:id_alvo>/', views.avaliacao_criar, {'tipo': 'servico'}, name='avaliar-servico'),
 
     path('api/cep/<str:cep>/', views.api_cep, name='api-cep'),
+
+    # region PÁGINAS DE INFORMAÇÕES
+
+    path(
+        'loja/<int:id_loja>/',
+        views.InformacoesLoja,
+        name='InformacoesLoja'
+    ),
+
+    path(
+        'loja/<int:id_loja>/produtos/',
+        views.InformacoesProduto,
+        name='InformacoesProduto'
+    ),
+
+    path(
+        'loja/<int:id_loja>/servicos/',
+        views.InformacoesServico,
+        name='InformacoesServico'
+    ),
+
+    # endregion
 ]

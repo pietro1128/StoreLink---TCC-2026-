@@ -7,7 +7,7 @@ from decimal import Decimal, InvalidOperation
 from django.views.decorators.http import require_POST
 from django.contrib import messages # importa mensagens de erro e sucesso
 from django.contrib.auth.hashers import make_password, check_password
-from AppStoreLink.models import Avaliacao, Usuario, Loja, Endereco, Produto, Servico, LojaFavoritas, TipoUsuario, Categoria# importação das classes em models
+from AppStoreLink.models import Usuario, Loja, Endereco, Produto, Servico, LojaFavoritas, TipoUsuario, Categoria, Avaliacao # importação das classes em models
 from django.contrib.auth.decorators import login_required # @login_required -> usado para privar apenas usuarios loggados
 from django.http import HttpResponseForbidden # -> 
 import re # importação de Regex: biblioteca de validações
@@ -693,3 +693,108 @@ def avaliacao_criar(request, tipo, id_alvo):
 
     messages.success(request, 'Avaliação salva com sucesso!')
     return _voltar(request)
+# region PÁGINAS DE INFORMAÇÕES
+
+
+def InformacoesLoja(request, id_loja):
+
+    loja = get_object_or_404(
+        Loja.objects.select_related(
+            'id_endereco',
+            'id_categoria'
+        ),
+        id_loja=id_loja
+    )
+
+
+    avaliacoes = Avaliacao.objects.filter(
+        id_loja=loja
+    ).select_related(
+        'id_usuario'
+    ).exclude(
+        comentario__isnull=True
+    ).exclude(
+        comentario=''
+    ).order_by(
+        '-id'
+    )
+
+
+    contexto = {
+        'loja': loja,
+        'avaliacoes': avaliacoes,
+    }
+
+
+    return render(
+        request,
+        'AppStoreLink/InformacoesLoja.html',
+        contexto
+    )
+
+
+
+def InformacoesProduto(request, id_loja):
+
+    loja = get_object_or_404(
+        Loja.objects.select_related(
+            'id_categoria'
+        ),
+        id_loja=id_loja
+    )
+
+
+    produtos = Produto.objects.filter(
+        id_loja=loja
+    ).select_related(
+        'id_categoria'
+    ).order_by(
+        'id_produto'
+    )
+
+
+    contexto = {
+        'loja': loja,
+        'produtos': produtos,
+    }
+
+
+    return render(
+        request,
+        'AppStoreLink/InformacoesProduto.html',
+        contexto
+    )
+
+
+
+def InformacoesServico(request, id_loja):
+
+    loja = get_object_or_404(
+        Loja.objects.select_related(
+            'id_categoria'
+        ),
+        id_loja=id_loja
+    )
+
+
+    servicos = Servico.objects.filter(
+        id_loja=loja
+    ).order_by(
+        'id_servico'
+    )
+
+
+    contexto = {
+        'loja': loja,
+        'servicos': servicos,
+    }
+
+
+    return render(
+        request,
+        'AppStoreLink/InformacoesServico.html',
+        contexto
+    )
+
+
+# endregion
