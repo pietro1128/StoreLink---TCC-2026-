@@ -66,4 +66,8 @@ urlpatterns = [
     path('loja/<int:id_loja>/favoritar/', views.favoritar_loja, name='favoritar-loja'),
 
     path('loja/<int:id_loja>/excluir/', views.loja_excluir, name='loja-excluir'),
+    
+    path('avaliar/loja/<int:id_alvo>/', views.avaliacao_criar, {'tipo': 'loja'}, name='avaliar-loja'),
+    path('avaliar/produto/<int:id_alvo>/', views.avaliacao_criar, {'tipo': 'produto'}, name='avaliar-produto'),
+    path('avaliar/servico/<int:id_alvo>/', views.avaliacao_criar, {'tipo': 'servico'}, name='avaliar-servico'),
 ]

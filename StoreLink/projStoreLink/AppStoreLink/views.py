@@ -1,3 +1,4 @@
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.db import transaction
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
@@ -6,7 +7,7 @@ from decimal import Decimal, InvalidOperation
 from django.views.decorators.http import require_POST
 from django.contrib import messages # importa mensagens de erro e sucesso
 from django.contrib.auth.hashers import make_password, check_password
-from AppStoreLink.models import Usuario, Loja, Endereco, Produto, Servico, LojaFavoritas, TipoUsuario, Categoria# importação das classes em models
+from AppStoreLink.models import Avaliacao, Usuario, Loja, Endereco, Produto, Servico, LojaFavoritas, TipoUsuario, Categoria# importação das classes em models
 from django.contrib.auth.decorators import login_required # @login_required -> usado para privar apenas usuarios loggados
 from django.http import HttpResponseForbidden # -> 
 import re # importação de Regex: biblioteca de validações
@@ -608,3 +609,59 @@ def loja_excluir(request, id_loja):
 
     messages.success(request, f'A loja "{nome}" foi excluída.')
     return redirect('index')
+
+
+def _voltar(request):
+    """Volta para a página de onde veio o formulário"""
+    destino = request.META.get('HTTP_REFERER')
+    if destino and url_has_allowed_host_and_scheme(destino, allowed_hosts={request.get_host()}):
+        return redirect(destino)
+    return redirect('index')
+
+
+@require_POST
+def avaliacao_criar(request, tipo, id_alvo):
+    # tipo vem da URL ('loja', 'produto' ou 'servico'): diz qual FK preencher
+    modelos = {
+        'loja': (Loja, 'id_loja'),
+        'produto': (Produto, 'id_produto'),
+        'servico': (Servico, 'id_servico'),
+    }
+    modelo, campo = modelos[tipo]
+
+    # Quem avalia vem da sessão do login manual
+    usuario_id = request.session.get('usuario_id')
+    if not usuario_id:
+        messages.error(request, 'Você precisa fazer login para avaliar.')
+        return redirect('login')
+    usuario = get_object_or_404(Usuario, pk=usuario_id)#???(pk): funciona mesmo com as chaves primárias customizadas (id_loja, id_produto...), então não depende do nome delas.
+
+    alvo = get_object_or_404(modelo, pk=id_alvo)
+
+    comentario = request.POST.get('comentario', '').strip()
+    try:
+        nota = int(request.POST.get('nota', ''))
+    except ValueError:
+        nota = None
+
+    erros = []
+    if nota is None or not 1 <= nota <= 5:
+        erros.append('A nota deve ser um número de 1 a 5.')
+    if len(comentario) > 1000:
+        erros.append('O comentário deve ter no máximo 1000 caracteres.')
+
+    if erros:
+        for erro in erros:
+            messages.error(request, erro)
+        return _voltar(request)
+
+    # update_or_create: se este usuário já avaliou este alvo, atualiza;
+    # se não, cria. Assim cada pessoa tem no máximo 1 avaliação por alvo.
+    Avaliacao.objects.update_or_create(
+        id_usuario=usuario,
+        **{campo: alvo},
+        defaults={'nota': nota, 'comentario': comentario or None},
+    )
+
+    messages.success(request, 'Avaliação salva com sucesso!')
+    return _voltar(request)
