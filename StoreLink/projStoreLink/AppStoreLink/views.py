@@ -78,7 +78,7 @@ def perfil_loja(request):
 
         Loja.objects.create(nome=nome, endereco=endereco, email_loja=email)
 
-    # TODO: trocar pela loja do usuário logado quando existir o vínculo Usuario↔Loja
+    # TODO: trocar pela loja do usuário logado quando existir o vínculo Usuario↔Loja 
     loja = Loja.objects.first()
 
     return render(request, 'AppStoreLink/perfil-loja.html', {'loja': loja})
