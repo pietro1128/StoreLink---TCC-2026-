@@ -64,4 +64,6 @@ urlpatterns = [
     path('servico/<int:id_servico>/excluir/', views.servico_excluir, name='servico-excluir'),
 
     path('loja/<int:id_loja>/favoritar/', views.favoritar_loja, name='favoritar-loja'),
+
+    path('loja/<int:id_loja>/excluir/', views.loja_excluir, name='loja-excluir'),
 ]

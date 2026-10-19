@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.db.models import Q
@@ -77,13 +78,10 @@ def perfil_loja(request):
 
         Loja.objects.create(nome=nome, endereco=endereco, email_loja=email)
 
-    loja = Loja.objects.all()# -> '???.objects.all()': Busca todos os registros salvos no banco sobre a tabela argumentada
-    usuario = Usuario.objects.all()
-    endereco = Endereco.objects.all()
-    produto = Produto.objects.all()
-    servico = Servico.objects.all()
+    # TODO: trocar pela loja do usuário logado quando existir o vínculo Usuario↔Loja
+    loja = Loja.objects.first()
 
-    return render(request, 'AppStoreLink/perfil-loja.html')
+    return render(request, 'AppStoreLink/perfil-loja.html', {'loja': loja})
 
 
 def perfil_consumidor(request):
@@ -589,3 +587,24 @@ def favoritar_loja(request, id_loja):
         favorita.delete() # -> remove o favorito quando apertar no botao de uma loja ja favoritada
         #           L> '.delete()': deleta o registro do banco
     return redirect(request.META.get('HTTP_REFERER', 'perfil-consumidor')) # -> redireciona para a pagina que veio, caso contrario ele redireciona para 'perfil-consumidor'
+
+@require_POST
+def loja_excluir(request, id_loja):
+    loja = get_object_or_404(Loja, id_loja=id_loja)
+
+    # TODO: quando existir o vínculo Usuario↔Loja, conferir aqui se o usuário
+    # logado é o dono da loja antes de permitir a exclusão.
+
+    nome = loja.nome_loja
+    endereco = loja.id_endereco
+
+    # atomic: ou apaga tudo, ou não apaga nada (se der erro no meio, desfaz)
+    with transaction.atomic():
+        loja.delete()  # CASCADE apaga produtos, serviços e favoritos da loja
+
+        # Limpa o endereço órfão, mas só se nenhuma outra loja usar o mesmo
+        if not Loja.objects.filter(id_endereco=endereco).exists():
+            endereco.delete()
+
+    messages.success(request, f'A loja "{nome}" foi excluída.')
+    return redirect('index')

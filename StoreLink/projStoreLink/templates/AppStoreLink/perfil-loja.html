@@ -385,10 +385,16 @@
             Salvar Loja
           </button>
 
-
-          <button class="perfil-delete-btn">
-            Excluir Loja
-          </button>
+          {% if loja %}
+            <form
+              method="POST"
+              action="{% url 'loja-excluir' loja.id_loja %}"
+              onsubmit="return confirm('Excluir a loja {{ loja.nome_loja|escapejs }}? Todos os produtos e serviços dela também serão apagados. Essa ação não pode ser desfeita.');"
+            >
+              {% csrf_token %}
+              <button type="submit" class="perfil-delete-btn">Excluir loja</button>
+            </form>
+          {% endif %}
 
         </div>
 
