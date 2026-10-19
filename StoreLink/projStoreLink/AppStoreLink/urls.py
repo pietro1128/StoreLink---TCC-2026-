@@ -70,4 +70,25 @@ urlpatterns = [
     path('avaliar/loja/<int:id_alvo>/', views.avaliacao_criar, {'tipo': 'loja'}, name='avaliar-loja'),
     path('avaliar/produto/<int:id_alvo>/', views.avaliacao_criar, {'tipo': 'produto'}, name='avaliar-produto'),
     path('avaliar/servico/<int:id_alvo>/', views.avaliacao_criar, {'tipo': 'servico'}, name='avaliar-servico'),
+    # region PÁGINAS DE INFORMAÇÕES
+
+    path(
+        'loja/<int:id_loja>/',
+        views.InformacoesLoja,
+        name='InformacoesLoja'
+    ),
+
+    path(
+        'loja/<int:id_loja>/produtos/',
+        views.InformacoesProduto,
+        name='InformacoesProduto'
+    ),
+
+    path(
+        'loja/<int:id_loja>/servicos/',
+        views.InformacoesServico,
+        name='InformacoesServico'
+    ),
+
+    # endregion
 ]

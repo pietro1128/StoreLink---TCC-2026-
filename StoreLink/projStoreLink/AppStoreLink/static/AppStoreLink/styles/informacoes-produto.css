@@ -1,0 +1,393 @@
+.topbar .nav-btn {
+  text-decoration: none;
+}
+
+
+.info-produto-page {
+  --cor-categoria: #cfcfcf;
+
+  min-height:
+    calc(100vh - 58px);
+
+  padding:
+    30px 34px 55px;
+
+  background:
+    var(--bg-page);
+
+  color:
+    var(--text-color);
+}
+
+
+.info-alimentos {
+  --cor-categoria: #e8534f;
+}
+
+.info-moda {
+  --cor-categoria: #7a5c50;
+}
+
+.info-esportes {
+  --cor-categoria: #f5943a;
+}
+
+.info-construcao {
+  --cor-categoria: #f6c344;
+}
+
+.info-saude {
+  --cor-categoria: #35b5ea;
+}
+
+.info-pets {
+  --cor-categoria: #21c9c9;
+}
+
+.info-ambiente {
+  --cor-categoria: #7fcf85;
+}
+
+.info-tecnologia {
+  --cor-categoria: #7c5cf0;
+}
+
+.info-beleza {
+  --cor-categoria: #f06ec0;
+}
+
+.info-outros {
+  --cor-categoria: #cfcfcf;
+}
+
+
+.info-lista-topo {
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  margin-bottom: 24px;
+}
+
+
+.info-voltar {
+  width: 46px;
+  height: 46px;
+
+  border:
+    4px solid
+    var(--cor-categoria);
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color:
+    var(--cor-categoria);
+
+  text-decoration: none;
+
+  font-size: 26px;
+
+  font-weight: 900;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+
+.info-voltar:hover {
+  transform:
+    translateX(-3px);
+
+  background:
+    var(--cor-categoria);
+
+  color:
+    #ffffff;
+}
+
+
+.info-lista-topo h1 {
+  margin: 0;
+
+  color:
+    var(--cor-categoria);
+
+  font-size: 26px;
+
+  font-weight: 900;
+}
+
+
+.info-lista-topo p {
+  margin:
+    3px 0 0;
+
+  color:
+    var(--hint-color);
+
+  font-size: 13px;
+}
+
+
+.info-produto-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(290px, 1fr)
+    );
+
+  gap: 28px;
+}
+
+
+.info-produto-card {
+  border:
+    12px solid
+    var(--cor-categoria);
+
+  border-radius: 24px;
+
+  overflow: hidden;
+
+  background:
+    var(--cor-categoria);
+
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+
+.info-produto-card:hover {
+  transform:
+    translateY(-5px);
+
+  box-shadow:
+    0 10px 22px
+    rgba(0, 0, 0, 0.14);
+}
+
+
+.info-produto-imagem {
+  height: 180px;
+
+  overflow: hidden;
+
+  border-radius: 12px;
+
+  background:
+    #d7d7d7;
+}
+
+
+.info-produto-imagem img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  transition:
+    transform 0.3s ease;
+}
+
+
+.info-produto-card:hover
+.info-produto-imagem img {
+  transform:
+    scale(1.03);
+}
+
+
+.info-sem-imagem {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color:
+    #666666;
+
+  font-size: 14px;
+
+  font-weight: 700;
+}
+
+
+.info-produto-corpo {
+  min-height: 235px;
+
+  margin-top: 10px;
+
+  padding: 16px;
+
+  border-radius: 12px;
+
+  background:
+    #ffffff;
+
+  color:
+    #222222;
+}
+
+
+.info-label {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color:
+    var(--cor-categoria);
+
+  font-size: 13px;
+
+  font-weight: 800;
+}
+
+
+.info-produto-corpo h2 {
+  margin:
+    0 0 14px;
+
+  font-size: 19px;
+
+  color:
+    #111111;
+}
+
+
+.info-preco {
+  display: block;
+
+  margin-bottom: 14px;
+
+  font-size: 18px;
+
+  color:
+    #111111;
+}
+
+
+.info-produto-corpo p {
+  margin: 0;
+
+  color:
+    #555555;
+
+  line-height: 1.45;
+}
+
+
+.info-vazio {
+  max-width: 520px;
+
+  padding: 24px;
+
+  border-radius: 15px;
+
+  background:
+    #ededed;
+}
+
+
+.info-vazio h2 {
+  margin:
+    0 0 6px;
+
+  color:
+    #222222;
+
+  font-size: 20px;
+}
+
+
+.info-vazio p {
+  margin: 0;
+
+  color:
+    #666666;
+}
+
+
+body.dark
+.info-produto-corpo {
+  background:
+    #1f1f1f;
+}
+
+
+body.dark
+.info-produto-corpo h2,
+body.dark
+.info-preco {
+  color:
+    #ffffff;
+}
+
+
+body.dark
+.info-produto-corpo p {
+  color:
+    #d0d0d0;
+}
+
+
+body.dark
+.info-produto-imagem {
+  background:
+    #2a2a2a;
+}
+
+
+body.dark
+.info-vazio {
+  background:
+    #1f1f1f;
+}
+
+
+body.dark
+.info-vazio h2 {
+  color:
+    #ffffff;
+}
+
+
+body.dark
+.info-vazio p {
+  color:
+    #b8b8b8;
+}
+
+
+@media (
+  max-width: 650px
+) {
+
+  .info-produto-page {
+    padding:
+      22px 18px 45px;
+  }
+
+
+  .info-produto-grid {
+    grid-template-columns:
+      1fr;
+  }
+
+}

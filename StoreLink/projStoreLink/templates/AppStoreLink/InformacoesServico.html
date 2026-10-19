@@ -1,0 +1,346 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    StoreLink - Serviços de {{ loja.nome_loja }}
+  </title>
+
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="{% static 'AppStoreLink/images/icon-dark.png' %}"
+  >
+
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/style.css' %}"
+  >
+
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/informacoes-servico.css' %}"
+  >
+
+</head>
+
+
+<body>
+
+
+  <script>
+
+    if (
+      localStorage.getItem('theme') === 'dark'
+    ) {
+
+      document.body.classList.add(
+        'dark'
+      );
+
+    }
+
+  </script>
+
+
+
+  <!-- #region TOPBAR -->
+
+  <div class="topbar">
+
+
+    <div class="logo-icon">
+
+      <img
+        src="{% static 'AppStoreLink/images/icon-dark.png' %}"
+        alt="StoreLink"
+      >
+
+    </div>
+
+
+    <a
+      class="nav-btn active"
+      href="{% url 'index' %}"
+    >
+      Início
+    </a>
+
+
+    <a
+      class="nav-btn"
+      href="{% url 'perfil-loja' %}"
+    >
+      Sua loja
+    </a>
+
+
+    <a
+      class="nav-btn"
+      href="{% url 'suporte' %}"
+    >
+      Suporte
+    </a>
+
+
+    <a
+      class="nav-btn"
+      onclick="setActiveNav(this)"
+    >
+      Como navegar?
+    </a>
+
+
+    {% if request.user.is_authenticated %}
+
+      <button
+        class="nav-account-btn"
+        data-url="{% url 'perfil-consumidor' %}"
+        onclick="location.href=this.dataset.url"
+      >
+        👤 Minha conta
+      </button>
+
+    {% else %}
+
+      <button
+        class="nav-account-btn"
+        data-url="{% url 'cadastro' %}"
+        onclick="location.href=this.dataset.url"
+      >
+        Criar conta ou Entrar
+      </button>
+
+    {% endif %}
+
+
+    <button
+      class="theme-toggle"
+      onclick="toggleTheme(this)"
+    >
+      🌙 Modo escuro
+    </button>
+
+
+  </div>
+
+  <!-- #endregion -->
+
+
+
+  <main
+    class="
+      info-servico-page
+
+      {% if loja.id_categoria.tipo_categoria == 'Alimentos' %}
+        info-alimentos
+
+      {% elif loja.id_categoria.tipo_categoria == 'Moda' %}
+        info-moda
+
+      {% elif loja.id_categoria.tipo_categoria == 'Esportes' %}
+        info-esportes
+
+      {% elif loja.id_categoria.tipo_categoria == 'Construção' %}
+        info-construcao
+
+      {% elif loja.id_categoria.tipo_categoria == 'Saúde' %}
+        info-saude
+
+      {% elif loja.id_categoria.tipo_categoria == 'Pets' %}
+        info-pets
+
+      {% elif loja.id_categoria.tipo_categoria == 'Ambiente' %}
+        info-ambiente
+
+      {% elif loja.id_categoria.tipo_categoria == 'Tecnologia' %}
+        info-tecnologia
+
+      {% elif loja.id_categoria.tipo_categoria == 'Beleza' %}
+        info-beleza
+
+      {% else %}
+        info-outros
+
+      {% endif %}
+    "
+  >
+
+
+    <div class="info-lista-topo">
+
+
+      <a
+        class="info-voltar"
+        href="{% url 'InformacoesLoja' loja.id_loja %}"
+        aria-label="Voltar"
+      >
+        ←
+      </a>
+
+
+      <div>
+
+        <h1>
+          SERVIÇOS
+        </h1>
+
+        <p>
+          {{ loja.nome_loja }}
+        </p>
+
+      </div>
+
+
+    </div>
+
+
+
+    {% if servicos %}
+
+
+      <div class="info-servico-grid">
+
+
+        {% for servico in servicos %}
+
+
+          <article class="info-servico-card">
+
+
+            <div class="info-servico-imagem">
+
+
+              {% if servico.foto %}
+
+                <img
+                  src="{{ servico.foto }}"
+                  alt="{{ servico.nome_servico }}"
+                  onerror="
+                    this.style.display='none';
+                    this.nextElementSibling.style.display='flex';
+                  "
+                >
+
+
+                <div
+                  class="info-sem-imagem"
+                  style="display: none;"
+                >
+                  Sem imagem cadastrada
+                </div>
+
+              {% else %}
+
+                <div class="info-sem-imagem">
+                  Sem imagem cadastrada
+                </div>
+
+              {% endif %}
+
+
+            </div>
+
+
+
+            <div class="info-servico-corpo">
+
+
+              <span class="info-label">
+                Nome do serviço:
+              </span>
+
+
+              <h2>
+                {{ servico.nome_servico }}
+              </h2>
+
+
+
+              <span class="info-label">
+                Preço do serviço:
+              </span>
+
+
+              <strong class="info-preco">
+                R$ {{ servico.preco }}
+              </strong>
+
+
+
+              <span class="info-label">
+                Descrição do serviço:
+              </span>
+
+
+              <p>
+
+                {% if servico.descricao %}
+
+                  {{ servico.descricao }}
+
+                {% else %}
+
+                  Sem descrição.
+
+                {% endif %}
+
+              </p>
+
+
+            </div>
+
+
+          </article>
+
+
+        {% endfor %}
+
+
+      </div>
+
+
+    {% else %}
+
+
+      <div class="info-vazio">
+
+        <h2>
+          Nenhum serviço cadastrado
+        </h2>
+
+        <p>
+          Esta loja ainda não possui serviços cadastrados.
+        </p>
+
+      </div>
+
+
+    {% endif %}
+
+
+  </main>
+
+
+
+  <script
+    src="{% static 'AppStoreLink/scripts/index.js' %}"
+  ></script>
+
+
+</body>
+
+</html>
