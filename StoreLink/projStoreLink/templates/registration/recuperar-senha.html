@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StoreLink - Recuperar Senha</title>
+<link rel="icon" type="image/png" href="{% static 'AppStoreLink/images/icon-dark.png' %}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'AppStoreLink/styles/recuperar-senha.css' %}">
+<link rel="stylesheet" href="{% static 'AppStoreLink/styles/mensagens.css' %}">
+
+</head>
+
+<!-- #region modo escuro -->
+<body>
+
+  <button class="theme-toggle" onclick="toggleTheme(this)">🌙 Modo escuro</button>
+  <a class="recuperar-page-icon" href="{% url 'index' %}" aria-label="Voltar para a tela inicial">
+    <img class="icon-light" src="{% static 'AppStoreLink/images/icon.png' %}" alt="StoreLink">
+    <img class="icon-dark" src="{% static 'AppStoreLink/images/icon-dark.png' %}" alt="StoreLink">
+  </a>
+
+  <!-- #endregion -->
+
+<!-- #region mensagens -->
+  {% if messages %}
+    <div class="messages-container">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+  <!-- #endregion -->
+
+<!-- #region recuperar senha -->
+  <div class="recuperar-wrapper">
+
+    <div class="recuperar-card">
+      <h2>Recuperar senha</h2>
+      <p class="recuperar-subtitle">Insira suas informações para realizar a alteração da senha</p>
+
+      <form class="recuperar-form" method="post" action="">
+        {% csrf_token %}
+
+        <label class="recuperar-field">
+          <img class="field-icon-light" src="{% static 'AppStoreLink/images/e-mail.png' %}" alt=""><img class="field-icon-dark" src="{% static 'AppStoreLink/images/e-mail-dark.png' %}" alt="">
+          <input type="email" name="email" placeholder="E-mail" required>
+        </label>
+
+        <label class="recuperar-field">
+          <img class="field-icon-light" src="{% static 'AppStoreLink/images/bloqueado.png' %}" alt=""><img class="field-icon-dark" src="{% static 'AppStoreLink/images/bloqueado-dark.png' %}" alt="">
+          <input type="password" name="nova_senha" placeholder="Nova Senha" required>
+        </label>
+
+        <label class="recuperar-field">
+          <img class="field-icon-light" src="{% static 'AppStoreLink/images/bloqueado.png' %}" alt=""><img class="field-icon-dark" src="{% static 'AppStoreLink/images/bloqueado-dark.png' %}" alt="">
+          <input type="password" name="confirmar_senha" placeholder="Confirmar Nova Senha" required>
+        </label>
+
+        <button type="submit" class="recuperar-submit-btn">SALVAR</button>
+
+        <div class="recuperar-signup">
+          Não tem uma conta ? <a href="{% url 'cadastro' %}">Cadastre-se</a>
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+  <!-- #endregion -->
+
+<!-- #region modo escuro js -->
+  <script>
+    function toggleTheme(btn) {
+      document.body.classList.toggle('dark');
+      if (document.body.classList.contains('dark')) {
+        btn.textContent = '☀️ Modo claro';
+      } else {
+        btn.textContent = '🌙 Modo escuro';
+      }
+    }
+  </script>
+
+<!-- #endregion -->
+
+</body>
+</html>

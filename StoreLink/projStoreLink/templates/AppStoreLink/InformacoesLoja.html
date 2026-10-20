@@ -29,7 +29,6 @@
     href="{% static 'AppStoreLink/styles/style.css' %}"
   >
 
-
   <link
     rel="stylesheet"
     href="{% static 'AppStoreLink/styles/informacoes-loja.css' %}"
@@ -252,7 +251,6 @@
 
             </form>
 
-
           </div>
 
 
@@ -285,7 +283,6 @@
 
 
         <div class="info-loja-dados">
-
 
           <h2>
             NOME
@@ -505,9 +502,39 @@
                   </strong>
 
 
-                  <span>
-                    Nota: {{ avaliacao.nota }}/5
-                  </span>
+                  <div class="info-nota-estrelas">
+
+                    {% if avaliacao.nota >= 1 %}
+                      ★
+                    {% else %}
+                      ☆
+                    {% endif %}
+
+                    {% if avaliacao.nota >= 2 %}
+                      ★
+                    {% else %}
+                      ☆
+                    {% endif %}
+
+                    {% if avaliacao.nota >= 3 %}
+                      ★
+                    {% else %}
+                      ☆
+                    {% endif %}
+
+                    {% if avaliacao.nota >= 4 %}
+                      ★
+                    {% else %}
+                      ☆
+                    {% endif %}
+
+                    {% if avaliacao.nota >= 5 %}
+                      ★
+                    {% else %}
+                      ☆
+                    {% endif %}
+
+                  </div>
 
                 </div>
 
@@ -515,9 +542,161 @@
               </div>
 
 
+
               <p>
                 {{ avaliacao.comentario }}
               </p>
+
+
+
+              {% if request.session.usuario_id == avaliacao.id_usuario_id %}
+
+                <div class="info-comentario-acoes">
+
+
+                  <button
+                    type="button"
+                    class="info-comentario-editar"
+                    onclick="abrirEdicao(this)"
+                  >
+                    Editar
+                  </button>
+
+
+                  <button
+                    type="button"
+                    class="info-comentario-excluir"
+                    onclick="confirmarExclusao()"
+                  >
+                    Excluir
+                  </button>
+
+
+                </div>
+
+
+
+                <div class="info-comentario-edicao">
+
+
+                  <label>
+                    Nota
+                  </label>
+
+
+                  <div class="info-estrelas info-estrelas-edicao">
+
+
+                    <input
+                      type="radio"
+                      id="edit-{{ avaliacao.pk }}-5"
+                      name="nota-{{ avaliacao.pk }}"
+                      value="5"
+                      {% if avaliacao.nota == 5 %}checked{% endif %}
+                    >
+
+                    <label for="edit-{{ avaliacao.pk }}-5">
+                      ★
+                    </label>
+
+
+
+                    <input
+                      type="radio"
+                      id="edit-{{ avaliacao.pk }}-4"
+                      name="nota-{{ avaliacao.pk }}"
+                      value="4"
+                      {% if avaliacao.nota == 4 %}checked{% endif %}
+                    >
+
+                    <label for="edit-{{ avaliacao.pk }}-4">
+                      ★
+                    </label>
+
+
+
+                    <input
+                      type="radio"
+                      id="edit-{{ avaliacao.pk }}-3"
+                      name="nota-{{ avaliacao.pk }}"
+                      value="3"
+                      {% if avaliacao.nota == 3 %}checked{% endif %}
+                    >
+
+                    <label for="edit-{{ avaliacao.pk }}-3">
+                      ★
+                    </label>
+
+
+
+                    <input
+                      type="radio"
+                      id="edit-{{ avaliacao.pk }}-2"
+                      name="nota-{{ avaliacao.pk }}"
+                      value="2"
+                      {% if avaliacao.nota == 2 %}checked{% endif %}
+                    >
+
+                    <label for="edit-{{ avaliacao.pk }}-2">
+                      ★
+                    </label>
+
+
+
+                    <input
+                      type="radio"
+                      id="edit-{{ avaliacao.pk }}-1"
+                      name="nota-{{ avaliacao.pk }}"
+                      value="1"
+                      {% if avaliacao.nota == 1 %}checked{% endif %}
+                    >
+
+                    <label for="edit-{{ avaliacao.pk }}-1">
+                      ★
+                    </label>
+
+
+                  </div>
+
+
+
+                  <label>
+                    Comentário
+                  </label>
+
+
+                  <textarea
+                    maxlength="1000"
+                  >{{ avaliacao.comentario|default:'' }}</textarea>
+
+
+
+                  <div class="info-edicao-acoes">
+
+
+                    <button
+                      type="button"
+                      class="info-edicao-salvar"
+                    >
+                      Salvar
+                    </button>
+
+
+                    <button
+                      type="button"
+                      class="info-edicao-cancelar"
+                      onclick="fecharEdicao(this)"
+                    >
+                      Cancelar
+                    </button>
+
+
+                  </div>
+
+
+                </div>
+
+              {% endif %}
 
 
             </article>
@@ -540,6 +719,116 @@
         </div>
 
 
+
+        <form
+          method="POST"
+          action="{% url 'avaliar-loja' loja.id_loja %}"
+          class="info-comentario-form"
+        >
+
+
+          {% csrf_token %}
+
+
+          <label>
+            Nota
+          </label>
+
+
+          <div class="info-estrelas">
+
+
+            <input
+              type="radio"
+              id="estrela5"
+              name="nota"
+              value="5"
+              required
+            >
+
+            <label for="estrela5">
+              ★
+            </label>
+
+
+
+            <input
+              type="radio"
+              id="estrela4"
+              name="nota"
+              value="4"
+            >
+
+            <label for="estrela4">
+              ★
+            </label>
+
+
+
+            <input
+              type="radio"
+              id="estrela3"
+              name="nota"
+              value="3"
+            >
+
+            <label for="estrela3">
+              ★
+            </label>
+
+
+
+            <input
+              type="radio"
+              id="estrela2"
+              name="nota"
+              value="2"
+            >
+
+            <label for="estrela2">
+              ★
+            </label>
+
+
+
+            <input
+              type="radio"
+              id="estrela1"
+              name="nota"
+              value="1"
+            >
+
+            <label for="estrela1">
+              ★
+            </label>
+
+
+          </div>
+
+
+
+          <label for="comentario-loja">
+            Comentário
+          </label>
+
+
+          <textarea
+            id="comentario-loja"
+            name="comentario"
+            maxlength="1000"
+            placeholder="Escreva seu comentário..."
+          ></textarea>
+
+
+
+          <button type="submit">
+            ENVIAR COMENTÁRIO
+          </button>
+
+
+        </form>
+
+
       </aside>
 
       <!-- #endregion -->
@@ -557,6 +846,37 @@
   <script
     src="{% static 'AppStoreLink/scripts/index.js' %}"
   ></script>
+
+
+  <script>
+
+    function abrirEdicao(botao) {
+
+      botao
+        .closest('.info-comentario-card')
+        .classList.add('editando');
+
+    }
+
+
+    function fecharEdicao(botao) {
+
+      botao
+        .closest('.info-comentario-card')
+        .classList.remove('editando');
+
+    }
+
+
+    function confirmarExclusao() {
+
+      confirm(
+        'Deseja excluir este comentário?'
+      );
+
+    }
+
+  </script>
 
 
 </body>

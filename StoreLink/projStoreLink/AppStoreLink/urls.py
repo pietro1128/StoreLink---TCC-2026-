@@ -6,6 +6,7 @@ from AppStoreLink.views import (
     perfil_consumidor,
     cadastro,
     login,
+    recuperar_senha,
     CatAlimentos,
     CatModa,
     CatEsportes,
@@ -30,6 +31,7 @@ urlpatterns = [
 
     path('cadastro/', cadastro, name='cadastro'),
     path('login/', login, name='login'),
+    path('recuperar-senha/', recuperar_senha, name='recuperar-senha'),
 
     path('buscar/', views.buscar, name='buscar'),
 
