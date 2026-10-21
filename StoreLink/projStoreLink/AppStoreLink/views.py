@@ -37,8 +37,6 @@ def perfil_loja(request):
         rua = request.POST.get('rua')
         numero = request.POST.get('numero')
         cep = request.POST.get('cep')
-        endereco = Endereco.objects.create(rua=rua, numero=numero, cep=cep)
-        # guarda os valores das variaveis dentro da tabela 'Endereco' que esta guardada dentro da variavel 'endereco'
 
         email = request.POST.get('email_loja')
         telefone = request.POST.get('telefone_loja')
@@ -63,34 +61,53 @@ def perfil_loja(request):
         padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$'# -> Argumenta um padrão com characteres finais nos emails
         if not re.match(padrao_email, email): # -> Verifica se estão nos padões argumentados estao coecidindo com as variaveis 
             messages.error(request, 'O campo E-mail deve ser um Gmail válido (exemplo: email@gmail.com).')# -> cria uma mensagens
-            return render(request, 'templates/perfil-loja.html')
+            return render(request, 'AppStoreLink/perfil-loja.html')
 
-        if Loja.objects.filter(email=email).exists():# -> ???.objects.filter(???=???) --> busca valores por filtros argumentados
+        if Loja.objects.filter(email_loja=email).exists():# -> ???.objects.filter(???=???) --> busca valores por filtros argumentados
                                                      # -> .exists() --> verifica se ja existe 
             messages.error(request, 'Este e-mail já está cadastrado.')
-            return render(request, 'templates/perfil-loja.html')
+            return render(request, 'AppStoreLink/perfil-loja.html')
 
         # Validações de CNPJ:
         padrao_cnpj = r'^.{14,14}$'# ^.{??,??}$ -> diz que o texton precisa ter exatamente o numero de letras argumantadas
         if not re.match(padrao_cnpj, cnpj):
             messages.error(request, 'Este CNPJ deve conter exatamente 14 números.')
-            return render(request, 'templates/perfil-loja.html')
+            return render(request, 'AppStoreLink/perfil-loja.html')
 
         if Loja.objects.filter(cnpj=cnpj).exists():
             messages.error(request, 'Este CNPJ ja foi cadastrado.')
-            return render(request, 'templates/perfil-loja.html')
+            return render(request, 'AppStoreLink/perfil-loja.html')
 
         # Validações de Telefone para loja:
         padrao_telefone = r'^.{11,11}$'
         if not re.match(padrao_telefone, telefone):
             messages.error(request, 'Este número esta incorreto, ele deve ter exatamente 11 números.')
-            return render(request, 'templates/perfil-loja.html')
+            return render(request, 'AppStoreLink/perfil-loja.html')
 
-        if Loja.objects.filter(telefone=telefone).exists():
+        if Loja.objects.filter(telefone_loja=telefone).exists():
             messages.error(request, 'Este telefone ja foi cadastrado.')
-            return render(request, 'templates/perfil-loja.html')
+            return render(request, 'AppStoreLink/perfil-loja.html')
 
-        Loja.objects.create(nome=nome, endereco=endereco, email_loja=email)
+        # Depois de todas as validações, cria endereço e loja:
+        endereco = Endereco.objects.create(
+            rua=rua, 
+            numero_estabelecimento=numero, 
+            cep=cep
+        )
+        # guarda os valores das variaveis dentro da tabela 'Endereco' que esta guardada dentro da variavel 'endereco'
+
+        Loja.objects.create(
+            nome_loja=nome, 
+            id_endereco=endereco,
+            id_categoria=Categoria.objects.first(), # -> procura o primeiro registro do banco de 'categoria'
+            email_loja=email,
+            telefone_loja=telefone,
+            cnpj=cnpj,
+            link=link
+        )
+
+        messages.success(request, 'Sua loja foi cadastrada com sucesso!')
+        return redirect('perfil-loja')
 
     # TODO: trocar pela loja do usuário logado quando existir o vínculo Usuario↔Loja 
     loja = Loja.objects.first()
