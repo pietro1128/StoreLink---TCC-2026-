@@ -232,6 +232,29 @@ def login(request):
     return render(request, 'registration/login.html')
 
 def recuperar_senha(request):
+    if request.method == 'POST':
+        email = request.POST.get('email', '').strip()
+        nova_senha = request.POST.get('nova_senha', '')
+        confirmar_senha = request.POST.get('confirmar_senha', '')
+        
+        if nova_senha != confirmar_senha:
+            messages.error(request, 'As senhas não estão iguais nos dois campos.')
+            return render (request, 'registration/recuperar-senha.html')
+        
+        try:
+            usuario = Usuario.objects.get(email=email) # -> procura no banco quem é o usuario com o e-mail digitado
+        except Usuario.DoesNotExist: # -> Caso o e-mail não tenha correspondido como cadastrado
+            messages.error(request, 'Não encontramos um usuario cadastrado com este e-mail.')
+            return render(request, 'registration/recuperar-senha.html')
+        
+        usuario.senha = make_password(nova_senha) # -> Ele transforma a senha em um Hash e atribui ao valor 'senha' do banco
+        #                     L> 'make_password()': transforma uma string em um Hash
+        #                        'Hash': Transforma a string 'normal' em uma string 'criptografada'
+        usuario.save()
+        
+        messages.success(request, 'Senha alterada com sucesso!')
+        return redirect('login')
+            
     return render(request, 'registration/recuperar-senha.html')
 
 
@@ -715,7 +738,6 @@ def avaliacao_criar(request, tipo, id_alvo):
     return _voltar(request)
 # region PÁGINAS DE INFORMAÇÕES
 
-
 def InformacoesLoja(request, id_loja):
 
     loja = get_object_or_404(
@@ -725,7 +747,6 @@ def InformacoesLoja(request, id_loja):
         ),
         id_loja=id_loja
     )
-
 
     avaliacoes = Avaliacao.objects.filter(
         id_loja=loja
@@ -739,20 +760,16 @@ def InformacoesLoja(request, id_loja):
         '-id'
     )
 
-
     contexto = {
         'loja': loja,
         'avaliacoes': avaliacoes,
     }
-
 
     return render(
         request,
         'AppStoreLink/InformacoesLoja.html',
         contexto
     )
-
-
 
 def InformacoesProduto(request, id_loja):
 
@@ -763,7 +780,6 @@ def InformacoesProduto(request, id_loja):
         id_loja=id_loja
     )
 
-
     produtos = Produto.objects.filter(
         id_loja=loja
     ).select_related(
@@ -772,20 +788,16 @@ def InformacoesProduto(request, id_loja):
         'id_produto'
     )
 
-
     contexto = {
         'loja': loja,
         'produtos': produtos,
     }
-
 
     return render(
         request,
         'AppStoreLink/InformacoesProduto.html',
         contexto
     )
-
-
 
 def InformacoesServico(request, id_loja):
 
@@ -796,25 +808,21 @@ def InformacoesServico(request, id_loja):
         id_loja=id_loja
     )
 
-
     servicos = Servico.objects.filter(
         id_loja=loja
     ).order_by(
         'id_servico'
     )
 
-
     contexto = {
         'loja': loja,
         'servicos': servicos,
     }
-
 
     return render(
         request,
         'AppStoreLink/InformacoesServico.html',
         contexto
     )
-
 
 # endregion
