@@ -42,6 +42,7 @@ def perfil_loja(request):
         telefone = request.POST.get('telefone_loja')
         cnpj = request.POST.get('cnpj')
         link = request.POST.get('link_loja')
+        nome_categoria = request.POST.get('categoria', '').strip() # -> era nescessario que o codigo pegue esse valor para conseguir comparar mais a frente no codigo
         
         try:
             dados_cep = consultar_cep(cep)
@@ -88,6 +89,12 @@ def perfil_loja(request):
             messages.error(request, 'Este telefone ja foi cadastrado.')
             return render(request, 'AppStoreLink/perfil-loja.html')
 
+        # Validação de Categorias:
+        categoria = Categoria.objects.filter(tipo_categoria=nome_categoria).first() # -> Procura no banco o registro igual ao que ele recebeu
+        if categoria is None:
+            messages.error(request, 'Selecione uma categoria válida.')
+            return render(request, 'AppStoreLink/perfil-loja.html')
+
         # Depois de todas as validações, cria endereço e loja:
         endereco = Endereco.objects.create(
             rua=rua, 
@@ -99,7 +106,7 @@ def perfil_loja(request):
         Loja.objects.create(
             nome_loja=nome, 
             id_endereco=endereco,
-            id_categoria=Categoria.objects.first(), # -> procura o primeiro registro do banco de 'categoria'
+            id_categoria=categoria,
             email_loja=email,
             telefone_loja=telefone,
             cnpj=cnpj,

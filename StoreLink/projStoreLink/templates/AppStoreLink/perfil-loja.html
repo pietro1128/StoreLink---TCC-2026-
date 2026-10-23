@@ -439,6 +439,13 @@
               value="1"
             >
 
+            <input 
+              type="hidden" 
+              name="categoria" 
+              id="categoriaInput" 
+              value="Alimentos"
+            >
+
 
             <h3>
               Nome
@@ -872,30 +879,19 @@
       }
 
 
+      function applyClassification(name, bgColor, categoria) {
 
-      function applyClassification(
-        name,
-        bgColor
-      ) {
+        classifName.textContent = name;
 
-        classifName.textContent =
-          name;
+        // grava a categoria escolhida no campo escondido
+        document.getElementById('categoriaInput').value = categoria;
 
-
-        document.documentElement.style.setProperty(
-          '--brand-red',
-          bgColor
-        );
-
+        document.documentElement.style.setProperty('--brand-red', bgColor);
 
         document.documentElement.style.setProperty(
           '--brand-red-light',
-          lightenColor(
-            bgColor,
-            0.18
-          )
+          lightenColor(bgColor, 0.18)
         );
-
       }
 
 
@@ -963,7 +959,6 @@
 
               e.stopPropagation();
 
-
               if (name === 'Outros') {
 
                 var custom =
@@ -979,7 +974,8 @@
 
                   applyClassification(
                     custom.trim(),
-                    bgColor
+                    bgColor,
+                    'Outros'        // <- NOVO
                   );
 
                 }
@@ -988,7 +984,8 @@
 
                 applyClassification(
                   name,
-                  bgColor
+                  bgColor,
+                  name              // <- NOVO
                 );
 
               }
