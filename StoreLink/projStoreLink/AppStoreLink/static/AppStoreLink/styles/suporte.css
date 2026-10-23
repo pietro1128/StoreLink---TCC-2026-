@@ -1,7 +1,7 @@
 /* #region Container principal */
 
 .suporte-container {
-  min-height: calc(100vh - 58px);
+  min-height: calc(100vh - 64px);
 
   display: flex;
   flex-direction: column;
@@ -165,6 +165,32 @@ body.dark .suporte-email:hover {
     padding: 10px 14px;
   }
 
+}
+
+/* #endregion */
+
+/* #region AJUSTES DE PROPORÇÃO */
+
+.suporte-container {
+  padding: 36px 20px 55px;
+}
+
+.suporte-alerta {
+  width: 260px;
+}
+
+.suporte-titulo {
+  font-size: 40px;
+}
+
+.suporte-texto {
+  font-size: 30px;
+  margin-bottom: 44px;
+}
+
+.suporte-email {
+  font-size: 31px;
+  padding: 13px 18px;
 }
 
 /* #endregion */

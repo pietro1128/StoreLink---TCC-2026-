@@ -9,7 +9,7 @@
   --cor-categoria: #cfcfcf;
 
   min-height:
-    calc(100vh - 58px);
+    calc(100vh - 64px);
 
   padding:
     28px 34px 50px;
@@ -1012,6 +1012,74 @@ body.dark
     gap: 0;
   }
 
+}
+
+/* #endregion */
+
+/* #region AJUSTES DE PROPORÇÃO */
+
+.info-loja-page {
+  padding: 30px 38px 55px;
+}
+
+.info-voltar {
+  width: 50px;
+  height: 50px;
+  font-size: 29px;
+}
+
+.info-loja-layout {
+  grid-template-columns: minmax(0, 2.35fr) minmax(360px, 0.9fr);
+  gap: 26px;
+}
+
+.info-loja-card {
+  grid-template-columns: 390px minmax(0, 1fr);
+  padding: 18px;
+  gap: 20px;
+}
+
+.info-loja-foto {
+  height: 240px;
+}
+
+.info-acesso-btn {
+  min-height: 72px;
+  font-size: 23px;
+}
+
+.info-loja-dados {
+  padding: 25px 28px;
+}
+
+.info-loja-dados h2 {
+  font-size: 17px;
+}
+
+.info-campo strong,
+.info-classificacao strong {
+  font-size: 14px;
+}
+
+.info-campo span,
+.info-campo a {
+  font-size: 16px;
+}
+
+.info-comentarios h2 {
+  font-size: 27px;
+}
+
+.info-comentario-card p,
+.info-comentarios-vazio,
+.info-comentario-form textarea {
+  font-size: 15px;
+}
+
+@media (max-width: 1200px) {
+  .info-loja-layout {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* #endregion */

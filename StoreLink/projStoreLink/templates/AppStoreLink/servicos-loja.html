@@ -91,7 +91,7 @@
     </a>
 
 
-    {% if request.user.is_authenticated %}
+    {% if usuario_logado %}
 
       <button
         type="button"
@@ -131,20 +131,14 @@
 
 
 
-  <!-- #region PÁGINA -->
-
   <main class="servico-page">
 
-
-    <!-- #region PERFIL LATERAL -->
 
     <aside class="servico-perfil">
 
 
       <div class="servico-badge">
-
         Estabelecimento
-
       </div>
 
 
@@ -209,9 +203,7 @@
           for="foto-responsavel-servico"
           title="Adicionar foto"
         >
-
           📷
-
         </label>
 
 
@@ -271,16 +263,10 @@
 
     </aside>
 
-    <!-- #endregion -->
 
-
-
-    <!-- #region CONTEÚDO -->
 
     <section class="servico-conteudo">
 
-
-      <!-- #region CABEÇALHO -->
 
       <div class="servico-topo">
 
@@ -291,9 +277,7 @@
           aria-label="Voltar"
           title="Voltar"
         >
-
           ←
-
         </a>
 
 
@@ -302,9 +286,7 @@
 
 
           <p class="servico-editar-texto">
-
             Editar fotos e informações dos serviços
-
           </p>
 
 
@@ -313,16 +295,12 @@
 
 
             <h1>
-
               SERVIÇOS
-
             </h1>
 
 
             <div class="servico-dinheiro">
-
               $
-
             </div>
 
 
@@ -334,9 +312,7 @@
 
       </div>
 
-      <!-- #endregion -->
 
-      {# Mensagens de sucesso e erro #}
       {% if messages %}
         <div class="messages-container">
           {% for message in messages %}
@@ -345,7 +321,6 @@
         </div>
       {% endif %}
 
-      <!-- #region CARDS -->
 
       <div
         class="servico-cards-scroll"
@@ -358,8 +333,6 @@
 
           <div class="servico-card">
 
-
-            <!-- #region EXCLUIR -->
 
             <form
               method="POST"
@@ -376,18 +349,12 @@
                 aria-label="Excluir serviço"
                 title="Excluir serviço"
               >
-
                 ✕
-
               </button>
 
             </form>
 
-            <!-- #endregion -->
 
-            
-
-            <!-- #region IMAGEM -->
 
             <div class="servico-imagem">
 
@@ -416,9 +383,7 @@
                   aria-label="Trocar imagem"
                   title="Trocar imagem"
                 >
-
                   ✎
-
                 </button>
 
 
@@ -429,9 +394,7 @@
                   type="button"
                   class="servico-botao-imagem"
                 >
-
                   📷 Adicionar imagem
-
                 </button>
 
 
@@ -447,9 +410,7 @@
                   aria-label="Trocar imagem"
                   title="Trocar imagem"
                 >
-
                   ✎
-
                 </button>
 
 
@@ -458,11 +419,7 @@
 
             </div>
 
-            <!-- #endregion -->
 
-
-
-            <!-- #region INFORMAÇÕES -->
 
             <div class="servico-card-conteudo">
 
@@ -473,9 +430,7 @@
                 aria-label="Editar informações"
                 title="Editar informações"
               >
-
                 ✎
-
               </button>
 
 
@@ -483,12 +438,13 @@
                    Corrigi os value (servico.xxx em vez de request.AppStoreLink_servico.xxx)
                    e o textarea ganhou name="descricao".
                    Ele NÃO deve criar nada: a criação fica no card "Novo serviço" lá embaixo. -->
+
               <form method="POST">
+
                 {% csrf_token %}
+
                 <label>
-
                   Nome do serviço:
-
                 </label>
 
 
@@ -502,9 +458,7 @@
 
 
                 <label>
-
                   Preço do serviço:
-
                 </label>
 
 
@@ -518,9 +472,7 @@
 
 
                 <label>
-
                   Descrição do serviço:
-
                 </label>
 
 
@@ -528,12 +480,11 @@
                   name="descricao"
                   placeholder="Descrição do serviço..."
                 >{{ servico.descricao|default:'' }}</textarea>
+
               </form>
 
 
             </div>
-
-            <!-- #endregion -->
 
 
           </div>
@@ -543,16 +494,16 @@
 
 
 
-        <!-- #region NOVO SERVIÇO (FORMULÁRIO DE CADASTRO) -->
-
         <!-- NOVO: este card fica FORA do FOR, então aparece sempre,
              mesmo quando ainda não existe nenhum serviço no banco.
              É o único form que cria um serviço novo (POST -> view servicos_loja). -->
+
         <div class="servico-card">
 
           <div class="servico-card-conteudo">
 
             <form method="POST">
+
               {% csrf_token %}
 
               <label>
@@ -599,11 +550,7 @@
 
         </div>
 
-        <!-- #endregion -->
 
-
-
-        <!-- #region ADICIONAR SERVIÇO -->
 
         <div
           class="servico-criar-card"
@@ -618,54 +565,36 @@
             aria-label="Adicionar serviço"
             title="Adicionar serviço"
           >
-
             +
-
           </button>
 
 
           <h2>
-
             Adicionar serviço
-
           </h2>
 
 
           <p>
-
             Clique no + para cadastrar outro serviço.
-
           </p>
 
 
         </div>
 
-        <!-- #endregion -->
-
 
       </div>
-
-      <!-- #endregion -->
 
 
     </section>
 
-    <!-- #endregion -->
-
 
   </main>
 
-  <!-- #endregion -->
 
-
-
-  <!-- #region JAVASCRIPT -->
 
   <script
     src="{% static 'AppStoreLink/scripts/index.js' %}"
   ></script>
-
-  <!-- #endregion -->
 
 
 </body>

@@ -80,7 +80,7 @@
     </a>
 
 
-    {% if request.user.is_authenticated %}
+    {% if usuario_logado %}
 
       <button
         class="nav-account-btn"
@@ -211,11 +211,8 @@
   <main class="suporte-container">
 
 
-    <!-- IMAGEM DE ALERTA -->
-
     <div class="suporte-imagens">
 
-      <!-- MODO CLARO -->
 
       <img
         class="suporte-alerta suporte-alerta-light"
@@ -224,25 +221,20 @@
       >
 
 
-      <!-- MODO ESCURO -->
-
       <img
         class="suporte-alerta suporte-alerta-dark"
         src="{% static 'AppStoreLink/images/suporte alerta modo escuro.png' %}"
         alt="Símbolo de alerta"
       >
 
+
     </div>
 
-
-    <!-- TÍTULO -->
 
     <h1 class="suporte-titulo">
       Está com <span>problemas?</span>
     </h1>
 
-
-    <!-- TEXTO -->
 
     <p class="suporte-texto">
 
@@ -254,8 +246,6 @@
 
     </p>
 
-
-    <!-- EMAIL -->
 
     <a
       class="suporte-email"

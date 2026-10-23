@@ -73,7 +73,7 @@
 
 
     <a
-      class="nav-btn active"
+      class="nav-btn"
       href="{% url 'index' %}"
     >
       Início
@@ -104,7 +104,7 @@
     </a>
 
 
-    {% if request.user.is_authenticated %}
+    {% if usuario_logado %}
 
       <button
         class="nav-account-btn"

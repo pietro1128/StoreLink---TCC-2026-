@@ -47,7 +47,7 @@ body {
   display: flex;
   align-items: center;
 
-  height: 58px;
+  height: 64px;
 
   padding: 10px 20px;
 
@@ -213,7 +213,7 @@ body {
   position: fixed;
 
   top: calc(
-    58px + (100vh - 58px) / 2
+    64px + (100vh - 64px) / 2
   );
 
   left: 0;
@@ -347,7 +347,7 @@ body.dark .sidebar {
 .acesso-loja {
   position: fixed;
 
-  top: 58px;
+  top: 64px;
 
   left: 0;
   right: 0;
@@ -1267,6 +1267,89 @@ body.dark .nav-account-btn {
     font-size: 16px;
   }
 
+}
+
+/* #endregion */
+
+/* #region AJUSTES DE PROPORÇÃO */
+
+.topbar {
+  height: 64px;
+  padding: 9px 20px;
+  gap: 12px;
+}
+
+.logo-icon {
+  width: 42px;
+  height: 42px;
+}
+
+.nav-btn {
+  font-size: 16px;
+  padding: 10px 16px;
+  text-decoration: none;
+}
+
+.nav-btn.active {
+  background: #fff;
+  color: #000;
+  transform: none;
+}
+
+.nav-btn.active::after {
+  display: none;
+}
+
+.nav-account-btn {
+  font-size: 15px;
+  padding: 9px 18px;
+}
+
+.theme-toggle {
+  font-size: 15px;
+  padding: 9px 15px;
+}
+
+.sidebar {
+  top: calc(64px + (100vh - 64px) / 2);
+}
+
+.acesso-loja {
+  top: 64px;
+}
+
+.page-perfil {
+  padding: 26px 30px 50px;
+}
+
+.perfil-wrapper {
+  max-width: 1560px;
+  gap: 22px;
+}
+
+.perfil-left {
+  width: 245px;
+}
+
+.perfil-card {
+  padding: 22px;
+  gap: 22px;
+}
+
+.perfil-card-left {
+  width: 260px;
+}
+
+.perfil-cover {
+  height: 180px;
+}
+
+.perfil-card-middle {
+  padding: 22px 25px;
+}
+
+.perfil-card-right {
+  width: 185px;
 }
 
 /* #endregion */

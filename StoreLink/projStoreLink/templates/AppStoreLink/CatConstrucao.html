@@ -27,12 +27,18 @@
 
 <body>
 
+  <!-- #region modo escuro -->
+
   <script>
     if (localStorage.getItem('theme') === 'dark') {
       document.body.classList.add('dark');
     }
   </script>
 
+  <!-- #endregion -->
+
+
+  <!-- #region navbar -->
 
   <div class="topbar">
 
@@ -40,25 +46,17 @@
       <img src="{% static 'AppStoreLink/images/icon-dark.png' %}" alt="StoreLink">
     </div>
 
-    <a class="nav-btn active" href="{% url 'index' %}">Início</a>
+    <a class="nav-btn" href="{% url 'index' %}">Início</a>
     <a class="nav-btn" href="{% url 'perfil-loja' %}">Sua loja</a>
     <a class="nav-btn" href="{% url 'suporte' %}">Suporte</a>
     <a class="nav-btn" onclick="setActiveNav(this)">Como navegar?</a>
 
-    {% if request.user.is_authenticated %}
-      <button
-        class="nav-account-btn"
-        data-url="{% url 'perfil-consumidor' %}"
-        onclick="location.href=this.dataset.url"
-      >
+    {% if usuario_logado %}
+      <button class="nav-account-btn" data-url="{% url 'perfil-consumidor' %}" onclick="location.href=this.dataset.url">
         👤 Minha conta
       </button>
     {% else %}
-      <button
-        class="nav-account-btn"
-        data-url="{% url 'cadastro' %}"
-        onclick="location.href=this.dataset.url"
-      >
+      <button class="nav-account-btn" data-url="{% url 'cadastro' %}" onclick="location.href=this.dataset.url">
         Criar conta ou Entrar
       </button>
     {% endif %}
@@ -69,6 +67,10 @@
 
   </div>
 
+  <!-- #endregion -->
+
+
+  <!-- #region sidebar -->
 
   <div class="sidebar-trigger"></div>
 
@@ -87,6 +89,10 @@
 
   </div>
 
+  <!-- #endregion -->
+
+
+  <!-- #region conteudo -->
 
   <div class="categoria-container">
 
@@ -110,14 +116,12 @@
             <div class="loja-card-capa">
 
               {% if loja.foto_estabelecimento %}
-
                 <img
                   src="{{ loja.foto_estabelecimento }}"
                   alt="{{ loja.nome_loja }}"
                   style="width:100%; height:100%; display:block; object-fit:cover;"
                   onerror="this.style.display='none'"
                 >
-
               {% endif %}
 
               <form
@@ -127,38 +131,23 @@
               >
                 {% csrf_token %}
 
-                <button
-                  type="submit"
-                  class="loja-card-fav"
-                  aria-label="Favoritar"
-                >
+                <button type="submit" class="loja-card-fav" aria-label="Favoritar">
                   ♡
                 </button>
               </form>
 
             </div>
 
-
             <div class="loja-card-corpo">
 
-              <h3>
-                {{ loja.nome_loja }}
-              </h3>
+              <h3>{{ loja.nome_loja }}</h3>
 
               {% if loja.telefone_loja %}
-
-                <p class="loja-card-label">
-                  Telefone:
-                </p>
-
-                <p>
-                  {{ loja.telefone_loja }}
-                </p>
-
+                <p class="loja-card-label">Telefone:</p>
+                <p>{{ loja.telefone_loja }}</p>
               {% endif %}
 
               {% if loja.id_endereco %}
-
                 <p class="loja-card-label">
                   Localização:
 
@@ -167,7 +156,6 @@
                     {{ loja.id_endereco.numero_estabelecimento }}
                   </span>
                 </p>
-
               {% endif %}
 
             </div>
@@ -188,8 +176,14 @@
 
   </div>
 
+  <!-- #endregion -->
+
+
+  <!-- #region js -->
 
   <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
+
+  <!-- #endregion -->
 
 </body>
 </html>

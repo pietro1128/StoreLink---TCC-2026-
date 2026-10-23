@@ -91,7 +91,7 @@
     </a>
 
 
-    {% if request.user.is_authenticated %}
+    {% if usuario_logado %}
 
       <button
         type="button"
@@ -136,17 +136,12 @@
   <main class="produto-page">
 
 
-    <!-- #region PERFIL LATERAL -->
-
     <aside class="produto-perfil">
 
 
       <div class="produto-badge">
-
         Estabelecimento
-
       </div>
-
 
 
       <div class="produto-avatar-wrap">
@@ -209,9 +204,7 @@
           for="foto-responsavel-produto"
           title="Adicionar foto"
         >
-
           📷
-
         </label>
 
 
@@ -271,16 +264,10 @@
 
     </aside>
 
-    <!-- #endregion -->
 
-
-
-    <!-- #region CONTEÚDO -->
 
     <section class="produto-conteudo">
 
-
-      <!-- #region CABEÇALHO -->
 
       <div class="produto-topo">
 
@@ -291,9 +278,7 @@
           aria-label="Voltar"
           title="Voltar"
         >
-
           ←
-
         </a>
 
 
@@ -302,9 +287,7 @@
 
 
           <p class="produto-editar-texto">
-
             Editar fotos e informações dos produtos
-
           </p>
 
 
@@ -354,9 +337,7 @@
 
       </div>
 
-      <!-- #endregion -->
 
-      {# Mensagens de sucesso e erro #}
       {% if messages %}
         <div class="messages-container">
           {% for message in messages %}
@@ -365,9 +346,6 @@
         </div>
       {% endif %}
 
-      <!-- #region CARDS -->
-
-      <!-- #region CARDS -->
 
       <div
         class="produto-cards-scroll"
@@ -380,8 +358,6 @@
 
           <div class="produto-card">
 
-
-            <!-- #region EXCLUIR -->
 
             <form
               method="POST"
@@ -398,18 +374,12 @@
                 aria-label="Excluir produto"
                 title="Excluir produto"
               >
-
                 ✕
-
               </button>
 
             </form>
 
-            <!-- #endregion -->
 
-
-
-            <!-- #region IMAGEM -->
 
             <div class="produto-imagem">
 
@@ -438,9 +408,7 @@
                   aria-label="Trocar imagem"
                   title="Trocar imagem"
                 >
-
                   ✎
-
                 </button>
 
 
@@ -451,9 +419,7 @@
                   type="button"
                   class="produto-botao-imagem"
                 >
-
                   📷 Adicionar imagem
-
                 </button>
 
 
@@ -469,9 +435,7 @@
                   aria-label="Trocar imagem"
                   title="Trocar imagem"
                 >
-
                   ✎
-
                 </button>
 
 
@@ -480,11 +444,7 @@
 
             </div>
 
-            <!-- #endregion -->
 
-
-
-            <!-- #region INFORMAÇÕES -->
 
             <div class="produto-card-conteudo">
 
@@ -495,15 +455,14 @@
                 aria-label="Editar informações"
                 title="Editar informações"
               >
-
                 ✎
-
               </button>
 
               <form method="POST" action="{% url 'produto-editar' produto.id_produto %}">
                 {% csrf_token %}
 
                 <label>Nome do produto:</label>
+
                 <input
                   type="text"
                   name="nome_produto"
@@ -512,6 +471,7 @@
                 >
 
                 <label>Preço do produto:</label>
+
                 <input
                   type="text"
                   name="preco_produto"
@@ -520,18 +480,19 @@
                 >
 
                 <label>Descrição do produto:</label>
+
                 <textarea
                   name="descricao_produto"
                   placeholder="Descrição do produto..."
                 >{{ produto.descricao|default:'' }}</textarea>
 
-                <button type="submit" class="produto-salvar">Salvar alterações</button>
+                <button type="submit" class="produto-salvar">
+                  Salvar alterações
+                </button>
 
               </form>
 
             </div>
-
-            <!-- #endregion -->
 
 
           </div>
@@ -539,7 +500,7 @@
 
         {% endfor %}
 
-        <!-- #region NOVO PRODUTO (FORMULÁRIO DE CADASTRO) -->
+
 
         <div class="produto-card">
 
@@ -549,6 +510,7 @@
               {% csrf_token %}
 
               <label>Nome do produto:</label>
+
               <input
                 type="text"
                 name="nome_produto"
@@ -557,6 +519,7 @@
               >
 
               <label>Preço do produto:</label>
+
               <input
                 type="text"
                 name="preco_produto"
@@ -565,20 +528,31 @@
               >
 
               <label>Categoria:</label>
+
               <select name="id_categoria" required>
-                <option value="">Selecione...</option>
+
+                <option value="">
+                  Selecione...
+                </option>
+
                 {% for c in categorias %}
-                  <option value="{{ c.id_categoria }}">{{ c.tipo_categoria }}</option>
+                  <option value="{{ c.id_categoria }}">
+                    {{ c.tipo_categoria }}
+                  </option>
                 {% endfor %}
+
               </select>
 
               <label>Descrição do produto:</label>
+
               <textarea
                 name="descricao_produto"
                 placeholder="Descrição do produto..."
               ></textarea>
 
-              <button type="submit" class="produto-salvar">Cadastrar produto</button>
+              <button type="submit" class="produto-salvar">
+                Cadastrar produto
+              </button>
 
             </form>
 
@@ -586,9 +560,7 @@
 
         </div>
 
-        <!-- #endregion -->
 
-        <!-- #region ADICIONAR PRODUTO -->
 
         <div
           class="produto-criar-card"
@@ -603,54 +575,36 @@
             aria-label="Adicionar produto"
             title="Adicionar produto"
           >
-
             +
-
           </button>
 
 
           <h2>
-
             Adicionar produto
-
           </h2>
 
 
           <p>
-
             Clique no + para cadastrar outro produto.
-
           </p>
 
 
         </div>
 
-        <!-- #endregion -->
-
 
       </div>
-
-      <!-- #endregion -->
 
 
     </section>
 
-    <!-- #endregion -->
-
 
   </main>
 
-  <!-- #endregion -->
 
-
-
-  <!-- #region JAVASCRIPT -->
 
   <script
     src="{% static 'AppStoreLink/scripts/index.js' %}"
   ></script>
-
-  <!-- #endregion -->
 
 
 </body>

@@ -40,7 +40,7 @@
     <a class="nav-btn" href="{% url 'perfil-loja' %}">Sua loja</a>
     <a class="nav-btn" href="{% url 'suporte' %}">Suporte</a>
     <a class="nav-btn" onclick="setActiveNav(this)">Como navegar?</a>
-    {% if request.user.is_authenticated %}
+    {% if usuario_logado %}
     <button class="nav-account-btn" data-url="{% url 'perfil-consumidor' %}" onclick="location.href=this.dataset.url">👤 Minha conta</button>
     {% else %}
     <button class="nav-account-btn" data-url="{% url 'cadastro' %}" onclick="location.href=this.dataset.url">Criar conta ou Entrar</button>

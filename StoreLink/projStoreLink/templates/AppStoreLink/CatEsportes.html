@@ -8,21 +8,9 @@
 
   <title>StoreLink - Esportes</title>
 
-  <link
-    rel="icon"
-    type="image/png"
-    href="{% static 'AppStoreLink/images/icon-dark.png' %}"
-  >
-
-  <link
-    rel="stylesheet"
-    href="{% static 'AppStoreLink/styles/style.css' %}"
-  >
-
-  <link
-    rel="stylesheet"
-    href="{% static 'AppStoreLink/styles/catesportes.css' %}"
-  >
+  <link rel="icon" type="image/png" href="{% static 'AppStoreLink/images/icon-dark.png' %}">
+  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/style.css' %}">
+  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/catesportes.css' %}">
 </head>
 
 <body>
@@ -34,18 +22,20 @@
   </script>
 
 
+  <!-- #region Topbar -->
+
   <div class="topbar">
 
     <div class="logo-icon">
       <img src="{% static 'AppStoreLink/images/icon-dark.png' %}" alt="StoreLink">
     </div>
 
-    <a class="nav-btn active" href="{% url 'index' %}">Início</a>
+    <a class="nav-btn" href="{% url 'index' %}">Início</a>
     <a class="nav-btn" href="{% url 'perfil-loja' %}">Sua loja</a>
     <a class="nav-btn" href="{% url 'suporte' %}">Suporte</a>
     <a class="nav-btn" onclick="setActiveNav(this)">Como navegar?</a>
 
-    {% if request.user.is_authenticated %}
+    {% if usuario_logado %}
       <button class="nav-account-btn" data-url="{% url 'perfil-consumidor' %}" onclick="location.href=this.dataset.url">
         👤 Minha conta
       </button>
@@ -61,11 +51,14 @@
 
   </div>
 
+  <!-- #endregion -->
+
+
+  <!-- #region sidebar -->
 
   <div class="sidebar-trigger"></div>
 
   <div class="sidebar">
-
     <a class="cat-btn cat-alimentos {% if categoria == 'Alimentos' %}cat-active{% endif %}" href="{% url 'CatAlimentos' %}">Alimentos</a>
     <a class="cat-btn cat-moda {% if categoria == 'Moda' %}cat-active{% endif %}" href="{% url 'CatModa' %}">Moda</a>
     <a class="cat-btn cat-esportes {% if categoria == 'Esportes' %}cat-active{% endif %}" href="{% url 'CatEsportes' %}">Esportes</a>
@@ -76,9 +69,12 @@
     <a class="cat-btn cat-tecnologia {% if categoria == 'Tecnologia' %}cat-active{% endif %}" href="{% url 'CatTecnologia' %}">Tecnologia</a>
     <a class="cat-btn cat-beleza {% if categoria == 'Beleza' %}cat-active{% endif %}" href="{% url 'CatBeleza' %}">Beleza</a>
     <a class="cat-btn cat-outros {% if categoria == 'Outros' %}cat-active{% endif %}" href="{% url 'CatOutros' %}">Outros</a>
-
   </div>
 
+  <!-- #endregion -->
+
+
+  <!-- #region conteudo -->
 
   <div class="categoria-container">
 
@@ -102,14 +98,12 @@
             <div class="loja-card-capa">
 
               {% if loja.foto_estabelecimento %}
-
                 <img
                   src="{{ loja.foto_estabelecimento }}"
                   alt="{{ loja.nome_loja }}"
                   style="width:100%; height:100%; display:block; object-fit:cover;"
                   onerror="this.style.display='none'"
                 >
-
               {% endif %}
 
               <form
@@ -119,17 +113,12 @@
               >
                 {% csrf_token %}
 
-                <button
-                  type="submit"
-                  class="loja-card-fav"
-                  aria-label="Favoritar"
-                >
+                <button type="submit" class="loja-card-fav" aria-label="Favoritar">
                   ♡
                 </button>
               </form>
 
             </div>
-
 
             <div class="loja-card-corpo">
 
@@ -143,7 +132,6 @@
               {% if loja.id_endereco %}
                 <p class="loja-card-label">
                   Localização:
-
                   <span class="loja-card-endereco">
                     {{ loja.id_endereco.rua }},
                     {{ loja.id_endereco.numero_estabelecimento }}
@@ -169,8 +157,11 @@
 
   </div>
 
+  <!-- #endregion -->
+
 
   <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
 
 </body>
+
 </html>

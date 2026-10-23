@@ -27,12 +27,18 @@
 
 <body>
 
+  <!-- #region modo escuro -->
+
   <script>
     if (localStorage.getItem('theme') === 'dark') {
       document.body.classList.add('dark');
     }
   </script>
 
+  <!-- #endregion -->
+
+
+  <!-- #region navbar -->
 
   <div class="topbar">
 
@@ -40,12 +46,12 @@
       <img src="{% static 'AppStoreLink/images/icon-dark.png' %}" alt="StoreLink">
     </div>
 
-    <a class="nav-btn active" href="{% url 'index' %}">Início</a>
+    <a class="nav-btn" href="{% url 'index' %}">Início</a>
     <a class="nav-btn" href="{% url 'perfil-loja' %}">Sua loja</a>
     <a class="nav-btn" href="{% url 'suporte' %}">Suporte</a>
     <a class="nav-btn" onclick="setActiveNav(this)">Como navegar?</a>
 
-    {% if request.user.is_authenticated %}
+    {% if usuario_logado %}
       <button class="nav-account-btn" data-url="{% url 'perfil-consumidor' %}" onclick="location.href=this.dataset.url">
         👤 Minha conta
       </button>
@@ -61,6 +67,10 @@
 
   </div>
 
+  <!-- #endregion -->
+
+
+  <!-- #region sidebar -->
 
   <div class="sidebar-trigger"></div>
 
@@ -79,6 +89,10 @@
 
   </div>
 
+  <!-- #endregion -->
+
+
+  <!-- #region conteudo -->
 
   <div class="categoria-container">
 
@@ -124,7 +138,6 @@
 
             </div>
 
-
             <div class="loja-card-corpo">
 
               <h3>{{ loja.nome_loja }}</h3>
@@ -163,8 +176,14 @@
 
   </div>
 
+  <!-- #endregion -->
+
+
+  <!-- #region js -->
 
   <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
+
+  <!-- #endregion -->
 
 </body>
 </html>

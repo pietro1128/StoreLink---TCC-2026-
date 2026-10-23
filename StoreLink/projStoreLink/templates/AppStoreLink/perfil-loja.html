@@ -71,7 +71,7 @@
 
 
     <a
-      class="nav-btn active"
+      class="nav-btn"
       href="{% url 'index' %}"
       onclick="location.href=this.dataset.url"
     >
@@ -80,7 +80,7 @@
 
 
     <a
-      class="nav-btn"
+      class="nav-btn active"
       href="{% url 'perfil-loja' %}"
     >
       Sua loja
@@ -437,13 +437,6 @@
               type="hidden"
               name="form_loja"
               value="1"
-            >
-
-            <input 
-              type="hidden" 
-              name="categoria" 
-              id="categoriaInput" 
-              value="Alimentos"
             >
 
 
@@ -879,19 +872,30 @@
       }
 
 
-      function applyClassification(name, bgColor, categoria) {
 
-        classifName.textContent = name;
+      function applyClassification(
+        name,
+        bgColor
+      ) {
 
-        // grava a categoria escolhida no campo escondido
-        document.getElementById('categoriaInput').value = categoria;
+        classifName.textContent =
+          name;
 
-        document.documentElement.style.setProperty('--brand-red', bgColor);
+
+        document.documentElement.style.setProperty(
+          '--brand-red',
+          bgColor
+        );
+
 
         document.documentElement.style.setProperty(
           '--brand-red-light',
-          lightenColor(bgColor, 0.18)
+          lightenColor(
+            bgColor,
+            0.18
+          )
         );
+
       }
 
 
@@ -959,6 +963,7 @@
 
               e.stopPropagation();
 
+
               if (name === 'Outros') {
 
                 var custom =
@@ -974,8 +979,7 @@
 
                   applyClassification(
                     custom.trim(),
-                    bgColor,
-                    'Outros'        // <- NOVO
+                    bgColor
                   );
 
                 }
@@ -984,8 +988,7 @@
 
                 applyClassification(
                   name,
-                  bgColor,
-                  name              // <- NOVO
+                  bgColor
                 );
 
               }

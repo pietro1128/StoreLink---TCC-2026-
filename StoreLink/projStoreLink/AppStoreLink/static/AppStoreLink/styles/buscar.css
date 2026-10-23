@@ -1,7 +1,7 @@
 /* #region pagina */
 
 .resultados-container {
-  min-height: calc(100vh - 58px);
+  min-height: calc(100vh - 64px);
 
   padding:
     28px
@@ -486,6 +486,52 @@ body.dark .resultado-vazio p {
     width: 100%;
   }
 
+}
+
+/* #endregion */
+
+/* #region AJUSTES DE PROPORÇÃO */
+
+.resultados-container {
+  padding: 34px 42px 65px;
+}
+
+.resultados-topo h1 {
+  font-size: 31px;
+}
+
+.resultado-secao-titulo {
+  font-size: 26px;
+}
+
+.resultado-grid {
+  gap: 24px;
+}
+
+.resultado-card {
+  width: 350px;
+  border-width: 12px;
+  border-radius: 23px;
+}
+
+.resultado-card-capa {
+  height: 195px;
+}
+
+.resultado-card-corpo {
+  min-height: 220px;
+  padding: 17px 15px;
+}
+
+.resultado-card-corpo h3 {
+  font-size: 20px;
+}
+
+.resultado-info,
+.resultado-localizacao,
+.resultado-descricao,
+.resultado-loja {
+  font-size: 15px;
 }
 
 /* #endregion */
