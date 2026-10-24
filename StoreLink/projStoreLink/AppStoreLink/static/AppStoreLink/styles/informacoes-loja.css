@@ -1083,3 +1083,46 @@ body.dark
 }
 
 /* #endregion */
+/* #region ações do proprietário */
+
+.info-loja-acoes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.info-editar-loja,
+.info-excluir-loja {
+  width: 100%;
+  min-height: 46px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: inherit;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.info-editar-loja {
+  background: var(--info-cor);
+  color: #fff;
+}
+
+.info-excluir-loja {
+  background: #202020;
+  color: #fff;
+}
+
+.info-editar-loja:hover,
+.info-excluir-loja:hover {
+  filter: brightness(0.92);
+  transform: translateY(-1px);
+}
+
+/* #endregion */

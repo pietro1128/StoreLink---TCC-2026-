@@ -72,7 +72,7 @@
 
 
     <a
-      class="nav-btn"
+      class="nav-btn active"
       href="{% url 'index' %}"
     >
       Início
@@ -276,6 +276,38 @@
           >
             SERVIÇOS
           </a>
+
+
+
+          <!-- #region AÇÕES DA LOJA -->
+
+          {% if usuario_logado %}
+
+            <div class="info-loja-acoes">
+
+
+              <a
+                class="info-editar-loja"
+                href="{% url 'perfil-loja' %}"
+              >
+                ✎ EDITAR LOJA
+              </a>
+
+
+              <button
+                type="button"
+                class="info-excluir-loja"
+                onclick="confirmarExclusaoLoja()"
+              >
+                🗑 EXCLUIR LOJA
+              </button>
+
+
+            </div>
+
+          {% endif %}
+
+          <!-- #endregion -->
 
 
         </div>
@@ -872,6 +904,15 @@
 
       confirm(
         'Deseja excluir este comentário?'
+      );
+
+    }
+
+
+    function confirmarExclusaoLoja() {
+
+      confirm(
+        'Deseja excluir esta loja?'
       );
 
     }
