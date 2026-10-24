@@ -74,6 +74,8 @@ urlpatterns = [
     path('avaliar/servico/<int:id_alvo>/', views.avaliacao_criar, {'tipo': 'servico'}, name='avaliar-servico'),
 
     path('api/cep/<str:cep>/', views.api_cep, name='api-cep'),
+    
+    path('logout/', views.logout_view, name='logout'),
 
     # region PÁGINAS DE INFORMAÇÕES
 

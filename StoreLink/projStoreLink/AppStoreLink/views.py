@@ -833,3 +833,12 @@ def InformacoesServico(request, id_loja):
     )
 
 # endregion
+
+@require_POST
+def logout_view(request):
+    # flush() apaga TODOS os dados da sessão (inclusive 'usuario_id') e troca
+    # a chave da sessão, então o login anterior deixa de valer.
+    request.session.flush()
+
+    messages.success(request, 'Você saiu da sua conta.')
+    return redirect('index')

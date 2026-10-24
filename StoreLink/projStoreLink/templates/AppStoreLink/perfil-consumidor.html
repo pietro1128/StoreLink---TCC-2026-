@@ -215,18 +215,13 @@
         </div>
 
 
-        <button
-          type="button"
-          class="consumidor-logout-btn"
-        >
-
-          Fazer Logout
-
-          <span>
-            ≪
-          </span>
-
-        </button>
+        <form method="POST" action="{% url 'logout' %}" style="display: contents;">
+          {% csrf_token %}
+          <button type="submit" class="produto-logout">
+            Fazer Logout
+            <span>≪</span>
+          </button>
+        </form>
 
 
       </aside>

@@ -331,9 +331,13 @@
         </form>
 
 
-        <button class="perfil-logout-btn">
-          Fazer Logout
-        </button>
+        <form method="POST" action="{% url 'logout' %}" style="display: contents;">
+          {% csrf_token %}
+          <button type="submit" class="produto-logout">
+            Fazer Logout
+            <span>≪</span>
+          </button>
+        </form>
 
       </div>
 
