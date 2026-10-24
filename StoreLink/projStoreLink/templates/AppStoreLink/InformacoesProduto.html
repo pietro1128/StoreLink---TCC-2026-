@@ -73,7 +73,7 @@
 
 
     <a
-      class="nav-btn"
+      class="nav-btn active"
       href="{% url 'index' %}"
     >
       Início
@@ -221,6 +221,37 @@
           <article class="info-produto-card">
 
 
+            <!-- #region ações do proprietário -->
+
+            {% if eh_dono %}
+
+              <div class="info-item-acoes">
+
+                <a
+                  class="info-item-editar"
+                  href="{% url 'produtos-loja' %}"
+                  title="Editar produto"
+                >
+                  ✎ Editar
+                </a>
+
+
+                <button
+                  type="button"
+                  class="info-item-excluir"
+                  onclick="confirmarExclusaoProduto()"
+                  title="Excluir produto"
+                >
+                  🗑 Excluir
+                </button>
+
+              </div>
+
+            {% endif %}
+
+            <!-- #endregion -->
+
+
             <div class="info-produto-imagem">
 
 
@@ -339,6 +370,19 @@
   <script
     src="{% static 'AppStoreLink/scripts/index.js' %}"
   ></script>
+
+
+  <script>
+
+    function confirmarExclusaoProduto() {
+
+      confirm(
+        'Deseja excluir este produto?'
+      );
+
+    }
+
+  </script>
 
 
 </body>
