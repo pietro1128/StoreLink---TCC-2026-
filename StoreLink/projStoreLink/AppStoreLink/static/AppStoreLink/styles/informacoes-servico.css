@@ -7,7 +7,7 @@
   --cor-categoria: #cfcfcf;
 
   min-height:
-    calc(100vh - 64px);
+    calc(100vh - 58px);
 
   padding:
     30px 34px 55px;
@@ -152,6 +152,8 @@
 
 
 .info-servico-card {
+  position: relative;
+
   border:
     12px solid
     var(--cor-categoria);
@@ -293,6 +295,84 @@
 }
 
 
+/* #region ações do proprietário */
+
+.info-item-acoes {
+  position: absolute;
+
+  top: 18px;
+  right: 18px;
+
+  z-index: 10;
+
+  display: flex;
+
+  gap: 8px;
+}
+
+
+.info-item-editar,
+.info-item-excluir {
+  min-height: 36px;
+
+  padding:
+    0 12px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease;
+}
+
+
+.info-item-editar {
+  background:
+    #ffffff;
+
+  color:
+    var(--cor-categoria);
+}
+
+
+.info-item-excluir {
+  background:
+    #202020;
+
+  color:
+    #ffffff;
+}
+
+
+.info-item-editar:hover,
+.info-item-excluir:hover {
+  transform:
+    translateY(-1px);
+
+  filter:
+    brightness(0.92);
+}
+
+/* #endregion */
+
+
 .info-vazio {
   max-width: 520px;
 
@@ -375,6 +455,26 @@ body.dark
 }
 
 
+body.dark
+.info-item-editar {
+  background:
+    #ffffff;
+
+  color:
+    #222222;
+}
+
+
+body.dark
+.info-item-excluir {
+  background:
+    #111111;
+
+  color:
+    #ffffff;
+}
+
+
 @media (
   max-width: 650px
 ) {
@@ -390,60 +490,82 @@ body.dark
       1fr;
   }
 
+
+  .info-item-acoes {
+    top: 14px;
+    right: 14px;
+  }
+
+
+  .info-item-editar,
+  .info-item-excluir {
+    padding:
+      0 9px;
+
+    font-size: 12px;
+  }
+
 }
+
 
 /* #region AJUSTES DE PROPORÇÃO */
 
 .info-servico-page {
-  padding: 34px 38px 58px;
+  min-height:
+    calc(100vh - 52px);
+
+  padding:
+    22px 24px 42px;
 }
+
+
+.info-lista-topo {
+  gap: 10px;
+
+  margin-bottom: 16px;
+}
+
+
+.info-voltar {
+  width: 42px;
+  height: 42px;
+}
+
 
 .info-lista-topo h1 {
-  font-size: 30px;
+  font-size: 27px;
 }
+
 
 .info-servico-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 28px;
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(320px, 1fr)
+    );
+
+  gap: 18px;
 }
+
 
 .info-servico-card {
-  border-width: 14px;
-  border-radius: 26px;
+  border-width: 10px;
+
+  border-radius: 21px;
 }
+
 
 .info-servico-imagem {
-  height: 245px;
+  height: 190px;
 }
+
 
 .info-servico-corpo {
-  min-height: 300px;
-  padding: 20px 18px;
-}
+  min-height: 215px;
 
-.info-label {
-  font-size: 15px;
-}
+  margin-top: 8px;
 
-.info-servico-corpo h2 {
-  font-size: 21px;
-}
-
-.info-preco,
-.info-servico-corpo p {
-  font-size: 16px;
-}
-
-@media (max-width: 1100px) {
-  .info-servico-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 700px) {
-  .info-servico-grid {
-    grid-template-columns: 1fr;
-  }
+  padding: 14px;
 }
 
 /* #endregion */

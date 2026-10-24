@@ -73,7 +73,7 @@
 
 
     <a
-      class="nav-btn"
+      class="nav-btn active"
       href="{% url 'index' %}"
     >
       Início
@@ -221,6 +221,37 @@
           <article class="info-servico-card">
 
 
+            <!-- #region ações do proprietário -->
+
+            {% if eh_dono %}
+
+              <div class="info-item-acoes">
+
+                <a
+                  class="info-item-editar"
+                  href="{% url 'servicos-loja' %}"
+                  title="Editar serviço"
+                >
+                  ✎ Editar
+                </a>
+
+
+                <button
+                  type="button"
+                  class="info-item-excluir"
+                  onclick="confirmarExclusaoServico()"
+                  title="Excluir serviço"
+                >
+                  🗑 Excluir
+                </button>
+
+              </div>
+
+            {% endif %}
+
+            <!-- #endregion -->
+
+
             <div class="info-servico-imagem">
 
 
@@ -339,6 +370,19 @@
   <script
     src="{% static 'AppStoreLink/scripts/index.js' %}"
   ></script>
+
+
+  <script>
+
+    function confirmarExclusaoServico() {
+
+      confirm(
+        'Deseja excluir este serviço?'
+      );
+
+    }
+
+  </script>
 
 
 </body>
