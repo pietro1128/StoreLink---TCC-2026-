@@ -638,6 +638,90 @@ def servicos_loja(request):
 # ============================================================================
 
 @require_POST
+def loja_editar(request, id_loja):
+    loja = get_object_or_404(Loja.objects.select_related('id_endereco'), id_loja=id_loja)
+    
+    if not request.session.get('usuario_id'):
+        messages.error(request, 'Você precisa fazer login para editar a loja.')
+        return redirect('login')
+    
+    nome = request.POST.get('nome_loja')# -> cria uma variavel puxando o valor do banco
+#                                   L> este valor tem que ser exatamente igual ao 'name' em perfil-loja.html
+    rua = request.POST.get('rua')
+    numero = request.POST.get('numero')
+    cep = request.POST.get('cep')
+
+    email = request.POST.get('email_loja')
+    telefone = request.POST.get('telefone_loja')
+    cnpj = request.POST.get('cnpj')
+    link = request.POST.get('link_loja')
+    nome_categoria = request.POST.get('categoria', '').strip() # -> era nescessario que o codigo pegue esse valor para conseguir comparar mais a frente no codigo
+        
+    erros = []
+    
+    if not nome:
+        erros.append('O nome da loja é obrigatorio.')
+        
+    try:
+        dados_cep = consultar_cep(cep)
+    except CepInvalido:
+        messages.error(request, 'CEP inválido. Digite 8 números.')
+        return render(request, 'AppStoreLink/perfil-loja.html')
+    except CepNaoEncontrado:
+        messages.error(request, 'Este CEP não existe.')
+        return render(request, 'AppStoreLink/perfil-loja.html')
+    except ServicoCepIndisponivel:
+        messages.error(request, 'Não foi possível validar o CEP agora. Tente novamente em instantes.')
+        return render(request, 'AppStoreLink/perfil-loja.html')
+
+    cep = dados_cep['cep']   # grava só os 8 dígitos, num formato único
+        
+    # Validações de E-mail para loja:
+    padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$'# -> Argumenta um padrão com characteres finais nos emails
+    if not re.match(padrao_email, email): # -> Verifica se estão nos padões argumentados estao coecidindo com as variaveis 
+        messages.error(request, 'O campo E-mail deve ser um Gmail válido (exemplo: email@gmail.com).')# -> cria uma mensagens
+        return render(request, 'AppStoreLink/perfil-loja.html')
+
+    # Validações de CNPJ:
+    padrao_cnpj = r'^.{14,14}$'# ^.{??,??}$ -> diz que o texton precisa ter exatamente o numero de letras argumantadas
+    if not re.match(padrao_cnpj, cnpj):
+        messages.error(request, 'Este CNPJ deve conter exatamente 14 números.')
+        return render(request, 'AppStoreLink/perfil-loja.html')
+
+    # Validações de Telefone para loja:
+    padrao_telefone = r'^.{11,11}$'
+    if not re.match(padrao_telefone, telefone):
+        messages.error(request, 'Este número esta incorreto, ele deve ter exatamente 11 números.')
+        return render(request, 'AppStoreLink/perfil-loja.html')
+
+    # Validação de Categorias:
+    categoria = Categoria.objects.filter(tipo_categoria=nome_categoria).first() # -> Procura no banco o registro igual ao que ele recebeu
+    if categoria is None:
+        messages.error(request, 'Selecione uma categoria válida.')
+        return render(request, 'AppStoreLink/perfil-loja.html')
+
+    # Depois de todas as validações, cria endereço e loja:
+    with transaction.atomic():
+        endereco = loja.id_endereco
+        endereco.rua = rua
+        endereco.numero_estabelecimento = numero
+        endereco.cep = cep
+        endereco.save()
+        
+        loja.nome_loja = nome
+        loja.id_categoria = categoria
+        loja.email_loja = email
+        loja.telefone_loja = telefone
+        loja.cnpj = cnpj
+        loja.link = link
+        loja.save()
+
+    messages.success(request, 'Sua loja foi atualizada com sucesso!')
+    return redirect('InformacoesLoja', id_loja=loja.id_loja)
+
+    # TODO: trocar pela loja do usuário logado quando existir o vínculo Usuario↔Loja 
+
+@require_POST
 def servico_excluir(request, id_servico):
     servico = get_object_or_404(Servico, id_servico=id_servico)
     nome = servico.nome_servico
@@ -770,6 +854,7 @@ def InformacoesLoja(request, id_loja):
     contexto = {
         'loja': loja,
         'avaliacoes': avaliacoes,
+        'categorias': Categoria.objects.all(),
     }
 
     return render(

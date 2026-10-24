@@ -1125,4 +1125,45 @@ body.dark
   transform: translateY(-1px);
 }
 
+/* Campos de edição ficam escondidos até clicar em "Editar loja" */
+.info-loja-card .campo-edicao,
+.info-loja-card .edicao-acoes {
+  display: none;
+}
+
+.info-loja-card.modo-edicao .campo-leitura,
+.info-loja-card.modo-edicao .info-loja-acoes {
+  display: none;
+}
+
+.info-loja-card.modo-edicao .campo-edicao {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font: inherit;
+}
+
+.info-loja-card.modo-edicao .edicao-acoes {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.edicao-salvar,
+.edicao-cancelar {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.info-mensagens { margin-bottom: 16px; }
+.info-mensagem { padding: 10px 14px; border-radius: 8px; margin: 6px 0; }
+.info-mensagem.error { background: #fde2e2; color: #8a1f1f; }
+.info-mensagem.success { background: #e0f5e4; color: #1d6b2e; }
+
 /* #endregion */

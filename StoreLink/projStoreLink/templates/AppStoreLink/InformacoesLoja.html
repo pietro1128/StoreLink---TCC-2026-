@@ -180,6 +180,14 @@
     "
   >
 
+    {% if messages %}
+      <div class="info-mensagens">
+        {% for message in messages %}
+          <p class="info-mensagem {{ message.tags }}">{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
 
     <a
       class="info-voltar"
@@ -189,14 +197,20 @@
       ←
     </a>
 
+    <form id="form-editar-loja" method="POST" action="{% url 'loja-editar' loja.id_loja %}">
+      {% csrf_token %}
+    </form>
 
+    <form id="form-excluir-loja" method="POST" action="{% url 'loja-excluir' loja.id_loja %}">
+      {% csrf_token %}
+    </form>
 
     <div class="info-loja-layout">
 
 
       <!-- #region LOJA -->
 
-      <section class="info-loja-card">
+      <section class="info-loja-card"  id="info-loja-card">
 
 
         <div class="info-loja-esquerda">
@@ -288,7 +302,8 @@
 
               <a
                 class="info-editar-loja"
-                href="{% url 'perfil-loja' %}"
+                href="#"
+                onclick="abrirEdicaoLoja(); return false;"
               >
                 ✎ EDITAR LOJA
               </a>
@@ -316,176 +331,93 @@
 
         <div class="info-loja-dados">
 
-          <h2>
-            NOME
-          </h2>
-
-
+          <h2>NOME</h2>
           <div class="info-campo">
-
-            <strong>
-              Nome do Estabelecimento
-            </strong>
-
-            <span>
-              {{ loja.nome_loja }}
-            </span>
-
+            <strong>Nome do Estabelecimento</strong>
+            <span class="campo-leitura">{{ loja.nome_loja }}</span>
+            <input class="campo-edicao" form="form-editar-loja" type="text"
+                  name="nome_loja" value="{{ loja.nome_loja }}" required>
           </div>
 
-
-
-          <h2>
-            LOCALIZAÇÃO
-          </h2>
-
-
+          <h2>LOCALIZAÇÃO</h2>
           <div class="info-localizacao-grid">
-
-
             <div class="info-campo info-rua">
-
-              <strong>
-                Rua
-              </strong>
-
-              <span>
-                {{ loja.id_endereco.rua }}
-              </span>
-
+              <strong>Rua</strong>
+              <span class="campo-leitura">{{ loja.id_endereco.rua }}</span>
+              <input class="campo-edicao" form="form-editar-loja" type="text"
+                    name="rua" value="{{ loja.id_endereco.rua }}" required>
             </div>
-
-
 
             <div class="info-campo">
-
-              <strong>
-                Número
-              </strong>
-
-              <span>
-                {{ loja.id_endereco.numero_estabelecimento }}
-              </span>
-
+              <strong>Número</strong>
+              <span class="campo-leitura">{{ loja.id_endereco.numero_estabelecimento }}</span>
+              <input class="campo-edicao" form="form-editar-loja" type="text"
+                    name="numero" value="{{ loja.id_endereco.numero_estabelecimento }}" required>
             </div>
-
-
 
             <div class="info-campo">
-
-              <strong>
-                CEP
-              </strong>
-
-              <span>
-                {{ loja.id_endereco.cep }}
-              </span>
-
+              <strong>CEP</strong>
+              <span class="campo-leitura">{{ loja.id_endereco.cep }}</span>
+              <input class="campo-edicao" form="form-editar-loja" type="text"
+                    name="cep" value="{{ loja.id_endereco.cep }}" inputmode="numeric" required>
             </div>
-
-
           </div>
 
-
-
-          <h2>
-            INFORMAÇÕES
-          </h2>
-
+          <h2>INFORMAÇÕES</h2>
+          <div class="info-campo">
+            <strong>E-mail</strong>
+            <span class="campo-leitura">{{ loja.email_loja }}</span>
+            <input class="campo-edicao" form="form-editar-loja" type="email"
+                  name="email_loja" value="{{ loja.email_loja }}" required>
+          </div>
 
           <div class="info-campo">
-
-            <strong>
-              E-mail
-            </strong>
-
-            <span>
-              {{ loja.email_loja }}
+            <strong>Telefone</strong>
+            <span class="campo-leitura">
+              {% if loja.telefone_loja %}{{ loja.telefone_loja }}{% else %}Não informado{% endif %}
             </span>
-
+            <input class="campo-edicao" form="form-editar-loja" type="text"
+                  name="telefone_loja" value="{{ loja.telefone_loja|default:'' }}"
+                  maxlength="11" inputmode="numeric" required>
           </div>
 
-
+          <div class="info-campo">
+            <strong>CNPJ</strong>
+            <span class="campo-leitura">{{ loja.cnpj }}</span>
+            <input class="campo-edicao" form="form-editar-loja" type="text"
+                  name="cnpj" value="{{ loja.cnpj }}" maxlength="14" inputmode="numeric" required>
+          </div>
 
           <div class="info-campo">
-
-            <strong>
-              Telefone
-            </strong>
-
-            <span>
-
-              {% if loja.telefone_loja %}
-
-                {{ loja.telefone_loja }}
-
+            <strong>Link de Loja virtual</strong>
+            <div class="campo-leitura">
+              {% if loja.link %}
+                <a href="{{ loja.link }}" target="_blank" rel="noopener noreferrer">{{ loja.link }}</a>
               {% else %}
-
-                Não informado
-
+                <span>Não possui</span>
               {% endif %}
-
-            </span>
-
+            </div>
+            <input class="campo-edicao" form="form-editar-loja" type="text"
+                  name="link_loja" value="{{ loja.link|default:'' }}">
           </div>
-
-
-
-          <div class="info-campo">
-
-            <strong>
-              CNPJ
-            </strong>
-
-            <span>
-              {{ loja.cnpj }}
-            </span>
-
-          </div>
-
-
-
-          <div class="info-campo">
-
-            <strong>
-              Link de Loja virtual
-            </strong>
-
-
-            {% if loja.link %}
-
-              <a
-                href="{{ loja.link }}"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {{ loja.link }}
-              </a>
-
-            {% else %}
-
-              <span>
-                Não possui
-              </span>
-
-            {% endif %}
-
-          </div>
-
-
 
           <div class="info-classificacao">
-
-            <strong>
-              Classificação da Loja
-            </strong>
-
-            <span>
-              {{ loja.id_categoria.tipo_categoria }}
-            </span>
-
+            <strong>Classificação da Loja</strong>
+            <span class="campo-leitura">{{ loja.id_categoria.tipo_categoria }}</span>
+            <select class="campo-edicao" form="form-editar-loja" name="categoria" required>
+              {% for cat in categorias %}
+                <option value="{{ cat.tipo_categoria }}"
+                        {% if cat.pk == loja.id_categoria_id %}selected{% endif %}>
+                  {{ cat.tipo_categoria }}
+                </option>
+              {% endfor %}
+            </select>
           </div>
 
+          <div class="edicao-acoes">
+            <button type="submit" form="form-editar-loja" class="edicao-salvar">Salvar</button>
+            <button type="button" class="edicao-cancelar" onclick="fecharEdicaoLoja()">Cancelar</button>
+          </div>
 
         </div>
 
@@ -882,21 +814,13 @@
 
   <script>
 
-    function abrirEdicao(botao) {
-
-      botao
-        .closest('.info-comentario-card')
-        .classList.add('editando');
-
+    function abrirEdicaoLoja() {
+      document.getElementById('info-loja-card').classList.add('modo-edicao');
     }
 
-
-    function fecharEdicao(botao) {
-
-      botao
-        .closest('.info-comentario-card')
-        .classList.remove('editando');
-
+    function fecharEdicaoLoja() {
+      document.getElementById('info-loja-card').classList.remove('modo-edicao');
+      document.getElementById('form-editar-loja').reset();  // volta os campos ao valor original
     }
 
 
@@ -910,11 +834,9 @@
 
 
     function confirmarExclusaoLoja() {
-
-      confirm(
-        'Deseja excluir esta loja?'
-      );
-
+      if (confirm('Deseja excluir esta loja? Os produtos, serviços e favoritos dela também serão apagados.')) {
+        document.getElementById('form-excluir-loja').submit();
+      }
     }
 
   </script>

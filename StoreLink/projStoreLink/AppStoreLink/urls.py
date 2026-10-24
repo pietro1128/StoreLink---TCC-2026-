@@ -84,6 +84,8 @@ urlpatterns = [
         views.InformacoesLoja,
         name='InformacoesLoja'
     ),
+    path('loja/<int:id_loja>/editar/', views.loja_editar, name='loja-editar'),
+    path('loja/<int:id_loja>/excluir/', views.loja_excluir, name='loja-excluir'),
 
     path(
         'loja/<int:id_loja>/produtos/',
