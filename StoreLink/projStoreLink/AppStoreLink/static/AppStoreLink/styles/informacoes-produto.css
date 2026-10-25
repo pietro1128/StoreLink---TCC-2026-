@@ -163,13 +163,6 @@
 
   gap: 18px;
 
-
-  /*
-    IMPORTANTE:
-    impede os outros cards da mesma linha
-    de crescerem junto com o card editado
-  */
-
   align-items: start;
 }
 

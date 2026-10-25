@@ -16,19 +16,16 @@
     StoreLink - {{ loja.nome_loja }}
   </title>
 
-
   <link
     rel="icon"
     type="image/png"
     href="{% static 'AppStoreLink/images/icon-dark.png' %}"
   >
 
-
   <link
     rel="stylesheet"
     href="{% static 'AppStoreLink/styles/style.css' %}"
   >
-
 
   <link
     rel="stylesheet"
@@ -217,7 +214,6 @@
                 "
               >
 
-
               <div
                 class="info-sem-imagem"
                 style="display: none;"
@@ -317,6 +313,8 @@
 
 
 
+        <!-- #region DADOS -->
+
         <div class="info-loja-dados">
 
 
@@ -352,7 +350,7 @@
             <div class="info-localizacao-grid">
 
 
-              <div class="info-campo info-rua">
+              <div class="info-campo">
 
                 <strong>
                   Rua
@@ -460,7 +458,6 @@
                 Link de Loja virtual
               </strong>
 
-
               <span class="js-loja-link">
 
                 {% if loja.link %}
@@ -514,7 +511,6 @@
                 Nome do Estabelecimento
               </label>
 
-
               <input
                 type="text"
                 class="js-editar-loja-nome"
@@ -526,7 +522,6 @@
               <label>
                 Rua
               </label>
-
 
               <input
                 type="text"
@@ -578,7 +573,6 @@
                 E-mail
               </label>
 
-
               <input
                 type="email"
                 class="js-editar-loja-email"
@@ -590,7 +584,6 @@
               <label>
                 Telefone
               </label>
-
 
               <input
                 type="text"
@@ -604,7 +597,6 @@
                 CNPJ
               </label>
 
-
               <input
                 type="text"
                 class="js-editar-loja-cnpj"
@@ -617,7 +609,6 @@
                 Link de Loja virtual
               </label>
 
-
               <input
                 type="text"
                 class="js-editar-loja-link"
@@ -629,7 +620,6 @@
               <label>
                 Classificação da Loja
               </label>
-
 
               <input
                 type="text"
@@ -671,6 +661,8 @@
 
 
         </div>
+
+        <!-- #endregion -->
 
 
       </section>
@@ -815,7 +807,6 @@
                     </label>
 
 
-
                     <input
                       type="radio"
                       id="edit-{{ avaliacao.pk }}-4"
@@ -827,7 +818,6 @@
                     <label for="edit-{{ avaliacao.pk }}-4">
                       ★
                     </label>
-
 
 
                     <input
@@ -843,7 +833,6 @@
                     </label>
 
 
-
                     <input
                       type="radio"
                       id="edit-{{ avaliacao.pk }}-2"
@@ -855,7 +844,6 @@
                     <label for="edit-{{ avaliacao.pk }}-2">
                       ★
                     </label>
-
 
 
                     <input
@@ -966,7 +954,6 @@
             </label>
 
 
-
             <input
               type="radio"
               id="estrela4"
@@ -977,7 +964,6 @@
             <label for="estrela4">
               ★
             </label>
-
 
 
             <input
@@ -992,7 +978,6 @@
             </label>
 
 
-
             <input
               type="radio"
               id="estrela2"
@@ -1003,7 +988,6 @@
             <label for="estrela2">
               ★
             </label>
-
 
 
             <input
@@ -1035,7 +1019,6 @@
           ></textarea>
 
 
-
           <button type="submit">
             ENVIAR COMENTÁRIO
           </button>
@@ -1058,13 +1041,15 @@
 
 
 
-  <script
-    src="{% static 'AppStoreLink/scripts/index.js' %}"
-  ></script>
+  <!-- #region JAVASCRIPT -->
+
+  <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
 
 
   <script>
 
+
+    /* #region COMENTÁRIO */
 
     function abrirEdicao(botao) {
 
@@ -1092,7 +1077,11 @@
 
     }
 
+    /* #endregion */
 
+
+
+    /* #region LOJA */
 
     function abrirEdicaoLoja(botao) {
 
@@ -1100,6 +1089,11 @@
         botao.closest(
           '.info-loja-card'
         );
+
+
+      if (!card) {
+        return;
+      }
 
 
       const nome =
@@ -1224,6 +1218,11 @@
         );
 
 
+      if (!card) {
+        return;
+      }
+
+
       card.classList.remove(
         'editando'
       );
@@ -1238,6 +1237,11 @@
         botao.closest(
           '.info-loja-card'
         );
+
+
+      if (!card) {
+        return;
+      }
 
 
       const nome =
@@ -1378,8 +1382,12 @@
 
     }
 
+    /* #endregion */
+
 
   </script>
+
+  <!-- #endregion -->
 
 
 </body>

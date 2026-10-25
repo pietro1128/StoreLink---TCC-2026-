@@ -152,6 +152,8 @@
 
   background:
     var(--cor-categoria);
+
+  align-self: start;
 }
 
 /* #endregion */
@@ -1229,23 +1231,6 @@ body.dark
 .info-loja-edicao input:focus {
   background:
     #1f1f1f;
-}
-
-
-body.dark
-.info-loja-edicao label {
-  color:
-    var(--cor-categoria);
-}
-
-
-body.dark
-.info-editar-loja {
-  background:
-    #ffffff;
-
-  color:
-    #222222;
 }
 
 /* #endregion */

@@ -141,6 +141,8 @@
 
 
 
+  <!-- #region CONTEÚDO -->
+
   <main
     class="
       info-servico-page
@@ -180,6 +182,8 @@
   >
 
 
+    <!-- #region CABEÇALHO -->
+
     <div class="info-lista-topo">
 
 
@@ -207,7 +211,11 @@
 
     </div>
 
+    <!-- #endregion -->
 
+
+
+    <!-- #region SERVIÇOS -->
 
     {% if servicos %}
 
@@ -254,6 +262,8 @@
 
 
 
+            <!-- #region IMAGEM -->
+
             <div class="info-servico-imagem">
 
 
@@ -262,7 +272,19 @@
                 <img
                   src="{{ servico.foto }}"
                   alt="{{ servico.nome_servico }}"
+                  onerror="
+                    this.style.display='none';
+                    this.nextElementSibling.style.display='flex';
+                  "
                 >
+
+
+                <div
+                  class="info-sem-imagem"
+                  style="display:none;"
+                >
+                  Sem imagem cadastrada
+                </div>
 
               {% else %}
 
@@ -275,10 +297,16 @@
 
             </div>
 
+            <!-- #endregion -->
 
+
+
+            <!-- #region CORPO -->
 
             <div class="info-servico-corpo">
 
+
+              <!-- #region VISUALIZAÇÃO -->
 
               <div class="info-item-visualizacao">
 
@@ -327,7 +355,11 @@
 
               </div>
 
+              <!-- #endregion -->
 
+
+
+              <!-- #region EDIÇÃO -->
 
               {% if eh_dono %}
 
@@ -399,8 +431,12 @@
 
               {% endif %}
 
+              <!-- #endregion -->
+
 
             </div>
+
+            <!-- #endregion -->
 
 
           </article>
@@ -412,12 +448,34 @@
       </div>
 
 
+    {% else %}
+
+
+      <div class="info-vazio">
+
+        <h2>
+          Nenhum serviço cadastrado
+        </h2>
+
+        <p>
+          Esta loja ainda não possui serviços cadastrados.
+        </p>
+
+      </div>
+
+
     {% endif %}
+
+    <!-- #endregion -->
 
 
   </main>
 
+  <!-- #endregion -->
 
+
+
+  <!-- #region JAVASCRIPT -->
 
   <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
 
@@ -431,6 +489,11 @@
         botao.closest(
           '.info-servico-card'
         );
+
+
+      if (!card) {
+        return;
+      }
 
 
       const nome =
@@ -451,15 +514,43 @@
         );
 
 
-      card.querySelector(
-        '.js-editar-nome'
-      ).value =
+      const inputNome =
+        card.querySelector(
+          '.js-editar-nome'
+        );
+
+
+      const inputPreco =
+        card.querySelector(
+          '.js-editar-preco'
+        );
+
+
+      const inputDescricao =
+        card.querySelector(
+          '.js-editar-descricao'
+        );
+
+
+      if (
+        !nome ||
+        !preco ||
+        !descricao ||
+        !inputNome ||
+        !inputPreco ||
+        !inputDescricao
+      ) {
+
+        return;
+
+      }
+
+
+      inputNome.value =
         nome.textContent.trim();
 
 
-      card.querySelector(
-        '.js-editar-preco'
-      ).value =
+      inputPreco.value =
         preco.textContent
           .replace('R$', '')
           .trim();
@@ -469,9 +560,7 @@
         descricao.textContent.trim();
 
 
-      card.querySelector(
-        '.js-editar-descricao'
-      ).value =
+      inputDescricao.value =
         descricaoAtual === 'Sem descrição.'
           ? ''
           : descricaoAtual;
@@ -487,9 +576,20 @@
 
     function cancelarEdicaoServico(botao) {
 
-      botao
-        .closest('.info-servico-card')
-        .classList.remove('editando');
+      const card =
+        botao.closest(
+          '.info-servico-card'
+        );
+
+
+      if (!card) {
+        return;
+      }
+
+
+      card.classList.remove(
+        'editando'
+      );
 
     }
 
@@ -503,38 +603,73 @@
         );
 
 
-      const nome =
+      if (!card) {
+        return;
+      }
+
+
+      const inputNome =
         card.querySelector(
           '.js-editar-nome'
-        ).value.trim();
+        );
+
+
+      const inputPreco =
+        card.querySelector(
+          '.js-editar-preco'
+        );
+
+
+      const inputDescricao =
+        card.querySelector(
+          '.js-editar-descricao'
+        );
+
+
+      const nome =
+        inputNome.value.trim();
 
 
       const preco =
-        card.querySelector(
-          '.js-editar-preco'
-        ).value.trim();
+        inputPreco.value.trim();
 
 
       const descricao =
-        card.querySelector(
-          '.js-editar-descricao'
-        ).value.trim();
+        inputDescricao.value.trim();
 
 
-      if (!nome || !preco) {
+
+      if (!nome) {
 
         alert(
-          'Preencha o nome e o preço do serviço.'
+          'Preencha o nome do serviço.'
         );
+
+        inputNome.focus();
 
         return;
 
       }
 
 
+      if (!preco) {
+
+        alert(
+          'Preencha o preço do serviço.'
+        );
+
+        inputPreco.focus();
+
+        return;
+
+      }
+
+
+
       card.querySelector(
         '.js-nome'
-      ).textContent = nome;
+      ).textContent =
+        nome;
 
 
       card.querySelector(
@@ -546,7 +681,8 @@
       card.querySelector(
         '.js-descricao'
       ).textContent =
-        descricao || 'Sem descrição.';
+        descricao ||
+        'Sem descrição.';
 
 
       card.classList.remove(
@@ -565,28 +701,38 @@
         );
 
 
+      if (!card) {
+        return;
+      }
+
+
       const nome =
         card.querySelector(
           '.js-nome'
         ).textContent.trim();
 
 
-      if (
+      const confirmar =
         confirm(
           'Deseja excluir o serviço "' +
           nome +
           '"?'
-        )
-      ) {
+        );
 
-        card.remove();
 
+      if (!confirmar) {
+        return;
       }
+
+
+      card.remove();
 
     }
 
 
   </script>
+
+  <!-- #endregion -->
 
 
 </body>
