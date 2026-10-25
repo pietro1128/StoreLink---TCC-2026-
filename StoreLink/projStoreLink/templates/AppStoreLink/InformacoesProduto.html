@@ -221,35 +221,37 @@
           <article class="info-produto-card">
 
 
-            <!-- #region ações do proprietário -->
+            <!-- #region AÇÕES DO PROPRIETÁRIO -->
 
             {% if eh_dono %}
 
               <div class="info-item-acoes">
 
-                <a
+
+                <button
+                  type="button"
                   class="info-item-editar"
-                  href="{% url 'produtos-loja' %}"
-                  title="Editar produto"
+                  onclick="abrirEdicaoProduto(this)"
                 >
                   ✎ Editar
-                </a>
+                </button>
 
 
                 <button
                   type="button"
                   class="info-item-excluir"
-                  onclick="confirmarExclusaoProduto()"
-                  title="Excluir produto"
+                  onclick="excluirProduto(this)"
                 >
                   🗑 Excluir
                 </button>
+
 
               </div>
 
             {% endif %}
 
             <!-- #endregion -->
+
 
 
             <div class="info-produto-imagem">
@@ -260,19 +262,7 @@
                 <img
                   src="{{ produto.foto }}"
                   alt="{{ produto.nome_produto }}"
-                  onerror="
-                    this.style.display='none';
-                    this.nextElementSibling.style.display='flex';
-                  "
                 >
-
-
-                <div
-                  class="info-sem-imagem"
-                  style="display: none;"
-                >
-                  Sem imagem cadastrada
-                </div>
 
               {% else %}
 
@@ -290,46 +280,124 @@
             <div class="info-produto-corpo">
 
 
-              <span class="info-label">
-                Nome do produto:
-              </span>
+              <div class="info-item-visualizacao">
 
 
-              <h2>
-                {{ produto.nome_produto }}
-              </h2>
+                <span class="info-label">
+                  Nome do produto:
+                </span>
 
 
-
-              <span class="info-label">
-                Preço do produto:
-              </span>
-
-
-              <strong class="info-preco">
-                R$ {{ produto.preco }}
-              </strong>
+                <h2 class="js-nome">
+                  {{ produto.nome_produto }}
+                </h2>
 
 
 
-              <span class="info-label">
-                Descrição do produto:
-              </span>
+                <span class="info-label">
+                  Preço do produto:
+                </span>
 
 
-              <p>
+                <strong class="info-preco js-preco">
+                  R$ {{ produto.preco }}
+                </strong>
 
-                {% if produto.descricao %}
 
-                  {{ produto.descricao }}
 
-                {% else %}
+                <span class="info-label">
+                  Descrição do produto:
+                </span>
 
-                  Sem descrição.
 
-                {% endif %}
+                <p class="js-descricao">
 
-              </p>
+                  {% if produto.descricao %}
+
+                    {{ produto.descricao }}
+
+                  {% else %}
+
+                    Sem descrição.
+
+                  {% endif %}
+
+                </p>
+
+
+              </div>
+
+
+
+              {% if eh_dono %}
+
+                <div class="info-item-edicao">
+
+
+                  <label>
+                    Nome do produto:
+                  </label>
+
+
+                  <input
+                    type="text"
+                    class="js-editar-nome"
+                    value="{{ produto.nome_produto }}"
+                  >
+
+
+
+                  <label>
+                    Preço do produto:
+                  </label>
+
+
+                  <input
+                    type="text"
+                    class="js-editar-preco"
+                    value="{{ produto.preco }}"
+                  >
+
+
+
+                  <label>
+                    Descrição do produto:
+                  </label>
+
+
+                  <textarea
+                    class="js-editar-descricao"
+                  >{{ produto.descricao|default:'' }}</textarea>
+
+
+
+                  <div class="info-edicao-botoes">
+
+
+                    <button
+                      type="button"
+                      class="info-edicao-salvar"
+                      onclick="salvarEdicaoProduto(this)"
+                    >
+                      Salvar
+                    </button>
+
+
+                    <button
+                      type="button"
+                      class="info-edicao-cancelar"
+                      onclick="cancelarEdicaoProduto(this)"
+                    >
+                      Cancelar
+                    </button>
+
+
+                  </div>
+
+
+                </div>
+
+              {% endif %}
 
 
             </div>
@@ -344,22 +412,6 @@
       </div>
 
 
-    {% else %}
-
-
-      <div class="info-vazio">
-
-        <h2>
-          Nenhum produto cadastrado
-        </h2>
-
-        <p>
-          Esta loja ainda não possui produtos cadastrados.
-        </p>
-
-      </div>
-
-
     {% endif %}
 
 
@@ -367,20 +419,172 @@
 
 
 
-  <script
-    src="{% static 'AppStoreLink/scripts/index.js' %}"
-  ></script>
+  <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
 
 
   <script>
 
-    function confirmarExclusaoProduto() {
 
-      confirm(
-        'Deseja excluir este produto?'
+    function abrirEdicaoProduto(botao) {
+
+      const card =
+        botao.closest(
+          '.info-produto-card'
+        );
+
+
+      const nome =
+        card.querySelector(
+          '.js-nome'
+        );
+
+
+      const preco =
+        card.querySelector(
+          '.js-preco'
+        );
+
+
+      const descricao =
+        card.querySelector(
+          '.js-descricao'
+        );
+
+
+      card.querySelector(
+        '.js-editar-nome'
+      ).value =
+        nome.textContent.trim();
+
+
+      card.querySelector(
+        '.js-editar-preco'
+      ).value =
+        preco.textContent
+          .replace('R$', '')
+          .trim();
+
+
+      const descricaoAtual =
+        descricao.textContent.trim();
+
+
+      card.querySelector(
+        '.js-editar-descricao'
+      ).value =
+        descricaoAtual === 'Sem descrição.'
+          ? ''
+          : descricaoAtual;
+
+
+      card.classList.add(
+        'editando'
       );
 
     }
+
+
+
+    function cancelarEdicaoProduto(botao) {
+
+      botao
+        .closest('.info-produto-card')
+        .classList.remove('editando');
+
+    }
+
+
+
+    function salvarEdicaoProduto(botao) {
+
+      const card =
+        botao.closest(
+          '.info-produto-card'
+        );
+
+
+      const nome =
+        card.querySelector(
+          '.js-editar-nome'
+        ).value.trim();
+
+
+      const preco =
+        card.querySelector(
+          '.js-editar-preco'
+        ).value.trim();
+
+
+      const descricao =
+        card.querySelector(
+          '.js-editar-descricao'
+        ).value.trim();
+
+
+      if (!nome || !preco) {
+
+        alert(
+          'Preencha o nome e o preço do produto.'
+        );
+
+        return;
+
+      }
+
+
+      card.querySelector(
+        '.js-nome'
+      ).textContent = nome;
+
+
+      card.querySelector(
+        '.js-preco'
+      ).textContent =
+        'R$ ' + preco;
+
+
+      card.querySelector(
+        '.js-descricao'
+      ).textContent =
+        descricao || 'Sem descrição.';
+
+
+      card.classList.remove(
+        'editando'
+      );
+
+    }
+
+
+
+    function excluirProduto(botao) {
+
+      const card =
+        botao.closest(
+          '.info-produto-card'
+        );
+
+
+      const nome =
+        card.querySelector(
+          '.js-nome'
+        ).textContent.trim();
+
+
+      if (
+        confirm(
+          'Deseja excluir o produto "' +
+          nome +
+          '"?'
+        )
+      ) {
+
+        card.remove();
+
+      }
+
+    }
+
 
   </script>
 

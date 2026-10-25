@@ -221,35 +221,37 @@
           <article class="info-servico-card">
 
 
-            <!-- #region ações do proprietário -->
+            <!-- #region AÇÕES DO PROPRIETÁRIO -->
 
             {% if eh_dono %}
 
               <div class="info-item-acoes">
 
-                <a
+
+                <button
+                  type="button"
                   class="info-item-editar"
-                  href="{% url 'servicos-loja' %}"
-                  title="Editar serviço"
+                  onclick="abrirEdicaoServico(this)"
                 >
                   ✎ Editar
-                </a>
+                </button>
 
 
                 <button
                   type="button"
                   class="info-item-excluir"
-                  onclick="confirmarExclusaoServico()"
-                  title="Excluir serviço"
+                  onclick="excluirServico(this)"
                 >
                   🗑 Excluir
                 </button>
+
 
               </div>
 
             {% endif %}
 
             <!-- #endregion -->
+
 
 
             <div class="info-servico-imagem">
@@ -260,19 +262,7 @@
                 <img
                   src="{{ servico.foto }}"
                   alt="{{ servico.nome_servico }}"
-                  onerror="
-                    this.style.display='none';
-                    this.nextElementSibling.style.display='flex';
-                  "
                 >
-
-
-                <div
-                  class="info-sem-imagem"
-                  style="display: none;"
-                >
-                  Sem imagem cadastrada
-                </div>
 
               {% else %}
 
@@ -290,46 +280,124 @@
             <div class="info-servico-corpo">
 
 
-              <span class="info-label">
-                Nome do serviço:
-              </span>
+              <div class="info-item-visualizacao">
 
 
-              <h2>
-                {{ servico.nome_servico }}
-              </h2>
+                <span class="info-label">
+                  Nome do serviço:
+                </span>
 
 
-
-              <span class="info-label">
-                Preço do serviço:
-              </span>
-
-
-              <strong class="info-preco">
-                R$ {{ servico.preco }}
-              </strong>
+                <h2 class="js-nome">
+                  {{ servico.nome_servico }}
+                </h2>
 
 
 
-              <span class="info-label">
-                Descrição do serviço:
-              </span>
+                <span class="info-label">
+                  Preço do serviço:
+                </span>
 
 
-              <p>
+                <strong class="info-preco js-preco">
+                  R$ {{ servico.preco }}
+                </strong>
 
-                {% if servico.descricao %}
 
-                  {{ servico.descricao }}
 
-                {% else %}
+                <span class="info-label">
+                  Descrição do serviço:
+                </span>
 
-                  Sem descrição.
 
-                {% endif %}
+                <p class="js-descricao">
 
-              </p>
+                  {% if servico.descricao %}
+
+                    {{ servico.descricao }}
+
+                  {% else %}
+
+                    Sem descrição.
+
+                  {% endif %}
+
+                </p>
+
+
+              </div>
+
+
+
+              {% if eh_dono %}
+
+                <div class="info-item-edicao">
+
+
+                  <label>
+                    Nome do serviço:
+                  </label>
+
+
+                  <input
+                    type="text"
+                    class="js-editar-nome"
+                    value="{{ servico.nome_servico }}"
+                  >
+
+
+
+                  <label>
+                    Preço do serviço:
+                  </label>
+
+
+                  <input
+                    type="text"
+                    class="js-editar-preco"
+                    value="{{ servico.preco }}"
+                  >
+
+
+
+                  <label>
+                    Descrição do serviço:
+                  </label>
+
+
+                  <textarea
+                    class="js-editar-descricao"
+                  >{{ servico.descricao|default:'' }}</textarea>
+
+
+
+                  <div class="info-edicao-botoes">
+
+
+                    <button
+                      type="button"
+                      class="info-edicao-salvar"
+                      onclick="salvarEdicaoServico(this)"
+                    >
+                      Salvar
+                    </button>
+
+
+                    <button
+                      type="button"
+                      class="info-edicao-cancelar"
+                      onclick="cancelarEdicaoServico(this)"
+                    >
+                      Cancelar
+                    </button>
+
+
+                  </div>
+
+
+                </div>
+
+              {% endif %}
 
 
             </div>
@@ -344,22 +412,6 @@
       </div>
 
 
-    {% else %}
-
-
-      <div class="info-vazio">
-
-        <h2>
-          Nenhum serviço cadastrado
-        </h2>
-
-        <p>
-          Esta loja ainda não possui serviços cadastrados.
-        </p>
-
-      </div>
-
-
     {% endif %}
 
 
@@ -367,20 +419,172 @@
 
 
 
-  <script
-    src="{% static 'AppStoreLink/scripts/index.js' %}"
-  ></script>
+  <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
 
 
   <script>
 
-    function confirmarExclusaoServico() {
 
-      confirm(
-        'Deseja excluir este serviço?'
+    function abrirEdicaoServico(botao) {
+
+      const card =
+        botao.closest(
+          '.info-servico-card'
+        );
+
+
+      const nome =
+        card.querySelector(
+          '.js-nome'
+        );
+
+
+      const preco =
+        card.querySelector(
+          '.js-preco'
+        );
+
+
+      const descricao =
+        card.querySelector(
+          '.js-descricao'
+        );
+
+
+      card.querySelector(
+        '.js-editar-nome'
+      ).value =
+        nome.textContent.trim();
+
+
+      card.querySelector(
+        '.js-editar-preco'
+      ).value =
+        preco.textContent
+          .replace('R$', '')
+          .trim();
+
+
+      const descricaoAtual =
+        descricao.textContent.trim();
+
+
+      card.querySelector(
+        '.js-editar-descricao'
+      ).value =
+        descricaoAtual === 'Sem descrição.'
+          ? ''
+          : descricaoAtual;
+
+
+      card.classList.add(
+        'editando'
       );
 
     }
+
+
+
+    function cancelarEdicaoServico(botao) {
+
+      botao
+        .closest('.info-servico-card')
+        .classList.remove('editando');
+
+    }
+
+
+
+    function salvarEdicaoServico(botao) {
+
+      const card =
+        botao.closest(
+          '.info-servico-card'
+        );
+
+
+      const nome =
+        card.querySelector(
+          '.js-editar-nome'
+        ).value.trim();
+
+
+      const preco =
+        card.querySelector(
+          '.js-editar-preco'
+        ).value.trim();
+
+
+      const descricao =
+        card.querySelector(
+          '.js-editar-descricao'
+        ).value.trim();
+
+
+      if (!nome || !preco) {
+
+        alert(
+          'Preencha o nome e o preço do serviço.'
+        );
+
+        return;
+
+      }
+
+
+      card.querySelector(
+        '.js-nome'
+      ).textContent = nome;
+
+
+      card.querySelector(
+        '.js-preco'
+      ).textContent =
+        'R$ ' + preco;
+
+
+      card.querySelector(
+        '.js-descricao'
+      ).textContent =
+        descricao || 'Sem descrição.';
+
+
+      card.classList.remove(
+        'editando'
+      );
+
+    }
+
+
+
+    function excluirServico(botao) {
+
+      const card =
+        botao.closest(
+          '.info-servico-card'
+        );
+
+
+      const nome =
+        card.querySelector(
+          '.js-nome'
+        ).textContent.trim();
+
+
+      if (
+        confirm(
+          'Deseja excluir o serviço "' +
+          nome +
+          '"?'
+        )
+      ) {
+
+        card.remove();
+
+      }
+
+    }
+
 
   </script>
 

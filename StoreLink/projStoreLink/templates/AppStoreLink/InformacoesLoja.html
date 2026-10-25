@@ -29,6 +29,7 @@
     href="{% static 'AppStoreLink/styles/style.css' %}"
   >
 
+
   <link
     rel="stylesheet"
     href="{% static 'AppStoreLink/styles/informacoes-loja.css' %}"
@@ -251,6 +252,7 @@
 
             </form>
 
+
           </div>
 
 
@@ -279,19 +281,20 @@
 
 
 
-          <!-- #region AÇÕES DA LOJA -->
+          <!-- #region AÇÕES DO PROPRIETÁRIO -->
 
-          {% if usuario_logado %}
+          {% if eh_dono %}
 
             <div class="info-loja-acoes">
 
 
-              <a
+              <button
+                type="button"
                 class="info-editar-loja"
-                href="{% url 'perfil-loja' %}"
+                onclick="abrirEdicaoLoja(this)"
               >
                 ✎ EDITAR LOJA
-              </a>
+              </button>
 
 
               <button
@@ -316,41 +319,97 @@
 
         <div class="info-loja-dados">
 
-          <h2>
-            NOME
-          </h2>
+
+          <!-- #region VISUALIZAÇÃO -->
+
+          <div class="info-loja-visualizacao">
 
 
-          <div class="info-campo">
-
-            <strong>
-              Nome do Estabelecimento
-            </strong>
-
-            <span>
-              {{ loja.nome_loja }}
-            </span>
-
-          </div>
+            <h2>
+              NOME
+            </h2>
 
 
-
-          <h2>
-            LOCALIZAÇÃO
-          </h2>
-
-
-          <div class="info-localizacao-grid">
-
-
-            <div class="info-campo info-rua">
+            <div class="info-campo">
 
               <strong>
-                Rua
+                Nome do Estabelecimento
               </strong>
 
-              <span>
-                {{ loja.id_endereco.rua }}
+              <span class="js-loja-nome">
+                {{ loja.nome_loja }}
+              </span>
+
+            </div>
+
+
+
+            <h2>
+              LOCALIZAÇÃO
+            </h2>
+
+
+            <div class="info-localizacao-grid">
+
+
+              <div class="info-campo info-rua">
+
+                <strong>
+                  Rua
+                </strong>
+
+                <span class="js-loja-rua">
+                  {{ loja.id_endereco.rua }}
+                </span>
+
+              </div>
+
+
+
+              <div class="info-campo">
+
+                <strong>
+                  Número
+                </strong>
+
+                <span class="js-loja-numero">
+                  {{ loja.id_endereco.numero_estabelecimento }}
+                </span>
+
+              </div>
+
+
+
+              <div class="info-campo">
+
+                <strong>
+                  CEP
+                </strong>
+
+                <span class="js-loja-cep">
+                  {{ loja.id_endereco.cep }}
+                </span>
+
+              </div>
+
+
+            </div>
+
+
+
+            <h2>
+              INFORMAÇÕES
+            </h2>
+
+
+            <div class="info-campo">
+
+              <strong>
+                E-mail
+              </strong>
+
+              <span class="js-loja-email">
+                {{ loja.email_loja }}
               </span>
 
             </div>
@@ -360,11 +419,21 @@
             <div class="info-campo">
 
               <strong>
-                Número
+                Telefone
               </strong>
 
-              <span>
-                {{ loja.id_endereco.numero_estabelecimento }}
+              <span class="js-loja-telefone">
+
+                {% if loja.telefone_loja %}
+
+                  {{ loja.telefone_loja }}
+
+                {% else %}
+
+                  Não informado
+
+                {% endif %}
+
               </span>
 
             </div>
@@ -374,11 +443,50 @@
             <div class="info-campo">
 
               <strong>
-                CEP
+                CNPJ
               </strong>
 
-              <span>
-                {{ loja.id_endereco.cep }}
+              <span class="js-loja-cnpj">
+                {{ loja.cnpj }}
+              </span>
+
+            </div>
+
+
+
+            <div class="info-campo">
+
+              <strong>
+                Link de Loja virtual
+              </strong>
+
+
+              <span class="js-loja-link">
+
+                {% if loja.link %}
+
+                  {{ loja.link }}
+
+                {% else %}
+
+                  Não possui
+
+                {% endif %}
+
+              </span>
+
+            </div>
+
+
+
+            <div class="info-classificacao">
+
+              <strong>
+                Classificação da Loja
+              </strong>
+
+              <span class="js-loja-categoria">
+                {{ loja.id_categoria.tipo_categoria }}
               </span>
 
             </div>
@@ -386,105 +494,180 @@
 
           </div>
 
-
-
-          <h2>
-            INFORMAÇÕES
-          </h2>
-
-
-          <div class="info-campo">
-
-            <strong>
-              E-mail
-            </strong>
-
-            <span>
-              {{ loja.email_loja }}
-            </span>
-
-          </div>
+          <!-- #endregion -->
 
 
 
-          <div class="info-campo">
+          <!-- #region EDIÇÃO -->
 
-            <strong>
-              Telefone
-            </strong>
+          {% if eh_dono %}
 
-            <span>
-
-              {% if loja.telefone_loja %}
-
-                {{ loja.telefone_loja }}
-
-              {% else %}
-
-                Não informado
-
-              {% endif %}
-
-            </span>
-
-          </div>
+            <div class="info-loja-edicao">
 
 
-
-          <div class="info-campo">
-
-            <strong>
-              CNPJ
-            </strong>
-
-            <span>
-              {{ loja.cnpj }}
-            </span>
-
-          </div>
+              <h2>
+                EDITAR LOJA
+              </h2>
 
 
-
-          <div class="info-campo">
-
-            <strong>
-              Link de Loja virtual
-            </strong>
+              <label>
+                Nome do Estabelecimento
+              </label>
 
 
-            {% if loja.link %}
-
-              <a
-                href="{{ loja.link }}"
-                target="_blank"
-                rel="noopener noreferrer"
+              <input
+                type="text"
+                class="js-editar-loja-nome"
+                value="{{ loja.nome_loja }}"
               >
-                {{ loja.link }}
-              </a>
-
-            {% else %}
-
-              <span>
-                Não possui
-              </span>
-
-            {% endif %}
-
-          </div>
 
 
 
-          <div class="info-classificacao">
+              <label>
+                Rua
+              </label>
 
-            <strong>
-              Classificação da Loja
-            </strong>
 
-            <span>
-              {{ loja.id_categoria.tipo_categoria }}
-            </span>
+              <input
+                type="text"
+                class="js-editar-loja-rua"
+                value="{{ loja.id_endereco.rua }}"
+              >
 
-          </div>
+
+
+              <div class="info-loja-edicao-row">
+
+
+                <div>
+
+                  <label>
+                    Número
+                  </label>
+
+                  <input
+                    type="text"
+                    class="js-editar-loja-numero"
+                    value="{{ loja.id_endereco.numero_estabelecimento }}"
+                  >
+
+                </div>
+
+
+
+                <div>
+
+                  <label>
+                    CEP
+                  </label>
+
+                  <input
+                    type="text"
+                    class="js-editar-loja-cep"
+                    value="{{ loja.id_endereco.cep }}"
+                  >
+
+                </div>
+
+
+              </div>
+
+
+
+              <label>
+                E-mail
+              </label>
+
+
+              <input
+                type="email"
+                class="js-editar-loja-email"
+                value="{{ loja.email_loja }}"
+              >
+
+
+
+              <label>
+                Telefone
+              </label>
+
+
+              <input
+                type="text"
+                class="js-editar-loja-telefone"
+                value="{{ loja.telefone_loja|default:'' }}"
+              >
+
+
+
+              <label>
+                CNPJ
+              </label>
+
+
+              <input
+                type="text"
+                class="js-editar-loja-cnpj"
+                value="{{ loja.cnpj }}"
+              >
+
+
+
+              <label>
+                Link de Loja virtual
+              </label>
+
+
+              <input
+                type="text"
+                class="js-editar-loja-link"
+                value="{{ loja.link|default:'' }}"
+              >
+
+
+
+              <label>
+                Classificação da Loja
+              </label>
+
+
+              <input
+                type="text"
+                class="js-editar-loja-categoria"
+                value="{{ loja.id_categoria.tipo_categoria }}"
+              >
+
+
+
+              <div class="info-loja-edicao-botoes">
+
+
+                <button
+                  type="button"
+                  class="info-loja-salvar"
+                  onclick="salvarEdicaoLoja(this)"
+                >
+                  Salvar alterações
+                </button>
+
+
+                <button
+                  type="button"
+                  class="info-loja-cancelar"
+                  onclick="cancelarEdicaoLoja(this)"
+                >
+                  Cancelar
+                </button>
+
+
+              </div>
+
+
+            </div>
+
+          {% endif %}
+
+          <!-- #endregion -->
 
 
         </div>
@@ -882,6 +1065,7 @@
 
   <script>
 
+
     function abrirEdicao(botao) {
 
       botao
@@ -909,6 +1093,283 @@
     }
 
 
+
+    function abrirEdicaoLoja(botao) {
+
+      const card =
+        botao.closest(
+          '.info-loja-card'
+        );
+
+
+      const nome =
+        card.querySelector(
+          '.js-loja-nome'
+        ).textContent.trim();
+
+
+      const rua =
+        card.querySelector(
+          '.js-loja-rua'
+        ).textContent.trim();
+
+
+      const numero =
+        card.querySelector(
+          '.js-loja-numero'
+        ).textContent.trim();
+
+
+      const cep =
+        card.querySelector(
+          '.js-loja-cep'
+        ).textContent.trim();
+
+
+      const email =
+        card.querySelector(
+          '.js-loja-email'
+        ).textContent.trim();
+
+
+      const telefone =
+        card.querySelector(
+          '.js-loja-telefone'
+        ).textContent.trim();
+
+
+      const cnpj =
+        card.querySelector(
+          '.js-loja-cnpj'
+        ).textContent.trim();
+
+
+      const link =
+        card.querySelector(
+          '.js-loja-link'
+        ).textContent.trim();
+
+
+      const categoria =
+        card.querySelector(
+          '.js-loja-categoria'
+        ).textContent.trim();
+
+
+
+      card.querySelector(
+        '.js-editar-loja-nome'
+      ).value = nome;
+
+
+      card.querySelector(
+        '.js-editar-loja-rua'
+      ).value = rua;
+
+
+      card.querySelector(
+        '.js-editar-loja-numero'
+      ).value = numero;
+
+
+      card.querySelector(
+        '.js-editar-loja-cep'
+      ).value = cep;
+
+
+      card.querySelector(
+        '.js-editar-loja-email'
+      ).value = email;
+
+
+      card.querySelector(
+        '.js-editar-loja-telefone'
+      ).value =
+        telefone === 'Não informado'
+          ? ''
+          : telefone;
+
+
+      card.querySelector(
+        '.js-editar-loja-cnpj'
+      ).value = cnpj;
+
+
+      card.querySelector(
+        '.js-editar-loja-link'
+      ).value =
+        link === 'Não possui'
+          ? ''
+          : link;
+
+
+      card.querySelector(
+        '.js-editar-loja-categoria'
+      ).value = categoria;
+
+
+      card.classList.add(
+        'editando'
+      );
+
+    }
+
+
+
+    function cancelarEdicaoLoja(botao) {
+
+      const card =
+        botao.closest(
+          '.info-loja-card'
+        );
+
+
+      card.classList.remove(
+        'editando'
+      );
+
+    }
+
+
+
+    function salvarEdicaoLoja(botao) {
+
+      const card =
+        botao.closest(
+          '.info-loja-card'
+        );
+
+
+      const nome =
+        card.querySelector(
+          '.js-editar-loja-nome'
+        ).value.trim();
+
+
+      const rua =
+        card.querySelector(
+          '.js-editar-loja-rua'
+        ).value.trim();
+
+
+      const numero =
+        card.querySelector(
+          '.js-editar-loja-numero'
+        ).value.trim();
+
+
+      const cep =
+        card.querySelector(
+          '.js-editar-loja-cep'
+        ).value.trim();
+
+
+      const email =
+        card.querySelector(
+          '.js-editar-loja-email'
+        ).value.trim();
+
+
+      const telefone =
+        card.querySelector(
+          '.js-editar-loja-telefone'
+        ).value.trim();
+
+
+      const cnpj =
+        card.querySelector(
+          '.js-editar-loja-cnpj'
+        ).value.trim();
+
+
+      const link =
+        card.querySelector(
+          '.js-editar-loja-link'
+        ).value.trim();
+
+
+      const categoria =
+        card.querySelector(
+          '.js-editar-loja-categoria'
+        ).value.trim();
+
+
+
+      if (
+        !nome ||
+        !rua ||
+        !numero ||
+        !cep ||
+        !email ||
+        !cnpj ||
+        !categoria
+      ) {
+
+        alert(
+          'Preencha todos os campos obrigatórios.'
+        );
+
+        return;
+
+      }
+
+
+
+      card.querySelector(
+        '.js-loja-nome'
+      ).textContent = nome;
+
+
+      card.querySelector(
+        '.js-loja-rua'
+      ).textContent = rua;
+
+
+      card.querySelector(
+        '.js-loja-numero'
+      ).textContent = numero;
+
+
+      card.querySelector(
+        '.js-loja-cep'
+      ).textContent = cep;
+
+
+      card.querySelector(
+        '.js-loja-email'
+      ).textContent = email;
+
+
+      card.querySelector(
+        '.js-loja-telefone'
+      ).textContent =
+        telefone || 'Não informado';
+
+
+      card.querySelector(
+        '.js-loja-cnpj'
+      ).textContent = cnpj;
+
+
+      card.querySelector(
+        '.js-loja-link'
+      ).textContent =
+        link || 'Não possui';
+
+
+      card.querySelector(
+        '.js-loja-categoria'
+      ).textContent = categoria;
+
+
+      card.classList.remove(
+        'editando'
+      );
+
+    }
+
+
+
     function confirmarExclusaoLoja() {
 
       confirm(
@@ -916,6 +1377,7 @@
       );
 
     }
+
 
   </script>
 

@@ -3,14 +3,16 @@
 }
 
 
+/* #region PAGINA */
+
 .info-produto-page {
   --cor-categoria: #cfcfcf;
 
   min-height:
-    calc(100vh - 58px);
+    calc(100vh - 64px);
 
   padding:
-    30px 34px 55px;
+    22px 24px 42px;
 
   background:
     var(--bg-page);
@@ -19,6 +21,10 @@
     var(--text-color);
 }
 
+/* #endregion */
+
+
+/* #region CORES */
 
 .info-alimentos {
   --cor-categoria: #e8534f;
@@ -60,21 +66,25 @@
   --cor-categoria: #cfcfcf;
 }
 
+/* #endregion */
+
+
+/* #region CABEÇALHO */
 
 .info-lista-topo {
   display: flex;
 
   align-items: center;
 
-  gap: 14px;
+  gap: 10px;
 
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 
 .info-voltar {
-  width: 46px;
-  height: 46px;
+  width: 42px;
+  height: 42px;
 
   border:
     4px solid
@@ -121,7 +131,7 @@
   color:
     var(--cor-categoria);
 
-  font-size: 26px;
+  font-size: 27px;
 
   font-weight: 900;
 }
@@ -137,6 +147,10 @@
   font-size: 13px;
 }
 
+/* #endregion */
+
+
+/* #region GRID */
 
 .info-produto-grid {
   display: grid;
@@ -144,21 +158,36 @@
   grid-template-columns:
     repeat(
       auto-fill,
-      minmax(290px, 1fr)
+      minmax(320px, 1fr)
     );
 
-  gap: 28px;
+  gap: 18px;
+
+
+  /*
+    IMPORTANTE:
+    impede os outros cards da mesma linha
+    de crescerem junto com o card editado
+  */
+
+  align-items: start;
 }
 
+/* #endregion */
+
+
+/* #region CARD */
 
 .info-produto-card {
   position: relative;
 
+  align-self: start;
+
   border:
-    12px solid
+    10px solid
     var(--cor-categoria);
 
-  border-radius: 24px;
+  border-radius: 21px;
 
   overflow: hidden;
 
@@ -181,8 +210,17 @@
 }
 
 
+.info-produto-card.editando:hover {
+  transform: none;
+}
+
+/* #endregion */
+
+
+/* #region IMAGEM */
+
 .info-produto-imagem {
-  height: 180px;
+  height: 190px;
 
   overflow: hidden;
 
@@ -213,6 +251,12 @@
 }
 
 
+.info-produto-card.editando
+.info-produto-imagem img {
+  transform: none;
+}
+
+
 .info-sem-imagem {
   width: 100%;
   height: 100%;
@@ -230,13 +274,17 @@
   font-weight: 700;
 }
 
+/* #endregion */
+
+
+/* #region CORPO */
 
 .info-produto-corpo {
-  min-height: 235px;
+  min-height: 215px;
 
-  margin-top: 10px;
+  margin-top: 8px;
 
-  padding: 16px;
+  padding: 14px;
 
   border-radius: 12px;
 
@@ -294,8 +342,10 @@
   line-height: 1.45;
 }
 
+/* #endregion */
 
-/* #region ações do proprietário */
+
+/* #region AÇÕES */
 
 .info-item-acoes {
   position: absolute;
@@ -333,8 +383,6 @@
 
   font-weight: 700;
 
-  text-decoration: none;
-
   cursor: pointer;
 
   transition:
@@ -370,8 +418,167 @@
     brightness(0.92);
 }
 
+
+.info-produto-card.editando
+.info-item-acoes {
+  display: none;
+}
+
 /* #endregion */
 
+
+/* #region EDIÇÃO */
+
+.info-item-edicao {
+  display: none;
+}
+
+
+.info-produto-card.editando
+.info-item-visualizacao {
+  display: none;
+}
+
+
+.info-produto-card.editando
+.info-item-edicao {
+  display: block;
+}
+
+
+.info-produto-card.editando
+.info-produto-corpo {
+  min-height: auto;
+}
+
+
+.info-item-edicao label {
+  display: block;
+
+  margin:
+    0 0 5px;
+
+  color:
+    var(--cor-categoria);
+
+  font-size: 13px;
+
+  font-weight: 800;
+}
+
+
+.info-item-edicao input,
+.info-item-edicao textarea {
+  width: 100%;
+
+  border:
+    1px solid
+    #cccccc;
+
+  border-radius: 7px;
+
+  outline: none;
+
+  padding:
+    9px 10px;
+
+  margin-bottom: 12px;
+
+  font-family: inherit;
+
+  font-size: 14px;
+
+  color:
+    #222222;
+
+  background:
+    #f5f5f5;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+
+.info-item-edicao input:focus,
+.info-item-edicao textarea:focus {
+  border-color:
+    var(--cor-categoria);
+
+  background:
+    #ffffff;
+}
+
+
+.info-item-edicao textarea {
+  min-height: 90px;
+
+  resize: vertical;
+}
+
+
+.info-edicao-botoes {
+  display: flex;
+
+  gap: 8px;
+}
+
+
+.info-edicao-salvar,
+.info-edicao-cancelar {
+  flex: 1;
+
+  min-height: 38px;
+
+  border: none;
+
+  border-radius: 7px;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease;
+}
+
+
+.info-edicao-salvar {
+  background:
+    var(--cor-categoria);
+
+  color:
+    #ffffff;
+}
+
+
+.info-edicao-cancelar {
+  background:
+    #202020;
+
+  color:
+    #ffffff;
+}
+
+
+.info-edicao-salvar:hover,
+.info-edicao-cancelar:hover {
+  transform:
+    translateY(-1px);
+
+  filter:
+    brightness(0.92);
+}
+
+/* #endregion */
+
+
+/* #region VAZIO */
 
 .info-vazio {
   max-width: 520px;
@@ -403,6 +610,10 @@
     #666666;
 }
 
+/* #endregion */
+
+
+/* #region DARK */
 
 body.dark
 .info-produto-corpo {
@@ -435,6 +646,33 @@ body.dark
 
 
 body.dark
+.info-item-edicao input,
+body.dark
+.info-item-edicao textarea {
+  background:
+    #2a2a2a;
+
+  color:
+    #ffffff;
+
+  border-color:
+    #444444;
+}
+
+
+body.dark
+.info-item-edicao input:focus,
+body.dark
+.info-item-edicao textarea:focus {
+  background:
+    #1f1f1f;
+
+  border-color:
+    var(--cor-categoria);
+}
+
+
+body.dark
 .info-vazio {
   background:
     #1f1f1f;
@@ -454,26 +692,10 @@ body.dark
     #b8b8b8;
 }
 
-
-body.dark
-.info-item-editar {
-  background:
-    #ffffff;
-
-  color:
-    #222222;
-}
+/* #endregion */
 
 
-body.dark
-.info-item-excluir {
-  background:
-    #111111;
-
-  color:
-    #ffffff;
-}
-
+/* #region RESPONSIVIDADE */
 
 @media (
   max-width: 650px
@@ -505,67 +727,12 @@ body.dark
     font-size: 12px;
   }
 
-}
 
+  .info-edicao-botoes {
+    flex-direction:
+      column;
+  }
 
-/* #region AJUSTES DE PROPORÇÃO */
-
-.info-produto-page {
-  min-height:
-    calc(100vh - 52px);
-
-  padding:
-    22px 24px 42px;
-}
-
-
-.info-lista-topo {
-  gap: 10px;
-
-  margin-bottom: 16px;
-}
-
-
-.info-voltar {
-  width: 42px;
-  height: 42px;
-}
-
-
-.info-lista-topo h1 {
-  font-size: 27px;
-}
-
-
-.info-produto-grid {
-  grid-template-columns:
-    repeat(
-      auto-fill,
-      minmax(320px, 1fr)
-    );
-
-  gap: 18px;
-}
-
-
-.info-produto-card {
-  border-width: 10px;
-
-  border-radius: 21px;
-}
-
-
-.info-produto-imagem {
-  height: 190px;
-}
-
-
-.info-produto-corpo {
-  min-height: 215px;
-
-  margin-top: 8px;
-
-  padding: 14px;
 }
 
 /* #endregion */
