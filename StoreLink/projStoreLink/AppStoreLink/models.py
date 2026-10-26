@@ -1,5 +1,60 @@
 from django.db import models
+import os
+import uuid
+from django.core.exceptions import ValidationError
+from PIL import Image
 # Create your models here.
+
+#=======================================================================
+
+# NÃO RENOMEAR, NEM MOVER AS FUNÇÕES validar_foto E caminho_foto_usuario
+
+#======================================================================= 
+
+# Tamanho e formato do arquivo para foto
+FOTO_TAMANHO_MAXIMO = 2 * 1024 * 1024    # 2 MB
+FOTO_EXTENSOES = ('.jpg', '.jpeg', '.png', '.webp')
+FOTO_FORMATOS = ('JPEG', 'PNG', 'WEBP')
+FOTO_LADO_MAXIMO = 4000                  # pixels
+
+
+def validar_foto(arquivo):
+    """Levanta ValidationError se a foto não atender às regras do sistema."""
+    # Foto que já está salva não é revalidada (evita erro se o arquivo sumir do disco).
+    if getattr(arquivo, '_committed', False):
+        return
+
+    if arquivo.size > FOTO_TAMANHO_MAXIMO:
+        raise ValidationError('A foto deve ter no máximo 2 MB.')
+
+    extensao = os.path.splitext(arquivo.name)[1].lower()
+    if extensao not in FOTO_EXTENSOES:
+        raise ValidationError('Formato não permitido. Envie uma foto JPG, PNG ou WEBP.')
+
+    # Confere o conteúdo de verdade: um .txt renomeado para .jpg é barrado aqui.
+    try:
+        arquivo.seek(0)
+        imagem = Image.open(arquivo)
+        formato = imagem.format
+        largura, altura = imagem.size
+        imagem.verify()
+    except Exception:
+        # A biblioteca pode levantar vários tipos de erro com arquivo corrompido.
+        raise ValidationError('O arquivo enviado não é uma imagem válida.')
+    finally:
+        arquivo.seek(0)   # devolve o ponteiro ao início para o arquivo poder ser salvo depois
+
+    if formato not in FOTO_FORMATOS:
+        raise ValidationError('Formato não permitido. Envie uma foto JPG, PNG ou WEBP.')
+    if max(largura, altura) > FOTO_LADO_MAXIMO:
+        raise ValidationError('A foto é grande demais (máximo 4000 pixels de largura ou altura).')
+
+
+def caminho_foto_usuario(instance, nome_arquivo):
+    """Nome aleatório: evita colisão e não aproveita o nome que o usuário mandou."""
+    extensao = os.path.splitext(nome_arquivo)[1].lower()
+    return f'usuarios/{uuid.uuid4().hex}{extensao}'
+
 
 class TipoUsuario(models.Model):
     id_tipo_usuario = models.AutoField(primary_key=True)
@@ -38,6 +93,12 @@ class Usuario(models.Model):
     id_tipo_usuario = models.ForeignKey(
         TipoUsuario, on_delete=models.CASCADE, db_column="id_tipo_usuario",
         blank=True, null=True
+    )
+    
+    foto = models.ImageField(
+        upload_to=caminho_foto_usuario,
+        blank=True, null=True,
+        validators=[validar_foto],
     )
 
     def __str__(self):

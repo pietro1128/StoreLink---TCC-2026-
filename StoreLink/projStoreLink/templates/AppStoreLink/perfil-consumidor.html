@@ -127,6 +127,12 @@
 
   <main class="page-consumidor">
 
+    <form method="POST" action="{% url 'perfil-consumidor' %}" enctype="multipart/form-data">
+      {% csrf_token %}
+      <input type="file" name="foto" accept="image/jpeg,image/png,image/webp">
+      <button type="submit">Salvar foto</button>
+    </form>
+
     <div class="consumidor-wrapper">
 
 
@@ -144,27 +150,21 @@
 
 
           <label
-            class="consumidor-avatar"
+            class="consumidor-avatar {% if chave_perf_consm.foto %}tem-imagem{% endif %}"
             for="foto-consumidor"
           >
 
             <input
               type="file"
               id="foto-consumidor"
-              accept="image/*"
+              name="foto"
+              form="formFoto"
+              accept="image/jpeg,image/png,image/webp"
               hidden
             >
 
-
-            <svg
-              id="avatar-padrao-consumidor"
-              viewBox="0 0 24 24"
-            >
-
-              <path
-                d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"
-              />
-
+            <svg id="avatar-padrao-consumidor" viewBox="0 0 24 24">
+              <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z" />
             </svg>
 
 
@@ -172,6 +172,7 @@
               id="preview-consumidor"
               class="consumidor-avatar-image"
               alt="Foto do consumidor"
+              {% if chave_perf_consm.foto %}src="{{ chave_perf_consm.foto.url }}"{% endif %}
             >
 
           </label>
@@ -186,6 +187,9 @@
 
         </div>
 
+        <button type="submit" form="formFoto" class="consumidor-salvar-foto">
+          Salvar foto
+        </button>
 
         <div class="consumidor-field-left">
 

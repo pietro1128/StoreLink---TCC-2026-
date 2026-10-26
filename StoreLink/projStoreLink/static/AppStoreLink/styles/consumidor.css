@@ -1,0 +1,10 @@
+.consumidor-salvar-foto {
+  margin: 8px auto;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #000;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}

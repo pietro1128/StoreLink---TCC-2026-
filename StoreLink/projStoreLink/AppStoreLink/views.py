@@ -1,3 +1,8 @@
+import os
+import uuid
+from django.core.exceptions import ValidationError
+from django.core.files.storage import default_storage
+from AppStoreLink.models import validar_foto   # junto da linha que já importa os models
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.db import transaction
 from django.shortcuts import render, redirect, get_object_or_404
@@ -43,6 +48,11 @@ def perfil_loja(request):
         cnpj = request.POST.get('cnpj')
         link = request.POST.get('link_loja')
         nome_categoria = request.POST.get('categoria', '').strip() # -> era nescessario que o codigo pegue esse valor para conseguir comparar mais a frente no codigo
+        
+        foto, erro = _foto_enviada(request, 'foto_estabelecimento')
+        if erro:
+            messages.error(request, erro)
+            return render(request, 'AppStoreLink/perfil-loja.html')   # use o mesmo return das outras validações
         
         try:
             dados_cep = consultar_cep(cep)
@@ -94,6 +104,10 @@ def perfil_loja(request):
         if categoria is None:
             messages.error(request, 'Selecione uma categoria válida.')
             return render(request, 'AppStoreLink/perfil-loja.html')
+        
+        caminho_foto = _salvar_foto(foto, 'lojas') if foto else None
+        # ao gravar a loja, só atribua se veio foto:
+        #   foto_estabelecimento=caminho_foto
 
         # Depois de todas as validações, cria endereço e loja:
         endereco = Endereco.objects.create(
@@ -131,6 +145,21 @@ def perfil_consumidor(request):
 
     usuario = get_object_or_404(Usuario, id_categoria=usuario_id)
     loja_fav = LojaFavoritas.objects.filter(id_usuario=usuario).select_related('id_loja')
+    
+    if request.method == 'POST':
+        foto, erro = _foto_enviada(request, 'foto')
+        if erro:
+            messages.error(request, erro)
+            return redirect('perfil-consumidor')
+        if foto:
+            foto_antiga = usuario.foto.name if usuario.foto else None
+            usuario.foto = foto    # o upload_to do model dá o nome final
+            usuario.save(update_fields=['foto'])
+            if foto_antiga:
+                usuario.foto.storage.delete(foto_antiga)   # não deixa fotos antigas acumulando
+            messages.success(request, 'Foto atualizada com sucesso!')
+            return redirect('perfil-consumidor')
+        # sem foto no envio: segue o fluxo normal da view
 
     return render(
         request,
@@ -927,3 +956,20 @@ def logout_view(request):
 
     messages.success(request, 'Você saiu da sua conta.')
     return redirect('index')
+
+def _foto_enviada(request, nome_campo):
+    """Devolve (arquivo, erro). Sem arquivo enviado: (None, None), a foto é opcional."""
+    arquivo = request.FILES.get(nome_campo)
+    if not arquivo:
+        return None, None
+    try:
+        validar_foto(arquivo)
+    except ValidationError as e:
+        return None, e.messages[0]
+    return arquivo, None
+
+
+def _salvar_foto(arquivo, pasta):
+    """Grava o arquivo em media/<pasta>/ com nome aleatório e devolve o caminho relativo."""
+    extensao = os.path.splitext(arquivo.name)[1].lower()
+    return default_storage.save(f'{pasta}/{uuid.uuid4().hex}{extensao}', arquivo)

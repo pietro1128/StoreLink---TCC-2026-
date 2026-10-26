@@ -123,3 +123,7 @@ STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 LOGIN_URL = 'login'
+
+# Pillow para validação de fotos
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media' 
