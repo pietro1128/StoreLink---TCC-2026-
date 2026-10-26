@@ -139,6 +139,27 @@ def perfil_consumidor(request):
     )
 
 
+@require_POST
+def editar_consumidor(request):
+    
+    usuario_id = request.session.get('usuario_id') # -> busca o 'id' que o usuario esta usando
+                                                   # -> ele precisa buscar o 'id' para que ele saiba exatamente qual é o usuario
+    usuario = get_object_or_404(Usuario, id_categoria=usuario_id) # -> busca um registro no banco, se não achar ele da 'erro 404' 
+    
+    nome = request.POST.get('nome', '').strip()
+    sobrenome = request.POST.get('sobrenome', '').strip() or None
+    
+    if not nome:
+        messages.error(request, 'O consumidor precisa ter um nome.')
+        return redirect('perfil-consumidor')
+    
+    usuario.nome = nome
+    usuario.sobrenome = sobrenome
+    usuario.save()
+    
+    messages.success(request, 'Seu perfil foi atualizado com sucesso!')
+    return redirect('perfil-consumidor')
+
 def cadastro(request):
     if request.method == 'POST':
         nome = request.POST.get('nome', '').strip()
@@ -732,7 +753,7 @@ def loja_editar(request, id_loja):
         return render(request, 'AppStoreLink/perfil-loja.html')
 
     # Depois de todas as validações, cria endereço e loja:
-    with transaction.atomic():
+    with transaction.atomic(): # -> 
         endereco = loja.id_endereco
         endereco.rua = rua
         endereco.numero_estabelecimento = numero
@@ -764,9 +785,9 @@ def servico_editar(request, id_servico):
     preco_txt = request.POST.get('preco', '').strip().replace(',', '.')
     descricao = request.POST.get('descricao', '').strip()
     
-    erros, preco = _validar_nome_preco(nome, preco_txt, 'servico')
+    erros, preco = _validar_nome_preco(nome, preco_txt, 'servico') # -> puxa a função de validar preços 
     
-    if erros:
+    if erros: # -> verifica erros da tal função
         for erro in erros:
             messages.error(request, erro)
         return redirect('InformacoesServico', id_loja=servico.id_loja)
@@ -774,10 +795,11 @@ def servico_editar(request, id_servico):
     servico.nome_servico = nome
     servico.preco = preco
     servico.descricao = descricao or None
-    servico.save()
+    servico.save() # -> salva novamente os dados
     
     messages.success(request, 'Serviço atualizado com sucesso!')
-    return redirect('InformacoesServico', id_loja=servico.id_loja_id)
+    return redirect('InformacoesServico', id_loja=servico.id_loja_id) 
+# 'id_loja=servico.id_loja_id': trabalha com as chaves Primarias e Estrangeiras de 'loja' para saber qual serviço (alterado no método) pertence a qual loja
 
 @require_POST
 def servico_excluir(request, id_servico):

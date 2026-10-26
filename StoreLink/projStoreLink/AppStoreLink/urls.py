@@ -28,7 +28,9 @@ urlpatterns = [
     path('', index, name='index'),
 
     path('perfil-loja/', perfil_loja, name='perfil-loja'),
+    
     path('perfil-consumidor/', perfil_consumidor, name='perfil-consumidor'),
+    path('perfil-consumidor/editar', views.editar_consumidor, name='editar-consumidor'),
 
     path('cadastro/', cadastro, name='cadastro'),
     path('login/', login, name='login'),

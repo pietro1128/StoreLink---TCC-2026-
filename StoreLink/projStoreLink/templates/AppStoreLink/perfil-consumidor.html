@@ -190,34 +190,42 @@
         <button type="submit" form="formFoto" class="consumidor-salvar-foto">
           Salvar foto
         </button>
+        
+        <form method="POST" action="{% url 'editar-consumidor' %}">
+          {% csrf_token %}
 
-        <div class="consumidor-field-left">
+          <div class="consumidor-field-left">
 
-          <label>
-            Nome
-          </label>
+            <label>
+                Nome
+            </label>
 
-          <input
-            type="text"
-            value="{{ chave_perf_consm.nome }}"
-          >
+            <input
+              type="text"
+              name="nome"
+              value="{{ chave_perf_consm.nome }}"
+              required
+            >
 
-        </div>
+          </div>
 
+          <div class="consumidor-field-left">
 
-        <div class="consumidor-field-left">
+            <label>
+                Sobrenome
+            </label>
 
-          <label>
-            Sobrenome
-          </label>
+            <input
+                type="text"
+                name="sobrenome"
+                value="{{ chave_perf_consm.sobrenome }}"
+            >
 
-          <input
-            type="text"
-            value="{{ chave_perf_consm.sobrenome }}"
-          >
+          </div>
 
-        </div>
+          <button type="submit">Salvar alterações</button>
 
+        </form>
 
         <form method="POST" action="{% url 'logout' %}" style="display: contents;">
           {% csrf_token %}
@@ -226,6 +234,8 @@
             <span>≪</span>
           </button>
         </form>
+
+
 
 
       </aside>
