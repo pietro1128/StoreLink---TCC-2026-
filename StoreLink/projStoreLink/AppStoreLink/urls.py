@@ -19,7 +19,8 @@ from AppStoreLink.views import (
     CatOutros,
     suporte,
     produtos_loja,
-    servicos_loja
+    servicos_loja,
+    tutorial
 )
 
 
@@ -100,4 +101,6 @@ urlpatterns = [
     ),
 
     # endregion
+
+    path('tutorial/', tutorial, name='tutorial'),
 ]

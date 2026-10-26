@@ -973,3 +973,6 @@ def _salvar_foto(arquivo, pasta):
     """Grava o arquivo em media/<pasta>/ com nome aleatório e devolve o caminho relativo."""
     extensao = os.path.splitext(arquivo.name)[1].lower()
     return default_storage.save(f'{pasta}/{uuid.uuid4().hex}{extensao}', arquivo)
+
+def tutorial(request):
+    return render(request, 'AppStoreLink/Tutorial.html')

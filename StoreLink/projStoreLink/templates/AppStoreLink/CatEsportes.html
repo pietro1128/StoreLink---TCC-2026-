@@ -33,7 +33,7 @@
     <a class="nav-btn" href="{% url 'index' %}">Início</a>
     <a class="nav-btn" href="{% url 'perfil-loja' %}">Sua loja</a>
     <a class="nav-btn" href="{% url 'suporte' %}">Suporte</a>
-    <a class="nav-btn" onclick="setActiveNav(this)">Como navegar?</a>
+    <a class="nav-btn" href="{% url 'tutorial' %}">Como navegar?</a>
 
     {% if usuario_logado %}
       <button class="nav-account-btn" data-url="{% url 'perfil-consumidor' %}" onclick="location.href=this.dataset.url">

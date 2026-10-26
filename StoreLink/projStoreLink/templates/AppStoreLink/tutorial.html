@@ -1,0 +1,924 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    StoreLink - Como navegar?
+  </title>
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="{% static 'AppStoreLink/images/icon-dark.png' %}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/style.css' %}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/tutorial.css' %}"
+  >
+
+</head>
+
+
+<body>
+
+
+  <!-- #region modo escuro -->
+
+  <script>
+
+    if (
+      localStorage.getItem('theme') === 'dark'
+    ) {
+
+      document.body.classList.add(
+        'dark'
+      );
+
+    }
+
+  </script>
+
+  <!-- #endregion -->
+
+
+
+  <!-- #region navbar -->
+
+  <div class="topbar">
+
+
+    <div class="logo-icon">
+
+      <img
+        src="{% static 'AppStoreLink/images/icon-dark.png' %}"
+        alt="StoreLink"
+      >
+
+    </div>
+
+
+    <a
+      class="nav-btn"
+      href="{% url 'index' %}"
+    >
+      Início
+    </a>
+
+
+    <a
+      class="nav-btn"
+      href="{% url 'perfil-loja' %}"
+    >
+      Sua loja
+    </a>
+
+
+    <a
+      class="nav-btn"
+      href="{% url 'suporte' %}"
+    >
+      Suporte
+    </a>
+
+
+    <a
+      class="nav-btn active"
+      href="{% url 'tutorial' %}"
+    >
+      Como navegar?
+    </a>
+
+
+    {% if usuario_logado %}
+
+      <button
+        class="nav-account-btn"
+        data-url="{% url 'perfil-consumidor' %}"
+        onclick="location.href=this.dataset.url"
+      >
+        👤 Minha conta
+      </button>
+
+    {% else %}
+
+      <button
+        class="nav-account-btn"
+        data-url="{% url 'cadastro' %}"
+        onclick="location.href=this.dataset.url"
+      >
+        Criar conta ou Entrar
+      </button>
+
+    {% endif %}
+
+
+    <button
+      class="theme-toggle"
+      onclick="toggleTheme(this)"
+    >
+      🌙 Modo escuro
+    </button>
+
+
+  </div>
+
+  <!-- #endregion -->
+
+
+
+  <!-- #region sidebar -->
+
+  <div class="sidebar-trigger"></div>
+
+
+  <div class="sidebar">
+
+
+    <a
+      class="cat-btn cat-alimentos"
+      href="{% url 'CatAlimentos' %}"
+    >
+      Alimentos
+    </a>
+
+
+    <a
+      class="cat-btn cat-moda"
+      href="{% url 'CatModa' %}"
+    >
+      Moda
+    </a>
+
+
+    <a
+      class="cat-btn cat-esportes"
+      href="{% url 'CatEsportes' %}"
+    >
+      Esportes
+    </a>
+
+
+    <a
+      class="cat-btn cat-construcao"
+      href="{% url 'CatConstrucao' %}"
+    >
+      Construção
+    </a>
+
+
+    <a
+      class="cat-btn cat-saude"
+      href="{% url 'CatSaude' %}"
+    >
+      Saúde
+    </a>
+
+
+    <a
+      class="cat-btn cat-pets"
+      href="{% url 'CatPets' %}"
+    >
+      Pets
+    </a>
+
+
+    <a
+      class="cat-btn cat-ambiente"
+      href="{% url 'CatAmbiente' %}"
+    >
+      Ambiente
+    </a>
+
+
+    <a
+      class="cat-btn cat-tecnologia"
+      href="{% url 'CatTecnologia' %}"
+    >
+      Tecnologia
+    </a>
+
+
+    <a
+      class="cat-btn cat-beleza"
+      href="{% url 'CatBeleza' %}"
+    >
+      Beleza
+    </a>
+
+
+    <a
+      class="cat-btn cat-outros"
+      href="{% url 'CatOutros' %}"
+    >
+      Outros
+    </a>
+
+
+  </div>
+
+  <!-- #endregion -->
+
+
+
+  <!-- #region página -->
+
+  <main class="tutorial-page">
+
+
+    <!-- #region apresentação -->
+
+    <section class="tutorial-apresentacao">
+
+
+      <span class="tutorial-tag">
+        GUIA STORELINK
+      </span>
+
+
+      <h1>
+        COMO NAVEGAR?
+      </h1>
+
+
+      <p>
+        Aprenda de forma rápida como utilizar as principais
+        funções do StoreLink.
+      </p>
+
+
+      <a
+        class="tutorial-comecar"
+        href="#passo-1"
+      >
+        COMEÇAR TUTORIAL ↓
+      </a>
+
+
+    </section>
+
+    <!-- #endregion -->
+
+
+
+    <!-- #region tutorial 1 -->
+
+    <section
+      class="tutorial-passo"
+      id="passo-1"
+    >
+
+
+      <div class="tutorial-texto">
+
+
+        <span class="tutorial-numero">
+          01
+        </span>
+
+
+        <div>
+
+          <h2>
+            Pesquise no StoreLink
+          </h2>
+
+
+          <p>
+            Na página inicial você encontra a barra de
+            pesquisa principal do StoreLink.
+          </p>
+
+
+          <p>
+            Utilize a barra de pesquisa para encontrar
+            a loja ou produto que desejar.
+          </p>
+
+        </div>
+
+
+      </div>
+
+
+
+      <div class="tutorial-imagem">
+
+
+        <img
+          src="{% static 'AppStoreLink/images/tutorial 1.png' %}"
+          alt="Tutorial 1 - Barra de pesquisa do StoreLink"
+        >
+
+
+      </div>
+
+
+    </section>
+
+    <!-- #endregion -->
+
+
+
+    <!-- #region tutorial 2 -->
+
+    <section class="tutorial-passo tutorial-invertido">
+
+
+      <div class="tutorial-texto">
+
+
+        <span class="tutorial-numero">
+          02
+        </span>
+
+
+        <div>
+
+          <h2>
+            Navegue pelas categorias
+          </h2>
+
+
+          <p>
+            Passe o mouse pela lateral esquerda da página
+            para abrir o menu de categorias.
+          </p>
+
+
+          <p>
+            Navegue pelas categorias para encontrar
+            o tipo de loja que procura.
+          </p>
+
+        </div>
+
+
+      </div>
+
+
+
+      <div class="tutorial-imagem">
+
+
+        <img
+          src="{% static 'AppStoreLink/images/tutorial 2.png' %}"
+          alt="Tutorial 2 - Categorias do StoreLink"
+        >
+
+
+      </div>
+
+
+    </section>
+
+    <!-- #endregion -->
+
+
+
+    <!-- #region tutorial 3 -->
+
+    <section class="tutorial-passo">
+
+
+      <div class="tutorial-texto">
+
+
+        <span class="tutorial-numero">
+          03
+        </span>
+
+
+        <div>
+
+          <h2>
+            Conheça o estabelecimento
+          </h2>
+
+
+          <p>
+            Ao selecionar uma loja, o StoreLink apresenta
+            as principais informações do estabelecimento.
+          </p>
+
+
+          <p>
+            Você poderá visualizar endereço, telefone,
+            e-mail, classificação e outras informações.
+          </p>
+
+        </div>
+
+
+      </div>
+
+
+
+      <div class="tutorial-imagem">
+
+
+        <img
+          src="{% static 'AppStoreLink/images/tutorial 3.png' %}"
+          alt="Tutorial 3 - Informações da loja"
+          onerror="
+            this.style.display='none';
+            this.nextElementSibling.style.display='flex';
+          "
+        >
+
+
+        <div class="tutorial-sem-print">
+          Adicione o print: tutorial 3.png
+        </div>
+
+
+      </div>
+
+
+    </section>
+
+    <!-- #endregion -->
+
+
+
+    <!-- #region tutorial 4 -->
+
+    <section class="tutorial-passo tutorial-invertido">
+
+
+      <div class="tutorial-texto">
+
+
+        <span class="tutorial-numero">
+          04
+        </span>
+
+
+        <div>
+
+          <h2>
+            Consulte os produtos
+          </h2>
+
+
+          <p>
+            Dentro da página da loja, clique em
+            Produtos para visualizar os itens cadastrados.
+          </p>
+
+
+          <p>
+            Cada produto pode apresentar nome, preço,
+            descrição e imagem.
+          </p>
+
+        </div>
+
+
+      </div>
+
+
+
+      <div class="tutorial-imagem">
+
+
+        <img
+          src="{% static 'AppStoreLink/images/tutorial 4.png' %}"
+          alt="Tutorial 4 - Produtos da loja"
+          onerror="
+            this.style.display='none';
+            this.nextElementSibling.style.display='flex';
+          "
+        >
+
+
+        <div class="tutorial-sem-print">
+          Adicione o print: tutorial 4.png
+        </div>
+
+
+      </div>
+
+
+    </section>
+
+    <!-- #endregion -->
+
+
+
+    <!-- #region tutorial 5 -->
+
+    <section class="tutorial-passo">
+
+
+      <div class="tutorial-texto">
+
+
+        <span class="tutorial-numero">
+          05
+        </span>
+
+
+        <div>
+
+          <h2>
+            Consulte os serviços
+          </h2>
+
+
+          <p>
+            Clique em Serviços para visualizar os
+            serviços disponíveis no estabelecimento.
+          </p>
+
+
+          <p>
+            Cada serviço apresenta suas principais
+            informações, como nome, preço e descrição.
+          </p>
+
+        </div>
+
+
+      </div>
+
+
+
+      <div class="tutorial-imagem">
+
+
+        <img
+          src="{% static 'AppStoreLink/images/tutorial 5.png' %}"
+          alt="Tutorial 5 - Serviços da loja"
+          onerror="
+            this.style.display='none';
+            this.nextElementSibling.style.display='flex';
+          "
+        >
+
+
+        <div class="tutorial-sem-print">
+          Adicione o print: tutorial 5.png
+        </div>
+
+
+      </div>
+
+
+    </section>
+
+    <!-- #endregion -->
+
+
+
+    <!-- #region tutorial 6 -->
+
+    <section class="tutorial-passo tutorial-invertido">
+
+
+      <div class="tutorial-texto">
+
+
+        <span class="tutorial-numero">
+          06
+        </span>
+
+
+        <div>
+
+          <h2>
+            Favorite suas lojas
+          </h2>
+
+
+          <p>
+            Utilize o botão de coração para adicionar
+            uma loja aos seus favoritos.
+          </p>
+
+
+          <p>
+            Depois, acesse Minha conta para consultar
+            suas lojas favoritas.
+          </p>
+
+        </div>
+
+
+      </div>
+
+
+
+      <div class="tutorial-imagem">
+
+
+        <img
+          src="{% static 'AppStoreLink/images/tutorial 6.png' %}"
+          alt="Tutorial 6 - Favoritos"
+          onerror="
+            this.style.display='none';
+            this.nextElementSibling.style.display='flex';
+          "
+        >
+
+
+        <div class="tutorial-sem-print">
+          Adicione o print: tutorial 6.png
+        </div>
+
+
+      </div>
+
+
+    </section>
+
+    <!-- #endregion -->
+
+
+
+    <!-- #region tutorial 7 -->
+
+    <section class="tutorial-passo">
+
+
+      <div class="tutorial-texto">
+
+
+        <span class="tutorial-numero">
+          07
+        </span>
+
+
+        <div>
+
+          <h2>
+            Avalie sua experiência
+          </h2>
+
+
+          <p>
+            Na página da loja, escolha uma nota utilizando
+            as estrelas de avaliação.
+          </p>
+
+
+          <p>
+            Também é possível escrever um comentário
+            sobre sua experiência com o estabelecimento.
+          </p>
+
+        </div>
+
+
+      </div>
+
+
+
+      <div class="tutorial-imagem">
+
+
+        <img
+          src="{% static 'AppStoreLink/images/tutorial 7.png' %}"
+          alt="Tutorial 7 - Avaliação da loja"
+          onerror="
+            this.style.display='none';
+            this.nextElementSibling.style.display='flex';
+          "
+        >
+
+
+        <div class="tutorial-sem-print">
+          Adicione o print: tutorial 7.png
+        </div>
+
+
+      </div>
+
+
+    </section>
+
+    <!-- #endregion -->
+
+
+
+    <!-- #region tutorial 8 -->
+
+    <section class="tutorial-passo tutorial-invertido">
+
+
+      <div class="tutorial-texto">
+
+
+        <span class="tutorial-numero">
+          08
+        </span>
+
+
+        <div>
+
+          <h2>
+            Gerencie seu estabelecimento
+          </h2>
+
+
+          <p>
+            Caso possua uma loja cadastrada, acesse
+            Sua loja pela barra superior.
+          </p>
+
+
+          <p>
+            Nessa área você poderá visualizar e gerenciar
+            informações, produtos e serviços da loja.
+          </p>
+
+        </div>
+
+
+      </div>
+
+
+
+      <div class="tutorial-imagem">
+
+
+        <img
+          src="{% static 'AppStoreLink/images/tutorial 8.png' %}"
+          alt="Tutorial 8 - Gerenciamento da loja"
+          onerror="
+            this.style.display='none';
+            this.nextElementSibling.style.display='flex';
+          "
+        >
+
+
+        <div class="tutorial-sem-print">
+          Adicione o print: tutorial 8.png
+        </div>
+
+
+      </div>
+
+
+    </section>
+
+    <!-- #endregion -->
+
+
+
+    <!-- #region recursos extras -->
+
+    <section class="tutorial-extras">
+
+
+      <h2>
+        OUTROS RECURSOS
+      </h2>
+
+
+      <div class="tutorial-extras-grid">
+
+
+        <article class="tutorial-extra-card">
+
+
+          <span>
+            🌙
+          </span>
+
+
+          <h3>
+            Modo escuro
+          </h3>
+
+
+          <p>
+            Utilize o botão localizado na barra superior
+            para alternar entre o modo claro e escuro.
+          </p>
+
+
+        </article>
+
+
+
+        <article class="tutorial-extra-card">
+
+
+          <span>
+            👤
+          </span>
+
+
+          <h3>
+            Minha conta
+          </h3>
+
+
+          <p>
+            Acesse suas informações e suas lojas
+            favoritas através da opção Minha conta.
+          </p>
+
+
+        </article>
+
+
+
+        <article class="tutorial-extra-card">
+
+
+          <span>
+            🛟
+          </span>
+
+
+          <h3>
+            Suporte
+          </h3>
+
+
+          <p>
+            Caso tenha algum problema ou dúvida,
+            utilize a página de Suporte.
+          </p>
+
+
+          <a href="{% url 'suporte' %}">
+            ACESSAR SUPORTE
+          </a>
+
+
+        </article>
+
+
+      </div>
+
+
+    </section>
+
+    <!-- #endregion -->
+
+
+
+    <!-- #region final -->
+
+    <section class="tutorial-final">
+
+
+      <h2>
+        PRONTO PARA COMEÇAR?
+      </h2>
+
+
+      <p>
+        Agora você já conhece as principais funções
+        disponíveis no StoreLink.
+      </p>
+
+
+      <a
+        href="{% url 'index' %}"
+        class="tutorial-inicio-btn"
+      >
+        VOLTAR PARA O INÍCIO
+      </a>
+
+
+    </section>
+
+    <!-- #endregion -->
+
+
+  </main>
+
+  <!-- #endregion -->
+
+
+
+  <!-- #region javascript -->
+
+  <script
+    src="{% static 'AppStoreLink/scripts/index.js' %}"
+  ></script>
+
+  <!-- #endregion -->
+
+
+</body>
+
+</html>
