@@ -14,6 +14,7 @@
 
   <title>
     StoreLink - Produtos de {{ loja.nome_loja }}
+
   </title>
 
 
@@ -245,13 +246,13 @@
                 </button>
 
 
-                <button
-                  type="button"
-                  class="info-item-excluir"
-                  onclick="excluirProduto(this)"
-                >
-                  🗑 Excluir
-                </button>
+                <form method="post"
+                      action="{% url 'produto-excluir' produto.id_produto %}"
+                      style="display:inline;"
+                      onsubmit="return confirm('Deseja excluir o produto {{ produto.nome_produto|escapejs }}?');">
+                  {% csrf_token %}
+                  <button type="submit" class="info-item-excluir">🗑 Excluir</button>
+                </form>
 
 
               </div>
@@ -362,73 +363,32 @@
               <!-- #region EDIÇÃO -->
 
               {% if eh_dono %}
+                <form
+                  class="info-item-edicao"
+                  method="post"
+                  action="{% url 'produto-editar' produto.id_produto %}"
+                >
+                  {% csrf_token %}
 
-                <div class="info-item-edicao">
+                  <label>Nome do produto:</label>
+                  <input type="text" name="nome_produto" class="js-editar-nome"
+                        value="{{ produto.nome_produto }}" maxlength="100" required>
 
+                  <label>Preço do produto:</label>
+                  <input type="text" name="preco_produto" class="js-editar-preco"
+                        value="{{ produto.preco }}" required>
 
-                  <label>
-                    Nome do produto:
-                  </label>
-
-
-                  <input
-                    type="text"
-                    class="js-editar-nome"
-                    value="{{ produto.nome_produto }}"
-                  >
-
-
-
-                  <label>
-                    Preço do produto:
-                  </label>
-
-
-                  <input
-                    type="text"
-                    class="js-editar-preco"
-                    value="{{ produto.preco }}"
-                  >
-
-
-
-                  <label>
-                    Descrição do produto:
-                  </label>
-
-
-                  <textarea
-                    class="js-editar-descricao"
-                  >{{ produto.descricao|default:'' }}</textarea>
-
-
+                  <label>Descrição do produto:</label>
+                  <textarea name="descricao_produto"
+                            class="js-editar-descricao">{{ produto.descricao|default:'' }}</textarea>
 
                   <div class="info-edicao-botoes">
+                    <button type="submit" class="info-edicao-salvar">Salvar</button>
 
-
-                    <button
-                      type="button"
-                      class="info-edicao-salvar"
-                      onclick="salvarEdicaoProduto(this)"
-                    >
-                      Salvar
-                    </button>
-
-
-                    <button
-                      type="button"
-                      class="info-edicao-cancelar"
-                      onclick="cancelarEdicaoProduto(this)"
-                    >
-                      Cancelar
-                    </button>
-
-
+                    <button type="button" class="info-edicao-cancelar"
+                            onclick="cancelarEdicaoProduto(this)">Cancelar</button>
                   </div>
-
-
-                </div>
-
+                </form>
               {% endif %}
 
               <!-- #endregion -->
@@ -470,6 +430,12 @@
 
 
   </main>
+
+  {% if messages %}
+    {% for message in messages %}
+      <p class="info-mensagem {{ message.tags }}">{{ message }}</p>
+    {% endfor %}
+  {% endif %}
 
   <!-- #endregion -->
 
@@ -592,143 +558,6 @@
       );
 
     }
-
-
-
-    function salvarEdicaoProduto(botao) {
-
-      const card =
-        botao.closest(
-          '.info-produto-card'
-        );
-
-
-      if (!card) {
-        return;
-      }
-
-
-      const inputNome =
-        card.querySelector(
-          '.js-editar-nome'
-        );
-
-
-      const inputPreco =
-        card.querySelector(
-          '.js-editar-preco'
-        );
-
-
-      const inputDescricao =
-        card.querySelector(
-          '.js-editar-descricao'
-        );
-
-
-      const nome =
-        inputNome.value.trim();
-
-
-      const preco =
-        inputPreco.value.trim();
-
-
-      const descricao =
-        inputDescricao.value.trim();
-
-
-
-      if (!nome) {
-
-        alert(
-          'Preencha o nome do produto.'
-        );
-
-        inputNome.focus();
-
-        return;
-
-      }
-
-
-      if (!preco) {
-
-        alert(
-          'Preencha o preço do produto.'
-        );
-
-        inputPreco.focus();
-
-        return;
-
-      }
-
-
-
-      card.querySelector(
-        '.js-nome'
-      ).textContent =
-        nome;
-
-
-      card.querySelector(
-        '.js-preco'
-      ).textContent =
-        'R$ ' + preco;
-
-
-      card.querySelector(
-        '.js-descricao'
-      ).textContent =
-        descricao ||
-        'Sem descrição.';
-
-
-      card.classList.remove(
-        'editando'
-      );
-
-    }
-
-
-
-    function excluirProduto(botao) {
-
-      const card =
-        botao.closest(
-          '.info-produto-card'
-        );
-
-
-      if (!card) {
-        return;
-      }
-
-
-      const nome =
-        card.querySelector(
-          '.js-nome'
-        ).textContent.trim();
-
-
-      const confirmar =
-        confirm(
-          'Deseja excluir o produto "' +
-          nome +
-          '"?'
-        );
-
-
-      if (!confirmar) {
-        return;
-      }
-
-
-      card.remove();
-
-    }
-
 
   </script>
 

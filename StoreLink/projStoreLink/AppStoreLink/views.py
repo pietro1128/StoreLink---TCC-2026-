@@ -1,8 +1,3 @@
-import os
-import uuid
-from django.core.exceptions import ValidationError
-from django.core.files.storage import default_storage
-from AppStoreLink.models import validar_foto   # junto da linha que já importa os models
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.db import transaction
 from django.shortcuts import render, redirect, get_object_or_404
@@ -48,11 +43,6 @@ def perfil_loja(request):
         cnpj = request.POST.get('cnpj')
         link = request.POST.get('link_loja')
         nome_categoria = request.POST.get('categoria', '').strip() # -> era nescessario que o codigo pegue esse valor para conseguir comparar mais a frente no codigo
-        
-        foto, erro = _foto_enviada(request, 'foto_estabelecimento')
-        if erro:
-            messages.error(request, erro)
-            return render(request, 'AppStoreLink/perfil-loja.html')   # use o mesmo return das outras validações
         
         try:
             dados_cep = consultar_cep(cep)
@@ -104,10 +94,6 @@ def perfil_loja(request):
         if categoria is None:
             messages.error(request, 'Selecione uma categoria válida.')
             return render(request, 'AppStoreLink/perfil-loja.html')
-        
-        caminho_foto = _salvar_foto(foto, 'lojas') if foto else None
-        # ao gravar a loja, só atribua se veio foto:
-        #   foto_estabelecimento=caminho_foto
 
         # Depois de todas as validações, cria endereço e loja:
         endereco = Endereco.objects.create(
@@ -145,21 +131,6 @@ def perfil_consumidor(request):
 
     usuario = get_object_or_404(Usuario, id_categoria=usuario_id)
     loja_fav = LojaFavoritas.objects.filter(id_usuario=usuario).select_related('id_loja')
-    
-    if request.method == 'POST':
-        foto, erro = _foto_enviada(request, 'foto')
-        if erro:
-            messages.error(request, erro)
-            return redirect('perfil-consumidor')
-        if foto:
-            foto_antiga = usuario.foto.name if usuario.foto else None
-            usuario.foto = foto    # o upload_to do model dá o nome final
-            usuario.save(update_fields=['foto'])
-            if foto_antiga:
-                usuario.foto.storage.delete(foto_antiga)   # não deixa fotos antigas acumulando
-            messages.success(request, 'Foto atualizada com sucesso!')
-            return redirect('perfil-consumidor')
-        # sem foto no envio: segue o fluxo normal da view
 
     return render(
         request,
@@ -467,12 +438,12 @@ def suporte(request):
     return render(request, 'AppStoreLink/suporte.html')
 
 
-def _validar_nome_preco(nome, preco_txt):
+def _validar_nome_preco(nome, preco_txt, rotulo='produto'):
     """Valida nome e preço. Devolve (lista_de_erros, preco_como_Decimal)."""
     erros = []
 
     if not nome:
-        erros.append('O nome do produto é obrigatório.')
+        erros.append(f'O nome do {rotulo} é obrigatório.')
     elif len(nome) > 100:
         erros.append('O nome deve ter no máximo 100 caracteres.')
 
@@ -502,7 +473,38 @@ def produtos_loja(request):
     })
 
 @require_POST
+def produto_editar(request, id_produto):
+    if not request.session.get('usuario_id'):
+        messages.error(request, 'Você precisa fazer login para editar o serviço.')
+        return redirect('login')
+    
+    produto = get_object_or_404(Produto, id_produto=id_produto)
+    
+    nome = request.POST.get('nome_servico', '').strip()
+    preco_txt = request.POST.get('preco', '').strip().replace(',', '.')
+    descricao = request.POST.get('descricao', '').strip()
+    
+    erros, preco = _validar_nome_preco(nome, preco_txt, 'produto')
+    
+    if erros:
+        for erro in erros:
+            messages.error(request, erro)
+        return redirect('InformacoesProduto', id_loja=produto.id_loja)
+    
+    produto.nome_servico = nome
+    produto.preco = preco
+    produto.descricao = descricao or None
+    produto.save()
+    
+    messages.success(request, 'Produto atualizado com sucesso!')
+    return redirect('InformacoesProduto', id_loja=produto.id_loja_id)
+
+@require_POST
 def produto_excluir(request, id_produto):
+    if not request.session.get('usuario_id'):
+        messages.error(request, 'Você precisa fazer login para editar o serviço.')
+        return redirect('login')
+    
     produto = get_object_or_404(Produto, id_produto=id_produto)
     nome = produto.nome_produto
     produto.delete()
@@ -751,7 +753,38 @@ def loja_editar(request, id_loja):
     # TODO: trocar pela loja do usuário logado quando existir o vínculo Usuario↔Loja 
 
 @require_POST
+def servico_editar(request, id_servico):
+    if not request.session.get('usuario_id'):
+        messages.error(request, 'Você precisa fazer login para editar o serviço.')
+        return redirect('login')
+    
+    servico = get_object_or_404(Servico, id_servico=id_servico)
+    
+    nome = request.POST.get('nome_servico', '').strip()
+    preco_txt = request.POST.get('preco', '').strip().replace(',', '.')
+    descricao = request.POST.get('descricao', '').strip()
+    
+    erros, preco = _validar_nome_preco(nome, preco_txt, 'servico')
+    
+    if erros:
+        for erro in erros:
+            messages.error(request, erro)
+        return redirect('InformacoesServico', id_loja=servico.id_loja)
+    
+    servico.nome_servico = nome
+    servico.preco = preco
+    servico.descricao = descricao or None
+    servico.save()
+    
+    messages.success(request, 'Serviço atualizado com sucesso!')
+    return redirect('InformacoesServico', id_loja=servico.id_loja_id)
+
+@require_POST
 def servico_excluir(request, id_servico):
+    if not request.session.get('usuario_id'):
+        messages.error(request, 'Você precisa fazer login para excluir o serviço.')
+        return redirect('login')
+    
     servico = get_object_or_404(Servico, id_servico=id_servico)
     nome = servico.nome_servico
     servico.delete()
@@ -909,9 +942,13 @@ def InformacoesProduto(request, id_loja):
         'id_produto'
     )
 
+    usuario_id = request.session.get(usuario_id)
+
     contexto = {
         'loja': loja,
         'produtos': produtos,
+        'usuario_logado': bool(usuario_id),
+        'eh_dono': bool(usuario_id),
     }
 
     return render(
@@ -935,9 +972,13 @@ def InformacoesServico(request, id_loja):
         'id_servico'
     )
 
+    usuario_id = request.session.get(usuario_id)
+    
     contexto = {
         'loja': loja,
         'servicos': servicos,
+        'usuario_logado': bool(usuario_id),
+        'eh_dono': bool(usuario_id),
     }
 
     return render(
@@ -957,22 +998,5 @@ def logout_view(request):
     messages.success(request, 'Você saiu da sua conta.')
     return redirect('index')
 
-def _foto_enviada(request, nome_campo):
-    """Devolve (arquivo, erro). Sem arquivo enviado: (None, None), a foto é opcional."""
-    arquivo = request.FILES.get(nome_campo)
-    if not arquivo:
-        return None, None
-    try:
-        validar_foto(arquivo)
-    except ValidationError as e:
-        return None, e.messages[0]
-    return arquivo, None
-
-
-def _salvar_foto(arquivo, pasta):
-    """Grava o arquivo em media/<pasta>/ com nome aleatório e devolve o caminho relativo."""
-    extensao = os.path.splitext(arquivo.name)[1].lower()
-    return default_storage.save(f'{pasta}/{uuid.uuid4().hex}{extensao}', arquivo)
-
 def tutorial(request):
-    return render(request, 'AppStoreLink/Tutorial.html')
+    return render(request, 'AppStoreLink/tutorial.html')

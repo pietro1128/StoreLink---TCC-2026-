@@ -23,6 +23,10 @@
     href="{% static 'AppStoreLink/images/icon-dark.png' %}"
   >
 
+  <link 
+    rel="stylesheet" 
+    href="{% static 'AppStoreLink/styles/mensagens.css' %}"
+  >
 
   <link
     rel="stylesheet"
@@ -266,7 +270,6 @@
 
             <div class="info-servico-imagem">
 
-
               {% if servico.foto %}
 
                 <img
@@ -278,11 +281,7 @@
                   "
                 >
 
-
-                <div
-                  class="info-sem-imagem"
-                  style="display:none;"
-                >
+                <div class="info-sem-imagem" style="display: none;">
                   Sem imagem cadastrada
                 </div>
 
@@ -293,7 +292,6 @@
                 </div>
 
               {% endif %}
-
 
             </div>
 
@@ -471,6 +469,14 @@
 
   </main>
 
+  {% if messages %}
+    <div class="messages-container">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
   <!-- #endregion -->
 
 
@@ -481,255 +487,15 @@
 
 
   <script>
+    function alternarEdicao(id) {
+      const ver  = document.getElementById('servico-ver-' + id);
+      const form = document.getElementById('servico-form-' + id);
+      const editando = form.style.display !== 'none';
 
-
-    function abrirEdicaoServico(botao) {
-
-      const card =
-        botao.closest(
-          '.info-servico-card'
-        );
-
-
-      if (!card) {
-        return;
-      }
-
-
-      const nome =
-        card.querySelector(
-          '.js-nome'
-        );
-
-
-      const preco =
-        card.querySelector(
-          '.js-preco'
-        );
-
-
-      const descricao =
-        card.querySelector(
-          '.js-descricao'
-        );
-
-
-      const inputNome =
-        card.querySelector(
-          '.js-editar-nome'
-        );
-
-
-      const inputPreco =
-        card.querySelector(
-          '.js-editar-preco'
-        );
-
-
-      const inputDescricao =
-        card.querySelector(
-          '.js-editar-descricao'
-        );
-
-
-      if (
-        !nome ||
-        !preco ||
-        !descricao ||
-        !inputNome ||
-        !inputPreco ||
-        !inputDescricao
-      ) {
-
-        return;
-
-      }
-
-
-      inputNome.value =
-        nome.textContent.trim();
-
-
-      inputPreco.value =
-        preco.textContent
-          .replace('R$', '')
-          .trim();
-
-
-      const descricaoAtual =
-        descricao.textContent.trim();
-
-
-      inputDescricao.value =
-        descricaoAtual === 'Sem descrição.'
-          ? ''
-          : descricaoAtual;
-
-
-      card.classList.add(
-        'editando'
-      );
-
+      // '' devolve o display original do CSS (não força "block")
+      form.style.display = editando ? 'none' : '';
+      ver.style.display  = editando ? '' : 'none';
     }
-
-
-
-    function cancelarEdicaoServico(botao) {
-
-      const card =
-        botao.closest(
-          '.info-servico-card'
-        );
-
-
-      if (!card) {
-        return;
-      }
-
-
-      card.classList.remove(
-        'editando'
-      );
-
-    }
-
-
-
-    function salvarEdicaoServico(botao) {
-
-      const card =
-        botao.closest(
-          '.info-servico-card'
-        );
-
-
-      if (!card) {
-        return;
-      }
-
-
-      const inputNome =
-        card.querySelector(
-          '.js-editar-nome'
-        );
-
-
-      const inputPreco =
-        card.querySelector(
-          '.js-editar-preco'
-        );
-
-
-      const inputDescricao =
-        card.querySelector(
-          '.js-editar-descricao'
-        );
-
-
-      const nome =
-        inputNome.value.trim();
-
-
-      const preco =
-        inputPreco.value.trim();
-
-
-      const descricao =
-        inputDescricao.value.trim();
-
-
-
-      if (!nome) {
-
-        alert(
-          'Preencha o nome do serviço.'
-        );
-
-        inputNome.focus();
-
-        return;
-
-      }
-
-
-      if (!preco) {
-
-        alert(
-          'Preencha o preço do serviço.'
-        );
-
-        inputPreco.focus();
-
-        return;
-
-      }
-
-
-
-      card.querySelector(
-        '.js-nome'
-      ).textContent =
-        nome;
-
-
-      card.querySelector(
-        '.js-preco'
-      ).textContent =
-        'R$ ' + preco;
-
-
-      card.querySelector(
-        '.js-descricao'
-      ).textContent =
-        descricao ||
-        'Sem descrição.';
-
-
-      card.classList.remove(
-        'editando'
-      );
-
-    }
-
-
-
-    function excluirServico(botao) {
-
-      const card =
-        botao.closest(
-          '.info-servico-card'
-        );
-
-
-      if (!card) {
-        return;
-      }
-
-
-      const nome =
-        card.querySelector(
-          '.js-nome'
-        ).textContent.trim();
-
-
-      const confirmar =
-        confirm(
-          'Deseja excluir o serviço "' +
-          nome +
-          '"?'
-        );
-
-
-      if (!confirmar) {
-        return;
-      }
-
-
-      card.remove();
-
-    }
-
-
   </script>
 
   <!-- #endregion -->

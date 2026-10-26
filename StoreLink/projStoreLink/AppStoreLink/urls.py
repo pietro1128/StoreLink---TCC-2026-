@@ -93,12 +93,17 @@ urlpatterns = [
         views.InformacoesProduto,
         name='InformacoesProduto'
     ),
+    path('loja/<int:id_loja>/editar/', views.produto_editar, name='produto-editar'),
+    path('loja/<int:id_loja>/excluir/', views.produto_excluir, name='produto-excluir'),
 
     path(
         'loja/<int:id_loja>/servicos/',
         views.InformacoesServico,
         name='InformacoesServico'
     ),
+    path('loja/<int:id_loja>/editar/', views.servico_editar, name='servico-editar'),
+    path('loja/<int:id_loja>/excluir/', views.servico_excluir, name='servico-excluir'),
+    
 
     # endregion
 
