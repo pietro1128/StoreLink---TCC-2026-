@@ -35,7 +35,11 @@
     href="{% static 'AppStoreLink/styles/produtos-loja.css' %}"
   >
 
-  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/mensagens.css' %}">
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/mensagens.css' %}"
+  >
 
 </head>
 
@@ -136,6 +140,8 @@
   <main class="produto-page">
 
 
+    <!-- #region PERFIL LATERAL -->
+
     <aside class="produto-perfil">
 
 
@@ -198,7 +204,6 @@
         </label>
 
 
-
         <label
           class="produto-camera-badge"
           for="foto-responsavel-produto"
@@ -209,7 +214,6 @@
 
 
       </div>
-
 
 
       <div class="produto-perfil-fields">
@@ -229,7 +233,6 @@
         </div>
 
 
-
         <div class="produto-perfil-field">
 
           <label>
@@ -247,22 +250,40 @@
       </div>
 
 
+      <form
+        method="POST"
+        action="{% url 'logout' %}"
+        style="display: contents;"
+      >
 
-      <form method="POST" action="{% url 'logout' %}" style="display: contents;">
         {% csrf_token %}
-        <button type="submit" class="produto-logout">
+
+        <button
+          type="submit"
+          class="produto-logout"
+        >
           Fazer Logout
-          <span>≪</span>
+
+          <span>
+            ≪
+          </span>
         </button>
+
       </form>
 
 
     </aside>
 
+    <!-- #endregion -->
 
+
+
+    <!-- #region CONTEÚDO -->
 
     <section class="produto-conteudo">
 
+
+      <!-- #region CABEÇALHO -->
 
       <div class="produto-topo">
 
@@ -277,14 +298,12 @@
         </a>
 
 
-
         <div class="produto-topo-info">
 
 
           <p class="produto-editar-texto">
             Editar fotos e informações dos produtos
           </p>
-
 
 
           <div class="produto-titulo-box">
@@ -332,15 +351,33 @@
 
       </div>
 
+      <!-- #endregion -->
+
+
+
+      <!-- #region MENSAGENS -->
 
       {% if messages %}
+
         <div class="messages-container">
+
           {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+
+            <div class="alert alert-{{ message.tags }}">
+              {{ message }}
+            </div>
+
           {% endfor %}
+
         </div>
+
       {% endif %}
 
+      <!-- #endregion -->
+
+
+
+      <!-- #region CARDS -->
 
       <div
         class="produto-cards-scroll"
@@ -348,11 +385,15 @@
       >
 
 
+        <!-- #region PRODUTOS CADASTRADOS -->
+
         {% for produto in produtos %}
 
 
           <div class="produto-card">
 
+
+            <!-- #region EXCLUIR -->
 
             <form
               method="POST"
@@ -374,7 +415,11 @@
 
             </form>
 
+            <!-- #endregion -->
 
+
+
+            <!-- #region IMAGEM -->
 
             <div class="produto-imagem">
 
@@ -439,7 +484,11 @@
 
             </div>
 
+            <!-- #endregion -->
 
+
+
+            <!-- #region INFORMAÇÕES -->
 
             <div class="produto-card-conteudo">
 
@@ -453,10 +502,18 @@
                 ✎
               </button>
 
-              <form method="POST" action="{% url 'produto-editar' produto.id_produto %}">
+
+              <form
+                method="POST"
+                action="{% url 'produto-editar' produto.id_produto %}"
+              >
+
                 {% csrf_token %}
 
-                <label>Nome do produto:</label>
+
+                <label>
+                  Nome do produto:
+                </label>
 
                 <input
                   type="text"
@@ -465,7 +522,10 @@
                   placeholder="Nome do produto"
                 >
 
-                <label>Preço do produto:</label>
+
+                <label>
+                  Preço do produto:
+                </label>
 
                 <input
                   type="text"
@@ -474,20 +534,31 @@
                   placeholder="R$ 00,00"
                 >
 
-                <label>Descrição do produto:</label>
+
+                <label>
+                  Descrição do produto:
+                </label>
 
                 <textarea
                   name="descricao_produto"
                   placeholder="Descrição do produto..."
                 >{{ produto.descricao|default:'' }}</textarea>
 
-                <button type="submit" class="produto-salvar">
-                  Salvar alterações
+
+                <button
+                  type="submit"
+                  class="produto-salvar"
+                >
+                  SALVAR ALTERAÇÕES
                 </button>
+
 
               </form>
 
+
             </div>
+
+            <!-- #endregion -->
 
 
           </div>
@@ -495,16 +566,32 @@
 
         {% endfor %}
 
+        <!-- #endregion -->
 
 
-        <div class="produto-card">
+
+        <!-- #region NOVO PRODUTO -->
+
+        <div
+          class="produto-card produto-card-novo"
+          id="produtoCardNovo"
+        >
+
 
           <div class="produto-card-conteudo">
 
-            <form method="POST" action="{% url 'produto-criar' %}">
+
+            <form
+              method="POST"
+              action="{% url 'produto-criar' %}"
+            >
+
               {% csrf_token %}
 
-              <label>Nome do produto:</label>
+
+              <label>
+                Nome do produto:
+              </label>
 
               <input
                 type="text"
@@ -513,7 +600,10 @@
                 required
               >
 
-              <label>Preço do produto:</label>
+
+              <label>
+                Preço do produto:
+              </label>
 
               <input
                 type="text"
@@ -522,40 +612,81 @@
                 required
               >
 
-              <label>Categoria:</label>
 
-              <select name="id_categoria" required>
+              <label>
+                Categoria:
+              </label>
 
-                <option value="">
+
+              <select
+                name="id_categoria"
+                class="produto-categoria-select"
+                onchange="atualizarCategoriaProduto(this)"
+                required
+              >
+
+                <option
+                  value=""
+                  data-categoria=""
+                >
                   Selecione...
                 </option>
 
+
                 {% for c in categorias %}
-                  <option value="{{ c.id_categoria }}">
+
+                  <option
+                    value="{{ c.id_categoria }}"
+                    data-categoria="{{ c.tipo_categoria }}"
+                  >
                     {{ c.tipo_categoria }}
                   </option>
+
                 {% endfor %}
+
 
               </select>
 
-              <label>Descrição do produto:</label>
+
+              <div
+                class="produto-categoria-selecionada"
+                id="produtoCategoriaSelecionada"
+              >
+                Nenhuma categoria selecionada
+              </div>
+
+
+              <label>
+                Descrição do produto:
+              </label>
 
               <textarea
                 name="descricao_produto"
                 placeholder="Descrição do produto..."
               ></textarea>
 
-              <button type="submit" class="produto-salvar">
-                Cadastrar produto
+
+              <button
+                type="submit"
+                class="produto-salvar"
+              >
+                CADASTRAR PRODUTO
               </button>
+
 
             </form>
 
+
           </div>
+
 
         </div>
 
+        <!-- #endregion -->
 
+
+
+        <!-- #region ADICIONAR PRODUTO -->
 
         <div
           class="produto-criar-card"
@@ -586,20 +717,163 @@
 
         </div>
 
+        <!-- #endregion -->
+
 
       </div>
+
+      <!-- #endregion -->
 
 
     </section>
 
+    <!-- #endregion -->
+
 
   </main>
 
+  <!-- #endregion -->
 
+
+
+  <!-- #region JAVASCRIPT -->
 
   <script
     src="{% static 'AppStoreLink/scripts/index.js' %}"
   ></script>
+
+
+  <script>
+
+    function atualizarCategoriaProduto(select) {
+
+      const card =
+        select.closest(
+          '.produto-card-novo'
+        );
+
+
+      if (!card) {
+        return;
+      }
+
+
+      const categoriaSelecionada =
+        card.querySelector(
+          '.produto-categoria-selecionada'
+        );
+
+
+      const option =
+        select.options[
+          select.selectedIndex
+        ];
+
+
+      const categoria =
+        option.dataset.categoria || '';
+
+
+      const cores = {
+
+        'Alimentos':
+          '#e8534f',
+
+        'Moda':
+          '#7a5c50',
+
+        'Esportes':
+          '#f5943a',
+
+        'Construção':
+          '#f6c344',
+
+        'Saúde':
+          '#35b5ea',
+
+        'Pets':
+          '#21c9c9',
+
+        'Ambiente':
+          '#7fcf85',
+
+        'Tecnologia':
+          '#7c5cf0',
+
+        'Beleza':
+          '#f06ec0',
+
+        'Outros':
+          '#cfcfcf'
+
+      };
+
+
+      if (!categoria) {
+
+        card.style.setProperty(
+          '--produto-cor',
+          '#ff454c'
+        );
+
+
+        card.style.setProperty(
+          '--produto-cor-texto',
+          '#ffffff'
+        );
+
+
+        card.classList.remove(
+          'tem-categoria'
+        );
+
+
+        categoriaSelecionada.textContent =
+          'Nenhuma categoria selecionada';
+
+
+        return;
+
+      }
+
+
+      const cor =
+        cores[categoria] ||
+        '#ff454c';
+
+
+      card.style.setProperty(
+        '--produto-cor',
+        cor
+      );
+
+
+      const usarTextoEscuro =
+        categoria === 'Construção' ||
+        categoria === 'Outros';
+
+
+      card.style.setProperty(
+        '--produto-cor-texto',
+        usarTextoEscuro
+          ? '#222222'
+          : '#ffffff'
+      );
+
+
+      card.classList.add(
+        'tem-categoria'
+      );
+
+
+      categoriaSelecionada.textContent =
+        categoria;
+
+    }
+
+  </script>
+
+  <!-- #endregion -->
 
 
 </body>

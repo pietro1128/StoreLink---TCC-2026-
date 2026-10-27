@@ -35,7 +35,11 @@
     href="{% static 'AppStoreLink/styles/servicos-loja.css' %}"
   >
 
-  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/mensagens.css' %}">
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/mensagens.css' %}"
+  >
 
 </head>
 
@@ -131,8 +135,12 @@
 
 
 
+  <!-- #region PÁGINA -->
+
   <main class="servico-page">
 
+
+    <!-- #region PERFIL LATERAL -->
 
     <aside class="servico-perfil">
 
@@ -140,7 +148,6 @@
       <div class="servico-badge">
         Estabelecimento
       </div>
-
 
 
       <div class="servico-avatar-wrap">
@@ -197,7 +204,6 @@
         </label>
 
 
-
         <label
           class="servico-camera-badge"
           for="foto-responsavel-servico"
@@ -208,7 +214,6 @@
 
 
       </div>
-
 
 
       <div class="servico-perfil-fields">
@@ -228,7 +233,6 @@
         </div>
 
 
-
         <div class="servico-perfil-field">
 
           <label>
@@ -246,22 +250,46 @@
       </div>
 
 
+      <!-- #region LOGOUT -->
 
-      <form method="POST" action="{% url 'logout' %}" style="display: contents;">
+      <form
+        method="POST"
+        action="{% url 'logout' %}"
+        class="servico-logout-form"
+      >
+
         {% csrf_token %}
-        <button type="submit" class="produto-logout">
+
+        <button
+          type="submit"
+          class="servico-logout"
+        >
+
           Fazer Logout
-          <span>≪</span>
+
+          <span>
+            ≪
+          </span>
+
         </button>
+
       </form>
+
+      <!-- #endregion -->
 
 
     </aside>
 
+    <!-- #endregion -->
 
+
+
+    <!-- #region CONTEÚDO -->
 
     <section class="servico-conteudo">
 
+
+      <!-- #region CABEÇALHO -->
 
       <div class="servico-topo">
 
@@ -276,14 +304,12 @@
         </a>
 
 
-
         <div class="servico-topo-info">
 
 
           <p class="servico-editar-texto">
             Editar fotos e informações dos serviços
           </p>
-
 
 
           <div class="servico-titulo-box">
@@ -307,15 +333,33 @@
 
       </div>
 
+      <!-- #endregion -->
+
+
+
+      <!-- #region MENSAGENS -->
 
       {% if messages %}
+
         <div class="messages-container">
+
           {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+
+            <div class="alert alert-{{ message.tags }}">
+              {{ message }}
+            </div>
+
           {% endfor %}
+
         </div>
+
       {% endif %}
 
+      <!-- #endregion -->
+
+
+
+      <!-- #region CARDS -->
 
       <div
         class="servico-cards-scroll"
@@ -323,11 +367,15 @@
       >
 
 
+        <!-- #region SERVIÇOS CADASTRADOS -->
+
         {% for servico in servicos %}
 
 
           <div class="servico-card">
 
+
+            <!-- #region EXCLUIR -->
 
             <form
               method="POST"
@@ -349,7 +397,11 @@
 
             </form>
 
+            <!-- #endregion -->
 
+
+
+            <!-- #region IMAGEM -->
 
             <div class="servico-imagem">
 
@@ -414,7 +466,11 @@
 
             </div>
 
+            <!-- #endregion -->
 
+
+
+            <!-- #region INFORMAÇÕES -->
 
             <div class="servico-card-conteudo">
 
@@ -429,19 +485,14 @@
               </button>
 
 
-              <!-- ALTERADO: este form agora só EXIBE os dados do serviço salvo.
-                   Corrigi os value (servico.xxx em vez de request.AppStoreLink_servico.xxx)
-                   e o textarea ganhou name="descricao".
-                   Ele NÃO deve criar nada: a criação fica no card "Novo serviço" lá embaixo. -->
-
               <form method="POST">
 
                 {% csrf_token %}
 
+
                 <label>
                   Nome do serviço:
                 </label>
-
 
                 <input
                   name="nome_servico"
@@ -451,11 +502,9 @@
                 >
 
 
-
                 <label>
                   Preço do serviço:
                 </label>
-
 
                 <input
                   name="preco"
@@ -465,21 +514,22 @@
                 >
 
 
-
                 <label>
                   Descrição do serviço:
                 </label>
-
 
                 <textarea
                   name="descricao"
                   placeholder="Descrição do serviço..."
                 >{{ servico.descricao|default:'' }}</textarea>
 
+
               </form>
 
 
             </div>
+
+            <!-- #endregion -->
 
 
           </div>
@@ -487,19 +537,25 @@
 
         {% endfor %}
 
+        <!-- #endregion -->
 
 
-        <!-- NOVO: este card fica FORA do FOR, então aparece sempre,
-             mesmo quando ainda não existe nenhum serviço no banco.
-             É o único form que cria um serviço novo (POST -> view servicos_loja). -->
 
-        <div class="servico-card">
+        <!-- #region NOVO SERVIÇO -->
+
+        <div
+          class="servico-card servico-card-novo"
+          id="servicoCardNovo"
+        >
+
 
           <div class="servico-card-conteudo">
+
 
             <form method="POST">
 
               {% csrf_token %}
+
 
               <label>
                 Nome do serviço:
@@ -526,6 +582,106 @@
 
 
               <label>
+                Categoria:
+              </label>
+
+
+              <select
+                name="categoria_servico"
+                class="servico-categoria-select"
+                onchange="atualizarCategoriaServico(this)"
+                required
+              >
+
+                <option
+                  value=""
+                  data-categoria=""
+                >
+                  Selecione...
+                </option>
+
+                <option
+                  value="Alimentos"
+                  data-categoria="Alimentos"
+                >
+                  Alimentos
+                </option>
+
+                <option
+                  value="Moda"
+                  data-categoria="Moda"
+                >
+                  Moda
+                </option>
+
+                <option
+                  value="Esportes"
+                  data-categoria="Esportes"
+                >
+                  Esportes
+                </option>
+
+                <option
+                  value="Construção"
+                  data-categoria="Construção"
+                >
+                  Construção
+                </option>
+
+                <option
+                  value="Saúde"
+                  data-categoria="Saúde"
+                >
+                  Saúde
+                </option>
+
+                <option
+                  value="Pets"
+                  data-categoria="Pets"
+                >
+                  Pets
+                </option>
+
+                <option
+                  value="Ambiente"
+                  data-categoria="Ambiente"
+                >
+                  Ambiente
+                </option>
+
+                <option
+                  value="Tecnologia"
+                  data-categoria="Tecnologia"
+                >
+                  Tecnologia
+                </option>
+
+                <option
+                  value="Beleza"
+                  data-categoria="Beleza"
+                >
+                  Beleza
+                </option>
+
+                <option
+                  value="Outros"
+                  data-categoria="Outros"
+                >
+                  Outros
+                </option>
+
+
+              </select>
+
+
+              <div
+                class="servico-categoria-selecionada"
+              >
+                Nenhuma categoria selecionada
+              </div>
+
+
+              <label>
                 Descrição do serviço:
               </label>
 
@@ -535,17 +691,27 @@
               ></textarea>
 
 
-              <button type="submit">
-                Salvar serviço
+              <button
+                type="submit"
+                class="servico-salvar"
+              >
+                SALVAR SERVIÇO
               </button>
+
 
             </form>
 
+
           </div>
+
 
         </div>
 
+        <!-- #endregion -->
 
+
+
+        <!-- #region ADICIONAR SERVIÇO -->
 
         <div
           class="servico-criar-card"
@@ -576,20 +742,163 @@
 
         </div>
 
+        <!-- #endregion -->
+
 
       </div>
+
+      <!-- #endregion -->
 
 
     </section>
 
+    <!-- #endregion -->
+
 
   </main>
 
+  <!-- #endregion -->
 
+
+
+  <!-- #region JAVASCRIPT -->
 
   <script
     src="{% static 'AppStoreLink/scripts/index.js' %}"
   ></script>
+
+
+  <script>
+
+    function atualizarCategoriaServico(select) {
+
+      const card =
+        select.closest(
+          '.servico-card-novo'
+        );
+
+
+      if (!card) {
+        return;
+      }
+
+
+      const categoriaSelecionada =
+        card.querySelector(
+          '.servico-categoria-selecionada'
+        );
+
+
+      const option =
+        select.options[
+          select.selectedIndex
+        ];
+
+
+      const categoria =
+        option.dataset.categoria || '';
+
+
+      const cores = {
+
+        'Alimentos':
+          '#e8534f',
+
+        'Moda':
+          '#7a5c50',
+
+        'Esportes':
+          '#f5943a',
+
+        'Construção':
+          '#f6c344',
+
+        'Saúde':
+          '#35b5ea',
+
+        'Pets':
+          '#21c9c9',
+
+        'Ambiente':
+          '#7fcf85',
+
+        'Tecnologia':
+          '#7c5cf0',
+
+        'Beleza':
+          '#f06ec0',
+
+        'Outros':
+          '#cfcfcf'
+
+      };
+
+
+      if (!categoria) {
+
+        card.style.setProperty(
+          '--servico-cor',
+          '#ff454c'
+        );
+
+
+        card.style.setProperty(
+          '--servico-cor-texto',
+          '#ffffff'
+        );
+
+
+        card.classList.remove(
+          'tem-categoria'
+        );
+
+
+        categoriaSelecionada.textContent =
+          'Nenhuma categoria selecionada';
+
+
+        return;
+
+      }
+
+
+      const cor =
+        cores[categoria] ||
+        '#ff454c';
+
+
+      card.style.setProperty(
+        '--servico-cor',
+        cor
+      );
+
+
+      const usarTextoEscuro =
+        categoria === 'Construção' ||
+        categoria === 'Outros';
+
+
+      card.style.setProperty(
+        '--servico-cor-texto',
+        usarTextoEscuro
+          ? '#222222'
+          : '#ffffff'
+      );
+
+
+      card.classList.add(
+        'tem-categoria'
+      );
+
+
+      categoriaSelecionada.textContent =
+        categoria;
+
+    }
+
+  </script>
+
+  <!-- #endregion -->
 
 
 </body>
