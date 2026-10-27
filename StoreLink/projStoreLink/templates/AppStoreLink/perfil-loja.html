@@ -432,6 +432,7 @@
           <form
             method="POST"
             id="formLoja"
+            {% if loja %}action="{% url 'loja-editar' loja.id_loja %}"{% endif %}
           >
 
             {% csrf_token %}
@@ -441,6 +442,13 @@
               type="hidden"
               name="form_loja"
               value="1"
+            >
+
+            <input
+              type="hidden"
+              name="categoria"
+              id="categoria-input"
+              value="{{ loja.id_categoria.tipo_categoria|default:'Alimentos' }}"
             >
 
 
@@ -613,7 +621,7 @@
               >
 
                 <span id="classifName">
-                  Alimentos
+                  {{ loja.id_categoria.tipo_categoria|default:'Alimentos' }}
                 </span>
 
                 ▾
@@ -876,29 +884,19 @@
 
 
 
-      function applyClassification(
-        name,
-        bgColor
-      ) {
+      function applyClassification(name, bgColor, valorCategoria) {
 
-        classifName.textContent =
-          name;
-
-
-        document.documentElement.style.setProperty(
-          '--brand-red',
-          bgColor
-        );
-
-
+        classifName.textContent = name;
+      
+        // este é o valor que realmente vai para o servidor
+        document.getElementById('categoria-input').value = valorCategoria;
+      
+        document.documentElement.style.setProperty('--brand-red', bgColor);
+      
         document.documentElement.style.setProperty(
           '--brand-red-light',
-          lightenColor(
-            bgColor,
-            0.18
-          )
+          lightenColor(bgColor, 0.18)
         );
-
       }
 
 
@@ -969,31 +967,16 @@
 
               if (name === 'Outros') {
 
-                var custom =
-                  window.prompt(
-                    'Digite o nome da classificação da loja:'
-                  );
-
-
-                if (
-                  custom &&
-                  custom.trim() !== ''
-                ) {
-
-                  applyClassification(
-                    custom.trim(),
-                    bgColor
-                  );
-
+                var custom = window.prompt('Digite o nome da classificação da loja:');
+              
+                if (custom && custom.trim() !== '') {
+                  applyClassification(custom.trim(), bgColor, name);   // <- name = 'Outros'
                 }
-
+              
               } else {
-
-                applyClassification(
-                  name,
-                  bgColor
-                );
-
+              
+                applyClassification(name, bgColor, name);              // <- name = 'Moda', 'Pets'...
+              
               }
 
 
