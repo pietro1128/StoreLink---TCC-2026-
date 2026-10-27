@@ -117,7 +117,7 @@ def perfil_loja(request):
         return redirect('perfil-loja')
 
     # TODO: trocar pela loja do usuário logado quando existir o vínculo Usuario↔Loja 
-    loja = Loja.objects.first()
+    loja = Loja.objects.select_related('id_endereco', 'id_categoria').order_by('-id_loja').first
 
     return render(request, 'AppStoreLink/perfil-loja.html', {'loja': loja})
 
@@ -964,7 +964,7 @@ def InformacoesProduto(request, id_loja):
         'id_produto'
     )
 
-    usuario_id = request.session.get(usuario_id)
+    usuario_id = request.session.get('usuario_id')
 
     contexto = {
         'loja': loja,
@@ -994,7 +994,7 @@ def InformacoesServico(request, id_loja):
         'id_servico'
     )
 
-    usuario_id = request.session.get(usuario_id)
+    usuario_id = request.session.get('usuario_id')
     
     contexto = {
         'loja': loja,

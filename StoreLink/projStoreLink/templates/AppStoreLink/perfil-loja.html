@@ -432,7 +432,6 @@
           <form
             method="POST"
             id="formLoja"
-            {% if loja %}action="{% url 'loja-editar' loja.id_loja %}"{% endif %}
           >
 
             {% csrf_token %}
@@ -466,7 +465,7 @@
               <input
                 name="nome_loja"
                 type="text"
-                value="{{ request.AppStoreLink_loja.nome_loja }}"
+                value="{{ loja.nome_loja }}"
               >
 
             </div>
@@ -486,7 +485,7 @@
               <input
                 name="rua"
                 type="text"
-                value="{{ request.AppStoreLink_endereco.rua }}"
+                value="{{ loja.id_endereco.rua }}"
               >
 
             </div>
@@ -504,7 +503,7 @@
                 <input
                   name="numero"
                   type="text"
-                  value="{{ request.AppStoreLink_endereco.numero_estabelecimento }}"
+                  value="{{ loja.id_endereco.numero_estabelecimento }}"
                 >
 
               </div>
@@ -519,7 +518,7 @@
                 <input
                   name="cep"
                   type="text"
-                  value="{{ request.AppStoreLink_endereco.cep }}"
+                  value="{{ loja.id_endereco.cep }}"
                 >
 
               </div>
@@ -542,7 +541,7 @@
               <input
                 name="email_loja"
                 type="text"
-                value="{{ request.AppStoreLink_loja.email_loja }}"
+                value="{{ loja.email_loja }}"
               >
 
             </div>
@@ -564,7 +563,7 @@
                 <input
                   name="telefone_loja"
                   type="text"
-                  value="{{ request.AppStoreLink_loja.telefone_loja }}"
+                  value="{{ loja.telefone_loja }}"
                 >
 
               </div>
@@ -581,7 +580,7 @@
               <input
                 name="cnpj"
                 type="text"
-                value="{{ request.AppStoreLink_loja.cnpj }}"
+                value="{{ loja.cnpj }}"
               >
 
             </div>
@@ -596,7 +595,7 @@
               <input
                 name="link_loja"
                 type="text"
-                value="{{ request.AppStoreLink_loja.link }}"
+                value="{{ loja.link|default_if_none:'' }}"
               >
 
             </div>
