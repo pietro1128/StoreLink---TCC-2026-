@@ -61,16 +61,11 @@ urlpatterns = [
     path('suporte/', suporte, name='suporte'),
 
     path('produtos-loja/', produtos_loja, name='produtos-loja'),
-    path('produto/<int:id_produto>/editar/', views.produto_editar, name='produto-editar'),
     path('produto/novo/', views.produto_criar, name='produto-criar'),
-    path('produto/<int:id_produto>/excluir/', views.produto_excluir, name='produto-excluir'),
 
     path('servicos-loja/', servicos_loja,name='servicos-loja'),
-    path('servico/<int:id_servico>/excluir/', views.servico_excluir, name='servico-excluir'),
 
     path('loja/<int:id_loja>/favoritar/', views.favoritar_loja, name='favoritar-loja'),
-
-    path('loja/<int:id_loja>/excluir/', views.loja_excluir, name='loja-excluir'),
     
     path('avaliar/loja/<int:id_alvo>/', views.avaliacao_criar, {'tipo': 'loja'}, name='avaliar-loja'),
     path('avaliar/produto/<int:id_alvo>/', views.avaliacao_criar, {'tipo': 'produto'}, name='avaliar-produto'),
@@ -95,16 +90,16 @@ urlpatterns = [
         views.InformacoesProduto,
         name='InformacoesProduto'
     ),
-    path('loja/<int:id_loja>/editar/', views.produto_editar, name='produto-editar'),
-    path('loja/<int:id_loja>/excluir/', views.produto_excluir, name='produto-excluir'),
+    path('produto/<int:id_produto>/editar/', views.produto_editar, name='produto-editar'),
+    path('produto/<int:id_produto>/excluir/', views.produto_excluir, name='produto-excluir'),
 
     path(
         'loja/<int:id_loja>/servicos/',
         views.InformacoesServico,
         name='InformacoesServico'
     ),
-    path('loja/<int:id_loja>/editar/', views.servico_editar, name='servico-editar'),
-    path('loja/<int:id_loja>/excluir/', views.servico_excluir, name='servico-excluir'),
+    path('servico/<int:id_servico>/editar/', views.servico_editar, name='servico-editar'),
+    path('servico/<int:id_servico>/excluir/', views.servico_excluir, name='servico-excluir'),
     
 
     # endregion

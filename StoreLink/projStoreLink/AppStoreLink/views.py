@@ -22,7 +22,8 @@ from AppStoreLink.services import (
 def index(request):
     return render(request, 'AppStoreLink/index.html')
 
-
+def _loja_atual():
+    return Loja.objects.select_related('id_endereco', 'id_categoria').order_by('-id_loja').first()
 # |  Para testar a pagina SEM CONTA, voce precisa transformar
 # V  a linha de baixo em um comentario: "#@login_required"
 #@login_required
@@ -117,7 +118,7 @@ def perfil_loja(request):
         return redirect('perfil-loja')
 
     # TODO: trocar pela loja do usuário logado quando existir o vínculo Usuario↔Loja 
-    loja = Loja.objects.select_related('id_endereco', 'id_categoria').order_by('-id_loja').first
+    loja = _loja_atual()
 
     return render(request, 'AppStoreLink/perfil-loja.html', {'loja': loja})
 
@@ -485,7 +486,7 @@ def _validar_nome_preco(nome, preco_txt, rotulo='produto'):
 
 def produtos_loja(request):
     # TODO: quando existir o vínculo Usuário↔Loja, filtrar só os produtos da loja do usuário logado
-    produtos = Produto.objects.all()
+    produtos = Produto.objects.filter(id_loja=_loja_atual())
     categorias = Categoria.objects.all()
 
     return render(request, 'AppStoreLink/produtos-loja.html', {
@@ -494,44 +495,21 @@ def produtos_loja(request):
     })
 
 @require_POST
-def produto_editar(request, id_produto):
-    if not request.session.get('usuario_id'):
-        messages.error(request, 'Você precisa fazer login para editar o serviço.')
-        return redirect('login')
-    
-    produto = get_object_or_404(Produto, id_produto=id_produto)
-    
-    nome = request.POST.get('nome_servico', '').strip()
-    preco_txt = request.POST.get('preco', '').strip().replace(',', '.')
-    descricao = request.POST.get('descricao', '').strip()
-    
-    erros, preco = _validar_nome_preco(nome, preco_txt, 'produto')
-    
-    if erros:
-        for erro in erros:
-            messages.error(request, erro)
-        return redirect('InformacoesProduto', id_loja=produto.id_loja)
-    
-    produto.nome_servico = nome
-    produto.preco = preco
-    produto.descricao = descricao or None
-    produto.save()
-    
-    messages.success(request, 'Produto atualizado com sucesso!')
-    return redirect('InformacoesProduto', id_loja=produto.id_loja_id)
-
-@require_POST
 def produto_excluir(request, id_produto):
     if not request.session.get('usuario_id'):
         messages.error(request, 'Você precisa fazer login para editar o serviço.')
         return redirect('login')
     
-    produto = get_object_or_404(Produto, id_produto=id_produto)
+    produto = Produto.objects.filter(id_produto=id_produto).first()
+    if produto is None:
+        messages.error(request, 'Este produto não existe mais ou ja foi excluido.')
+        return _voltar(request)
+    
     nome = produto.nome_produto
     produto.delete()
 
     messages.success(request, f'O produto "{nome}" foi excluído.')
-    return redirect('produtos-loja')
+    return _voltar(request)
 
 
 @require_POST
@@ -551,7 +529,7 @@ def produto_criar(request):
         erros.append('Selecione uma categoria válida.')
 
     # TODO: trocar pela loja do dono logado quando existir o vínculo Usuário↔Loja
-    loja = Loja.objects.first()
+    loja = _loja_atual()
     if loja is None:
         erros.append('Cadastre uma loja antes de cadastrar produto.')
 
@@ -585,7 +563,7 @@ def produto_editar(request, id_produto):
     if erros:
         for erro in erros:
             messages.error(request, erro)
-        return redirect('produtos-loja')
+        return _voltar(request)
 
     produto.nome_produto = nome
     produto.preco = preco
@@ -593,14 +571,15 @@ def produto_editar(request, id_produto):
     produto.save()
 
     messages.success(request, 'Produto atualizado com sucesso!')
-    return redirect('produtos-loja')
+    return _voltar(request)
 
 
 def servicos_loja(request):
     # ALTERADO: a lista de serviços foi movida para o topo da função.
     # Antes ela ficava só no final, mas agora também precisamos dela no
     # caso de erro de validação (para recarregar a página com os cards).
-    servicos = Servico.objects.all()
+    loja = _loja_atual()
+    servicos = Servico.objects.filter(id_loja=loja)
 
     if request.method == 'POST':
         nome_servico = request.POST.get('nome_servico', '').strip()  # strip(): tira espaços
@@ -643,7 +622,6 @@ def servicos_loja(request):
         # Atenção: isso coloca TODO serviço na mesma loja, não importa quem cadastrou. É uma limitação conhecida, só dá para resolver quando existir o vínculo Usuario -> Loja no banco.
         # TODO: trocar pela loja do usuário logado.
         
-        loja = Loja.objects.first()
         if loja is None:
             erros.append('Cadastre uma loja antes de cadastrar serviço.')
 
