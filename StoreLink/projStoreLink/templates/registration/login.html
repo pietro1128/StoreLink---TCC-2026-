@@ -1,89 +1,351 @@
 {% load static %}
 <!DOCTYPE html>
+
 <html lang="pt-BR">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StoreLink - Login</title>
-<link rel="icon" type="image/png" href="{% static 'AppStoreLink/images/icon-dark.png' %}">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{% static 'AppStoreLink/styles/login.css' %}">
-<link rel="stylesheet" href="{% static 'AppStoreLink/styles/mensagens.css' %}">
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    StoreLink - Login
+  </title>
+
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="{% static 'AppStoreLink/images/icon-dark.png' %}"
+  >
+
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap"
+    rel="stylesheet"
+  >
+
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/login.css' %}"
+  >
+
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/mensagens.css' %}"
+  >
 
 </head>
 
-<!-- #region modo escuro -->
+
 <body>
 
-  <button class="theme-toggle" onclick="toggleTheme(this)">🌙 Modo escuro</button>
-  <a class="login-page-icon" href="{% url 'index' %}" aria-label="Voltar para a tela inicial">
-    <img class="icon-light" src="{% static 'AppStoreLink/images/icon.png' %}" alt="StoreLink">
-    <img class="icon-dark" src="{% static 'AppStoreLink/images/icon-dark.png' %}" alt="StoreLink">
+
+  <!-- #region TEMA SALVO -->
+
+  <script>
+
+    if (
+      localStorage.getItem('theme') === 'dark'
+    ) {
+
+      document.body.classList.add(
+        'dark'
+      );
+
+    }
+
+  </script>
+
+  <!-- #endregion -->
+
+
+
+  <!-- #region MODO ESCURO -->
+
+  <button
+    type="button"
+    class="theme-toggle"
+    onclick="toggleTheme(this)"
+  >
+    🌙 Modo escuro
+  </button>
+
+
+  <a
+    class="login-page-icon"
+    href="{% url 'index' %}"
+    aria-label="Voltar para a tela inicial"
+  >
+
+    <img
+      class="icon-light"
+      src="{% static 'AppStoreLink/images/icon.png' %}"
+      alt="StoreLink"
+    >
+
+
+    <img
+      class="icon-dark"
+      src="{% static 'AppStoreLink/images/icon-dark.png' %}"
+      alt="StoreLink"
+    >
+
   </a>
 
   <!-- #endregion -->
 
-<!-- #region mensagens -->
+
+
+  <!-- #region MENSAGENS -->
+
   {% if messages %}
+
     <div class="messages-container">
+
       {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+
+        <div class="alert alert-{{ message.tags }}">
+          {{ message }}
+        </div>
+
       {% endfor %}
+
     </div>
+
   {% endif %}
+
   <!-- #endregion -->
 
-<!-- #region login -->
+
+
+  <!-- #region LOGIN -->
+
   <div class="login-wrapper">
-    <h1 class="login-welcome">Bem vindo de volta !</h1>
+
+
+    <h1 class="login-welcome">
+      Bem vindo de volta !
+    </h1>
+
 
     <div class="login-card">
-      <h2>User Login</h2>
-      <p class="login-subtitle">Insira suas informações para realizar o login</p>
 
-      <form class="login-form" method="post" action="">
+
+      <h2>
+        User Login
+      </h2>
+
+
+      <p class="login-subtitle">
+        Insira suas informações para realizar o login
+      </p>
+
+
+      <form
+        class="login-form"
+        method="post"
+        action=""
+      >
+
         {% csrf_token %}
 
-        <label class="login-field">
-          <img class="field-icon-light" src="{% static 'AppStoreLink/images/e-mail.png' %}" alt=""><img class="field-icon-dark" src="{% static 'AppStoreLink/images/e-mail-dark.png' %}" alt="">
-          <input type="email" name="email" placeholder="E-mail" required>
-        </label>
 
         <label class="login-field">
-          <img class="field-icon-light" src="{% static 'AppStoreLink/images/bloqueado.png' %}" alt=""><img class="field-icon-dark" src="{% static 'AppStoreLink/images/bloqueado-dark.png' %}" alt="">
-          <input type="password" name="senha" placeholder="Senha" required>
+
+
+          <img
+            class="field-icon-light"
+            src="{% static 'AppStoreLink/images/e-mail.png' %}"
+            alt=""
+          >
+
+
+          <img
+            class="field-icon-dark"
+            src="{% static 'AppStoreLink/images/e-mail-dark.png' %}"
+            alt=""
+          >
+
+
+          <input
+            type="email"
+            name="email"
+            placeholder="E-mail"
+            required
+          >
+
+
         </label>
+
+
+        <label class="login-field">
+
+
+          <img
+            class="field-icon-light"
+            src="{% static 'AppStoreLink/images/bloqueado.png' %}"
+            alt=""
+          >
+
+
+          <img
+            class="field-icon-dark"
+            src="{% static 'AppStoreLink/images/bloqueado-dark.png' %}"
+            alt=""
+          >
+
+
+          <input
+            type="password"
+            name="senha"
+            placeholder="Senha"
+            required
+          >
+
+
+        </label>
+
 
         <div class="login-forgot">
-          <a href="{% url 'recuperar-senha' %}">Esqueceu a senha</a> ?
+
+          <a href="{% url 'recuperar-senha' %}">
+            Esqueceu a senha
+          </a>
+
+          ?
+
         </div>
 
-        <button type="submit" class="login-submit-btn">ENTRAR</button>
+
+        <button
+          type="submit"
+          class="login-submit-btn"
+        >
+          ENTRAR
+        </button>
+
 
         <div class="login-signup">
-          Não tem uma conta ? <a href="{% url 'cadastro' %}">Cadastre-se</a>
+
+          Não tem uma conta ?
+
+          <a href="{% url 'cadastro' %}">
+            Cadastre-se
+          </a>
+
         </div>
+
+
       </form>
+
+
     </div>
+
+
   </div>
 
   <!-- #endregion -->
 
-<!-- #region modo escuro js -->
+
+
+  <!-- #region MODO ESCURO JS -->
+
   <script>
-    function toggleTheme(btn) {
-      document.body.classList.toggle('dark');
-      if (document.body.classList.contains('dark')) {
-        btn.textContent = '☀️ Modo claro';
-      } else {
-        btn.textContent = '🌙 Modo escuro';
+
+    function atualizarBotaoTema() {
+
+      const botao =
+        document.querySelector(
+          '.theme-toggle'
+        );
+
+
+      if (!botao) {
+        return;
       }
+
+
+      if (
+        document.body.classList.contains(
+          'dark'
+        )
+      ) {
+
+        botao.textContent =
+          '☀️ Modo claro';
+
+      } else {
+
+        botao.textContent =
+          '🌙 Modo escuro';
+
+      }
+
     }
+
+
+
+    function toggleTheme(botao) {
+
+      document.body.classList.toggle(
+        'dark'
+      );
+
+
+      if (
+        document.body.classList.contains(
+          'dark'
+        )
+      ) {
+
+        localStorage.setItem(
+          'theme',
+          'dark'
+        );
+
+      } else {
+
+        localStorage.setItem(
+          'theme',
+          'light'
+        );
+
+      }
+
+
+      atualizarBotaoTema();
+
+    }
+
+
+
+    atualizarBotaoTema();
+
   </script>
 
-<!-- #endregion -->
+  <!-- #endregion -->
+
 
 </body>
-</html> 
+
+</html>
