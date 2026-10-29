@@ -1,102 +1,42 @@
 {% load static %}
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 
 <head>
-
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <title>StoreLink - Serviços</title>
 
-  <title>
-    StoreLink - Serviços
-  </title>
-
-
-  <link
-    rel="icon"
-    type="image/png"
-    href="{% static 'AppStoreLink/images/icon-dark.png' %}"
-  >
-
-
-  <link
-    rel="stylesheet"
-    href="{% static 'AppStoreLink/styles/style.css' %}"
-  >
-
-
-  <link
-    rel="stylesheet"
-    href="{% static 'AppStoreLink/styles/servicos-loja.css' %}"
-  >
-
-
-  <link
-    rel="stylesheet"
-    href="{% static 'AppStoreLink/styles/mensagens.css' %}"
-  >
-
+  <link rel="icon" type="image/png" href="{% static 'AppStoreLink/images/icon-dark.png' %}">
+  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/style.css' %}">
+  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/servicos-loja.css' %}">
+  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/mensagens.css' %}">
 </head>
 
-
 <body>
+
+  <script>
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+    }
+  </script>
 
 
   <!-- #region NAVBAR -->
 
   <div class="topbar">
 
-
     <div class="logo-icon">
-
-      <img
-        src="{% static 'AppStoreLink/images/icon-dark.png' %}"
-        alt="StoreLink"
-      >
-
+      <img src="{% static 'AppStoreLink/images/icon-dark.png' %}" alt="StoreLink">
     </div>
 
-
-    <a
-      class="nav-btn"
-      href="{% url 'index' %}"
-    >
-      Início
-    </a>
-
-
-    <a
-      class="nav-btn active"
-      href="{% url 'perfil-loja' %}"
-    >
-      Sua loja
-    </a>
-
-
-    <a
-      id="suporte"
-      class="nav-btn"
-      href="{% url 'suporte' %}"
-    >
-      Suporte
-    </a>
-
-
-    <a
-      class="nav-btn"
-      href="{% url 'tutorial' %}"
-    >
-      Como navegar?
-    </a>
-
+    <a class="nav-btn" href="{% url 'index' %}">Início</a>
+    <a class="nav-btn active" href="{% url 'perfil-loja' %}">Sua loja</a>
+    <a id="suporte" class="nav-btn" href="{% url 'suporte' %}">Suporte</a>
+    <a class="nav-btn" href="{% url 'tutorial' %}">Como navegar?</a>
 
     {% if usuario_logado %}
-
       <button
         type="button"
         class="nav-account-btn"
@@ -105,9 +45,7 @@
       >
         👤 Minha conta
       </button>
-
     {% else %}
-
       <button
         type="button"
         class="nav-account-btn"
@@ -116,9 +54,7 @@
       >
         Criar conta ou Entrar
       </button>
-
     {% endif %}
-
 
     <button
       type="button"
@@ -128,11 +64,9 @@
       🌙 Modo escuro
     </button>
 
-
   </div>
 
   <!-- #endregion -->
-
 
 
   <!-- #region PÁGINA -->
@@ -144,20 +78,13 @@
 
     <aside class="servico-perfil">
 
-
       <div class="servico-badge">
         Estabelecimento
       </div>
 
-
       <div class="servico-avatar-wrap">
 
-
-        <label
-          class="servico-avatar"
-          for="foto-responsavel-servico"
-        >
-
+        <label class="servico-avatar" for="foto-responsavel-servico">
 
           <input
             type="file"
@@ -166,33 +93,11 @@
             hidden
           >
 
-
-          <svg
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-
+          <svg viewBox="0 0 24 24" aria-hidden="true">
             <path
-              d="
-                M12 12
-                c2.7 0 5-2.3 5-5
-                s-2.3-5-5-5
-                -5 2.3-5 5
-                2.3 5 5 5
-                z
-
-                m0 2
-                c-3.3 0-10 1.7-10 5
-                v3
-                h20
-                v-3
-                c0-3.3-6.7-5-10-5
-                z
-              "
+              d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"
             />
-
           </svg>
-
 
           <img
             id="preview-responsavel-servico"
@@ -200,9 +105,7 @@
             alt="Foto do responsável"
           >
 
-
         </label>
-
 
         <label
           class="servico-camera-badge"
@@ -212,87 +115,45 @@
           📷
         </label>
 
-
       </div>
-
 
       <div class="servico-perfil-fields">
 
-
         <div class="servico-perfil-field">
-
-          <label>
-            Nome do responsável
-          </label>
-
-          <input
-            type="text"
-            value="{{ request.AppStoreLink_usuario.nome }}"
-          >
-
+          <label>Nome do responsável</label>
+          <input type="text" value="{{ request.AppStoreLink_usuario.nome }}">
         </div>
 
-
         <div class="servico-perfil-field">
-
-          <label>
-            Sobrenome
-          </label>
-
-          <input
-            type="text"
-            value="{{ request.AppStoreLink_usuario.sobrenome }}"
-          >
-
+          <label>Sobrenome</label>
+          <input type="text" value="{{ request.AppStoreLink_usuario.sobrenome }}">
         </div>
-
 
       </div>
-
-
-      <!-- #region LOGOUT -->
 
       <form
         method="POST"
         action="{% url 'logout' %}"
         class="servico-logout-form"
       >
-
         {% csrf_token %}
 
-        <button
-          type="submit"
-          class="servico-logout"
-        >
-
+        <button type="submit" class="servico-logout">
           Fazer Logout
-
-          <span>
-            ≪
-          </span>
-
+          <span>≪</span>
         </button>
-
       </form>
-
-      <!-- #endregion -->
-
 
     </aside>
 
     <!-- #endregion -->
 
 
-
     <!-- #region CONTEÚDO -->
 
     <section class="servico-conteudo">
 
-
-      <!-- #region CABEÇALHO -->
-
       <div class="servico-topo">
-
 
         <a
           class="servico-voltar"
@@ -303,79 +164,46 @@
           ←
         </a>
 
-
         <div class="servico-topo-info">
-
 
           <p class="servico-editar-texto">
             Editar fotos e informações dos serviços
           </p>
 
-
           <div class="servico-titulo-box">
-
-
-            <h1>
-              SERVIÇOS
-            </h1>
-
-
-            <div class="servico-dinheiro">
-              $
-            </div>
-
-
+            <h1>SERVIÇOS</h1>
+            <div class="servico-dinheiro">$</div>
           </div>
 
-
         </div>
-
 
       </div>
 
-      <!-- #endregion -->
-
-
-
-      <!-- #region MENSAGENS -->
 
       {% if messages %}
-
         <div class="messages-container">
-
           {% for message in messages %}
-
             <div class="alert alert-{{ message.tags }}">
               {{ message }}
             </div>
-
           {% endfor %}
-
         </div>
-
       {% endif %}
-
-      <!-- #endregion -->
-
 
 
       <!-- #region CARDS -->
 
-      <div
-        class="servico-cards-scroll"
-        id="servicoCards"
-      >
+      <div class="servico-cards-scroll" id="servicoCards">
 
 
-        <!-- #region SERVIÇOS CADASTRADOS -->
+        <!-- #region SERVIÇOS SALVOS -->
 
         {% for servico in servicos %}
 
-
-          <div class="servico-card">
-
-
-            <!-- #region EXCLUIR -->
+          <div
+            class="servico-card servico-card-salvo"
+            data-categoria="{{ servico.id_loja.id_categoria.tipo_categoria }}"
+          >
 
             <form
               method="POST"
@@ -383,7 +211,6 @@
               style="display: contents;"
               onsubmit="return confirm('Excluir o serviço {{ servico.nome_servico|escapejs }}? Essa ação não pode ser desfeita.');"
             >
-
               {% csrf_token %}
 
               <button
@@ -394,49 +221,27 @@
               >
                 ✕
               </button>
-
             </form>
 
-            <!-- #endregion -->
-
-
-
-            <!-- #region IMAGEM -->
 
             <div class="servico-imagem">
-
 
               <input
                 class="servico-imagem-input"
                 type="file"
+                name="foto"
+                form="formServico{{ servico.id_servico }}"
                 accept="image/*"
                 hidden
               >
 
-
               {% if servico.foto %}
-
-
                 <img
                   class="servico-preview servico-preview-existente"
                   src="{{ servico.foto }}"
                   alt="{{ servico.nome_servico }}"
                 >
-
-
-                <button
-                  type="button"
-                  class="servico-trocar-imagem"
-                  aria-label="Trocar imagem"
-                  title="Trocar imagem"
-                >
-                  ✎
-                </button>
-
-
               {% else %}
-
-
                 <button
                   type="button"
                   class="servico-botao-imagem"
@@ -444,122 +249,162 @@
                   📷 Adicionar imagem
                 </button>
 
-
                 <img
                   class="servico-preview"
                   alt="Imagem do serviço"
                 >
-
-
-                <button
-                  type="button"
-                  class="servico-trocar-imagem"
-                  aria-label="Trocar imagem"
-                  title="Trocar imagem"
-                >
-                  ✎
-                </button>
-
-
               {% endif %}
 
+              <button
+                type="button"
+                class="servico-trocar-imagem"
+                aria-label="Trocar imagem"
+                title="Trocar imagem"
+              >
+                📷
+              </button>
 
             </div>
 
-            <!-- #endregion -->
-
-
-
-            <!-- #region INFORMAÇÕES -->
 
             <div class="servico-card-conteudo">
-
 
               <button
                 type="button"
                 class="servico-editar-info"
+                onclick="editarServico(this)"
                 aria-label="Editar informações"
                 title="Editar informações"
               >
                 ✎
               </button>
 
-
-              <form method="POST">
-
+              <form
+                method="POST"
+                action="{% url 'servico-editar' servico.id_servico %}"
+                id="formServico{{ servico.id_servico }}"
+                class="servico-form-salvo"
+                enctype="multipart/form-data"
+              >
                 {% csrf_token %}
 
-
-                <label>
-                  Nome do serviço:
-                </label>
+                <label>Nome do serviço:</label>
 
                 <input
                   name="nome_servico"
                   type="text"
                   value="{{ servico.nome_servico }}"
                   placeholder="Nome do serviço"
+                  readonly
                 >
 
-
-                <label>
-                  Preço do serviço:
-                </label>
+                <label>Preço do serviço:</label>
 
                 <input
                   name="preco"
                   type="text"
                   value="{{ servico.preco }}"
                   placeholder="R$ 00,00"
+                  readonly
                 >
 
+                <label>Categoria:</label>
 
-                <label>
-                  Descrição do serviço:
-                </label>
+                <div class="servico-categoria-salva">
+                  {{ servico.id_loja.id_categoria.tipo_categoria }}
+                </div>
+
+                <label>Descrição do serviço:</label>
 
                 <textarea
                   name="descricao"
                   placeholder="Descrição do serviço..."
+                  readonly
                 >{{ servico.descricao|default:'' }}</textarea>
 
+                <button
+                  type="submit"
+                  class="servico-salvar-alteracoes"
+                  hidden
+                >
+                  SALVAR ALTERAÇÕES
+                </button>
 
               </form>
 
-
             </div>
 
-            <!-- #endregion -->
-
-
           </div>
-
 
         {% endfor %}
 
         <!-- #endregion -->
 
 
-
-        <!-- #region NOVO SERVIÇO -->
+        <!-- #region NOVO SERVIÇO TEMPORÁRIO -->
 
         <div
           class="servico-card servico-card-novo"
           id="servicoCardNovo"
         >
 
+          <button
+            type="button"
+            class="servico-excluir-card servico-cancelar-card"
+            onclick="cancelarNovoServico()"
+            aria-label="Cancelar novo serviço"
+            title="Cancelar novo serviço"
+          >
+            ✕
+          </button>
+
+
+          <div class="servico-imagem servico-imagem-nova">
+
+            <input
+              class="servico-imagem-input"
+              type="file"
+              name="foto"
+              form="formNovoServico"
+              accept="image/*"
+              hidden
+            >
+
+            <button
+              type="button"
+              class="servico-botao-imagem"
+            >
+              📷 Adicionar imagem
+            </button>
+
+            <img
+              class="servico-preview"
+              alt="Imagem do novo serviço"
+            >
+
+            <button
+              type="button"
+              class="servico-trocar-imagem"
+              aria-label="Trocar imagem"
+              title="Trocar imagem"
+            >
+              📷
+            </button>
+
+          </div>
+
 
           <div class="servico-card-conteudo">
 
-
-            <form method="POST">
-
+            <form
+              method="POST"
+              action="{% url 'servicos-loja' %}"
+              id="formNovoServico"
+              enctype="multipart/form-data"
+            >
               {% csrf_token %}
 
-
-              <label>
-                Nome do serviço:
-              </label>
+              <label>Nome do serviço:</label>
 
               <input
                 name="nome_servico"
@@ -568,10 +413,7 @@
                 required
               >
 
-
-              <label>
-                Preço do serviço:
-              </label>
+              <label>Preço do serviço:</label>
 
               <input
                 name="preco"
@@ -580,11 +422,7 @@
                 required
               >
 
-
-              <label>
-                Categoria:
-              </label>
-
+              <label>Categoria:</label>
 
               <select
                 name="categoria_servico"
@@ -592,104 +430,62 @@
                 onchange="atualizarCategoriaServico(this)"
                 required
               >
-
-                <option
-                  value=""
-                  data-categoria=""
-                >
+                <option value="" data-categoria="">
                   Selecione...
                 </option>
 
-                <option
-                  value="Alimentos"
-                  data-categoria="Alimentos"
-                >
+                <option value="Alimentos" data-categoria="Alimentos">
                   Alimentos
                 </option>
 
-                <option
-                  value="Moda"
-                  data-categoria="Moda"
-                >
+                <option value="Moda" data-categoria="Moda">
                   Moda
                 </option>
 
-                <option
-                  value="Esportes"
-                  data-categoria="Esportes"
-                >
+                <option value="Esportes" data-categoria="Esportes">
                   Esportes
                 </option>
 
-                <option
-                  value="Construção"
-                  data-categoria="Construção"
-                >
+                <option value="Construção" data-categoria="Construção">
                   Construção
                 </option>
 
-                <option
-                  value="Saúde"
-                  data-categoria="Saúde"
-                >
+                <option value="Saúde" data-categoria="Saúde">
                   Saúde
                 </option>
 
-                <option
-                  value="Pets"
-                  data-categoria="Pets"
-                >
+                <option value="Pets" data-categoria="Pets">
                   Pets
                 </option>
 
-                <option
-                  value="Ambiente"
-                  data-categoria="Ambiente"
-                >
+                <option value="Ambiente" data-categoria="Ambiente">
                   Ambiente
                 </option>
 
-                <option
-                  value="Tecnologia"
-                  data-categoria="Tecnologia"
-                >
+                <option value="Tecnologia" data-categoria="Tecnologia">
                   Tecnologia
                 </option>
 
-                <option
-                  value="Beleza"
-                  data-categoria="Beleza"
-                >
+                <option value="Beleza" data-categoria="Beleza">
                   Beleza
                 </option>
 
-                <option
-                  value="Outros"
-                  data-categoria="Outros"
-                >
+                <option value="Outros" data-categoria="Outros">
                   Outros
                 </option>
 
-
               </select>
 
-
-              <div
-                class="servico-categoria-selecionada"
-              >
+              <div class="servico-categoria-selecionada">
                 Nenhuma categoria selecionada
               </div>
 
-
-              <label>
-                Descrição do serviço:
-              </label>
+              <label>Descrição do serviço:</label>
 
               <textarea
                 name="descricao"
                 placeholder="Descrição do serviço..."
               ></textarea>
-
 
               <button
                 type="submit"
@@ -698,17 +494,13 @@
                 SALVAR SERVIÇO
               </button>
 
-
             </form>
 
-
           </div>
-
 
         </div>
 
         <!-- #endregion -->
-
 
 
         <!-- #region ADICIONAR SERVIÇO -->
@@ -717,7 +509,6 @@
           class="servico-criar-card"
           id="servicoCriarCard"
         >
-
 
           <button
             type="button"
@@ -729,16 +520,13 @@
             +
           </button>
 
-
           <h2>
             Adicionar serviço
           </h2>
 
-
           <p>
             Clique no + para cadastrar outro serviço.
           </p>
-
 
         </div>
 
@@ -749,28 +537,69 @@
 
       <!-- #endregion -->
 
-
     </section>
 
     <!-- #endregion -->
-
 
   </main>
 
   <!-- #endregion -->
 
 
-
   <!-- #region JAVASCRIPT -->
 
-  <script
-    src="{% static 'AppStoreLink/scripts/index.js' %}"
-  ></script>
-
+  <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
 
   <script>
 
-    function atualizarCategoriaServico(select) {
+    const coresCategorias = {
+      'Alimentos': '#e8534f',
+      'Moda': '#7a5c50',
+      'Esportes': '#f5943a',
+      'Construção': '#f6c344',
+      'Saúde': '#35b5ea',
+      'Pets': '#21c9c9',
+      'Ambiente': '#7fcf85',
+      'Tecnologia': '#7c5cf0',
+      'Beleza': '#f06ec0',
+      'Outros': '#cfcfcf'
+    };
+
+
+    function definirCorServico(
+      card,
+      categoria
+    ) {
+
+      const cor =
+        coresCategorias[categoria] ||
+        '#ff454c';
+
+
+      const textoEscuro =
+        categoria === 'Construção' ||
+        categoria === 'Outros';
+
+
+      card.style.setProperty(
+        '--servico-cor',
+        cor
+      );
+
+
+      card.style.setProperty(
+        '--servico-cor-texto',
+        textoEscuro
+          ? '#222222'
+          : '#ffffff'
+      );
+
+    }
+
+
+    function atualizarCategoriaServico(
+      select
+    ) {
 
       const card =
         select.closest(
@@ -783,12 +612,6 @@
       }
 
 
-      const categoriaSelecionada =
-        card.querySelector(
-          '.servico-categoria-selecionada'
-        );
-
-
       const option =
         select.options[
           select.selectedIndex
@@ -799,57 +622,22 @@
         option.dataset.categoria || '';
 
 
-      const cores = {
-
-        'Alimentos':
-          '#e8534f',
-
-        'Moda':
-          '#7a5c50',
-
-        'Esportes':
-          '#f5943a',
-
-        'Construção':
-          '#f6c344',
-
-        'Saúde':
-          '#35b5ea',
-
-        'Pets':
-          '#21c9c9',
-
-        'Ambiente':
-          '#7fcf85',
-
-        'Tecnologia':
-          '#7c5cf0',
-
-        'Beleza':
-          '#f06ec0',
-
-        'Outros':
-          '#cfcfcf'
-
-      };
+      const categoriaSelecionada =
+        card.querySelector(
+          '.servico-categoria-selecionada'
+        );
 
 
       if (!categoria) {
 
-        card.style.setProperty(
-          '--servico-cor',
-          '#ff454c'
-        );
-
-
-        card.style.setProperty(
-          '--servico-cor-texto',
-          '#ffffff'
-        );
-
-
         card.classList.remove(
           'tem-categoria'
+        );
+
+
+        definirCorServico(
+          card,
+          ''
         );
 
 
@@ -862,27 +650,9 @@
       }
 
 
-      const cor =
-        cores[categoria] ||
-        '#ff454c';
-
-
-      card.style.setProperty(
-        '--servico-cor',
-        cor
-      );
-
-
-      const usarTextoEscuro =
-        categoria === 'Construção' ||
-        categoria === 'Outros';
-
-
-      card.style.setProperty(
-        '--servico-cor-texto',
-        usarTextoEscuro
-          ? '#222222'
-          : '#ffffff'
+      definirCorServico(
+        card,
+        categoria
       );
 
 
@@ -896,11 +666,308 @@
 
     }
 
+
+    function adicionarServico() {
+
+      const cardNovo =
+        document.getElementById(
+          'servicoCardNovo'
+        );
+
+
+      const criarCard =
+        document.getElementById(
+          'servicoCriarCard'
+        );
+
+
+      cardNovo.classList.add(
+        'aberto'
+      );
+
+
+      criarCard.classList.add(
+        'oculto'
+      );
+
+
+      cardNovo.scrollIntoView({
+        behavior: 'smooth',
+        inline: 'center',
+        block: 'nearest'
+      });
+
+
+      const primeiroCampo =
+        cardNovo.querySelector(
+          'input[name="nome_servico"]'
+        );
+
+
+      primeiroCampo.focus();
+
+    }
+
+
+    function cancelarNovoServico() {
+
+      const cardNovo =
+        document.getElementById(
+          'servicoCardNovo'
+        );
+
+
+      const criarCard =
+        document.getElementById(
+          'servicoCriarCard'
+        );
+
+
+      const form =
+        document.getElementById(
+          'formNovoServico'
+        );
+
+
+      form.reset();
+
+
+      const imagem =
+        cardNovo.querySelector(
+          '.servico-imagem'
+        );
+
+
+      const preview =
+        imagem.querySelector(
+          '.servico-preview'
+        );
+
+
+      imagem.classList.remove(
+        'tem-imagem'
+      );
+
+
+      preview.removeAttribute(
+        'src'
+      );
+
+
+      cardNovo.classList.remove(
+        'tem-categoria'
+      );
+
+
+      definirCorServico(
+        cardNovo,
+        ''
+      );
+
+
+      cardNovo.querySelector(
+        '.servico-categoria-selecionada'
+      ).textContent =
+        'Nenhuma categoria selecionada';
+
+
+      cardNovo.classList.remove(
+        'aberto'
+      );
+
+
+      criarCard.classList.remove(
+        'oculto'
+      );
+
+    }
+
+
+    function editarServico(
+      botao
+    ) {
+
+      const card =
+        botao.closest(
+          '.servico-card-salvo'
+        );
+
+
+      if (!card) {
+        return;
+      }
+
+
+      const editando =
+        !card.classList.contains(
+          'editando'
+        );
+
+
+      card.classList.toggle(
+        'editando',
+        editando
+      );
+
+
+      card
+        .querySelectorAll(
+          '.servico-form-salvo input, .servico-form-salvo textarea'
+        )
+        .forEach(
+          (campo) => {
+
+            campo.readOnly =
+              !editando;
+
+          }
+        );
+
+
+      const salvar =
+        card.querySelector(
+          '.servico-salvar-alteracoes'
+        );
+
+
+      salvar.hidden =
+        !editando;
+
+
+      if (editando) {
+
+        card.querySelector(
+          'input[name="nome_servico"]'
+        ).focus();
+
+      }
+
+    }
+
+
+    function prepararImagemServico(
+      imagem
+    ) {
+
+      const input =
+        imagem.querySelector(
+          '.servico-imagem-input'
+        );
+
+
+      const botaoAdicionar =
+        imagem.querySelector(
+          '.servico-botao-imagem'
+        );
+
+
+      const botaoTrocar =
+        imagem.querySelector(
+          '.servico-trocar-imagem'
+        );
+
+
+      const preview =
+        imagem.querySelector(
+          '.servico-preview'
+        );
+
+
+      if (botaoAdicionar) {
+
+        botaoAdicionar.addEventListener(
+          'click',
+          () => input.click()
+        );
+
+      }
+
+
+      if (botaoTrocar) {
+
+        botaoTrocar.addEventListener(
+          'click',
+          () => input.click()
+        );
+
+      }
+
+
+      input.addEventListener(
+        'change',
+        () => {
+
+          const arquivo =
+            input.files[0];
+
+
+          if (!arquivo) {
+            return;
+          }
+
+
+          const leitor =
+            new FileReader();
+
+
+          leitor.onload =
+            (evento) => {
+
+              preview.src =
+                evento.target.result;
+
+
+              imagem.classList.add(
+                'tem-imagem'
+              );
+
+            };
+
+
+          leitor.readAsDataURL(
+            arquivo
+          );
+
+        }
+      );
+
+    }
+
+
+    document.addEventListener(
+      'DOMContentLoaded',
+      () => {
+
+        document
+          .querySelectorAll(
+            '.servico-card-salvo'
+          )
+          .forEach(
+            (card) => {
+
+              definirCorServico(
+                card,
+                card.dataset.categoria
+              );
+
+            }
+          );
+
+
+        document
+          .querySelectorAll(
+            '.servico-imagem'
+          )
+          .forEach(
+            prepararImagemServico
+          );
+
+      }
+    );
+
   </script>
 
   <!-- #endregion -->
 
-
 </body>
-
 </html>
