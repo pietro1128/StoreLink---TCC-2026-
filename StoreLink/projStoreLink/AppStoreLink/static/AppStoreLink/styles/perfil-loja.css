@@ -1303,58 +1303,6 @@ h3:first-child {
 /* #endregion */
 
 
-/* #region CNPJ ANÔNIMO */
-
-.perfil-toggle {
-  width:
-    fit-content;
-
-  display: flex;
-
-  border-radius: 20px;
-
-  background:
-    #ffffff;
-
-  overflow: hidden;
-}
-
-
-.perfil-toggle-btn {
-  padding:
-    8px
-    18px;
-
-  border: none;
-
-  background:
-    transparent;
-
-  color:
-    #222222;
-
-  font-family:
-    inherit;
-
-  font-size: 13px;
-
-  font-weight: 700;
-
-  cursor: pointer;
-}
-
-
-.perfil-toggle-btn.active {
-  background:
-    #1c1c1c;
-
-  color:
-    #ffffff;
-}
-
-/* #endregion */
-
-
 /* #region MODO ESCURO */
 
 body.dark
@@ -1453,34 +1401,6 @@ body.dark
 
   background:
     #000000;
-}
-
-
-body.dark
-.perfil-toggle {
-  border:
-    1px solid
-    #333333;
-
-  background:
-    #000000;
-}
-
-
-body.dark
-.perfil-toggle-btn {
-  color:
-    #ffffff;
-}
-
-
-body.dark
-.perfil-toggle-btn.active {
-  background:
-    #2a2a2a;
-
-  color:
-    #ffffff;
 }
 
 

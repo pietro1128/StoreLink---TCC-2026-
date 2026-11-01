@@ -51,14 +51,6 @@
 <!-- #region navbar -->
 
   <div class="topbar">
-
-    {% if messages %}
-      <div class="messages-container">
-        {% for message in messages %}
-          <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-        {% endfor %}
-      </div>
-    {% endif %}
     
     <div class="logo-icon">
 
@@ -73,7 +65,6 @@
     <a
       class="nav-btn"
       href="{% url 'index' %}"
-      onclick="location.href=this.dataset.url"
     >
       Início
     </a>
@@ -331,12 +322,24 @@
         </form>
 
 
-        <form method="POST" action="{% url 'logout' %}" style="display: contents;">
+        <form
+          method="POST"
+          action="{% url 'logout' %}"
+          style="display: contents;"
+        >
           {% csrf_token %}
-          <button type="submit" class="produto-logout">
+
+          <button
+            type="submit"
+            class="produto-logout"
+          >
             Fazer Logout
-            <span>≪</span>
+
+            <span>
+              ≪
+            </span>
           </button>
+
         </form>
 
       </div>
@@ -412,15 +415,26 @@
             Salvar Loja
           </button>
 
+
           {% if loja %}
+
             <form
               method="POST"
               action="{% url 'loja-excluir' loja.id_loja %}"
               onsubmit="return confirm('Excluir a loja {{ loja.nome_loja|escapejs }}? Todos os produtos e serviços dela também serão apagados. Essa ação não pode ser desfeita.');"
             >
+
               {% csrf_token %}
-              <button type="submit" class="perfil-delete-btn">Excluir loja</button>
+
+              <button
+                type="submit"
+                class="perfil-delete-btn"
+              >
+                Excluir loja
+              </button>
+
             </form>
+
           {% endif %}
 
         </div>
@@ -442,6 +456,7 @@
               name="form_loja"
               value="1"
             >
+
 
             <input
               type="hidden"
@@ -636,34 +651,6 @@
             </div>
 
 
-            <div>
-
-              <label>
-                CNPJ Anônimo
-              </label>
-
-
-              <div class="perfil-toggle">
-
-                <button
-                  type="button"
-                  class="perfil-toggle-btn active"
-                >
-                  Sim
-                </button>
-
-                <button
-                  type="button"
-                  class="perfil-toggle-btn"
-                >
-                  Não
-                </button>
-
-              </div>
-
-            </div>
-
-
           </div>
 
 
@@ -713,13 +700,20 @@
 
     document
       .querySelectorAll('.nav-btn')
-      .forEach(function (b) {
+      .forEach(
+        function (b) {
 
-        b.classList.remove('active');
+          b.classList.remove(
+            'active'
+          );
 
-      });
+        }
+      );
 
-    btn.classList.add('active');
+
+    btn.classList.add(
+      'active'
+    );
 
   }
 
@@ -727,16 +721,22 @@
 
   function toggleTheme(btn) {
 
-    document.body.classList.toggle('dark');
+    document.body.classList.toggle(
+      'dark'
+    );
 
 
     var isDark =
-      document.body.classList.contains('dark');
+      document.body.classList.contains(
+        'dark'
+      );
 
 
     localStorage.setItem(
       'theme',
-      isDark ? 'dark' : 'light'
+      isDark
+        ? 'dark'
+        : 'light'
     );
 
 
@@ -761,12 +761,16 @@
     function () {
 
       var themeBtn =
-        document.querySelector('.theme-toggle');
+        document.querySelector(
+          '.theme-toggle'
+        );
 
 
       if (
         themeBtn &&
-        document.body.classList.contains('dark')
+        document.body.classList.contains(
+          'dark'
+        )
       ) {
 
         themeBtn.textContent =
@@ -786,123 +790,207 @@
     function () {
 
       var classifBtn =
-        document.getElementById('classifBtn');
+        document.getElementById(
+          'classifBtn'
+        );
 
 
       var classifName =
-        document.getElementById('classifName');
+        document.getElementById(
+          'classifName'
+        );
 
 
       var dropdown =
-        document.getElementById('classifDropdown');
+        document.getElementById(
+          'classifDropdown'
+        );
 
 
-      if (!classifBtn || !dropdown) {
+      if (
+        !classifBtn ||
+        !dropdown
+      ) {
+
         return;
+
       }
 
 
 
-      function lightenColor(color, amount) {
+      function lightenColor(
+        color,
+        amount
+      ) {
 
-        var r, g, b;
+        var r;
+        var g;
+        var b;
 
 
         var match =
-          color.match(/\d+/g);
+          color.match(
+            /\d+/g
+          );
 
 
         if (match) {
 
-          r = parseInt(match[0], 10);
+          r =
+            parseInt(
+              match[0],
+              10
+            );
 
-          g = parseInt(match[1], 10);
 
-          b = parseInt(match[2], 10);
+          g =
+            parseInt(
+              match[1],
+              10
+            );
+
+
+          b =
+            parseInt(
+              match[2],
+              10
+            );
 
         } else {
 
           var hex =
-            color.replace('#', '');
+            color.replace(
+              '#',
+              ''
+            );
 
 
           r =
             parseInt(
-              hex.substring(0, 2),
+              hex.substring(
+                0,
+                2
+              ),
               16
             );
 
 
           g =
             parseInt(
-              hex.substring(2, 4),
+              hex.substring(
+                2,
+                4
+              ),
               16
             );
 
 
           b =
             parseInt(
-              hex.substring(4, 6),
+              hex.substring(
+                4,
+                6
+              ),
               16
             );
 
         }
 
 
-        r = Math.min(
-          255,
-          Math.round(
-            r + (255 - r) * amount
-          )
-        );
+        r =
+          Math.min(
+            255,
+            Math.round(
+              r +
+              (255 - r) *
+              amount
+            )
+          );
 
 
-        g = Math.min(
-          255,
-          Math.round(
-            g + (255 - g) * amount
-          )
-        );
+        g =
+          Math.min(
+            255,
+            Math.round(
+              g +
+              (255 - g) *
+              amount
+            )
+          );
 
 
-        b = Math.min(
-          255,
-          Math.round(
-            b + (255 - b) * amount
-          )
-        );
+        b =
+          Math.min(
+            255,
+            Math.round(
+              b +
+              (255 - b) *
+              amount
+            )
+          );
 
 
-        return 'rgb(' +
-          r + ', ' +
-          g + ', ' +
+        return (
+          'rgb(' +
+          r +
+          ', ' +
+          g +
+          ', ' +
           b +
-          ')';
+          ')'
+        );
 
       }
 
 
 
-      function applyClassification(name, bgColor, valorCategoria) {
+      function applyClassification(
+        name,
+        bgColor,
+        valorCategoria
+      ) {
 
-        classifName.textContent = name;
-      
-        // este é o valor que realmente vai para o servidor
-        document.getElementById('categoria-input').value = valorCategoria;
-      
-        document.documentElement.style.setProperty('--brand-red', bgColor);
-      
-        document.documentElement.style.setProperty(
-          '--brand-red-light',
-          lightenColor(bgColor, 0.18)
-        );
+        classifName.textContent =
+          name;
+
+
+        document
+          .getElementById(
+            'categoria-input'
+          )
+          .value =
+            valorCategoria;
+
+
+        document
+          .documentElement
+          .style
+          .setProperty(
+            '--brand-red',
+            bgColor
+          );
+
+
+        document
+          .documentElement
+          .style
+          .setProperty(
+            '--brand-red-light',
+            lightenColor(
+              bgColor,
+              0.18
+            )
+          );
+
       }
 
 
 
       function closeDropdown() {
 
-        dropdown.classList.remove('open');
+        dropdown.classList.remove(
+          'open'
+        );
 
       }
 
@@ -918,11 +1006,15 @@
         function (catBtn) {
 
           var name =
-            catBtn.textContent.trim();
+            catBtn
+              .textContent
+              .trim();
 
 
           var style =
-            window.getComputedStyle(catBtn);
+            window.getComputedStyle(
+              catBtn
+            );
 
 
           var bgColor =
@@ -934,7 +1026,9 @@
 
 
           var option =
-            document.createElement('button');
+            document.createElement(
+              'button'
+            );
 
 
           option.type =
@@ -964,18 +1058,37 @@
               e.stopPropagation();
 
 
-              if (name === 'Outros') {
+              if (
+                name === 'Outros'
+              ) {
 
-                var custom = window.prompt('Digite o nome da classificação da loja:');
-              
-                if (custom && custom.trim() !== '') {
-                  applyClassification(custom.trim(), bgColor, name);   // <- name = 'Outros'
+                var custom =
+                  window.prompt(
+                    'Digite o nome da classificação da loja:'
+                  );
+
+
+                if (
+                  custom &&
+                  custom.trim() !== ''
+                ) {
+
+                  applyClassification(
+                    custom.trim(),
+                    bgColor,
+                    name
+                  );
+
                 }
-              
+
               } else {
-              
-                applyClassification(name, bgColor, name);              // <- name = 'Moda', 'Pets'...
-              
+
+                applyClassification(
+                  name,
+                  bgColor,
+                  name
+                );
+
               }
 
 
@@ -985,7 +1098,9 @@
           );
 
 
-          dropdown.appendChild(option);
+          dropdown.appendChild(
+            option
+          );
 
         }
       );
@@ -998,7 +1113,10 @@
 
           e.stopPropagation();
 
-          dropdown.classList.toggle('open');
+
+          dropdown.classList.toggle(
+            'open'
+          );
 
         }
       );
@@ -1013,41 +1131,6 @@
 
         }
       );
-
-
-
-      document
-        .querySelectorAll('.perfil-toggle-btn')
-        .forEach(
-          function (btn) {
-
-            btn.addEventListener(
-              'click',
-              function () {
-
-                document
-                  .querySelectorAll(
-                    '.perfil-toggle-btn'
-                  )
-                  .forEach(
-                    function (b) {
-
-                      b.classList.remove(
-                        'active'
-                      );
-
-                    }
-                  );
-
-
-                btn.classList.add('active');
-
-              }
-            );
-
-          }
-        );
-
 
     }
   );
@@ -1080,60 +1163,68 @@
     areaImagem
   ) {
 
-    fotoEstabelecimento.addEventListener(
-      'change',
-      function () {
+    fotoEstabelecimento
+      .addEventListener(
+        'change',
+        function () {
 
-        const arquivo =
-          this.files[0];
-
-
-        if (!arquivo) {
-          return;
-        }
+          const arquivo =
+            this.files[0];
 
 
-        if (
-          !arquivo.type.startsWith('image/')
-        ) {
+          if (!arquivo) {
 
-          alert(
-            'Selecione um arquivo de imagem.'
-          );
+            return;
 
-          this.value = '';
-
-          return;
-
-        }
+          }
 
 
-        const imagemURL =
-          URL.createObjectURL(
-            arquivo
-          );
+          if (
+            !arquivo.type.startsWith(
+              'image/'
+            )
+          ) {
 
-
-        previewEstabelecimento.src =
-          imagemURL;
-
-
-        areaImagem.classList.add(
-          'tem-imagem'
-        );
-
-
-        previewEstabelecimento.onload =
-          function () {
-
-            URL.revokeObjectURL(
-              imagemURL
+            alert(
+              'Selecione um arquivo de imagem.'
             );
 
-          };
 
-      }
-    );
+            this.value =
+              '';
+
+
+            return;
+
+          }
+
+
+          const imagemURL =
+            URL.createObjectURL(
+              arquivo
+            );
+
+
+          previewEstabelecimento.src =
+            imagemURL;
+
+
+          areaImagem.classList.add(
+            'tem-imagem'
+          );
+
+
+          previewEstabelecimento.onload =
+            function () {
+
+              URL.revokeObjectURL(
+                imagemURL
+              );
+
+            };
+
+        }
+      );
 
   }
 
@@ -1165,57 +1256,187 @@
     avatarResponsavel
   ) {
 
-    fotoResponsavel.addEventListener(
-      'change',
-      function () {
+    fotoResponsavel
+      .addEventListener(
+        'change',
+        function () {
 
-        const arquivo =
-          this.files[0];
+          const arquivo =
+            this.files[0];
 
 
-        if (!arquivo) {
-          return;
+          if (!arquivo) {
+
+            return;
+
+          }
+
+
+          if (
+            !arquivo.type.startsWith(
+              'image/'
+            )
+          ) {
+
+            alert(
+              'Selecione um arquivo de imagem.'
+            );
+
+
+            this.value =
+              '';
+
+
+            return;
+
+          }
+
+
+          const imagemURL =
+            URL.createObjectURL(
+              arquivo
+            );
+
+
+          previewResponsavel.src =
+            imagemURL;
+
+
+          avatarResponsavel
+            .classList
+            .add(
+              'tem-imagem'
+            );
+
+
+          previewResponsavel.onload =
+            function () {
+
+              URL.revokeObjectURL(
+                imagemURL
+              );
+
+            };
+
         }
+      );
+
+  }
+
+</script>
+
+<!-- #endregion -->
+
+
+<script>
+
+  const campoCep =
+    document.querySelector(
+      '[name="cep"]'
+    );
+
+
+  function preencher(
+    nome,
+    valor
+  ) {
+
+    const campo =
+      document.querySelector(
+        `[name="${nome}"]`
+      );
+
+
+    if (
+      campo &&
+      valor
+    ) {
+
+      campo.value =
+        valor;
+
+    }
+
+  }
+
+
+  if (campoCep) {
+
+    campoCep.addEventListener(
+      'blur',
+      async () => {
+
+        const cep =
+          campoCep
+            .value
+            .replace(
+              /\D/g,
+              ''
+            );
 
 
         if (
-          !arquivo.type.startsWith('image/')
+          cep.length !== 8
         ) {
-
-          alert(
-            'Selecione um arquivo de imagem.'
-          );
-
-          this.value = '';
 
           return;
 
         }
 
 
-        const imagemURL =
-          URL.createObjectURL(
-            arquivo
+        try {
+
+          const resposta =
+            await fetch(
+              `/api/cep/${cep}/`
+            );
+
+
+          const dados =
+            await resposta.json();
+
+
+          if (
+            !resposta.ok
+          ) {
+
+            alert(
+              dados.erro
+            );
+
+
+            return;
+
+          }
+
+
+          preencher(
+            'rua',
+            dados.rua
           );
 
 
-        previewResponsavel.src =
-          imagemURL;
-
-
-        avatarResponsavel.classList.add(
-          'tem-imagem'
-        );
-
-
-        previewResponsavel.onload =
-          function () {
-
-            URL.revokeObjectURL(
-              imagemURL
+          const proximoCampo =
+            document.querySelector(
+              dados.rua
+                ? '[name="numero"]'
+                : '[name="rua"]'
             );
 
-          };
+
+          if (proximoCampo) {
+
+            proximoCampo.focus();
+
+          }
+
+        } catch (e) {
+
+          alert(
+            'Não foi possível consultar o CEP agora.'
+          );
+
+        }
 
       }
     );
@@ -1224,40 +1445,6 @@
 
 </script>
 
-<!-- #endregion -->
-
-<script>
-  const campoCep = document.querySelector('[name="cep"]');
-
-  function preencher(nome, valor) {
-    const campo = document.querySelector(`[name="${nome}"]`);
-    // só preenche se o ViaCEP trouxe o dado; .value trata o texto como texto, não como HTML
-    if (campo && valor) campo.value = valor;
-  }
-
-  // 'blur' dispara quando a pessoa sai do campo CEP
-  campoCep.addEventListener('blur', async () => {
-    const cep = campoCep.value.replace(/\D/g, '');
-    if (cep.length !== 8) return;
-
-    try {
-      const resposta = await fetch(`/api/cep/${cep}/`);
-      const dados = await resposta.json();
-
-      if (!resposta.ok) {          // 400, 404 ou 503: mostra a mensagem do servidor
-        alert(dados.erro);
-        return;
-      }
-
-      preencher('rua', dados.rua);
-
-      // se veio rua, falta o número; se não veio, falta a rua
-      document.querySelector(dados.rua ? '[name="numero"]' : '[name="rua"]').focus();
-    } catch (e) {
-      alert('Não foi possível consultar o CEP agora.');
-    }
-  });
-</script>
 
 </body>
 </html>
