@@ -9,7 +9,7 @@ from django.contrib import messages # importa mensagens de erro e sucesso
 from django.contrib.auth.hashers import make_password, check_password
 from AppStoreLink.models import Usuario, Loja, Endereco, Produto, Servico, LojaFavoritas, TipoUsuario, Categoria, Avaliacao # importação das classes em models
 from django.contrib.auth.decorators import login_required # @login_required -> usado para privar apenas usuarios loggados
-from django.http import HttpResponseForbidden # -> 
+from django.http import HttpResponseForbidden # ->
 import re # importação de Regex: biblioteca de validações
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
@@ -22,18 +22,21 @@ from AppStoreLink.services import (
 def index(request):
     return render(request, 'AppStoreLink/index.html')
 
+
 def _loja_atual():
     return Loja.objects.select_related('id_endereco', 'id_categoria').order_by('-id_loja').first()
+
+
 # |  Para testar a pagina SEM CONTA, voce precisa transformar
 # V  a linha de baixo em um comentario: "#@login_required"
 #@login_required
 def perfil_loja(request):
     #if request.user.roler != 'admin':
-        #return HttpResponseForbidden("Você não tem permição para acessar está página.") 
-    
+        #return HttpResponseForbidden("Você não tem permição para acessar está página.")
+
     if request.method == 'POST': # -> verifica se o usuario enviou os dados usando o metodo HTTP 'POST'
 
-        nome = request.POST.get('nome_loja')# -> cria uma variavel puxando o valor do banco
+        nome = request.POST.get('nome_loja') # -> cria uma variavel puxando o valor do banco
 #                                   L> este valor tem que ser exatamente igual ao 'name' em perfil-loja.html
         rua = request.POST.get('rua')
         numero = request.POST.get('numero')
@@ -44,7 +47,7 @@ def perfil_loja(request):
         cnpj = request.POST.get('cnpj')
         link = request.POST.get('link_loja')
         nome_categoria = request.POST.get('categoria', '').strip() # -> era nescessario que o codigo pegue esse valor para conseguir comparar mais a frente no codigo
-        
+
         try:
             dados_cep = consultar_cep(cep)
         except CepInvalido:
@@ -57,21 +60,21 @@ def perfil_loja(request):
             messages.error(request, 'Não foi possível validar o CEP agora. Tente novamente em instantes.')
             return render(request, 'AppStoreLink/perfil-loja.html')
 
-        cep = dados_cep['cep']   # grava só os 8 dígitos, num formato único
-        
+        cep = dados_cep['cep'] # grava só os 8 dígitos, num formato único
+
         # Validações de E-mail para loja:
-        padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$'# -> Argumenta um padrão com characteres finais nos emails
-        if not re.match(padrao_email, email): # -> Verifica se estão nos padões argumentados estao coecidindo com as variaveis 
-            messages.error(request, 'O campo E-mail deve ser um Gmail válido (exemplo: email@gmail.com).')# -> cria uma mensagens
+        padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$' # -> Argumenta um padrão com characteres finais nos emails
+        if not re.match(padrao_email, email): # -> Verifica se estão nos padões argumentados estao coecidindo com as variaveis
+            messages.error(request, 'O campo E-mail deve ser um Gmail válido (exemplo: email@gmail.com).') # -> cria uma mensagens
             return render(request, 'AppStoreLink/perfil-loja.html')
 
-        if Loja.objects.filter(email_loja=email).exists():# -> ???.objects.filter(???=???) --> busca valores por filtros argumentados
-                                                     # -> .exists() --> verifica se ja existe 
+        if Loja.objects.filter(email_loja=email).exists(): # -> ???.objects.filter(???=???) --> busca valores por filtros argumentados
+                                                     # -> .exists() --> verifica se ja existe
             messages.error(request, 'Este e-mail já está cadastrado.')
             return render(request, 'AppStoreLink/perfil-loja.html')
 
         # Validações de CNPJ:
-        padrao_cnpj = r'^.{14,14}$'# ^.{??,??}$ -> diz que o texton precisa ter exatamente o numero de letras argumantadas
+        padrao_cnpj = r'^.{14,14}$' # ^.{??,??}$ -> diz que o texton precisa ter exatamente o numero de letras argumantadas
         if not re.match(padrao_cnpj, cnpj):
             messages.error(request, 'Este CNPJ deve conter exatamente 14 números.')
             return render(request, 'AppStoreLink/perfil-loja.html')
@@ -98,14 +101,14 @@ def perfil_loja(request):
 
         # Depois de todas as validações, cria endereço e loja:
         endereco = Endereco.objects.create(
-            rua=rua, 
-            numero_estabelecimento=numero, 
+            rua=rua,
+            numero_estabelecimento=numero,
             cep=cep
         )
         # guarda os valores das variaveis dentro da tabela 'Endereco' que esta guardada dentro da variavel 'endereco'
 
         Loja.objects.create(
-            nome_loja=nome, 
+            nome_loja=nome,
             id_endereco=endereco,
             id_categoria=categoria,
             email_loja=email,
@@ -117,7 +120,7 @@ def perfil_loja(request):
         messages.success(request, 'Sua loja foi cadastrada com sucesso!')
         return redirect('perfil-loja')
 
-    # TODO: trocar pela loja do usuário logado quando existir o vínculo Usuario↔Loja 
+    # TODO: trocar pela loja do usuário logado quando existir o vínculo Usuario↔Loja
     loja = _loja_atual()
 
     return render(request, 'AppStoreLink/perfil-loja.html', {'loja': loja})
@@ -142,24 +145,24 @@ def perfil_consumidor(request):
 
 @require_POST
 def editar_consumidor(request):
-    
     usuario_id = request.session.get('usuario_id') # -> busca o 'id' que o usuario esta usando
                                                    # -> ele precisa buscar o 'id' para que ele saiba exatamente qual é o usuario
-    usuario = get_object_or_404(Usuario, id_categoria=usuario_id) # -> busca um registro no banco, se não achar ele da 'erro 404' 
-    
+    usuario = get_object_or_404(Usuario, id_categoria=usuario_id) # -> busca um registro no banco, se não achar ele da 'erro 404'
+
     nome = request.POST.get('nome', '').strip()
     sobrenome = request.POST.get('sobrenome', '').strip() or None
-    
+
     if not nome:
         messages.error(request, 'O consumidor precisa ter um nome.')
         return redirect('perfil-consumidor')
-    
+
     usuario.nome = nome
     usuario.sobrenome = sobrenome
     usuario.save()
-    
+
     messages.success(request, 'Seu perfil foi atualizado com sucesso!')
     return redirect('perfil-consumidor')
+
 
 def cadastro(request):
     if request.method == 'POST':
@@ -188,6 +191,7 @@ def cadastro(request):
         >> ^ <<: começa a str
         >> (?=.*...) <<: Lookahead 'verifica se a condição CHAR escrita esta em algum lugar no texto'
         """
+
         if not re.match(padrao_senha, senha):
             messages.error(request, 'A senha precisa conter no mínimo 8 caracteres, letra maiúscula, minúscula e número.')
             return render(request, 'registration/cadastro.html')
@@ -195,6 +199,7 @@ def cadastro(request):
         # Validação de CPF (só roda se o usuário informou, já que é opcional)
         if cpf:
             padrao_cpf = r'^\d{11}$'
+
             if not re.match(padrao_cpf, cpf):
                 messages.error(request, 'O CPF deve ter exatamente 11 números.')
                 return render(request, 'registration/cadastro.html')
@@ -212,9 +217,9 @@ def cadastro(request):
             cpf=cpf,
             id_tipo_usuario_id=id_tipo_usuario,
         )
-        usuario.save()# -> Salva os valores concedidos dentro do banco 
+        usuario.save() # -> Salva os valores concedidos dentro do banco
 
-        messages.success(request, 'Cadastro realizado com sucesso! Faça login para continuar.')# -> retorna uma mensagem de sucesso caso passe por todos os campos
+        messages.success(request, 'Cadastro realizado com sucesso! Faça login para continuar.') # -> retorna uma mensagem de sucesso caso passe por todos os campos
         return redirect('login')
 
     return render(request, 'registration/cadastro.html')
@@ -223,6 +228,7 @@ def cadastro(request):
 @require_GET
 def api_cep(request, cep):
     """Endpoint JSON usado pelo front-end para autocompletar o endereço."""
+
     try:
         endereco = consultar_cep(cep)
     except CepInvalido:
@@ -260,30 +266,31 @@ def login(request):
 
     return render(request, 'registration/login.html')
 
+
 def recuperar_senha(request):
     if request.method == 'POST':
         email = request.POST.get('email', '').strip()
         nova_senha = request.POST.get('nova_senha', '')
         confirmar_senha = request.POST.get('confirmar_senha', '')
-        
+
         if nova_senha != confirmar_senha:
             messages.error(request, 'As senhas não estão iguais nos dois campos.')
-            return render (request, 'registration/recuperar-senha.html')
-        
+            return render(request, 'registration/recuperar-senha.html')
+
         try:
             usuario = Usuario.objects.get(email=email) # -> procura no banco quem é o usuario com o e-mail digitado
         except Usuario.DoesNotExist: # -> Caso o e-mail não tenha correspondido como cadastrado
             messages.error(request, 'Não encontramos um usuario cadastrado com este e-mail.')
             return render(request, 'registration/recuperar-senha.html')
-        
+
         usuario.senha = make_password(nova_senha) # -> Ele transforma a senha em um Hash e atribui ao valor 'senha' do banco
         #                     L> 'make_password()': transforma uma string em um Hash
         #                        'Hash': Transforma a string 'normal' em uma string 'criptografada'
         usuario.save()
-        
+
         messages.success(request, 'Senha alterada com sucesso!')
         return redirect('login')
-            
+
     return render(request, 'registration/recuperar-senha.html')
 
 
@@ -462,6 +469,7 @@ def suporte(request):
 
 def _validar_nome_preco(nome, preco_txt, rotulo='produto'):
     """Valida nome e preço. Devolve (lista_de_erros, preco_como_Decimal)."""
+
     erros = []
 
     if not nome:
@@ -470,14 +478,17 @@ def _validar_nome_preco(nome, preco_txt, rotulo='produto'):
         erros.append('O nome deve ter no máximo 100 caracteres.')
 
     preco = None
+
     try:
         preco = Decimal(preco_txt)
+
         if not preco.is_finite() or preco <= 0:
             erros.append('O preço deve ser um número maior que zero.')
         elif preco > Decimal('99999999.99'):
             erros.append('O preço informado é alto demais.')
         else:
             preco = preco.quantize(Decimal('0.01'))
+
     except InvalidOperation:
         erros.append('Informe um preço válido (exemplo: 12,50).')
 
@@ -486,25 +497,29 @@ def _validar_nome_preco(nome, preco_txt, rotulo='produto'):
 
 def produtos_loja(request):
     # TODO: quando existir o vínculo Usuário↔Loja, filtrar só os produtos da loja do usuário logado
-    produtos = Produto.objects.filter(id_loja=_loja_atual())
+    loja = _loja_atual()
+    produtos = Produto.objects.filter(id_loja=loja)
     categorias = Categoria.objects.all()
 
     return render(request, 'AppStoreLink/produtos-loja.html', {
+        'loja': loja,
         'produtos': produtos,
         'categorias': categorias,
     })
+
 
 @require_POST
 def produto_excluir(request, id_produto):
     if not request.session.get('usuario_id'):
         messages.error(request, 'Você precisa fazer login para editar o serviço.')
         return redirect('login')
-    
+
     produto = Produto.objects.filter(id_produto=id_produto).first()
+
     if produto is None:
         messages.error(request, 'Este produto não existe mais ou ja foi excluido.')
         return _voltar(request)
-    
+
     nome = produto.nome_produto
     produto.delete()
 
@@ -523,19 +538,23 @@ def produto_criar(request):
 
     # A categoria é obrigatória no model e o POST pode ser forjado, então confere no banco
     categoria = None
+
     if id_categoria.isdigit():
         categoria = Categoria.objects.filter(id_categoria=id_categoria).first()
+
     if categoria is None:
         erros.append('Selecione uma categoria válida.')
 
     # TODO: trocar pela loja do dono logado quando existir o vínculo Usuário↔Loja
     loja = _loja_atual()
+
     if loja is None:
         erros.append('Cadastre uma loja antes de cadastrar produto.')
 
     if erros:
         for erro in erros:
             messages.error(request, erro)
+
         return redirect('produtos-loja')
 
     Produto.objects.create(
@@ -563,6 +582,7 @@ def produto_editar(request, id_produto):
     if erros:
         for erro in erros:
             messages.error(request, erro)
+
         return _voltar(request)
 
     produto.nome_produto = nome
@@ -578,11 +598,12 @@ def servicos_loja(request):
     # ALTERADO: a lista de serviços foi movida para o topo da função.
     # Antes ela ficava só no final, mas agora também precisamos dela no
     # caso de erro de validação (para recarregar a página com os cards).
+
     loja = _loja_atual()
     servicos = Servico.objects.filter(id_loja=loja)
 
     if request.method == 'POST':
-        nome_servico = request.POST.get('nome_servico', '').strip()  # strip(): tira espaços
+        nome_servico = request.POST.get('nome_servico', '').strip() # strip(): tira espaços
 
         # ALTERADO: antes era só .strip(). Agora o .replace(',', '.') que corrige o erro que falei no resumo
         # (o nome da variável mudou de 'preco' para 'preco_txt' porque aqui
@@ -599,29 +620,33 @@ def servicos_loja(request):
         elif len(nome_servico) > 100:
             erros.append('O nome deve ter no máximo 100 caracteres.')
 
-        #Decimal é o tipo mais recomendado para dinheiro, e não o float  
+        # Decimal é o tipo mais recomendado para dinheiro, e não o float
         preco = None
+
         try:
-            preco = Decimal(preco_txt)  # levanta InvalidOperation se for "abc" ou vazio
+            preco = Decimal(preco_txt) # levanta InvalidOperation se for "abc" ou vazio
 
             # is_finite() barra valores como "nan" e "infinity", que o Decimal
             # aceita como texto mas não servem como preço.
             if not preco.is_finite() or preco <= 0:
                 erros.append('O preço deve ser um número maior que zero.')
+
             # 99999999.99 é o maior valor que cabe em DecimalField(10, 2)
             elif preco > Decimal('99999999.99'):
                 erros.append('O preço informado é alto demais.')
+
             else:
                 # força exatamente 2 casas decimais (6.7 vira 6.70)
                 preco = preco.quantize(Decimal('0.01'))
+
         except InvalidOperation:
             erros.append('Informe um preço válido (exemplo: 50,00).')
 
-
         # MANTIDO da versão original: pega a primeira loja do banco.
-        # Atenção: isso coloca TODO serviço na mesma loja, não importa quem cadastrou. É uma limitação conhecida, só dá para resolver quando existir o vínculo Usuario -> Loja no banco.
+        # Atenção: isso coloca TODO serviço na mesma loja, não importa quem cadastrou.
+        # É uma limitação conhecida, só dá para resolver quando existir o vínculo Usuario -> Loja no banco.
         # TODO: trocar pela loja do usuário logado.
-        
+
         if loja is None:
             erros.append('Cadastre uma loja antes de cadastrar serviço.')
 
@@ -630,11 +655,15 @@ def servicos_loja(request):
         if erros:
             for erro in erros:
                 messages.error(request, erro)
-            return render(request, 'AppStoreLink/servicos-loja.html', {'servicos': servicos})
+
+            return render(request, 'AppStoreLink/servicos-loja.html', {
+                'loja': loja,
+                'servicos': servicos
+            })
 
         Servico.objects.create(
             nome_servico=nome_servico,
-            preco=preco,  # ALTERADO: agora é um Decimal, não mais o texto cru
+            preco=preco, # ALTERADO: agora é um Decimal, não mais o texto cru
             # ALTERADO: o campo descricao aceita nulo no model; texto vazio
             # ('') é salvo como None para manter o banco consistente.
             descricao=descricao or None,
@@ -642,15 +671,19 @@ def servicos_loja(request):
         )
 
         messages.success(request, 'Serviço cadastrado com sucesso!')
-        return redirect('servicos-loja')  # redirect evita reenviar o form ao apertar F5
+        return redirect('servicos-loja') # redirect evita reenviar o form ao apertar F5
 
     # IMPORTANTE: este return fica alinhado com o 'if' de cima, FORA dele.
     # Se ele ficar dentro do 'if request.method == POST', a página não abre
     # por GET e dá "view retornou None".
-    return render(request, 'AppStoreLink/servicos-loja.html', {'servicos': servicos})
+    return render(request, 'AppStoreLink/servicos-loja.html', {
+        'loja': loja,
+        'servicos': servicos
+    })
+
 
 # ============================================================================
-# RESUMO DAS ALTERAÇÕES 
+# RESUMO DAS ALTERAÇÕES
 #
 # Problema: quando cadastra um serviço com preço "6,70", o sistema dava erro
 # de validação (ValidationError) e mostrava a tela de erro do Django.
@@ -667,15 +700,16 @@ def servicos_loja(request):
 #      problemas de uma vez, não um por vez).
 # ============================================================================
 
+
 @require_POST
 def loja_editar(request, id_loja):
     loja = get_object_or_404(Loja.objects.select_related('id_endereco'), id_loja=id_loja)
-    
+
     if not request.session.get('usuario_id'):
         messages.error(request, 'Você precisa fazer login para editar a loja.')
         return redirect('login')
-    
-    nome = request.POST.get('nome_loja')# -> cria uma variavel puxando o valor do banco
+
+    nome = request.POST.get('nome_loja') # -> cria uma variavel puxando o valor do banco
 #                                   L> este valor tem que ser exatamente igual ao 'name' em perfil-loja.html
     rua = request.POST.get('rua')
     numero = request.POST.get('numero')
@@ -686,12 +720,12 @@ def loja_editar(request, id_loja):
     cnpj = request.POST.get('cnpj')
     link = request.POST.get('link_loja')
     nome_categoria = request.POST.get('categoria', '').strip() # -> era nescessario que o codigo pegue esse valor para conseguir comparar mais a frente no codigo
-        
+
     erros = []
-    
+
     if not nome:
         erros.append('O nome da loja é obrigatorio.')
-        
+
     try:
         dados_cep = consultar_cep(cep)
     except CepInvalido:
@@ -704,40 +738,44 @@ def loja_editar(request, id_loja):
         messages.error(request, 'Não foi possível validar o CEP agora. Tente novamente em instantes.')
         return render(request, 'AppStoreLink/perfil-loja.html')
 
-    cep = dados_cep['cep']   # grava só os 8 dígitos, num formato único
-        
+    cep = dados_cep['cep'] # grava só os 8 dígitos, num formato único
+
     # Validações de E-mail para loja:
-    padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$'# -> Argumenta um padrão com characteres finais nos emails
-    if not re.match(padrao_email, email): # -> Verifica se estão nos padões argumentados estao coecidindo com as variaveis 
-        messages.error(request, 'O campo E-mail deve ser um Gmail válido (exemplo: email@gmail.com).')# -> cria uma mensagens
+    padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$' # -> Argumenta um padrão com characteres finais nos emails
+
+    if not re.match(padrao_email, email): # -> Verifica se estão nos padões argumentados estao coecidindo com as variaveis
+        messages.error(request, 'O campo E-mail deve ser um Gmail válido (exemplo: email@gmail.com).') # -> cria uma mensagens
         return render(request, 'AppStoreLink/perfil-loja.html')
 
     # Validações de CNPJ:
-    padrao_cnpj = r'^.{14,14}$'# ^.{??,??}$ -> diz que o texton precisa ter exatamente o numero de letras argumantadas
+    padrao_cnpj = r'^.{14,14}$' # ^.{??,??}$ -> diz que o texton precisa ter exatamente o numero de letras argumantadas
+
     if not re.match(padrao_cnpj, cnpj):
         messages.error(request, 'Este CNPJ deve conter exatamente 14 números.')
         return render(request, 'AppStoreLink/perfil-loja.html')
 
     # Validações de Telefone para loja:
     padrao_telefone = r'^.{11,11}$'
+
     if not re.match(padrao_telefone, telefone):
         messages.error(request, 'Este número esta incorreto, ele deve ter exatamente 11 números.')
         return render(request, 'AppStoreLink/perfil-loja.html')
 
     # Validação de Categorias:
     categoria = Categoria.objects.filter(tipo_categoria=nome_categoria).first() # -> Procura no banco o registro igual ao que ele recebeu
+
     if categoria is None:
         messages.error(request, 'Selecione uma categoria válida.')
         return render(request, 'AppStoreLink/perfil-loja.html')
 
-    # Depois de todas as validações, cria endereço e loja:
-    with transaction.atomic(): # -> 
+    # Depois de todas as validações, edita endereço e loja:
+    with transaction.atomic():
         endereco = loja.id_endereco
         endereco.rua = rua
         endereco.numero_estabelecimento = numero
         endereco.cep = cep
         endereco.save()
-        
+
         loja.nome_loja = nome
         loja.id_categoria = categoria
         loja.email_loja = email
@@ -749,42 +787,46 @@ def loja_editar(request, id_loja):
     messages.success(request, 'Sua loja foi atualizada com sucesso!')
     return redirect('InformacoesLoja', id_loja=loja.id_loja)
 
-    # TODO: trocar pela loja do usuário logado quando existir o vínculo Usuario↔Loja 
+    # TODO: trocar pela loja do usuário logado quando existir o vínculo Usuario↔Loja
+
 
 @require_POST
 def servico_editar(request, id_servico):
     if not request.session.get('usuario_id'):
         messages.error(request, 'Você precisa fazer login para editar o serviço.')
         return redirect('login')
-    
+
     servico = get_object_or_404(Servico, id_servico=id_servico)
-    
+
     nome = request.POST.get('nome_servico', '').strip()
     preco_txt = request.POST.get('preco', '').strip().replace(',', '.')
     descricao = request.POST.get('descricao', '').strip()
-    
-    erros, preco = _validar_nome_preco(nome, preco_txt, 'servico') # -> puxa a função de validar preços 
-    
+
+    erros, preco = _validar_nome_preco(nome, preco_txt, 'servico') # -> puxa a função de validar preços
+
     if erros: # -> verifica erros da tal função
         for erro in erros:
             messages.error(request, erro)
-        return redirect('InformacoesServico', id_loja=servico.id_loja)
-    
+
+        return redirect('InformacoesServico', id_loja=servico.id_loja_id)
+
     servico.nome_servico = nome
     servico.preco = preco
     servico.descricao = descricao or None
     servico.save() # -> salva novamente os dados
-    
+
     messages.success(request, 'Serviço atualizado com sucesso!')
-    return redirect('InformacoesServico', id_loja=servico.id_loja_id) 
+    return redirect('InformacoesServico', id_loja=servico.id_loja_id)
+
 # 'id_loja=servico.id_loja_id': trabalha com as chaves Primarias e Estrangeiras de 'loja' para saber qual serviço (alterado no método) pertence a qual loja
+
 
 @require_POST
 def servico_excluir(request, id_servico):
     if not request.session.get('usuario_id'):
         messages.error(request, 'Você precisa fazer login para excluir o serviço.')
         return redirect('login')
-    
+
     servico = get_object_or_404(Servico, id_servico=id_servico)
     nome = servico.nome_servico
     servico.delete()
@@ -792,26 +834,29 @@ def servico_excluir(request, id_servico):
     messages.success(request, f'O serviço "{nome}" foi excluído.')
     return redirect('servicos-loja')
 
+
 @require_POST # -> so deixa executar a função se a requisição usar o metodo HTTP 'POST'
 def favoritar_loja(request, id_loja):
-    
     usuario_id = request.session.get('usuario_id') # -> consulta a sessão para saber qual usuario esta conectado
+
     if not usuario_id: # -> verifica se esta desconectado
         messages.error(request, 'Você precisa fazer login para favorizar uma loja.')
         return redirect('login')
-    
+
     usuario = get_object_or_404(Usuario, id_categoria=usuario_id) # -> procura o usuario registrado no banco e guarda o valor na variavel 'usuario'
     loja = get_object_or_404(Loja, id_loja=id_loja)
-    
+
     favorita, criada = LojaFavoritas.objects.get_or_create( # -> verifica de o usuario ja favoritou ou não a loja
         id_usuario=usuario, # -> indica o 'usuario' que favoritou a 'loja'
         id_loja=loja,
     )
-    
+
     if not criada:
         favorita.delete() # -> remove o favorito quando apertar no botao de uma loja ja favoritada
         #           L> '.delete()': deleta o registro do banco
+
     return redirect(request.META.get('HTTP_REFERER', 'perfil-consumidor')) # -> redireciona para a pagina que veio, caso contrario ele redireciona para 'perfil-consumidor'
+
 
 @require_POST
 def loja_excluir(request, id_loja):
@@ -825,7 +870,7 @@ def loja_excluir(request, id_loja):
 
     # atomic: ou apaga tudo, ou não apaga nada (se der erro no meio, desfaz)
     with transaction.atomic():
-        loja.delete()  # CASCADE apaga produtos, serviços e favoritos da loja
+        loja.delete() # CASCADE apaga produtos, serviços e favoritos da loja
 
         # Limpa o endereço órfão, mas só se nenhuma outra loja usar o mesmo
         if not Loja.objects.filter(id_endereco=endereco).exists():
@@ -837,9 +882,12 @@ def loja_excluir(request, id_loja):
 
 def _voltar(request):
     """Volta para a página de onde veio o formulário"""
+
     destino = request.META.get('HTTP_REFERER')
+
     if destino and url_has_allowed_host_and_scheme(destino, allowed_hosts={request.get_host()}):
         return redirect(destino)
+
     return redirect('index')
 
 
@@ -851,32 +899,38 @@ def avaliacao_criar(request, tipo, id_alvo):
         'produto': (Produto, 'id_produto'),
         'servico': (Servico, 'id_servico'),
     }
+
     modelo, campo = modelos[tipo]
 
     # Quem avalia vem da sessão do login manual
     usuario_id = request.session.get('usuario_id')
+
     if not usuario_id:
         messages.error(request, 'Você precisa fazer login para avaliar.')
         return redirect('login')
-    usuario = get_object_or_404(Usuario, pk=usuario_id)#???(pk): funciona mesmo com as chaves primárias customizadas (id_loja, id_produto...), então não depende do nome delas.
 
+    usuario = get_object_or_404(Usuario, pk=usuario_id) #???(pk): funciona mesmo com as chaves primárias customizadas (id_loja, id_produto...), então não depende do nome delas.
     alvo = get_object_or_404(modelo, pk=id_alvo)
 
     comentario = request.POST.get('comentario', '').strip()
+
     try:
         nota = int(request.POST.get('nota', ''))
     except ValueError:
         nota = None
 
     erros = []
+
     if nota is None or not 1 <= nota <= 5:
         erros.append('A nota deve ser um número de 1 a 5.')
+
     if len(comentario) > 1000:
         erros.append('O comentário deve ter no máximo 1000 caracteres.')
 
     if erros:
         for erro in erros:
             messages.error(request, erro)
+
         return _voltar(request)
 
     # update_or_create: se este usuário já avaliou este alvo, atualiza;
@@ -889,10 +943,11 @@ def avaliacao_criar(request, tipo, id_alvo):
 
     messages.success(request, 'Avaliação salva com sucesso!')
     return _voltar(request)
+
+
 # region PÁGINAS DE INFORMAÇÕES
 
 def InformacoesLoja(request, id_loja):
-
     loja = get_object_or_404(
         Loja.objects.select_related(
             'id_endereco',
@@ -925,8 +980,8 @@ def InformacoesLoja(request, id_loja):
         contexto
     )
 
-def InformacoesProduto(request, id_loja):
 
+def InformacoesProduto(request, id_loja):
     loja = get_object_or_404(
         Loja.objects.select_related(
             'id_categoria'
@@ -957,8 +1012,8 @@ def InformacoesProduto(request, id_loja):
         contexto
     )
 
-def InformacoesServico(request, id_loja):
 
+def InformacoesServico(request, id_loja):
     loja = get_object_or_404(
         Loja.objects.select_related(
             'id_categoria'
@@ -973,7 +1028,7 @@ def InformacoesServico(request, id_loja):
     )
 
     usuario_id = request.session.get('usuario_id')
-    
+
     contexto = {
         'loja': loja,
         'servicos': servicos,
@@ -989,6 +1044,7 @@ def InformacoesServico(request, id_loja):
 
 # endregion
 
+
 @require_POST
 def logout_view(request):
     # flush() apaga TODOS os dados da sessão (inclusive 'usuario_id') e troca
@@ -997,6 +1053,7 @@ def logout_view(request):
 
     messages.success(request, 'Você saiu da sua conta.')
     return redirect('index')
+
 
 def tutorial(request):
     return render(request, 'AppStoreLink/tutorial.html')

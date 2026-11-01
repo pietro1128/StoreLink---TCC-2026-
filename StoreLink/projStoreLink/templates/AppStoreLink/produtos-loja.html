@@ -6,20 +6,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>StoreLink - Produtos</title>
+  <title>StoreLink - Serviços</title>
 
   <link rel="icon" type="image/png" href="{% static 'AppStoreLink/images/icon-dark.png' %}">
   <link rel="stylesheet" href="{% static 'AppStoreLink/styles/style.css' %}">
-  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/produtos-loja.css' %}">
+  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/servicos-loja.css' %}">
   <link rel="stylesheet" href="{% static 'AppStoreLink/styles/mensagens.css' %}">
 </head>
 
 <body>
 
   <script>
-    if (localStorage.getItem('theme') === 'dark') {
-      document.body.classList.add('dark');
+
+    if (
+      localStorage.getItem(
+        'theme'
+      ) === 'dark'
+    ) {
+
+      document.body.classList.add(
+        'dark'
+      );
+
     }
+
   </script>
 
 
@@ -28,15 +38,50 @@
   <div class="topbar">
 
     <div class="logo-icon">
-      <img src="{% static 'AppStoreLink/images/icon-dark.png' %}" alt="StoreLink">
+
+      <img
+        src="{% static 'AppStoreLink/images/icon-dark.png' %}"
+        alt="StoreLink"
+      >
+
     </div>
 
-    <a class="nav-btn" href="{% url 'index' %}">Início</a>
-    <a class="nav-btn active" href="{% url 'perfil-loja' %}">Sua loja</a>
-    <a id="suporte" class="nav-btn" href="{% url 'suporte' %}">Suporte</a>
-    <a class="nav-btn" href="{% url 'tutorial' %}">Como navegar?</a>
+
+    <a
+      class="nav-btn"
+      href="{% url 'index' %}"
+    >
+      Início
+    </a>
+
+
+    <a
+      class="nav-btn active"
+      href="{% url 'perfil-loja' %}"
+    >
+      Sua loja
+    </a>
+
+
+    <a
+      id="suporte"
+      class="nav-btn"
+      href="{% url 'suporte' %}"
+    >
+      Suporte
+    </a>
+
+
+    <a
+      class="nav-btn"
+      href="{% url 'tutorial' %}"
+    >
+      Como navegar?
+    </a>
+
 
     {% if usuario_logado %}
+
       <button
         type="button"
         class="nav-account-btn"
@@ -45,7 +90,9 @@
       >
         👤 Minha conta
       </button>
+
     {% else %}
+
       <button
         type="button"
         class="nav-account-btn"
@@ -54,7 +101,9 @@
       >
         Criar conta ou Entrar
       </button>
+
     {% endif %}
+
 
     <button
       type="button"
@@ -71,48 +120,57 @@
 
   <!-- #region PÁGINA -->
 
-  <main class="produto-page">
+  <main class="servico-page">
 
 
     <!-- #region PERFIL LATERAL -->
 
-    <aside class="produto-perfil">
+    <aside class="servico-perfil">
 
-      <div class="produto-badge">
+      <div class="servico-badge">
         Estabelecimento
       </div>
 
-      <div class="produto-avatar-wrap">
+
+      <div class="servico-avatar-wrap">
 
         <label
-          class="produto-avatar"
-          for="foto-responsavel-produto"
+          class="servico-avatar"
+          for="foto-responsavel-servico"
         >
 
           <input
             type="file"
-            id="foto-responsavel-produto"
+            id="foto-responsavel-servico"
             accept="image/*"
             hidden
           >
 
-          <svg viewBox="0 0 24 24" aria-hidden="true">
+
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+
             <path
               d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"
             />
+
           </svg>
 
+
           <img
-            id="preview-responsavel-produto"
-            class="produto-avatar-image"
+            id="preview-responsavel-servico"
+            class="servico-avatar-image"
             alt="Foto do responsável"
           >
 
         </label>
 
+
         <label
-          class="produto-camera-badge"
-          for="foto-responsavel-produto"
+          class="servico-camera-badge"
+          for="foto-responsavel-servico"
           title="Adicionar foto"
         >
           📷
@@ -121,25 +179,33 @@
       </div>
 
 
-      <div class="produto-perfil-fields">
+      <div class="servico-perfil-fields">
 
-        <div class="produto-perfil-field">
-          <label>Nome do responsável</label>
+        <div class="servico-perfil-field">
+
+          <label>
+            Nome do responsável
+          </label>
 
           <input
             type="text"
             value="{{ request.AppStoreLink_usuario.nome }}"
           >
+
         </div>
 
 
-        <div class="produto-perfil-field">
-          <label>Sobrenome</label>
+        <div class="servico-perfil-field">
+
+          <label>
+            Sobrenome
+          </label>
 
           <input
             type="text"
             value="{{ request.AppStoreLink_usuario.sobrenome }}"
           >
+
         </div>
 
       </div>
@@ -148,13 +214,15 @@
       <form
         method="POST"
         action="{% url 'logout' %}"
-        class="produto-logout-form"
+        class="servico-logout-form"
       >
+
         {% csrf_token %}
+
 
         <button
           type="submit"
-          class="produto-logout"
+          class="servico-logout"
         >
           Fazer Logout
 
@@ -172,12 +240,13 @@
 
     <!-- #region CONTEÚDO -->
 
-    <section class="produto-conteudo">
+    <section class="servico-conteudo">
 
-      <div class="produto-topo">
+
+      <div class="servico-topo">
 
         <a
-          class="produto-voltar"
+          class="servico-voltar"
           href="{% url 'perfil-loja' %}"
           aria-label="Voltar"
           title="Voltar"
@@ -186,41 +255,22 @@
         </a>
 
 
-        <div class="produto-topo-info">
+        <div class="servico-topo-info">
 
-          <p class="produto-editar-texto">
-            Editar fotos e informações dos produtos
+          <p class="servico-editar-texto">
+            Editar fotos e informações dos serviços
           </p>
 
 
-          <div class="produto-titulo-box">
+          <div class="servico-titulo-box">
 
             <h1>
-              PRODUTOS
+              SERVIÇOS{% if loja %} - {{ loja.nome_loja }}{% endif %}
             </h1>
 
-
-            <svg
-              class="produto-sacola"
-              viewBox="0 0 64 64"
-              fill="none"
-              aria-hidden="true"
-            >
-
-              <path
-                d="M16 22H48L52 56H12L16 22Z"
-                stroke="currentColor"
-                stroke-width="3"
-              />
-
-
-              <path
-                d="M23 23V17C23 11 27 7 32 7C37 7 41 11 41 17V23"
-                stroke="currentColor"
-                stroke-width="3"
-              />
-
-            </svg>
+            <div class="servico-dinheiro">
+              $
+            </div>
 
           </div>
 
@@ -230,6 +280,7 @@
 
 
       {% if messages %}
+
         <div class="messages-container">
 
           {% for message in messages %}
@@ -241,41 +292,44 @@
           {% endfor %}
 
         </div>
+
       {% endif %}
 
 
       <!-- #region CARDS -->
 
       <div
-        class="produto-cards-scroll"
-        id="produtoCards"
+        class="servico-cards-scroll"
+        id="servicoCards"
       >
 
 
-        <!-- #region PRODUTOS SALVOS -->
+        <!-- #region SERVIÇOS SALVOS -->
 
-        {% for produto in produtos %}
+        {% for servico in servicos %}
+
 
           <div
-            class="produto-card produto-card-salvo"
-            data-categoria="{{ produto.id_categoria.tipo_categoria }}"
+            class="servico-card servico-card-salvo"
+            data-categoria="{{ servico.id_loja.id_categoria.tipo_categoria }}"
           >
 
 
             <form
               method="POST"
-              action="{% url 'produto-excluir' produto.id_produto %}"
+              action="{% url 'servico-excluir' servico.id_servico %}"
               style="display: contents;"
-              onsubmit="return confirm('Excluir o produto {{ produto.nome_produto|escapejs }}? Essa ação não pode ser desfeita.');"
+              onsubmit="return confirm('Excluir o serviço {{ servico.nome_servico|escapejs }}? Essa ação não pode ser desfeita.');"
             >
 
               {% csrf_token %}
 
+
               <button
                 type="submit"
-                class="produto-excluir-card"
-                aria-label="Excluir produto"
-                title="Excluir produto"
+                class="servico-excluir-card"
+                aria-label="Excluir serviço"
+                title="Excluir serviço"
               >
                 ✕
               </button>
@@ -283,39 +337,39 @@
             </form>
 
 
-            <div class="produto-imagem">
+            <div class="servico-imagem">
 
               <input
-                class="produto-imagem-input"
+                class="servico-imagem-input"
                 type="file"
                 name="foto"
-                form="formProduto{{ produto.id_produto }}"
+                form="formServico{{ servico.id_servico }}"
                 accept="image/*"
                 hidden
               >
 
 
-              {% if produto.foto %}
+              {% if servico.foto %}
 
                 <img
-                  class="produto-preview produto-preview-existente"
-                  src="{{ produto.foto }}"
-                  alt="{{ produto.nome_produto }}"
+                  class="servico-preview servico-preview-existente"
+                  src="{{ servico.foto }}"
+                  alt="{{ servico.nome_servico }}"
                 >
 
               {% else %}
 
                 <button
                   type="button"
-                  class="produto-botao-imagem"
+                  class="servico-botao-imagem"
                 >
                   📷 Adicionar imagem
                 </button>
 
 
                 <img
-                  class="produto-preview"
-                  alt="Imagem do produto"
+                  class="servico-preview"
+                  alt="Imagem do serviço"
                 >
 
               {% endif %}
@@ -323,7 +377,7 @@
 
               <button
                 type="button"
-                class="produto-trocar-imagem"
+                class="servico-trocar-imagem"
                 aria-label="Trocar imagem"
                 title="Trocar imagem"
               >
@@ -333,12 +387,13 @@
             </div>
 
 
-            <div class="produto-card-conteudo">
+            <div class="servico-card-conteudo">
+
 
               <button
                 type="button"
-                class="produto-editar-info"
-                onclick="editarProduto(this)"
+                class="servico-editar-info"
+                onclick="editarServico(this)"
                 aria-label="Editar informações"
                 title="Editar informações"
               >
@@ -348,9 +403,9 @@
 
               <form
                 method="POST"
-                action="{% url 'produto-editar' produto.id_produto %}"
-                id="formProduto{{ produto.id_produto }}"
-                class="produto-form-salvo"
+                action="{% url 'servico-editar' servico.id_servico %}"
+                id="formServico{{ servico.id_servico }}"
+                class="servico-form-salvo"
                 enctype="multipart/form-data"
               >
 
@@ -358,26 +413,26 @@
 
 
                 <label>
-                  Nome do produto:
+                  Nome do serviço:
                 </label>
 
                 <input
+                  name="nome_servico"
                   type="text"
-                  name="nome_produto"
-                  value="{{ produto.nome_produto }}"
-                  placeholder="Nome do produto"
+                  value="{{ servico.nome_servico }}"
+                  placeholder="Nome do serviço"
                   readonly
                 >
 
 
                 <label>
-                  Preço do produto:
+                  Preço do serviço:
                 </label>
 
                 <input
+                  name="preco"
                   type="text"
-                  name="preco_produto"
-                  value="{{ produto.preco }}"
+                  value="{{ servico.preco }}"
                   placeholder="R$ 00,00"
                   readonly
                 >
@@ -387,25 +442,26 @@
                   Categoria:
                 </label>
 
-                <div class="produto-categoria-salva">
-                  {{ produto.id_categoria.tipo_categoria }}
+
+                <div class="servico-categoria-salva">
+                  {{ servico.id_loja.id_categoria.tipo_categoria }}
                 </div>
 
 
                 <label>
-                  Descrição do produto:
+                  Descrição do serviço:
                 </label>
 
                 <textarea
-                  name="descricao_produto"
-                  placeholder="Descrição do produto..."
+                  name="descricao"
+                  placeholder="Descrição do serviço..."
                   readonly
-                >{{ produto.descricao|default:'' }}</textarea>
+                >{{ servico.descricao|default:'' }}</textarea>
 
 
                 <button
                   type="submit"
-                  class="produto-salvar-alteracoes"
+                  class="servico-salvar-alteracoes"
                   hidden
                 >
                   SALVAR ALTERAÇÕES
@@ -417,36 +473,38 @@
 
           </div>
 
+
         {% endfor %}
 
         <!-- #endregion -->
 
 
-        <!-- #region NOVO PRODUTO TEMPORÁRIO -->
+        <!-- #region NOVO SERVIÇO TEMPORÁRIO -->
 
         <div
-          class="produto-card produto-card-novo"
-          id="produtoCardNovo"
+          class="servico-card servico-card-novo"
+          id="servicoCardNovo"
         >
+
 
           <button
             type="button"
-            class="produto-excluir-card produto-cancelar-card"
-            onclick="cancelarNovoProduto()"
-            aria-label="Cancelar novo produto"
-            title="Cancelar novo produto"
+            class="servico-excluir-card servico-cancelar-card"
+            onclick="cancelarNovoServico()"
+            aria-label="Cancelar novo serviço"
+            title="Cancelar novo serviço"
           >
             ✕
           </button>
 
 
-          <div class="produto-imagem produto-imagem-nova">
+          <div class="servico-imagem servico-imagem-nova">
 
             <input
-              class="produto-imagem-input"
+              class="servico-imagem-input"
               type="file"
               name="foto"
-              form="formNovoProduto"
+              form="formNovoServico"
               accept="image/*"
               hidden
             >
@@ -454,21 +512,21 @@
 
             <button
               type="button"
-              class="produto-botao-imagem"
+              class="servico-botao-imagem"
             >
               📷 Adicionar imagem
             </button>
 
 
             <img
-              class="produto-preview"
-              alt="Imagem do novo produto"
+              class="servico-preview"
+              alt="Imagem do novo serviço"
             >
 
 
             <button
               type="button"
-              class="produto-trocar-imagem"
+              class="servico-trocar-imagem"
               aria-label="Trocar imagem"
               title="Trocar imagem"
             >
@@ -478,12 +536,13 @@
           </div>
 
 
-          <div class="produto-card-conteudo">
+          <div class="servico-card-conteudo">
+
 
             <form
               method="POST"
-              action="{% url 'produto-criar' %}"
-              id="formNovoProduto"
+              action="{% url 'servicos-loja' %}"
+              id="formNovoServico"
               enctype="multipart/form-data"
             >
 
@@ -491,24 +550,24 @@
 
 
               <label>
-                Nome do produto:
+                Nome do serviço:
               </label>
 
               <input
+                name="nome_servico"
                 type="text"
-                name="nome_produto"
-                placeholder="Nome do produto"
+                placeholder="Nome do serviço"
                 required
               >
 
 
               <label>
-                Preço do produto:
+                Preço do serviço:
               </label>
 
               <input
+                name="preco"
                 type="text"
-                name="preco_produto"
                 placeholder="R$ 00,00"
                 required
               >
@@ -518,10 +577,11 @@
                 Categoria:
               </label>
 
+
               <select
-                name="id_categoria"
-                class="produto-categoria-select"
-                onchange="atualizarCategoriaProduto(this)"
+                name="categoria_servico"
+                class="servico-categoria-select"
+                onchange="atualizarCategoriaServico(this)"
                 required
               >
 
@@ -533,40 +593,108 @@
                 </option>
 
 
-                {% for c in categorias %}
+                <option
+                  value="Alimentos"
+                  data-categoria="Alimentos"
+                >
+                  Alimentos
+                </option>
 
-                  <option
-                    value="{{ c.id_categoria }}"
-                    data-categoria="{{ c.tipo_categoria }}"
-                  >
-                    {{ c.tipo_categoria }}
-                  </option>
 
-                {% endfor %}
+                <option
+                  value="Moda"
+                  data-categoria="Moda"
+                >
+                  Moda
+                </option>
+
+
+                <option
+                  value="Esportes"
+                  data-categoria="Esportes"
+                >
+                  Esportes
+                </option>
+
+
+                <option
+                  value="Construção"
+                  data-categoria="Construção"
+                >
+                  Construção
+                </option>
+
+
+                <option
+                  value="Saúde"
+                  data-categoria="Saúde"
+                >
+                  Saúde
+                </option>
+
+
+                <option
+                  value="Pets"
+                  data-categoria="Pets"
+                >
+                  Pets
+                </option>
+
+
+                <option
+                  value="Ambiente"
+                  data-categoria="Ambiente"
+                >
+                  Ambiente
+                </option>
+
+
+                <option
+                  value="Tecnologia"
+                  data-categoria="Tecnologia"
+                >
+                  Tecnologia
+                </option>
+
+
+                <option
+                  value="Beleza"
+                  data-categoria="Beleza"
+                >
+                  Beleza
+                </option>
+
+
+                <option
+                  value="Outros"
+                  data-categoria="Outros"
+                >
+                  Outros
+                </option>
 
               </select>
 
 
-              <div class="produto-categoria-selecionada">
+              <div class="servico-categoria-selecionada">
                 Nenhuma categoria selecionada
               </div>
 
 
               <label>
-                Descrição do produto:
+                Descrição do serviço:
               </label>
 
               <textarea
-                name="descricao_produto"
-                placeholder="Descrição do produto..."
+                name="descricao"
+                placeholder="Descrição do serviço..."
               ></textarea>
 
 
               <button
                 type="submit"
-                class="produto-salvar"
+                class="servico-salvar"
               >
-                CADASTRAR PRODUTO
+                SALVAR SERVIÇO
               </button>
 
             </form>
@@ -578,31 +706,32 @@
         <!-- #endregion -->
 
 
-        <!-- #region ADICIONAR PRODUTO -->
+        <!-- #region ADICIONAR SERVIÇO -->
 
         <div
-          class="produto-criar-card"
-          id="produtoCriarCard"
+          class="servico-criar-card"
+          id="servicoCriarCard"
         >
+
 
           <button
             type="button"
-            class="produto-criar-card-btn"
-            onclick="adicionarProduto()"
-            aria-label="Adicionar produto"
-            title="Adicionar produto"
+            class="servico-criar-card-btn"
+            onclick="adicionarServico()"
+            aria-label="Adicionar serviço"
+            title="Adicionar serviço"
           >
             +
           </button>
 
 
           <h2>
-            Adicionar produto
+            Adicionar serviço
           </h2>
 
 
           <p>
-            Clique no + para cadastrar outro produto.
+            Clique no + para cadastrar outro serviço.
           </p>
 
         </div>
@@ -614,9 +743,11 @@
 
       <!-- #endregion -->
 
+
     </section>
 
     <!-- #endregion -->
+
 
   </main>
 
@@ -627,9 +758,10 @@
 
   <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
 
+
   <script>
 
-    const coresCategoriasProduto = {
+    const coresCategorias = {
       'Alimentos': '#e8534f',
       'Moda': '#7a5c50',
       'Esportes': '#f5943a',
@@ -643,13 +775,13 @@
     };
 
 
-    function definirCorProduto(
+    function definirCorServico(
       card,
       categoria
     ) {
 
       const cor =
-        coresCategoriasProduto[categoria] ||
+        coresCategorias[categoria] ||
         '#ff454c';
 
 
@@ -659,13 +791,13 @@
 
 
       card.style.setProperty(
-        '--produto-cor',
+        '--servico-cor',
         cor
       );
 
 
       card.style.setProperty(
-        '--produto-cor-texto',
+        '--servico-cor-texto',
         textoEscuro
           ? '#222222'
           : '#ffffff'
@@ -674,18 +806,20 @@
     }
 
 
-    function atualizarCategoriaProduto(
+    function atualizarCategoriaServico(
       select
     ) {
 
       const card =
         select.closest(
-          '.produto-card-novo'
+          '.servico-card-novo'
         );
 
 
       if (!card) {
+
         return;
+
       }
 
 
@@ -701,7 +835,7 @@
 
       const categoriaSelecionada =
         card.querySelector(
-          '.produto-categoria-selecionada'
+          '.servico-categoria-selecionada'
         );
 
 
@@ -712,7 +846,7 @@
         );
 
 
-        definirCorProduto(
+        definirCorServico(
           card,
           ''
         );
@@ -727,7 +861,7 @@
       }
 
 
-      definirCorProduto(
+      definirCorServico(
         card,
         categoria
       );
@@ -744,17 +878,17 @@
     }
 
 
-    function adicionarProduto() {
+    function adicionarServico() {
 
       const cardNovo =
         document.getElementById(
-          'produtoCardNovo'
+          'servicoCardNovo'
         );
 
 
       const criarCard =
         document.getElementById(
-          'produtoCriarCard'
+          'servicoCriarCard'
         );
 
 
@@ -777,7 +911,7 @@
 
       const primeiroCampo =
         cardNovo.querySelector(
-          'input[name="nome_produto"]'
+          'input[name="nome_servico"]'
         );
 
 
@@ -786,23 +920,23 @@
     }
 
 
-    function cancelarNovoProduto() {
+    function cancelarNovoServico() {
 
       const cardNovo =
         document.getElementById(
-          'produtoCardNovo'
+          'servicoCardNovo'
         );
 
 
       const criarCard =
         document.getElementById(
-          'produtoCriarCard'
+          'servicoCriarCard'
         );
 
 
       const form =
         document.getElementById(
-          'formNovoProduto'
+          'formNovoServico'
         );
 
 
@@ -811,13 +945,13 @@
 
       const imagem =
         cardNovo.querySelector(
-          '.produto-imagem'
+          '.servico-imagem'
         );
 
 
       const preview =
         imagem.querySelector(
-          '.produto-preview'
+          '.servico-preview'
         );
 
 
@@ -836,16 +970,18 @@
       );
 
 
-      definirCorProduto(
+      definirCorServico(
         cardNovo,
         ''
       );
 
 
-      cardNovo.querySelector(
-        '.produto-categoria-selecionada'
-      ).textContent =
-        'Nenhuma categoria selecionada';
+      cardNovo
+        .querySelector(
+          '.servico-categoria-selecionada'
+        )
+        .textContent =
+          'Nenhuma categoria selecionada';
 
 
       cardNovo.classList.remove(
@@ -860,18 +996,20 @@
     }
 
 
-    function editarProduto(
+    function editarServico(
       botao
     ) {
 
       const card =
         botao.closest(
-          '.produto-card-salvo'
+          '.servico-card-salvo'
         );
 
 
       if (!card) {
+
         return;
+
       }
 
 
@@ -889,10 +1027,10 @@
 
       card
         .querySelectorAll(
-          '.produto-form-salvo input, .produto-form-salvo textarea'
+          '.servico-form-salvo input, .servico-form-salvo textarea'
         )
         .forEach(
-          (campo) => {
+          function (campo) {
 
             campo.readOnly =
               !editando;
@@ -903,7 +1041,7 @@
 
       const salvar =
         card.querySelector(
-          '.produto-salvar-alteracoes'
+          '.servico-salvar-alteracoes'
         );
 
 
@@ -913,40 +1051,42 @@
 
       if (editando) {
 
-        card.querySelector(
-          'input[name="nome_produto"]'
-        ).focus();
+        card
+          .querySelector(
+            'input[name="nome_servico"]'
+          )
+          .focus();
 
       }
 
     }
 
 
-    function prepararImagemProduto(
+    function prepararImagemServico(
       imagem
     ) {
 
       const input =
         imagem.querySelector(
-          '.produto-imagem-input'
+          '.servico-imagem-input'
         );
 
 
       const botaoAdicionar =
         imagem.querySelector(
-          '.produto-botao-imagem'
+          '.servico-botao-imagem'
         );
 
 
       const botaoTrocar =
         imagem.querySelector(
-          '.produto-trocar-imagem'
+          '.servico-trocar-imagem'
         );
 
 
       const preview =
         imagem.querySelector(
-          '.produto-preview'
+          '.servico-preview'
         );
 
 
@@ -954,7 +1094,11 @@
 
         botaoAdicionar.addEventListener(
           'click',
-          () => input.click()
+          function () {
+
+            input.click();
+
+          }
         );
 
       }
@@ -964,7 +1108,11 @@
 
         botaoTrocar.addEventListener(
           'click',
-          () => input.click()
+          function () {
+
+            input.click();
+
+          }
         );
 
       }
@@ -972,14 +1120,16 @@
 
       input.addEventListener(
         'change',
-        () => {
+        function () {
 
           const arquivo =
             input.files[0];
 
 
           if (!arquivo) {
+
             return;
+
           }
 
 
@@ -988,7 +1138,7 @@
 
 
           leitor.onload =
-            (evento) => {
+            function (evento) {
 
               preview.src =
                 evento.target.result;
@@ -1013,16 +1163,16 @@
 
     document.addEventListener(
       'DOMContentLoaded',
-      () => {
+      function () {
 
         document
           .querySelectorAll(
-            '.produto-card-salvo'
+            '.servico-card-salvo'
           )
           .forEach(
-            (card) => {
+            function (card) {
 
-              definirCorProduto(
+              definirCorServico(
                 card,
                 card.dataset.categoria
               );
@@ -1033,10 +1183,10 @@
 
         document
           .querySelectorAll(
-            '.produto-imagem'
+            '.servico-imagem'
           )
           .forEach(
-            prepararImagemProduto
+            prepararImagemServico
           );
 
       }
@@ -1045,6 +1195,7 @@
   </script>
 
   <!-- #endregion -->
+
 
 </body>
 </html>
