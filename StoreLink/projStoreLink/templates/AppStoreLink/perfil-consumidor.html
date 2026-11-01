@@ -28,7 +28,11 @@
     href="{% static 'AppStoreLink/styles/consumidor.css' %}"
   >
 
-  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/mensagens.css' %}">
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/mensagens.css' %}"
+  >
+
 </head>
 
 
@@ -37,9 +41,19 @@
   <!-- #region modo escuro -->
 
   <script>
-    if (localStorage.getItem('theme') === 'dark') {
-      document.body.classList.add('dark');
+
+    if (
+      localStorage.getItem(
+        'theme'
+      ) === 'dark'
+    ) {
+
+      document.body.classList.add(
+        'dark'
+      );
+
     }
+
   </script>
 
   <!-- #endregion -->
@@ -48,11 +62,19 @@
   <!-- #region mensagens -->
 
   {% if messages %}
+
     <div class="messages-container">
+
       {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+
+        <div class="alert alert-{{ message.tags }}">
+          {{ message }}
+        </div>
+
       {% endfor %}
+
     </div>
+
   {% endif %}
 
   <!-- #endregion -->
@@ -103,13 +125,15 @@
       Como navegar?
     </a>
 
-      <button
-        class="nav-account-btn consumidor-conta-ativa"
-        data-url="{% url 'perfil-consumidor' %}"
-        onclick="location.href=this.dataset.url"
-      >
-        👤 Minha conta
-      </button>
+
+    <button
+      class="nav-account-btn consumidor-conta-ativa"
+      data-url="{% url 'perfil-consumidor' %}"
+      onclick="location.href=this.dataset.url"
+    >
+      👤 Minha conta
+    </button>
+
 
     <button
       class="theme-toggle"
@@ -127,11 +151,6 @@
 
   <main class="page-consumidor">
 
-    <form method="POST" action="{% url 'perfil-consumidor' %}" enctype="multipart/form-data">
-      {% csrf_token %}
-      <input type="file" name="foto" accept="image/jpeg,image/png,image/webp">
-      <button type="submit">Salvar foto</button>
-    </form>
 
     <div class="consumidor-wrapper">
 
@@ -158,13 +177,20 @@
               type="file"
               id="foto-consumidor"
               name="foto"
-              form="formFoto"
               accept="image/jpeg,image/png,image/webp"
               hidden
             >
 
-            <svg id="avatar-padrao-consumidor" viewBox="0 0 24 24">
-              <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z" />
+
+            <svg
+              id="avatar-padrao-consumidor"
+              viewBox="0 0 24 24"
+            >
+
+              <path
+                d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"
+              />
+
             </svg>
 
 
@@ -172,7 +198,9 @@
               id="preview-consumidor"
               class="consumidor-avatar-image"
               alt="Foto do consumidor"
-              {% if chave_perf_consm.foto %}src="{{ chave_perf_consm.foto.url }}"{% endif %}
+              {% if chave_perf_consm.foto %}
+                src="{{ chave_perf_consm.foto.url }}"
+              {% endif %}
             >
 
           </label>
@@ -187,17 +215,32 @@
 
         </div>
 
-        <button type="submit" form="formFoto" class="consumidor-salvar-foto">
-          Salvar foto
+
+        <!-- #region editar usuario -->
+
+        <button
+          type="button"
+          class="consumidor-editar-btn"
+          onclick="editarConsumidor(this)"
+        >
+          ✎ Editar usuário
         </button>
-        
-        <form method="POST" action="{% url 'editar-consumidor' %}">
+
+
+        <form
+          method="POST"
+          action="{% url 'editar-consumidor' %}"
+          id="formEditarConsumidor"
+          class="consumidor-form-edicao"
+        >
+
           {% csrf_token %}
+
 
           <div class="consumidor-field-left">
 
             <label>
-                Nome
+              Nome
             </label>
 
             <input
@@ -205,37 +248,63 @@
               name="nome"
               value="{{ chave_perf_consm.nome }}"
               required
+              readonly
             >
 
           </div>
+
 
           <div class="consumidor-field-left">
 
             <label>
-                Sobrenome
+              Sobrenome
             </label>
 
             <input
-                type="text"
-                name="sobrenome"
-                value="{{ chave_perf_consm.sobrenome }}"
+              type="text"
+              name="sobrenome"
+              value="{{ chave_perf_consm.sobrenome|default_if_none:'' }}"
+              readonly
             >
 
           </div>
 
-          <button type="submit">Salvar alterações</button>
 
-        </form>
-
-        <form method="POST" action="{% url 'logout' %}" style="display: contents;">
-          {% csrf_token %}
-          <button type="submit" class="produto-logout">
-            Fazer Logout
-            <span>≪</span>
+          <button
+            type="submit"
+            class="consumidor-salvar-alteracoes"
+            hidden
+          >
+            Salvar alterações
           </button>
+
         </form>
 
+        <!-- #endregion -->
 
+
+        <form
+          method="POST"
+          action="{% url 'logout' %}"
+          style="display: contents;"
+        >
+
+          {% csrf_token %}
+
+
+          <button
+            type="submit"
+            class="consumidor-logout-btn"
+          >
+            Fazer Logout
+
+            <span>
+              ≪
+            </span>
+
+          </button>
+
+        </form>
 
 
       </aside>
@@ -247,11 +316,13 @@
 
       <section class="favoritos-area">
 
+
         <div class="favoritos-topo">
 
           <h1>
             FAVORITOS
           </h1>
+
 
           <button
             type="button"
@@ -272,9 +343,12 @@
 
         </div>
 
+
         <div class="favoritos-scroll">
 
+
           {% for favorita in loja_fav %}
+
 
             <article
               class="
@@ -314,8 +388,11 @@
               "
             >
 
+
               <!-- #region capa -->
+
               <div class="favorito-capa">
+
 
                 {% if favorita.id_loja.foto_estabelecimento %}
 
@@ -338,11 +415,22 @@
                 {% endif %}
 
 
-                <form method="post" action="{% url 'favoritar-loja' favorita.id_loja.id_loja %}">
+                <form
+                  method="POST"
+                  action="{% url 'favoritar-loja' favorita.id_loja.id_loja %}"
+                >
+
                   {% csrf_token %}
-                  <button type="submit" class="favorito-coracao" title="Remover dos favoritos">
+
+
+                  <button
+                    type="submit"
+                    class="favorito-coracao"
+                    title="Remover dos favoritos"
+                  >
                     ♥
                   </button>
+
                 </form>
 
 
@@ -468,15 +556,100 @@
     function setActiveNav(btn) {
 
       document
-        .querySelectorAll('.nav-btn')
-        .forEach(function (b) {
+        .querySelectorAll(
+          '.nav-btn'
+        )
+        .forEach(
+          function (b) {
 
-          b.classList.remove('active');
+            b.classList.remove(
+              'active'
+            );
 
-        });
+          }
+        );
 
 
-      btn.classList.add('active');
+      btn.classList.add(
+        'active'
+      );
+
+    }
+
+
+
+    function editarConsumidor(botao) {
+
+      const form =
+        document.getElementById(
+          'formEditarConsumidor'
+        );
+
+
+      if (!form) {
+
+        return;
+
+      }
+
+
+      const editando =
+        !form.classList.contains(
+          'editando'
+        );
+
+
+      form.classList.toggle(
+        'editando',
+        editando
+      );
+
+
+      form
+        .querySelectorAll(
+          'input[name="nome"], input[name="sobrenome"]'
+        )
+        .forEach(
+          function (campo) {
+
+            campo.readOnly =
+              !editando;
+
+          }
+        );
+
+
+      const salvar =
+        form.querySelector(
+          '.consumidor-salvar-alteracoes'
+        );
+
+
+      salvar.hidden =
+        !editando;
+
+
+      if (editando) {
+
+        botao.textContent =
+          '✕ Cancelar edição';
+
+
+        form
+          .querySelector(
+            'input[name="nome"]'
+          )
+          .focus();
+
+      } else {
+
+        botao.textContent =
+          '✎ Editar usuário';
+
+
+        form.reset();
+
+      }
 
     }
 
@@ -484,16 +657,22 @@
 
     function toggleTheme(btn) {
 
-      document.body.classList.toggle('dark');
+      document.body.classList.toggle(
+        'dark'
+      );
 
 
       var isDark =
-        document.body.classList.contains('dark');
+        document.body.classList.contains(
+          'dark'
+        );
 
 
       localStorage.setItem(
         'theme',
-        isDark ? 'dark' : 'light'
+        isDark
+          ? 'dark'
+          : 'light'
       );
 
 
@@ -525,7 +704,9 @@
 
         if (
           themeBtn &&
-          document.body.classList.contains('dark')
+          document.body.classList.contains(
+            'dark'
+          )
         ) {
 
           themeBtn.textContent =
@@ -579,7 +760,9 @@
 
 
           if (
-            !arquivo.type.startsWith('image/')
+            !arquivo.type.startsWith(
+              'image/'
+            )
           ) {
 
             alert(
@@ -587,7 +770,8 @@
             );
 
 
-            this.value = '';
+            this.value =
+              '';
 
 
             return;
@@ -605,9 +789,11 @@
             imagemURL;
 
 
-          avatarConsumidor.classList.add(
-            'tem-imagem'
-          );
+          avatarConsumidor
+            .classList
+            .add(
+              'tem-imagem'
+            );
 
 
           previewConsumidor.onload =
