@@ -118,7 +118,11 @@ class Loja(models.Model):
     id_categoria = models.ForeignKey(
         Categoria, on_delete=models.CASCADE, db_column="id_categoria"
     )
-
+    id_dono = models.ForeignKey(
+        Usuario, on_delete=models.CASCADE, db_column="id_dono", 
+        related_name="lojas", null=True, blank=True,
+    )
+    
     def __str__(self):
         return self.nome_loja
 

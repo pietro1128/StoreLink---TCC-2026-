@@ -26,13 +26,17 @@ def index(request):
 def _loja_atual():
     return Loja.objects.select_related('id_endereco', 'id_categoria').order_by('-id_loja').first()
 
-
 # |  Para testar a pagina SEM CONTA, voce precisa transformar
 # V  a linha de baixo em um comentario: "#@login_required"
 #@login_required
 def perfil_loja(request):
     #if request.user.roler != 'admin':
         #return HttpResponseForbidden("Você não tem permição para acessar está página.")
+    
+    usuario_id = request.session.get('usuario_id')
+    if not usuario_id:
+            messages.error(request, 'Você precisa fazer login para editar a loja.')
+            return redirect('login')
 
     if request.method == 'POST': # -> verifica se o usuario enviou os dados usando o metodo HTTP 'POST'
 
@@ -111,6 +115,7 @@ def perfil_loja(request):
             nome_loja=nome,
             id_endereco=endereco,
             id_categoria=categoria,
+            id_dono_id=usuario_id,
             email_loja=email,
             telefone_loja=telefone,
             cnpj=cnpj,
@@ -124,7 +129,6 @@ def perfil_loja(request):
     loja = _loja_atual()
 
     return render(request, 'AppStoreLink/perfil-loja.html', {'loja': loja})
-
 
 def perfil_consumidor(request):
     usuario_id = request.session.get('usuario_id')
@@ -703,6 +707,10 @@ def servicos_loja(request):
 
 @require_POST
 def loja_editar(request, id_loja):
+    if not _eh_dono(request, loja):
+        messages.error(request, 'Você não tem permissão para editar esta loja.')
+        return redirect('InformacoesLoja', id_loja=loja.id_loja)
+    
     loja = get_object_or_404(Loja.objects.select_related('id_endereco'), id_loja=id_loja)
 
     if not request.session.get('usuario_id'):
@@ -860,6 +868,14 @@ def favoritar_loja(request, id_loja):
 
 @require_POST
 def loja_excluir(request, id_loja):
+    if not request.session.get('usuario_id'): # -> verifica se esta desconectado
+        messages.error(request, 'Você precisa fazer login para excluir uma loja.')
+        return redirect('login')
+    
+    if not _eh_dono(request, loja):
+        messages.error(request, 'Você não tem permissão para editar esta loja.')
+        return redirect('InformacoesLoja', id_loja=loja.id_loja)
+
     loja = get_object_or_404(Loja, id_loja=id_loja)
 
     # TODO: quando existir o vínculo Usuario↔Loja, conferir aqui se o usuário
@@ -890,6 +906,10 @@ def _voltar(request):
 
     return redirect('index')
 
+# Função de verificação de dono:
+def _eh_dono(request, loja):
+    usuario_id = request.session.get('usuario_id')
+    return usuario_id is not None and loja.id_dono_id == usuario_id
 
 @require_POST
 def avaliacao_criar(request, tipo, id_alvo):
@@ -1003,7 +1023,7 @@ def InformacoesProduto(request, id_loja):
         'loja': loja,
         'produtos': produtos,
         'usuario_logado': bool(usuario_id),
-        'eh_dono': bool(usuario_id),
+        'eh_dono': _eh_dono(request, loja),
     }
 
     return render(
@@ -1033,7 +1053,7 @@ def InformacoesServico(request, id_loja):
         'loja': loja,
         'servicos': servicos,
         'usuario_logado': bool(usuario_id),
-        'eh_dono': bool(usuario_id),
+        'eh_dono': _eh_dono(request, loja),
     }
 
     return render(
