@@ -116,7 +116,8 @@ body.dark .side-icon-dark {
 }
 
 .auth-side-content h1 {
-  font-family: 'Yeseva One', Georgia, serif;
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+  font-weight: 700;
   font-size: clamp(20px, 6cqw, 42px);
   line-height: 1.15;
   margin-bottom: 24px;
@@ -124,8 +125,8 @@ body.dark .side-icon-dark {
 }
 
 .auth-side-content p {
-  font-family: 'Yeseva One', Georgia, serif;
-  font-weight: 400;
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+  font-weight: 500;
   font-size: 17px;
   line-height: 1.5;
   opacity: 0.95;
@@ -168,8 +169,8 @@ body.dark .side-icon-dark {
 }
 
 .auth-form-box h2 {
-  font-family: 'Yeseva One', Georgia, serif;
-  font-weight: 400;
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+  font-weight: 700;
   font-size: 40px;
   margin-bottom: 24px;
   color: var(--text-color);

@@ -227,9 +227,10 @@ body.dark
     var(--text-color);
 
   font-family:
-    'Yeseva One',
-    Georgia,
-    serif;
+    'Montserrat',
+    'Segoe UI',
+    Arial,
+    sans-serif;
 
   font-size:
     clamp(
@@ -238,7 +239,7 @@ body.dark
       40px
     );
 
-  font-weight: 400;
+  font-weight: 700;
 
   text-align: center;
 }
@@ -300,13 +301,14 @@ body.dark
     var(--text-color);
 
   font-family:
-    'Yeseva One',
-    Georgia,
-    serif;
+    'Montserrat',
+    'Segoe UI',
+    Arial,
+    sans-serif;
 
   font-size: 34px;
 
-  font-weight: 400;
+  font-weight: 700;
 }
 
 
