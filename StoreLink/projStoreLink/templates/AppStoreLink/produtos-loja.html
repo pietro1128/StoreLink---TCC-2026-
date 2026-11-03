@@ -12,6 +12,62 @@
   <link rel="stylesheet" href="{% static 'AppStoreLink/styles/style.css' %}">
   <link rel="stylesheet" href="{% static 'AppStoreLink/styles/produtos-loja.css' %}">
   <link rel="stylesheet" href="{% static 'AppStoreLink/styles/mensagens.css' %}">
+
+
+  <style>
+
+    .produto-page {
+      --produto-loja-cor: #e8534f;
+      --produto-loja-cor-texto: #ffffff;
+    }
+
+
+    .produto-voltar {
+      border-color: var(--produto-loja-cor);
+      color: var(--produto-loja-cor);
+    }
+
+
+    .produto-voltar:hover {
+      background: var(--produto-loja-cor);
+    }
+
+
+    .produto-titulo-box {
+      background: var(--produto-loja-cor);
+      color: var(--produto-loja-cor-texto);
+    }
+
+
+    .produto-sacola {
+      color: var(--produto-loja-cor-texto);
+    }
+
+
+    .produto-cards-scroll::-webkit-scrollbar-thumb {
+      background: var(--produto-loja-cor);
+    }
+
+
+    .produto-card {
+      --produto-cor: var(--produto-loja-cor);
+      --produto-cor-texto: var(--produto-loja-cor-texto);
+    }
+
+
+    .produto-criar-card-btn {
+      border-color: var(--produto-loja-cor);
+      color: var(--produto-loja-cor);
+    }
+
+
+    body.dark .produto-criar-card-btn {
+      border-color: var(--produto-loja-cor);
+      color: var(--produto-loja-cor);
+    }
+
+  </style>
+
 </head>
 
 <body>
@@ -71,7 +127,10 @@
 
   <!-- #region PÁGINA -->
 
-  <main class="produto-page">
+  <main
+    class="produto-page"
+    data-categoria-loja="{{ loja.id_categoria.tipo_categoria|default:'Alimentos' }}"
+  >
 
 
     <!-- #region PERFIL LATERAL -->
@@ -632,19 +691,88 @@
     };
 
 
-    function definirCorProduto(
-      card,
-      categoria
-    ) {
+    function aplicarCorLojaProduto() {
+
+      const pagina =
+        document.querySelector(
+          '.produto-page'
+        );
+
+
+      if (!pagina) {
+        return;
+      }
+
+
+      const categoria =
+        pagina.dataset.categoriaLoja ||
+        'Alimentos';
+
 
       const cor =
         coresCategoriasProduto[categoria] ||
-        '#ff454c';
+        '#e8534f';
 
 
       const textoEscuro =
         categoria === 'Construção' ||
         categoria === 'Outros';
+
+
+      pagina.style.setProperty(
+        '--produto-loja-cor',
+        cor
+      );
+
+
+      pagina.style.setProperty(
+        '--produto-loja-cor-texto',
+        textoEscuro
+          ? '#222222'
+          : '#ffffff'
+      );
+
+    }
+
+
+    function definirCorProduto(
+      card,
+      categoria
+    ) {
+
+      const pagina =
+        document.querySelector(
+          '.produto-page'
+        );
+
+
+      if (!pagina) {
+        return;
+      }
+
+
+      const estiloPagina =
+        window.getComputedStyle(
+          pagina
+        );
+
+
+      const cor =
+        estiloPagina
+          .getPropertyValue(
+            '--produto-loja-cor'
+          )
+          .trim() ||
+        '#e8534f';
+
+
+      const texto =
+        estiloPagina
+          .getPropertyValue(
+            '--produto-loja-cor-texto'
+          )
+          .trim() ||
+        '#ffffff';
 
 
       card.style.setProperty(
@@ -655,9 +783,7 @@
 
       card.style.setProperty(
         '--produto-cor-texto',
-        textoEscuro
-          ? '#222222'
-          : '#ffffff'
+        texto
       );
 
     }
@@ -1004,6 +1130,9 @@
       'DOMContentLoaded',
       () => {
 
+        aplicarCorLojaProduto();
+
+
         document
           .querySelectorAll(
             '.produto-card-salvo'
@@ -1018,6 +1147,22 @@
 
             }
           );
+
+
+        const cardNovo =
+          document.getElementById(
+            'produtoCardNovo'
+          );
+
+
+        if (cardNovo) {
+
+          definirCorProduto(
+            cardNovo,
+            ''
+          );
+
+        }
 
 
         document

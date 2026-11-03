@@ -12,6 +12,63 @@
   <link rel="stylesheet" href="{% static 'AppStoreLink/styles/style.css' %}">
   <link rel="stylesheet" href="{% static 'AppStoreLink/styles/servicos-loja.css' %}">
   <link rel="stylesheet" href="{% static 'AppStoreLink/styles/mensagens.css' %}">
+
+
+  <style>
+
+    .servico-page {
+      --servico-loja-cor: #e8534f;
+      --servico-loja-cor-texto: #ffffff;
+    }
+
+
+    .servico-voltar {
+      border-color: var(--servico-loja-cor);
+      color: var(--servico-loja-cor);
+    }
+
+
+    .servico-voltar:hover {
+      background: var(--servico-loja-cor);
+    }
+
+
+    .servico-titulo-box {
+      background: var(--servico-loja-cor);
+      color: var(--servico-loja-cor-texto);
+    }
+
+
+    .servico-dinheiro {
+      border-color: var(--servico-loja-cor-texto);
+      color: var(--servico-loja-cor-texto);
+    }
+
+
+    .servico-cards-scroll::-webkit-scrollbar-thumb {
+      background: var(--servico-loja-cor);
+    }
+
+
+    .servico-card {
+      --servico-cor: var(--servico-loja-cor);
+      --servico-cor-texto: var(--servico-loja-cor-texto);
+    }
+
+
+    .servico-criar-card-btn {
+      border-color: var(--servico-loja-cor);
+      color: var(--servico-loja-cor);
+    }
+
+
+    body.dark .servico-criar-card-btn {
+      border-color: var(--servico-loja-cor);
+      color: var(--servico-loja-cor);
+    }
+
+  </style>
+
 </head>
 
 <body>
@@ -71,7 +128,10 @@
 
   <!-- #region PÁGINA -->
 
-  <main class="servico-page">
+  <main
+    class="servico-page"
+    data-categoria-loja="{{ loja.id_categoria.tipo_categoria|default:'Alimentos' }}"
+  >
 
 
     <!-- #region PERFIL LATERAL -->
@@ -190,7 +250,7 @@
 
           <div
             class="servico-card servico-card-salvo"
-            data-categoria="{{ servico.id_loja.id_categoria.tipo_categoria }}"
+            data-categoria="{{ loja.id_categoria.tipo_categoria }}"
           >
 
             <form
@@ -299,7 +359,7 @@
                 <label>Categoria:</label>
 
                 <div class="servico-categoria-salva">
-                  {{ servico.id_loja.id_categoria.tipo_categoria }}
+                  {{ loja.id_categoria.tipo_categoria }}
                 </div>
 
                 <label>Descrição do serviço:</label>
@@ -412,60 +472,8 @@
 
               <label>Categoria:</label>
 
-              <select
-                name="categoria_servico"
-                class="servico-categoria-select"
-                onchange="atualizarCategoriaServico(this)"
-                required
-              >
-                <option value="" data-categoria="">
-                  Selecione...
-                </option>
-
-                <option value="Alimentos" data-categoria="Alimentos">
-                  Alimentos
-                </option>
-
-                <option value="Moda" data-categoria="Moda">
-                  Moda
-                </option>
-
-                <option value="Esportes" data-categoria="Esportes">
-                  Esportes
-                </option>
-
-                <option value="Construção" data-categoria="Construção">
-                  Construção
-                </option>
-
-                <option value="Saúde" data-categoria="Saúde">
-                  Saúde
-                </option>
-
-                <option value="Pets" data-categoria="Pets">
-                  Pets
-                </option>
-
-                <option value="Ambiente" data-categoria="Ambiente">
-                  Ambiente
-                </option>
-
-                <option value="Tecnologia" data-categoria="Tecnologia">
-                  Tecnologia
-                </option>
-
-                <option value="Beleza" data-categoria="Beleza">
-                  Beleza
-                </option>
-
-                <option value="Outros" data-categoria="Outros">
-                  Outros
-                </option>
-
-              </select>
-
               <div class="servico-categoria-selecionada">
-                Nenhuma categoria selecionada
+                {{ loja.id_categoria.tipo_categoria }}
               </div>
 
               <label>Descrição do serviço:</label>
@@ -540,7 +548,7 @@
 
   <script>
 
-    const coresCategorias = {
+    const coresCategoriasServico = {
       'Alimentos': '#e8534f',
       'Moda': '#7a5c50',
       'Esportes': '#f5943a',
@@ -554,19 +562,88 @@
     };
 
 
-    function definirCorServico(
-      card,
-      categoria
-    ) {
+    function aplicarCorLojaServico() {
+
+      const pagina =
+        document.querySelector(
+          '.servico-page'
+        );
+
+
+      if (!pagina) {
+        return;
+      }
+
+
+      const categoria =
+        pagina.dataset.categoriaLoja ||
+        'Alimentos';
+
 
       const cor =
-        coresCategorias[categoria] ||
-        '#ff454c';
+        coresCategoriasServico[categoria] ||
+        '#e8534f';
 
 
       const textoEscuro =
         categoria === 'Construção' ||
         categoria === 'Outros';
+
+
+      pagina.style.setProperty(
+        '--servico-loja-cor',
+        cor
+      );
+
+
+      pagina.style.setProperty(
+        '--servico-loja-cor-texto',
+        textoEscuro
+          ? '#222222'
+          : '#ffffff'
+      );
+
+    }
+
+
+    function definirCorServico(
+      card,
+      categoria
+    ) {
+
+      const pagina =
+        document.querySelector(
+          '.servico-page'
+        );
+
+
+      if (!pagina) {
+        return;
+      }
+
+
+      const estiloPagina =
+        window.getComputedStyle(
+          pagina
+        );
+
+
+      const cor =
+        estiloPagina
+          .getPropertyValue(
+            '--servico-loja-cor'
+          )
+          .trim() ||
+        '#e8534f';
+
+
+      const texto =
+        estiloPagina
+          .getPropertyValue(
+            '--servico-loja-cor-texto'
+          )
+          .trim() ||
+        '#ffffff';
 
 
       card.style.setProperty(
@@ -577,80 +654,8 @@
 
       card.style.setProperty(
         '--servico-cor-texto',
-        textoEscuro
-          ? '#222222'
-          : '#ffffff'
+        texto
       );
-
-    }
-
-
-    function atualizarCategoriaServico(
-      select
-    ) {
-
-      const card =
-        select.closest(
-          '.servico-card-novo'
-        );
-
-
-      if (!card) {
-        return;
-      }
-
-
-      const option =
-        select.options[
-          select.selectedIndex
-        ];
-
-
-      const categoria =
-        option.dataset.categoria || '';
-
-
-      const categoriaSelecionada =
-        card.querySelector(
-          '.servico-categoria-selecionada'
-        );
-
-
-      if (!categoria) {
-
-        card.classList.remove(
-          'tem-categoria'
-        );
-
-
-        definirCorServico(
-          card,
-          ''
-        );
-
-
-        categoriaSelecionada.textContent =
-          'Nenhuma categoria selecionada';
-
-
-        return;
-
-      }
-
-
-      definirCorServico(
-        card,
-        categoria
-      );
-
-
-      card.classList.add(
-        'tem-categoria'
-      );
-
-
-      categoriaSelecionada.textContent =
-        categoria;
 
     }
 
@@ -742,21 +747,10 @@
       );
 
 
-      cardNovo.classList.remove(
-        'tem-categoria'
-      );
-
-
       definirCorServico(
         cardNovo,
         ''
       );
-
-
-      cardNovo.querySelector(
-        '.servico-categoria-selecionada'
-      ).textContent =
-        'Nenhuma categoria selecionada';
 
 
       cardNovo.classList.remove(
@@ -926,6 +920,9 @@
       'DOMContentLoaded',
       () => {
 
+        aplicarCorLojaServico();
+
+
         document
           .querySelectorAll(
             '.servico-card-salvo'
@@ -940,6 +937,22 @@
 
             }
           );
+
+
+        const cardNovo =
+          document.getElementById(
+            'servicoCardNovo'
+          );
+
+
+        if (cardNovo) {
+
+          definirCorServico(
+            cardNovo,
+            ''
+          );
+
+        }
 
 
         document
