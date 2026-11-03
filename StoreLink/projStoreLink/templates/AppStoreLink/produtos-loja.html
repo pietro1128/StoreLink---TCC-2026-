@@ -84,17 +84,9 @@
 
       <div class="produto-avatar-wrap">
 
-        <label
-          class="produto-avatar"
-          for="foto-responsavel-produto"
+        <div
+          class="produto-avatar {% if usuario_logado.foto %}tem-imagem{% endif %}"
         >
-
-          <input
-            type="file"
-            id="foto-responsavel-produto"
-            accept="image/*"
-            hidden
-          >
 
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path
@@ -106,17 +98,12 @@
             id="preview-responsavel-produto"
             class="produto-avatar-image"
             alt="Foto do responsável"
+            {% if usuario_logado.foto %}
+              src="{{ usuario_logado.foto.url }}"
+            {% endif %}
           >
 
-        </label>
-
-        <label
-          class="produto-camera-badge"
-          for="foto-responsavel-produto"
-          title="Adicionar foto"
-        >
-          📷
-        </label>
+        </div>
 
       </div>
 
@@ -128,7 +115,8 @@
 
           <input
             type="text"
-            value="{{ request.AppStoreLink_usuario.nome }}"
+            value="{{ usuario_logado.nome }}"
+            readonly
           >
         </div>
 
@@ -138,7 +126,8 @@
 
           <input
             type="text"
-            value="{{ request.AppStoreLink_usuario.sobrenome }}"
+            value="{{ usuario_logado.sobrenome }}"
+            readonly
           >
         </div>
 

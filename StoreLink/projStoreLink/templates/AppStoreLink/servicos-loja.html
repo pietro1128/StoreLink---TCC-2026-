@@ -84,14 +84,7 @@
 
       <div class="servico-avatar-wrap">
 
-        <label class="servico-avatar" for="foto-responsavel-servico">
-
-          <input
-            type="file"
-            id="foto-responsavel-servico"
-            accept="image/*"
-            hidden
-          >
+        <div class="servico-avatar {% if usuario_logado.foto %}tem-imagem{% endif %}">
 
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path
@@ -103,17 +96,12 @@
             id="preview-responsavel-servico"
             class="servico-avatar-image"
             alt="Foto do responsável"
+            {% if usuario_logado.foto %}
+              src="{{ usuario_logado.foto.url }}"
+            {% endif %}
           >
 
-        </label>
-
-        <label
-          class="servico-camera-badge"
-          for="foto-responsavel-servico"
-          title="Adicionar foto"
-        >
-          📷
-        </label>
+        </div>
 
       </div>
 
@@ -121,12 +109,12 @@
 
         <div class="servico-perfil-field">
           <label>Nome do responsável</label>
-          <input type="text" value="{{ request.AppStoreLink_usuario.nome }}">
+          <input type="text" value="{{ usuario_logado.nome }}" readonly>
         </div>
 
         <div class="servico-perfil-field">
           <label>Sobrenome</label>
-          <input type="text" value="{{ request.AppStoreLink_usuario.sobrenome }}">
+          <input type="text" value="{{ usuario_logado.sobrenome }}" readonly>
         </div>
 
       </div>

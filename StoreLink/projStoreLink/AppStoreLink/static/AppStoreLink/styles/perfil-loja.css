@@ -463,13 +463,14 @@ body.dark .sidebar {
 
 .perfil-field-left input {
   width: 100%;
-  padding: 10px 12px;
+  padding: 0;
   border: none;
-  border-radius: 8px;
   outline: none;
-  background: #e4e4e4;
-  color: #222222;
+  background: transparent;
+  color: var(--text-color);
   font-size: 14px;
+  pointer-events: none;
+  caret-color: transparent;
 }
 
 /* #endregion */
@@ -847,7 +848,7 @@ body.dark .perfil-avatar svg {
 
 
 body.dark .perfil-field-left input {
-  background: #1f1f1f;
+  background: transparent;
   color: #ffffff;
 }
 

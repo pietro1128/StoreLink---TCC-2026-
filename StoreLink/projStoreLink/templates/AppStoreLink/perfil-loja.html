@@ -244,18 +244,9 @@
 
         <div class="perfil-avatar-wrap">
 
-          <label
-            class="perfil-avatar"
-            for="foto-responsavel"
+          <div
+            class="perfil-avatar {% if usuario_logado.foto %}tem-imagem{% endif %}"
           >
-
-            <input
-              type="file"
-              id="foto-responsavel"
-              accept="image/*"
-              hidden
-            >
-
 
             <svg
               id="avatar-padrao"
@@ -273,59 +264,44 @@
               id="preview-responsavel"
               class="perfil-avatar-image"
               alt="Foto do responsável"
+              {% if usuario_logado.foto %}
+                src="{{ usuario_logado.foto.url }}"
+              {% endif %}
             >
 
-          </label>
-
-
-          <label
-            class="perfil-camera-badge"
-            for="foto-responsavel"
-          >
-            📷
-          </label>
+          </div>
 
         </div>
 
 
-        <form method="POST">
+        <div class="perfil-field-left">
 
-          {% csrf_token %}
+          <label>
+            Nome do responsável
+          </label>
 
+          <input
+            type="text"
+            value="{{ usuario_logado.nome }}"
+            readonly
+          >
 
-          <div class="perfil-field-left">
-
-            <label>
-              Nome do responsável
-            </label>
-
-            <input
-              type="text"
-              value="{{ request.AppStoreLink_usuario.nome }}"
-            >
-
-          </div>
+        </div>
 
 
-          <div class="perfil-field-left">
+        <div class="perfil-field-left">
 
-            <label>
-              Sobrenome
-            </label>
+          <label>
+            Sobrenome
+          </label>
 
-            <input
-              type="text"
-              value="{{ request.AppStoreLink_usuario.sobrenome }}"
-            >
+          <input
+            type="text"
+            value="{{ usuario_logado.sobrenome }}"
+            readonly
+          >
 
-          </div>
-
-
-          <button class="perfil-delete-btn">
-            Salvar Nome
-          </button>
-
-        </form>
+        </div>
 
 
         <form

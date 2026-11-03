@@ -197,26 +197,26 @@ svg {
 .produto-perfil-field input {
   width: 100%;
 
-  padding:
-    7px
-    12px;
+  padding: 0;
 
   border: none;
-
-  border-radius: 9px;
 
   outline: none;
 
   background:
-    #d8d8d8;
+    transparent;
 
   color:
-    #222222;
+    var(--text-color);
 
   font-family:
     inherit;
 
   font-size: 17px;
+
+  pointer-events: none;
+
+  caret-color: transparent;
 }
 
 /* #endregion */
@@ -1092,8 +1092,6 @@ body.dark
 body.dark
 .produto-avatar,
 body.dark
-.produto-perfil-field input,
-body.dark
 .produto-card-conteudo input,
 body.dark
 .produto-card-conteudo textarea,
@@ -1105,6 +1103,16 @@ body.dark
 .produto-categoria-salva {
   background:
     #222222;
+
+  color:
+    #ffffff;
+}
+
+
+body.dark
+.produto-perfil-field input {
+  background:
+    transparent;
 
   color:
     #ffffff;
