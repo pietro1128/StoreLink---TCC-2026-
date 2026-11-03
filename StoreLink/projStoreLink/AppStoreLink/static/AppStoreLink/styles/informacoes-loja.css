@@ -474,6 +474,50 @@ h2:not(:first-child) {
 }
 
 
+.info-loja-link {
+  width:
+    fit-content;
+
+  max-width: 100%;
+
+  padding:
+    8px 12px;
+
+  border:
+    2px solid
+    var(--cor-categoria);
+
+  border-radius: 8px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  text-decoration: none;
+
+  font-size: 14px;
+
+  font-weight: 800;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+
+.info-loja-link:hover {
+  transform:
+    translateY(-1px);
+
+  background:
+    var(--cor-categoria);
+
+  color:
+    #ffffff;
+}
+
+
 .info-localizacao-grid {
   display: grid;
 

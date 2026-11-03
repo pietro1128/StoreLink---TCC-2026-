@@ -458,19 +458,28 @@
                 Link de Loja virtual
               </strong>
 
-              <span class="js-loja-link">
+              {% if loja.link %}
 
-                {% if loja.link %}
+                <a
+                  class="js-loja-link info-loja-link"
+                  href="{{ loja.link }}"
+                  data-link="{{ loja.link }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Acessar loja virtual ↗
+                </a>
 
-                  {{ loja.link }}
+              {% else %}
 
-                {% else %}
-
+                <span
+                  class="js-loja-link"
+                  data-link=""
+                >
                   Não possui
+                </span>
 
-                {% endif %}
-
-              </span>
+              {% endif %}
 
             </div>
 
@@ -1138,10 +1147,14 @@
         ).textContent.trim();
 
 
-      const link =
+      const linkElemento =
         card.querySelector(
           '.js-loja-link'
-        ).textContent.trim();
+        );
+
+
+      const link =
+        linkElemento.dataset.link || '';
 
 
       const categoria =
@@ -1355,10 +1368,36 @@
       ).textContent = cnpj;
 
 
-      card.querySelector(
-        '.js-loja-link'
-      ).textContent =
-        link || 'Não possui';
+      const linkElemento =
+        card.querySelector(
+          '.js-loja-link'
+        );
+
+
+      linkElemento.dataset.link =
+        link;
+
+
+      if (link) {
+
+        linkElemento.textContent =
+          'Acessar loja virtual ↗';
+
+
+        if (
+          linkElemento.tagName === 'A'
+        ) {
+
+          linkElemento.href = link;
+
+        }
+
+      } else {
+
+        linkElemento.textContent =
+          'Não possui';
+
+      }
 
 
       card.querySelector(
