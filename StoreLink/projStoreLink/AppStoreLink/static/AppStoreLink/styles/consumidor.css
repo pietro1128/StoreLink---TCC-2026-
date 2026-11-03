@@ -209,7 +209,7 @@ svg {
   border-radius: 9px;
 
   background:
-    #242424;
+    #000000;
 
   color:
     #ffffff;
@@ -225,13 +225,14 @@ svg {
 
   transition:
     transform 0.2s ease,
-    background 0.2s ease;
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 
 .consumidor-editar-btn:hover {
   background:
-    #333333;
+    #222222;
 
   transform:
     translateY(-1px);
@@ -301,7 +302,7 @@ input[readonly] {
 input {
   outline:
     2px solid
-    #e8534f;
+    #000000;
 
   outline-offset: 1px;
 }
@@ -324,7 +325,7 @@ input {
   border-radius: 9px;
 
   background:
-    #e8534f;
+    #000000;
 
   color:
     #ffffff;
@@ -340,13 +341,15 @@ input {
 
   transition:
     transform 0.2s ease,
-    filter 0.2s ease;
+    filter 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 
 .consumidor-salvar-alteracoes:hover {
   filter:
-    brightness(0.92);
+    brightness(0.85);
 
   transform:
     translateY(-1px);
@@ -476,49 +479,9 @@ input {
 
 /* #region fundo decorativo */
 
-.favoritos-area::before {
-  content: "";
-
-  position: absolute;
-
-  width: 590px;
-  height: 590px;
-
-  top: 4px;
-  left: 250px;
-
-  border:
-    35px solid
-    #eeeeee;
-
-  border-radius: 50%;
-
-  z-index: 0;
-
-  pointer-events: none;
-}
-
-
+.favoritos-area::before,
 .favoritos-area::after {
-  content: "";
-
-  position: absolute;
-
-  width: 310px;
-  height: 310px;
-
-  top: 65px;
-  left: 485px;
-
-  background:
-    var(--bg-page);
-
-  transform:
-    rotate(45deg);
-
-  z-index: 0;
-
-  pointer-events: none;
+  display: none;
 }
 
 /* #endregion */
@@ -1050,18 +1013,48 @@ input {
 body.dark
 .consumidor-editar-btn {
   background:
-    #1f1f1f;
+    #ffffff;
 
-  border:
-    1px solid
-    #444444;
+  color:
+    #000000;
 }
 
 
 body.dark
-.favoritos-area::before {
-  border-color:
-    #242424;
+.consumidor-editar-btn:hover {
+  background:
+    #e5e5e5;
+}
+
+
+body.dark
+.consumidor-form-edicao.editando
+.consumidor-field-left
+input {
+  outline:
+    2px solid
+    #ffffff;
+
+  outline-offset: 1px;
+}
+
+
+body.dark
+.consumidor-salvar-alteracoes {
+  background:
+    #ffffff;
+
+  color:
+    #000000;
+}
+
+
+body.dark
+.consumidor-salvar-alteracoes:hover {
+  background:
+    #e5e5e5;
+
+  filter: none;
 }
 
 
