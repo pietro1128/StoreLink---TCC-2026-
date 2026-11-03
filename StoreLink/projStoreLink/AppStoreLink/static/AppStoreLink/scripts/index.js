@@ -49,6 +49,227 @@ function toggleTheme(btn) {
 
 
 
+//#region FAVORITOS
+
+function pegarIdLojaFavorito(form) {
+
+    if (!form) {
+        return null;
+    }
+
+
+    const action =
+        form.getAttribute('action');
+
+
+    if (!action) {
+        return null;
+    }
+
+
+    const resultado =
+        action.match(
+            /\/loja\/(\d+)\/favoritar\/?/
+        );
+
+
+    if (!resultado) {
+        return null;
+    }
+
+
+    return resultado[1];
+}
+
+
+
+function atualizarCoracoesFavoritos(
+    lojasFavoritas
+) {
+
+    const formularios =
+        document.querySelectorAll(
+            'form[action*="/favoritar/"]'
+        );
+
+
+    formularios.forEach(
+        function (form) {
+
+            const idLoja =
+                pegarIdLojaFavorito(
+                    form
+                );
+
+
+            if (!idLoja) {
+                return;
+            }
+
+
+            const botao =
+                form.querySelector(
+                    '.loja-card-fav, .resultado-card-fav, .info-favoritar'
+                );
+
+
+            if (!botao) {
+                return;
+            }
+
+
+            if (
+                lojasFavoritas.includes(
+                    idLoja
+                )
+            ) {
+
+                botao.textContent =
+                    '♥';
+
+
+                botao.setAttribute(
+                    'aria-label',
+                    'Remover dos favoritos'
+                );
+
+
+                botao.setAttribute(
+                    'title',
+                    'Remover dos favoritos'
+                );
+
+            } else {
+
+                botao.textContent =
+                    '♡';
+
+
+                botao.setAttribute(
+                    'aria-label',
+                    'Favoritar loja'
+                );
+
+
+                botao.setAttribute(
+                    'title',
+                    'Favoritar loja'
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+
+async function carregarFavoritos() {
+
+    const formulariosFavorito =
+        document.querySelectorAll(
+            'form[action*="/favoritar/"]'
+        );
+
+
+    if (
+        formulariosFavorito.length === 0
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const resposta =
+            await fetch(
+                '/perfil-consumidor/',
+                {
+                    method: 'GET',
+                    credentials: 'same-origin'
+                }
+            );
+
+
+        if (!resposta.ok) {
+            return;
+        }
+
+
+        const html =
+            await resposta.text();
+
+
+        const parser =
+            new DOMParser();
+
+
+        const documento =
+            parser.parseFromString(
+                html,
+                'text/html'
+            );
+
+
+        const formulariosPerfil =
+            documento.querySelectorAll(
+                'form[action*="/favoritar/"]'
+            );
+
+
+        const lojasFavoritas =
+            [];
+
+
+        formulariosPerfil.forEach(
+            function (form) {
+
+                const idLoja =
+                    pegarIdLojaFavorito(
+                        form
+                    );
+
+
+                if (
+                    idLoja &&
+                    !lojasFavoritas.includes(
+                        idLoja
+                    )
+                ) {
+
+                    lojasFavoritas.push(
+                        idLoja
+                    );
+
+                }
+
+            }
+        );
+
+
+        atualizarCoracoesFavoritos(
+            lojasFavoritas
+        );
+
+
+    } catch (erro) {
+
+        console.error(
+            'Não foi possível carregar os favoritos.',
+            erro
+        );
+
+    }
+
+}
+
+//#endregion
+
+
+
 //#region PRODUTOS
 
 function prepararProdutoCard(card) {
@@ -1000,6 +1221,14 @@ document.addEventListener(
             }
 
         }
+
+        //#endregion
+
+
+
+        //#region FAVORITOS
+
+        carregarFavoritos();
 
         //#endregion
 
