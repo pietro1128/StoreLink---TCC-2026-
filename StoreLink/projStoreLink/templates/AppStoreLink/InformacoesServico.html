@@ -220,7 +220,7 @@
 
 
     <!-- #region SERVIÇOS -->
-
+     
     {% if servicos %}
 
 
@@ -236,30 +236,22 @@
             <!-- #region AÇÕES DO PROPRIETÁRIO -->
 
             {% if eh_dono %}
-
               <div class="info-item-acoes">
 
-
-                <button
-                  type="button"
-                  class="info-item-editar"
-                  onclick="abrirEdicaoServico(this)"
-                >
+                <button type="button" class="info-item-editar"
+                        onclick="abrirEdicaoServico(this)">
                   ✎ Editar
                 </button>
 
-
-                <button
-                  type="button"
-                  class="info-item-excluir"
-                  onclick="excluirServico(this)"
-                >
-                  🗑 Excluir
-                </button>
-
+                <form method="POST"
+                      action="{% url 'servico-excluir' servico.id_servico %}"
+                      style="display: contents;"
+                      onsubmit="return confirm('Excluir o serviço {{ servico.nome_servico|escapejs }}? Essa ação não pode ser desfeita.');">
+                  {% csrf_token %}
+                  <button type="submit" class="info-item-excluir">🗑 Excluir</button>
+                </form>
 
               </div>
-
             {% endif %}
 
             <!-- #endregion -->
@@ -360,73 +352,29 @@
               <!-- #region EDIÇÃO -->
 
               {% if eh_dono %}
+                <form method="POST"
+                      action="{% url 'servico-editar' servico.id_servico %}"
+                      class="info-item-edicao">
+                  {% csrf_token %}
 
-                <div class="info-item-edicao">
+                  <label>Nome do serviço:</label>
+                  <input type="text" name="nome_servico"
+                        value="{{ servico.nome_servico }}" maxlength="100" required>
 
+                  <label>Preço do serviço:</label>
+                  <input type="text" name="preco"
+                        value="{{ servico.preco }}" required>
 
-                  <label>
-                    Nome do serviço:
-                  </label>
-
-
-                  <input
-                    type="text"
-                    class="js-editar-nome"
-                    value="{{ servico.nome_servico }}"
-                  >
-
-
-
-                  <label>
-                    Preço do serviço:
-                  </label>
-
-
-                  <input
-                    type="text"
-                    class="js-editar-preco"
-                    value="{{ servico.preco }}"
-                  >
-
-
-
-                  <label>
-                    Descrição do serviço:
-                  </label>
-
-
-                  <textarea
-                    class="js-editar-descricao"
-                  >{{ servico.descricao|default:'' }}</textarea>
-
-
+                  <label>Descrição do serviço:</label>
+                  <textarea name="descricao">{{ servico.descricao|default:'' }}</textarea>
 
                   <div class="info-edicao-botoes">
-
-
-                    <button
-                      type="button"
-                      class="info-edicao-salvar"
-                      onclick="salvarEdicaoServico(this)"
-                    >
-                      Salvar
-                    </button>
-
-
-                    <button
-                      type="button"
-                      class="info-edicao-cancelar"
-                      onclick="cancelarEdicaoServico(this)"
-                    >
-                      Cancelar
-                    </button>
-
-
+                    <button type="submit" class="info-edicao-salvar">Salvar</button>
+                    <button type="button" class="info-edicao-cancelar"
+                            onclick="cancelarEdicaoServico(this)">Cancelar</button>
                   </div>
 
-
-                </div>
-
+                </form>
               {% endif %}
 
               <!-- #endregion -->
@@ -487,14 +435,15 @@
 
 
   <script>
-    function alternarEdicao(id) {
-      const ver  = document.getElementById('servico-ver-' + id);
-      const form = document.getElementById('servico-form-' + id);
-      const editando = form.style.display !== 'none';
+    function abrirEdicaoServico(botao) {
+      botao.closest('.info-servico-card').classList.add('editando');
+    }
 
-      // '' devolve o display original do CSS (não força "block")
-      form.style.display = editando ? 'none' : '';
-      ver.style.display  = editando ? '' : 'none';
+    function cancelarEdicaoServico(botao) {
+      const card = botao.closest('.info-servico-card');
+      card.classList.remove('editando');
+      // volta os campos para os valores que estão salvos no banco
+      card.querySelector('form.info-item-edicao').reset();
     }
   </script>
 

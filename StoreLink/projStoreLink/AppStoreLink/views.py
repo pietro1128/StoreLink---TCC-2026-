@@ -805,6 +805,10 @@ def servico_editar(request, id_servico):
         return redirect('login')
 
     servico = get_object_or_404(Servico, id_servico=id_servico)
+    
+    if not _eh_dono(request, servico.id_loja):
+        messages.error(request, 'Você não tem permissão para editar esse serviço.')
+        return redirect('InformacoesServico', id_loja=servico.id_loja_id)
 
     nome = request.POST.get('nome_servico', '').strip()
     preco_txt = request.POST.get('preco', '').strip().replace(',', '.')
@@ -836,6 +840,11 @@ def servico_excluir(request, id_servico):
         return redirect('login')
 
     servico = get_object_or_404(Servico, id_servico=id_servico)
+    
+    if not _eh_dono(request, servico.id_loja):
+        messages.error(request, 'Você não tem permissão para editar esse serviço.')
+        return redirect('InformacoesServico', id_loja=servico.id_loja_id)
+
     nome = servico.nome_servico
     servico.delete()
 
