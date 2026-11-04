@@ -515,10 +515,14 @@ def produtos_loja(request):
 @require_POST
 def produto_excluir(request, id_produto):
     if not request.session.get('usuario_id'):
-        messages.error(request, 'Você precisa fazer login para editar o serviço.')
+        messages.error(request, 'Você precisa fazer login para excluir o produto.')
         return redirect('login')
 
     produto = Produto.objects.filter(id_produto=id_produto).first()
+    
+    if not _eh_dono(request, produto.id_loja):
+        messages.error(request, 'Você não tem permissão para excluir esse produto.')
+        return redirect('InformacoesProduto', id_loja=produto.id_loja_id)
 
     if produto is None:
         messages.error(request, 'Este produto não existe mais ou ja foi excluido.')
@@ -533,6 +537,10 @@ def produto_excluir(request, id_produto):
 
 @require_POST
 def produto_criar(request):
+    if not request.session.get('usuario_id'):
+        messages.error(request, 'Você precisa fazer login para excluir o produto.')
+        return redirect('login')
+    
     nome = request.POST.get('nome_produto', '').strip()
     preco_txt = request.POST.get('preco_produto', '').strip().replace(',', '.')
     descricao = request.POST.get('descricao_produto', '').strip()
@@ -575,7 +583,15 @@ def produto_criar(request):
 
 @require_POST
 def produto_editar(request, id_produto):
+    if not request.session.get('usuario_id'):
+        messages.error(request, 'Você precisa fazer login para excluir o produto.')
+        return redirect('login')
+    
     produto = get_object_or_404(Produto, id_produto=id_produto)
+    
+    if not _eh_dono(request, produto.id_loja):
+        messages.error(request, 'Você não tem permissão para excluir esse produto.')
+        return redirect('InformacoesProduto', id_loja=produto.id_loja_id)
 
     nome = request.POST.get('nome_produto', '').strip()
     preco_txt = request.POST.get('preco_produto', '').strip().replace(',', '.')
@@ -842,7 +858,7 @@ def servico_excluir(request, id_servico):
     servico = get_object_or_404(Servico, id_servico=id_servico)
     
     if not _eh_dono(request, servico.id_loja):
-        messages.error(request, 'Você não tem permissão para editar esse serviço.')
+        messages.error(request, 'Você não tem permissão para excluir esse serviço.')
         return redirect('InformacoesServico', id_loja=servico.id_loja_id)
 
     nome = servico.nome_servico
@@ -884,7 +900,7 @@ def loja_excluir(request, id_loja):
     loja = get_object_or_404(Loja, id_loja=id_loja)
     
     if not _eh_dono(request, loja):
-        messages.error(request, 'Você não tem permissão para editar esta loja.')
+        messages.error(request, 'Você não tem permissão para excluir esta loja.')
         return redirect('InformacoesLoja', id_loja=loja.id_loja)
 
     # logado é o dono da loja antes de permitir a exclusão.
