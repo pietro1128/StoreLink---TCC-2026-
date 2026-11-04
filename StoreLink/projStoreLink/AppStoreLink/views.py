@@ -881,13 +881,12 @@ def loja_excluir(request, id_loja):
         messages.error(request, 'Você precisa fazer login para excluir uma loja.')
         return redirect('login')
     
+    loja = get_object_or_404(Loja, id_loja=id_loja)
+    
     if not _eh_dono(request, loja):
         messages.error(request, 'Você não tem permissão para editar esta loja.')
         return redirect('InformacoesLoja', id_loja=loja.id_loja)
 
-    loja = get_object_or_404(Loja, id_loja=id_loja)
-
-    # TODO: quando existir o vínculo Usuario↔Loja, conferir aqui se o usuário
     # logado é o dono da loja antes de permitir a exclusão.
 
     nome = loja.nome_loja
@@ -1001,6 +1000,7 @@ def InformacoesLoja(request, id_loja):
         'loja': loja,
         'avaliacoes': avaliacoes,
         'categorias': Categoria.objects.all(),
+        'eh_dono': _eh_dono(request, loja),
     }
 
     return render(

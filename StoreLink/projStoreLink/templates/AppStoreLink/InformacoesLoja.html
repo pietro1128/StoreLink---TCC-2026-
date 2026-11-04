@@ -304,6 +304,14 @@
 
             </div>
 
+            <form
+              id="form-excluir-loja"
+              method="POST"
+              action="{% url 'loja-excluir' loja.id_loja %}"
+            >
+              {% csrf_token %}
+            </form>
+
           {% endif %}
 
           <!-- #endregion -->
@@ -1078,11 +1086,11 @@
     }
 
 
-    function confirmarExclusao() {
+    function confirmarExclusaoLoja() {
 
-      confirm(
-        'Deseja excluir este comentário?'
-      );
+      if (confirm('Deseja excluir esta loja? Os produtos, serviços e favoritos dela também serão apagados.')) {
+        document.getElementById('form-excluir-loja').submit();
+      }
 
     }
 
@@ -1415,9 +1423,9 @@
 
     function confirmarExclusaoLoja() {
 
-      confirm(
-        'Deseja excluir esta loja?'
-      );
+      if (confirm('Deseja excluir esta loja? Os produtos, serviços e favoritos dela também serão apagados.')) {
+        document.getElementById('form-excluir-loja').submit();
+      }
 
     }
 
