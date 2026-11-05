@@ -26,12 +26,7 @@ def index(request):
 def _loja_atual():
     return Loja.objects.select_related('id_endereco', 'id_categoria').order_by('-id_loja').first()
 
-# |  Para testar a pagina SEM CONTA, voce precisa transformar
-# V  a linha de baixo em um comentario: "#@login_required"
-#@login_required
 def perfil_loja(request):
-    #if request.user.roler != 'admin':
-        #return HttpResponseForbidden("Você não tem permição para acessar está página.")
     
     usuario_id = request.session.get('usuario_id')
     if not usuario_id:
@@ -66,6 +61,19 @@ def perfil_loja(request):
 
         cep = dados_cep['cep'] # grava só os 8 dígitos, num formato único
 
+        # Validações para casos de valores Nulos:
+        if not nome:
+            messages.error(request, 'A loja precisa ter um nome.')
+            return render(request, 'AppStoreLink/perfil-loja.html')
+        
+        if not rua:
+            messages.error(request, 'A loja precisa ter uma localização completa.')
+            return render(request, 'AppStoreLink/perfil-loja.html')
+        
+        if not numero:
+            messages.error(request, 'A loja precisa ter uma localização completa.')
+            return render(request, 'AppStoreLink/perfil-loja.html')
+        
         # Validações de E-mail para loja:
         padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$' # -> Argumenta um padrão com characteres finais nos emails
         if not re.match(padrao_email, email): # -> Verifica se estão nos padões argumentados estao coecidindo com as variaveis
@@ -764,6 +772,18 @@ def loja_editar(request, id_loja):
 
     cep = dados_cep['cep'] # grava só os 8 dígitos, num formato único
 
+    if not nome:
+        messages.error(request, 'A loja precisa ter um nome.')
+        return render(request, 'AppStoreLink/perfil-loja.html')
+    
+    if not rua:
+        messages.error(request, 'A loja precisa ter uma localização completa.')
+        return render(request, 'AppStoreLink/perfil-loja.html')
+    
+    if not numero:
+        messages.error(request, 'A loja precisa ter uma localização completa.')
+        return render(request, 'AppStoreLink/perfil-loja.html')
+    
     # Validações de E-mail para loja:
     padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$' # -> Argumenta um padrão com characteres finais nos emails
 
