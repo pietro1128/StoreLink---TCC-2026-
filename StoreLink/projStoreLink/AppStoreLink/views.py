@@ -23,8 +23,19 @@ def index(request):
     return render(request, 'AppStoreLink/index.html')
 
 
-def _loja_atual():
-    return Loja.objects.select_related('id_endereco', 'id_categoria').order_by('-id_loja').first()
+def _loja_atual(request):
+    usuario_id = request.session.get('usuario_id')
+    
+    if not usuario_id:
+        return None
+    
+    return (
+        Loja.objects
+        .select_related('id_endereco', 'id_categoria')
+        .filter(id_dono_id=usuario_id)
+        .order_by('-id_loja')
+        .first()
+    )
 
 def perfil_loja(request):
     
@@ -134,7 +145,7 @@ def perfil_loja(request):
         return redirect('perfil-loja')
 
     # TODO: trocar pela loja do usuário logado quando existir o vínculo Usuario↔Loja
-    loja = _loja_atual()
+    loja = _loja_atual(request)
 
     return render(request, 'AppStoreLink/perfil-loja.html', {'loja': loja})
 
@@ -509,7 +520,7 @@ def _validar_nome_preco(nome, preco_txt, rotulo='produto'):
 
 def produtos_loja(request):
     # TODO: quando existir o vínculo Usuário↔Loja, filtrar só os produtos da loja do usuário logado
-    loja = _loja_atual()
+    loja = _loja_atual(request)
     produtos = Produto.objects.filter(id_loja=loja)
     categorias = Categoria.objects.all()
 
@@ -522,11 +533,11 @@ def produtos_loja(request):
 
 @require_POST
 def produto_excluir(request, id_produto):
+    produto = Produto.objects.filter(id_produto=id_produto).first()
+    
     if not request.session.get('usuario_id'):
         messages.error(request, 'Você precisa fazer login para excluir o produto.')
         return redirect('login')
-
-    produto = Produto.objects.filter(id_produto=id_produto).first()
     
     if not _eh_dono(request, produto.id_loja):
         messages.error(request, 'Você não tem permissão para excluir esse produto.')
@@ -566,7 +577,7 @@ def produto_criar(request):
         erros.append('Selecione uma categoria válida.')
 
     # TODO: trocar pela loja do dono logado quando existir o vínculo Usuário↔Loja
-    loja = _loja_atual()
+    loja = _loja_atual(request)
 
     if loja is None:
         erros.append('Cadastre uma loja antes de cadastrar produto.')
@@ -627,7 +638,7 @@ def servicos_loja(request):
     # Antes ela ficava só no final, mas agora também precisamos dela no
     # caso de erro de validação (para recarregar a página com os cards).
 
-    loja = _loja_atual()
+    loja = _loja_atual(request)
     servicos = Servico.objects.filter(id_loja=loja)
 
     if request.method == 'POST':
@@ -731,11 +742,11 @@ def servicos_loja(request):
 
 @require_POST
 def loja_editar(request, id_loja):
+    loja = get_object_or_404(Loja.objects.select_related('id_endereco'), id_loja=id_loja)
+    
     if not _eh_dono(request, loja):
         messages.error(request, 'Você não tem permissão para editar esta loja.')
         return redirect('InformacoesLoja', id_loja=loja.id_loja)
-    
-    loja = get_object_or_404(Loja.objects.select_related('id_endereco'), id_loja=id_loja)
 
     if not request.session.get('usuario_id'):
         messages.error(request, 'Você precisa fazer login para editar a loja.')
