@@ -86,9 +86,9 @@ def perfil_loja(request):
             return render(request, 'AppStoreLink/perfil-loja.html')
         
         # Validações de E-mail para loja:
-        padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$' # -> Argumenta um padrão com characteres finais nos emails
+        padrao_email = r'^[a-zA-Z0-9_.+-]+@(gmail|hotmail|outlook|yahoo|ymail)\.com$' # -> Argumenta um padrão com characteres finais nos emails
         if not re.match(padrao_email, email): # -> Verifica se estão nos padões argumentados estao coecidindo com as variaveis
-            messages.error(request, 'O campo E-mail deve ser um Gmail válido (exemplo: email@gmail.com).') # -> cria uma mensagens
+            messages.error(request, 'O campo E-mail deve conter "@" deve conter um serviço de email e ".com"') # -> cria uma mensagen de erro
             return render(request, 'AppStoreLink/perfil-loja.html')
 
         if Loja.objects.filter(email_loja=email).exists(): # -> ???.objects.filter(???=???) --> busca valores por filtros argumentados
@@ -198,9 +198,9 @@ def cadastro(request):
         id_tipo_usuario = request.POST.get('id_tipo_usuario')
 
         # Validação de e-mail (somente Gmail)
-        padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$'
+        padrao_email = r'^[a-zA-Z0-9_.+-]+@(gmail|hotmail|outlook|yahoo|ymail)\.com$' # -> Argumenta um padrão com characteres finais nos emails
         if not re.match(padrao_email, email):
-            messages.error(request, 'O campo E-mail deve ser um Gmail válido (exemplo: email@gmail.com).')
+            messages.error(request, 'O campo E-mail deve conter "@" deve conter um serviço de email e ".com"')
             return render(request, 'registration/cadastro.html')
 
         if Usuario.objects.filter(email=email).exists():
@@ -269,9 +269,9 @@ def login(request):
         email = request.POST.get('email', '').strip()
         senha = request.POST.get('senha', '')
 
-        padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$'
-        if not re.match(padrao_email, email):
-            messages.error(request, 'O campo E-mail deve ser um Gmail válido (exemplo: email@gmail.com).')
+        padrao_email = r'^[a-zA-Z0-9_.+-]+@(gmail|hotmail|outlook|yahoo|ymail)\.com$' # -> Argumenta um padrão com characteres finais nos emails
+        if not re.match(padrao_email, email): # -> Verifica se estão nos padões argumentados estao coecidindo com as variaveis
+            messages.error(request, 'O campo E-mail deve conter "@" deve conter um serviço de email e ".com"') # -> cria uma mensagen de erro
             return render(request, 'registration/login.html')
 
         try:
@@ -796,10 +796,9 @@ def loja_editar(request, id_loja):
         return render(request, 'AppStoreLink/perfil-loja.html')
     
     # Validações de E-mail para loja:
-    padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$' # -> Argumenta um padrão com characteres finais nos emails
-
+    padrao_email = r'^[a-zA-Z0-9_.+-]+@(gmail|hotmail|outlook|yahoo|ymail)\.com$' # -> Argumenta um padrão com characteres finais nos emails
     if not re.match(padrao_email, email): # -> Verifica se estão nos padões argumentados estao coecidindo com as variaveis
-        messages.error(request, 'O campo E-mail deve ser um Gmail válido (exemplo: email@gmail.com).') # -> cria uma mensagens
+        messages.error(request, 'O campo E-mail deve conter "@" deve conter um serviço de email e ".com"') # -> cria uma mensagen de erro
         return render(request, 'AppStoreLink/perfil-loja.html')
 
     # Validações de CNPJ:
