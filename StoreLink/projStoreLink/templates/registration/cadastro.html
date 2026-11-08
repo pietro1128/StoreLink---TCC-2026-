@@ -4,14 +4,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>StoreLink - Criar Conta</title>
+
 <link rel="icon" type="image/png" href="{% static 'AppStoreLink/images/icon-dark.png' %}">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 <link rel="stylesheet" href="{% static 'AppStoreLink/styles/cadastro.css' %}">
 <link rel="stylesheet" href="{% static 'AppStoreLink/styles/mensagens.css' %}">
 </head>
+
 <body>
 
 <!-- #region modo escuro -->
@@ -22,7 +30,9 @@
   }
 </script>
 
-<button class="theme-toggle" onclick="toggleTheme(this)">🌙 Modo escuro</button>
+<button class="theme-toggle" onclick="toggleTheme(this)">
+  🌙 Modo escuro
+</button>
 
 <!-- #endregion -->
 
@@ -52,7 +62,11 @@
 
 <div class="auth-wrapper">
 
+
+  <!-- #region arte -->
+
   <div class="auth-side">
+
 
     <button
       type="button"
@@ -77,6 +91,40 @@
     </button>
 
 
+    <!-- faixas -->
+
+    <span class="art-line art-line-amarelo"></span>
+
+    <span class="art-line art-line-vermelho"></span>
+
+    <span class="art-line art-line-verde"></span>
+
+    <span class="art-line art-line-roxo"></span>
+
+    <span class="art-line art-line-azul"></span>
+
+    <span class="art-line art-line-ciano"></span>
+
+    <span class="art-line art-line-laranja"></span>
+
+
+    <!-- ícones -->
+
+    <i class="bi bi-tools art-icon art-icon-construcao"></i>
+
+    <i class="bi bi-flower1 art-icon art-icon-ambiente"></i>
+
+    <i class="bi bi-fork-knife art-icon art-icon-alimentos"></i>
+
+    <i class="bi bi-laptop art-icon art-icon-tecnologia"></i>
+
+    <i class="bi bi-heart-pulse art-icon art-icon-saude"></i>
+
+    <i class="bi bi-bone art-icon art-icon-pets"></i>
+
+    <i class="bi bi-dribbble art-icon art-icon-esportes"></i>
+
+
     <div class="auth-side-content">
 
       <h1>
@@ -96,8 +144,13 @@
 
     </div>
 
+
   </div>
 
+  <!-- #endregion -->
+
+
+  <!-- #region formulario -->
 
   <div class="auth-form-side">
 
@@ -305,6 +358,9 @@
     </div>
 
   </div>
+
+  <!-- #endregion -->
+
 
 </div>
 
