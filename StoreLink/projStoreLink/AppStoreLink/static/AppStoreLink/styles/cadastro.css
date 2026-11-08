@@ -236,6 +236,22 @@ body.dark .field-icon-dark {
   display: block;
 }
 
+
+/* #region telefone */
+
+.telefone-icon {
+  display: block;
+  filter: brightness(0) !important;
+}
+
+body.dark .auth-field .telefone-icon {
+  display: block;
+  filter: brightness(0) invert(1) !important;
+}
+
+/* #endregion */
+
+
 .auth-field input {
   flex: 1;
   border: none;
@@ -269,6 +285,7 @@ body.dark .field-icon-dark {
 }
 
 @media (max-width: 800px) {
+
   .auth-wrapper {
     flex-direction: column;
   }
@@ -282,4 +299,5 @@ body.dark .field-icon-dark {
   .auth-form-side {
     padding: 50px 20px;
   }
+
 }
