@@ -1,6 +1,5 @@
 {% load static %}
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 
 <head>
@@ -14,9 +13,7 @@
 
   <title>
     StoreLink - Produtos de {{ loja.nome_loja }}
-
   </title>
-
 
   <link
     rel="icon"
@@ -24,28 +21,31 @@
     href="{% static 'AppStoreLink/images/icon-dark.png' %}"
   >
 
-
   <link
     rel="stylesheet"
     href="{% static 'AppStoreLink/styles/style.css' %}"
   >
-
 
   <link
     rel="stylesheet"
     href="{% static 'AppStoreLink/styles/informacoes-produto.css' %}"
   >
 
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/icons.css' %}"
+  >
+
 </head>
 
-
 <body>
-
 
   <script>
 
     if (
-      localStorage.getItem('theme') === 'dark'
+      localStorage.getItem(
+        'theme'
+      ) === 'dark'
     ) {
 
       document.body.classList.add(
@@ -57,11 +57,9 @@
   </script>
 
 
-
-  <!-- #region TOPBAR -->
+  <!-- #region navbar -->
 
   <div class="topbar">
-
 
     <div class="logo-icon">
 
@@ -112,7 +110,12 @@
         data-url="{% url 'perfil-consumidor' %}"
         onclick="location.href=this.dataset.url"
       >
-        👤 Minha conta
+        <span
+          class="sl-icon sl-user"
+          aria-hidden="true"
+        ></span>
+
+        Minha conta
       </button>
 
     {% else %}
@@ -130,19 +133,24 @@
 
     <button
       class="theme-toggle"
-      onclick="toggleTheme(this)"
+      onclick="toggleThemeProdutoInfo()"
     >
-      🌙 Modo escuro
-    </button>
+      <span
+        class="sl-icon sl-moon"
+        aria-hidden="true"
+      ></span>
 
+      <span class="theme-label">
+        Modo escuro
+      </span>
+    </button>
 
   </div>
 
   <!-- #endregion -->
 
 
-
-  <!-- #region CONTEÚDO -->
+  <!-- #region página -->
 
   <main
     class="
@@ -183,7 +191,7 @@
   >
 
 
-    <!-- #region CABEÇALHO -->
+    <!-- #region topo -->
 
     <div class="info-lista-topo">
 
@@ -192,8 +200,12 @@
         class="info-voltar"
         href="{% url 'InformacoesLoja' loja.id_loja %}"
         aria-label="Voltar"
+        title="Voltar"
       >
-        ←
+        <span
+          class="sl-icon sl-arrow-left"
+          aria-hidden="true"
+        ></span>
       </a>
 
 
@@ -215,9 +227,6 @@
     <!-- #endregion -->
 
 
-
-    <!-- #region PRODUTOS -->
-
     {% if produtos %}
 
 
@@ -230,8 +239,6 @@
           <article class="info-produto-card">
 
 
-            <!-- #region AÇÕES DO PROPRIETÁRIO -->
-
             {% if eh_dono %}
 
               <div class="info-item-acoes">
@@ -242,16 +249,38 @@
                   class="info-item-editar"
                   onclick="abrirEdicaoProduto(this)"
                 >
-                  ✎ Editar
+                  <span
+                    class="sl-icon sl-pencil"
+                    aria-hidden="true"
+                  ></span>
+
+                  Editar
                 </button>
 
 
-                <form method="post"
-                      action="{% url 'produto-excluir' produto.id_produto %}"
-                      style="display:inline;"
-                      onsubmit="return confirm('Deseja excluir o produto {{ produto.nome_produto|escapejs }}?');">
+                <form
+                  method="POST"
+                  action="{% url 'produto-excluir' produto.id_produto %}"
+                  style="display: inline;"
+                  onsubmit="return confirm('Deseja excluir o produto {{ produto.nome_produto|escapejs }}?');"
+                >
+
                   {% csrf_token %}
-                  <button type="submit" class="info-item-excluir">🗑 Excluir</button>
+
+
+                  <button
+                    type="submit"
+                    class="info-item-excluir"
+                  >
+                    <span
+                      class="sl-icon sl-trash"
+                      aria-hidden="true"
+                    ></span>
+
+                    Excluir
+                  </button>
+
+
                 </form>
 
 
@@ -259,11 +288,8 @@
 
             {% endif %}
 
-            <!-- #endregion -->
 
-
-
-            <!-- #region IMAGEM -->
+            <!-- #region imagem -->
 
             <div class="info-produto-imagem">
 
@@ -282,7 +308,7 @@
 
                 <div
                   class="info-sem-imagem"
-                  style="display:none;"
+                  style="display: none;"
                 >
                   Sem imagem cadastrada
                 </div>
@@ -301,13 +327,10 @@
             <!-- #endregion -->
 
 
-
-            <!-- #region CORPO -->
+            <!-- #region corpo -->
 
             <div class="info-produto-corpo">
 
-
-              <!-- #region VISUALIZAÇÃO -->
 
               <div class="info-item-visualizacao">
 
@@ -322,7 +345,6 @@
                 </h2>
 
 
-
                 <span class="info-label">
                   Preço do produto:
                 </span>
@@ -332,6 +354,15 @@
                   R$ {{ produto.preco }}
                 </strong>
 
+
+                <span class="info-label">
+                  Categoria:
+                </span>
+
+
+                <span class="info-produto-categoria">
+                  {{ produto.id_categoria.tipo_categoria }}
+                </span>
 
 
                 <span class="info-label">
@@ -356,42 +387,94 @@
 
               </div>
 
-              <!-- #endregion -->
-
-
-
-              <!-- #region EDIÇÃO -->
 
               {% if eh_dono %}
+
                 <form
                   class="info-item-edicao"
-                  method="post"
+                  method="POST"
                   action="{% url 'produto-editar' produto.id_produto %}"
                 >
+
                   {% csrf_token %}
 
-                  <label>Nome do produto:</label>
-                  <input type="text" name="nome_produto" class="js-editar-nome"
-                        value="{{ produto.nome_produto }}" maxlength="100" required>
 
-                  <label>Preço do produto:</label>
-                  <input type="text" name="preco_produto" class="js-editar-preco"
-                        value="{{ produto.preco }}" required>
+                  <label>
+                    Nome do produto:
+                  </label>
 
-                  <label>Descrição do produto:</label>
-                  <textarea name="descricao_produto"
-                            class="js-editar-descricao">{{ produto.descricao|default:'' }}</textarea>
+
+                  <input
+                    type="text"
+                    name="nome_produto"
+                    class="js-editar-nome"
+                    value="{{ produto.nome_produto }}"
+                    maxlength="100"
+                    required
+                  >
+
+
+                  <label>
+                    Preço do produto:
+                  </label>
+
+
+                  <input
+                    type="text"
+                    name="preco_produto"
+                    class="js-editar-preco"
+                    value="{{ produto.preco }}"
+                    required
+                  >
+
+
+                  <label>
+                    Categoria:
+                  </label>
+
+
+                  <div class="info-produto-categoria">
+                    {{ produto.id_categoria.tipo_categoria }}
+                  </div>
+
+
+                  <label>
+                    Descrição do produto:
+                  </label>
+
+
+                  <textarea
+                    name="descricao_produto"
+                    class="js-editar-descricao"
+                  >{{ produto.descricao|default:'' }}</textarea>
+
 
                   <div class="info-edicao-botoes">
-                    <button type="submit" class="info-edicao-salvar">Salvar</button>
 
-                    <button type="button" class="info-edicao-cancelar"
-                            onclick="cancelarEdicaoProduto(this)">Cancelar</button>
+
+                    <button
+                      type="submit"
+                      class="info-edicao-salvar"
+                    >
+                      Salvar
+                    </button>
+
+
+                    <button
+                      type="button"
+                      class="info-edicao-cancelar"
+                      onclick="cancelarEdicaoProduto(this)"
+                    >
+                      Cancelar
+                    </button>
+
+
                   </div>
-                </form>
-              {% endif %}
 
-              <!-- #endregion -->
+
+                </form>
+
+              {% endif %}
 
 
             </div>
@@ -426,30 +509,93 @@
 
     {% endif %}
 
-    <!-- #endregion -->
-
 
   </main>
-
-  {% if messages %}
-    {% for message in messages %}
-      <p class="info-mensagem {{ message.tags }}">{{ message }}</p>
-    {% endfor %}
-  {% endif %}
 
   <!-- #endregion -->
 
 
+  {% if messages %}
 
-  <!-- #region JAVASCRIPT -->
+    {% for message in messages %}
 
-  <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
+      <p class="info-mensagem {{ message.tags }}">
+        {{ message }}
+      </p>
+
+    {% endfor %}
+
+  {% endif %}
+
+
+  <script
+    src="{% static 'AppStoreLink/scripts/index.js' %}"
+  ></script>
 
 
   <script>
 
+    function atualizarTemaProdutoInfo() {
 
-    function abrirEdicaoProduto(botao) {
+      const botao =
+        document.querySelector(
+          '.theme-toggle'
+        );
+
+
+      if (!botao) {
+        return;
+      }
+
+
+      if (
+        document.body.classList.contains(
+          'dark'
+        )
+      ) {
+
+        botao.innerHTML =
+          '<span class="sl-icon sl-sun" aria-hidden="true"></span><span class="theme-label">Modo claro</span>';
+
+      } else {
+
+        botao.innerHTML =
+          '<span class="sl-icon sl-moon" aria-hidden="true"></span><span class="theme-label">Modo escuro</span>';
+
+      }
+
+    }
+
+
+    function toggleThemeProdutoInfo() {
+
+      document.body.classList.toggle(
+        'dark'
+      );
+
+
+      const isDark =
+        document.body.classList.contains(
+          'dark'
+        );
+
+
+      localStorage.setItem(
+        'theme',
+        isDark
+          ? 'dark'
+          : 'light'
+      );
+
+
+      atualizarTemaProdutoInfo();
+
+    }
+
+
+    function abrirEdicaoProduto(
+      botao
+    ) {
 
       const card =
         botao.closest(
@@ -518,7 +664,10 @@
 
       inputPreco.value =
         preco.textContent
-          .replace('R$', '')
+          .replace(
+            'R$',
+            ''
+          )
           .trim();
 
 
@@ -527,7 +676,8 @@
 
 
       inputDescricao.value =
-        descricaoAtual === 'Sem descrição.'
+        descricaoAtual ===
+        'Sem descrição.'
           ? ''
           : descricaoAtual;
 
@@ -539,8 +689,9 @@
     }
 
 
-
-    function cancelarEdicaoProduto(botao) {
+    function cancelarEdicaoProduto(
+      botao
+    ) {
 
       const card =
         botao.closest(
@@ -559,9 +710,17 @@
 
     }
 
-  </script>
 
-  <!-- #endregion -->
+    document.addEventListener(
+      'DOMContentLoaded',
+      function () {
+
+        atualizarTemaProdutoInfo();
+
+      }
+    );
+
+  </script>
 
 
 </body>

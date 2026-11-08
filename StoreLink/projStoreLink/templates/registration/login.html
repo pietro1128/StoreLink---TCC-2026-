@@ -87,7 +87,16 @@
     class="theme-toggle"
     onclick="toggleTheme(this)"
   >
-    🌙 Modo escuro
+
+    <i
+      class="bi bi-moon-fill"
+      aria-hidden="true"
+    ></i>
+
+    <span class="theme-label">
+      Modo escuro
+    </span>
+
   </button>
 
 
@@ -291,46 +300,38 @@
         )
       ) {
 
-        botao.textContent =
-          '☀️ Modo claro';
+        botao.innerHTML =
+          '<i class="bi bi-sun-fill" aria-hidden="true"></i><span class="theme-label">Modo claro</span>';
 
       } else {
 
-        botao.textContent =
-          '🌙 Modo escuro';
+        botao.innerHTML =
+          '<i class="bi bi-moon-fill" aria-hidden="true"></i><span class="theme-label">Modo escuro</span>';
 
       }
 
     }
 
 
-
-    function toggleTheme(botao) {
+    function toggleTheme() {
 
       document.body.classList.toggle(
         'dark'
       );
 
 
-      if (
+      const isDark =
         document.body.classList.contains(
           'dark'
-        )
-      ) {
-
-        localStorage.setItem(
-          'theme',
-          'dark'
         );
 
-      } else {
 
-        localStorage.setItem(
-          'theme',
-          'light'
-        );
-
-      }
+      localStorage.setItem(
+        'theme',
+        isDark
+          ? 'dark'
+          : 'light'
+      );
 
 
       atualizarBotaoTema();
@@ -338,8 +339,14 @@
     }
 
 
+    document.addEventListener(
+      'DOMContentLoaded',
+      function () {
 
-    atualizarBotaoTema();
+        atualizarBotaoTema();
+
+      }
+    );
 
   </script>
 

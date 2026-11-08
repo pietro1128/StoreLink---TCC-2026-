@@ -23,8 +23,13 @@
     rel="stylesheet"
     href="{% static 'AppStoreLink/styles/mensagens.css' %}"
   >
-</head>
 
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/icons.css' %}"
+  >
+
+</head>
 
 <body>
 
@@ -52,7 +57,7 @@
   {% endif %}
 
 
-  <!-- #region NAVBAR -->
+  <!-- #region navbar -->
 
   <div class="topbar">
 
@@ -105,7 +110,12 @@
         data-url="{% url 'perfil-consumidor' %}"
         onclick="location.href=this.dataset.url"
       >
-        👤 Minha conta
+        <span
+          class="sl-icon sl-user"
+          aria-hidden="true"
+        ></span>
+
+        Minha conta
       </button>
 
     {% else %}
@@ -125,7 +135,14 @@
       class="theme-toggle"
       onclick="toggleTheme(this)"
     >
-      🌙 Modo escuro
+      <span
+        class="sl-icon sl-moon"
+        aria-hidden="true"
+      ></span>
+
+      <span class="theme-label">
+        Modo escuro
+      </span>
     </button>
 
   </div>
@@ -133,7 +150,7 @@
   <!-- #endregion -->
 
 
-  <!-- #region SIDEBAR -->
+  <!-- #region sidebar -->
 
   <div class="sidebar-trigger"></div>
 
@@ -147,14 +164,12 @@
       Alimentos
     </a>
 
-
     <a
       class="cat-btn cat-moda"
       href="{% url 'CatModa' %}"
     >
       Moda
     </a>
-
 
     <a
       class="cat-btn cat-esportes"
@@ -163,14 +178,12 @@
       Esportes
     </a>
 
-
     <a
       class="cat-btn cat-construcao"
       href="{% url 'CatConstrucao' %}"
     >
       Construção
     </a>
-
 
     <a
       class="cat-btn cat-saude"
@@ -179,14 +192,12 @@
       Saúde
     </a>
 
-
     <a
       class="cat-btn cat-pets"
       href="{% url 'CatPets' %}"
     >
       Pets
     </a>
-
 
     <a
       class="cat-btn cat-ambiente"
@@ -195,7 +206,6 @@
       Ambiente
     </a>
 
-
     <a
       class="cat-btn cat-tecnologia"
       href="{% url 'CatTecnologia' %}"
@@ -203,14 +213,12 @@
       Tecnologia
     </a>
 
-
     <a
       class="cat-btn cat-beleza"
       href="{% url 'CatBeleza' %}"
     >
       Beleza
     </a>
-
 
     <a
       class="cat-btn cat-outros"
@@ -227,12 +235,13 @@
   {% if usuario_logado %}
 
 
-  <!-- #region PERFIL -->
-
   <div class="page-perfil">
+
 
     <div class="perfil-wrapper">
 
+
+      <!-- #region lateral -->
 
       <div class="perfil-left">
 
@@ -244,6 +253,7 @@
 
         <div class="perfil-avatar-wrap">
 
+
           <div
             class="perfil-avatar {% if usuario_logado.foto %}tem-imagem{% endif %}"
           >
@@ -252,11 +262,9 @@
               id="avatar-padrao"
               viewBox="0 0 24 24"
             >
-
               <path
                 d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"
               />
-
             </svg>
 
 
@@ -270,6 +278,7 @@
             >
 
           </div>
+
 
         </div>
 
@@ -319,9 +328,10 @@
           >
             Fazer Logout
 
-            <span>
-              ≪
-            </span>
+            <span
+              class="sl-icon sl-logout"
+              aria-hidden="true"
+            ></span>
 
           </button>
 
@@ -330,6 +340,10 @@
 
       </div>
 
+      <!-- #endregion -->
+
+
+      <!-- #region card loja -->
 
       <div class="perfil-card">
 
@@ -358,8 +372,16 @@
 
 
             <span id="texto-adicionar-imagem">
-              📷 Adicionar imagem
+
+              <span
+                class="sl-icon sl-camera-plus"
+                aria-hidden="true"
+              ></span>
+
+              Adicionar imagem
+
             </span>
+
 
           </label>
 
@@ -418,6 +440,11 @@
                 type="submit"
                 class="perfil-delete-btn"
               >
+                <span
+                  class="sl-icon sl-trash"
+                  aria-hidden="true"
+                ></span>
+
                 Excluir loja
               </button>
 
@@ -428,6 +455,8 @@
 
         </div>
 
+
+        <!-- #region dados -->
 
         <div class="perfil-card-middle">
 
@@ -564,7 +593,6 @@
                   (+55)
                 </span>
 
-
                 <input
                   name="telefone_loja"
                   type="text"
@@ -572,6 +600,7 @@
                 >
 
               </div>
+
 
             </div>
 
@@ -630,7 +659,11 @@
                   {{ loja.id_categoria.tipo_categoria|default:'Alimentos' }}
                 </span>
 
-                ▾
+
+                <span
+                  class="sl-icon sl-chevron-down"
+                  aria-hidden="true"
+                ></span>
 
               </button>
 
@@ -649,15 +682,18 @@
 
         </div>
 
+        <!-- #endregion -->
+
 
       </div>
+
+      <!-- #endregion -->
 
 
     </div>
 
-  </div>
 
-  <!-- #endregion -->
+  </div>
 
 
   {% else %}
@@ -683,35 +719,82 @@
   {% endif %}
 
 
+  <!-- #region javascript -->
 
   <script>
+
 
     function setActiveNav(btn) {
 
       document
-        .querySelectorAll('.nav-btn')
+        .querySelectorAll(
+          '.nav-btn'
+        )
         .forEach(
           function (b) {
 
-            b.classList.remove('active');
+            b.classList.remove(
+              'active'
+            );
 
           }
         );
 
 
-      btn.classList.add('active');
+      btn.classList.add(
+        'active'
+      );
 
     }
 
 
 
-    function toggleTheme(btn) {
+    function atualizarTemaPerfilLoja() {
 
-      document.body.classList.toggle('dark');
+      const botao =
+        document.querySelector(
+          '.theme-toggle'
+        );
 
 
-      var isDark =
-        document.body.classList.contains('dark');
+      if (!botao) {
+
+        return;
+
+      }
+
+
+      if (
+        document.body.classList.contains(
+          'dark'
+        )
+      ) {
+
+        botao.innerHTML =
+          '<span class="sl-icon sl-sun" aria-hidden="true"></span><span class="theme-label">Modo claro</span>';
+
+      } else {
+
+        botao.innerHTML =
+          '<span class="sl-icon sl-moon" aria-hidden="true"></span><span class="theme-label">Modo escuro</span>';
+
+      }
+
+    }
+
+
+
+    function toggleTheme() {
+
+      document.body.classList.toggle(
+        'dark'
+      );
+
+
+      const isDark =
+        document.body.classList.contains(
+          'dark'
+        );
 
 
       localStorage.setItem(
@@ -722,17 +805,7 @@
       );
 
 
-      if (isDark) {
-
-        btn.textContent =
-          '☀️ Modo claro';
-
-      } else {
-
-        btn.textContent =
-          '🌙 Modo escuro';
-
-      }
+      atualizarTemaPerfilLoja();
 
     }
 
@@ -742,26 +815,12 @@
       'DOMContentLoaded',
       function () {
 
-        var themeBtn =
-          document.querySelector('.theme-toggle');
-
-
-        if (
-          themeBtn &&
-          document.body.classList.contains('dark')
-        ) {
-
-          themeBtn.textContent =
-            '☀️ Modo claro';
-
-        }
+        atualizarTemaPerfilLoja();
 
       }
     );
 
 
-
-    /* classificação da loja */
 
     document.addEventListener(
       'DOMContentLoaded',
@@ -829,13 +888,11 @@
                 10
               );
 
-
             g =
               parseInt(
                 match[1],
                 10
               );
-
 
             b =
               parseInt(
@@ -985,7 +1042,6 @@
           );
 
 
-
         sidebarButtons.forEach(
           function (catBtn) {
 
@@ -1049,7 +1105,6 @@
                   'Outros'
                 ) {
 
-
                   var custom =
                     window.prompt(
                       'Digite o nome da classificação da loja:'
@@ -1069,16 +1124,13 @@
 
                   }
 
-
                 } else {
-
 
                   applyClassification(
                     name,
                     bgColor,
                     name
                   );
-
 
                 }
 
@@ -1097,14 +1149,6 @@
         );
 
 
-
-        /*
-          AQUI ESTÁ A CORREÇÃO PRINCIPAL:
-
-          pega a categoria que já está salva
-          no banco e aplica a cor assim que
-          a página abrir.
-        */
 
         var categoriaAtual =
           categoriaInput.value.trim();
@@ -1143,7 +1187,6 @@
                 categoriaAtual
               );
 
-
             }
 
           }
@@ -1163,7 +1206,6 @@
               'open'
             );
 
-
           }
         );
 
@@ -1172,6 +1214,7 @@
         document.addEventListener(
           'click',
           function () {
+
 
             closeDropdown();
 
@@ -1183,8 +1226,6 @@
     );
 
 
-
-    /* foto do estabelecimento */
 
     const fotoEstabelecimento =
       document.getElementById(
@@ -1210,7 +1251,6 @@
       areaImagem
     ) {
 
-
       fotoEstabelecimento.addEventListener(
         'change',
         function () {
@@ -1232,7 +1272,6 @@
               'image/'
             )
           ) {
-
 
             alert(
               'Selecione um arquivo de imagem.'
@@ -1274,117 +1313,17 @@
 
             };
 
-
         }
       );
 
-
     }
 
-
-
-    /* foto do responsavel */
-
-    const fotoResponsavel =
-      document.getElementById(
-        'foto-responsavel'
-      );
-
-
-    const previewResponsavel =
-      document.getElementById(
-        'preview-responsavel'
-      );
-
-
-    const avatarResponsavel =
-      document.querySelector(
-        '.perfil-avatar'
-      );
-
-
-    if (
-      fotoResponsavel &&
-      previewResponsavel &&
-      avatarResponsavel
-    ) {
-
-
-      fotoResponsavel.addEventListener(
-        'change',
-        function () {
-
-
-          const arquivo =
-            this.files[0];
-
-
-          if (!arquivo) {
-
-            return;
-
-          }
-
-
-          if (
-            !arquivo.type.startsWith(
-              'image/'
-            )
-          ) {
-
-
-            alert(
-              'Selecione um arquivo de imagem.'
-            );
-
-
-            this.value =
-              '';
-
-
-            return;
-
-          }
-
-
-          const imagemURL =
-            URL.createObjectURL(
-              arquivo
-            );
-
-
-          previewResponsavel.src =
-            imagemURL;
-
-
-          avatarResponsavel.classList.add(
-            'tem-imagem'
-          );
-
-
-          previewResponsavel.onload =
-            function () {
-
-
-              URL.revokeObjectURL(
-                imagemURL
-              );
-
-
-            };
-
-
-        }
-      );
-
-
-    }
 
   </script>
 
 
-
   <script>
+
 
     const campoCep =
       document.querySelector(
@@ -1396,7 +1335,6 @@
       nome,
       valor
     ) {
-
 
       const campo =
         document.querySelector(
@@ -1419,7 +1357,6 @@
 
 
     if (campoCep) {
-
 
       campoCep.addEventListener(
         'blur',
@@ -1460,7 +1397,6 @@
             if (
               !resposta.ok
             ) {
-
 
               alert(
                 dados.erro
@@ -1503,15 +1439,15 @@
 
           }
 
-
         }
       );
 
-
     }
+
 
   </script>
 
 
 </body>
+
 </html>

@@ -33,6 +33,11 @@
     href="{% static 'AppStoreLink/styles/mensagens.css' %}"
   >
 
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/icons.css' %}"
+  >
+
 </head>
 
 
@@ -131,7 +136,12 @@
       data-url="{% url 'perfil-consumidor' %}"
       onclick="location.href=this.dataset.url"
     >
-      👤 Minha conta
+      <span
+        class="sl-icon sl-user"
+        aria-hidden="true"
+      ></span>
+
+      Minha conta
     </button>
 
 
@@ -139,7 +149,14 @@
       class="theme-toggle"
       onclick="toggleTheme(this)"
     >
-      🌙 Modo escuro
+      <span
+        class="sl-icon sl-moon"
+        aria-hidden="true"
+      ></span>
+
+      <span class="theme-label">
+        Modo escuro
+      </span>
     </button>
 
   </div>
@@ -210,7 +227,10 @@
             class="consumidor-camera-badge"
             for="foto-consumidor"
           >
-            📷
+            <span
+              class="sl-icon sl-camera"
+              aria-hidden="true"
+            ></span>
           </label>
 
         </div>
@@ -223,7 +243,12 @@
           class="consumidor-editar-btn"
           onclick="editarConsumidor(this)"
         >
-          ✎ Editar usuário
+          <span
+            class="sl-icon sl-pencil"
+            aria-hidden="true"
+          ></span>
+
+          Editar usuário
         </button>
 
 
@@ -299,7 +324,10 @@
             Fazer Logout
 
             <span>
-              ≪
+              <span
+                class="sl-icon sl-logout"
+                aria-hidden="true"
+              ></span>
             </span>
 
           </button>
@@ -336,7 +364,10 @@
             </span>
 
             <span class="cadastrar-loja-icone">
-              🛒
+              <span
+                class="sl-icon sl-store"
+                aria-hidden="true"
+              ></span>
             </span>
 
           </button>
@@ -428,7 +459,10 @@
                     class="favorito-coracao"
                     title="Remover dos favoritos"
                   >
-                    ♥
+                    <span
+                      class="sl-icon sl-heart-fill"
+                      aria-hidden="true"
+                    ></span>
                   </button>
 
                 </form>
@@ -631,8 +665,8 @@
 
       if (editando) {
 
-        botao.textContent =
-          '✕ Cancelar edição';
+        botao.innerHTML =
+          '<span class="sl-icon sl-x" aria-hidden="true"></span> Cancelar edição';
 
 
         form
@@ -643,8 +677,8 @@
 
       } else {
 
-        botao.textContent =
-          '✎ Editar usuário';
+        botao.innerHTML =
+          '<span class="sl-icon sl-pencil" aria-hidden="true"></span> Editar usuário';
 
 
         form.reset();
@@ -678,13 +712,13 @@
 
       if (isDark) {
 
-        btn.textContent =
-          '☀️ Modo claro';
+        btn.innerHTML =
+          '<span class="sl-icon sl-sun" aria-hidden="true"></span><span class="theme-label">Modo claro</span>';
 
       } else {
 
-        btn.textContent =
-          '🌙 Modo escuro';
+        btn.innerHTML =
+          '<span class="sl-icon sl-moon" aria-hidden="true"></span><span class="theme-label">Modo escuro</span>';
 
       }
 
@@ -709,8 +743,8 @@
           )
         ) {
 
-          themeBtn.textContent =
-            '☀️ Modo claro';
+          themeBtn.innerHTML =
+            '<span class="sl-icon sl-sun" aria-hidden="true"></span><span class="theme-label">Modo claro</span>';
 
         }
 

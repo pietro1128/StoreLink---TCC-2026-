@@ -5,103 +5,431 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>StoreLink</title>
-  <link rel="icon" type="image/png" href="{% static 'AppStoreLink/images/icon-dark.png' %}">
-  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/style.css' %}">
-  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/mensagens.css' %}">
-</head>
 
-<!-- #region Modo escuro -->
+  <title>StoreLink</title>
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="{% static 'AppStoreLink/images/icon-dark.png' %}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/style.css' %}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/mensagens.css' %}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/icons.css' %}"
+  >
+
+</head>
 
 <body>
 
-  <script>
-    if (localStorage.getItem('theme') === 'dark') {
-      document.body.classList.add('dark');
-    }
-  </script>
-<!-- #endregion -->
+  <!-- #region modo escuro -->
 
-<!-- #region mensagens -->
-  {% if messages %}
-    <div class="messages-container">
-      {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-      {% endfor %}
-    </div>
-  {% endif %}
+  <script>
+
+    if (
+      localStorage.getItem(
+        'theme'
+      ) === 'dark'
+    ) {
+
+      document.body.classList.add(
+        'dark'
+      );
+
+    }
+
+  </script>
+
   <!-- #endregion -->
 
-<!-- #region navbar -->
+
+  <!-- #region mensagens -->
+
+  {% if messages %}
+
+    <div class="messages-container">
+
+      {% for message in messages %}
+
+        <div class="alert alert-{{ message.tags }}">
+          {{ message }}
+        </div>
+
+      {% endfor %}
+
+    </div>
+
+  {% endif %}
+
+  <!-- #endregion -->
+
+
+  <!-- #region navbar -->
 
   <div class="topbar">
-    <div class="logo-icon"><img src="{% static 'AppStoreLink/images/icon-dark.png' %}" alt="StoreLink"></div>
-    <a class="nav-btn active" href="{% url 'index' %}" onclick="location.href=this.dataset.url">Início</a>    
-    <a class="nav-btn" href="{% url 'perfil-loja' %}">Sua loja</a>
-    <a class="nav-btn" href="{% url 'suporte' %}">Suporte</a>
-    <a class="nav-btn" href="{% url 'tutorial' %}">Como navegar?</a>
+
+    <div class="logo-icon">
+
+      <img
+        src="{% static 'AppStoreLink/images/icon-dark.png' %}"
+        alt="StoreLink"
+      >
+
+    </div>
+
+
+    <a
+      class="nav-btn active"
+      href="{% url 'index' %}"
+    >
+      Início
+    </a>
+
+
+    <a
+      class="nav-btn"
+      href="{% url 'perfil-loja' %}"
+    >
+      Sua loja
+    </a>
+
+
+    <a
+      class="nav-btn"
+      href="{% url 'suporte' %}"
+    >
+      Suporte
+    </a>
+
+
+    <a
+      class="nav-btn"
+      href="{% url 'tutorial' %}"
+    >
+      Como navegar?
+    </a>
+
+
     {% if usuario_logado %}
-    <button class="nav-account-btn" data-url="{% url 'perfil-consumidor' %}" onclick="location.href=this.dataset.url">👤 Minha conta</button>
+
+      <button
+        class="nav-account-btn"
+        data-url="{% url 'perfil-consumidor' %}"
+        onclick="location.href=this.dataset.url"
+      >
+
+        <span
+          class="sl-icon sl-user"
+          aria-hidden="true"
+        ></span>
+
+        Minha conta
+
+      </button>
+
     {% else %}
-    <button class="nav-account-btn" data-url="{% url 'cadastro' %}" onclick="location.href=this.dataset.url">Criar conta ou Entrar</button>
+
+      <button
+        class="nav-account-btn"
+        data-url="{% url 'cadastro' %}"
+        onclick="location.href=this.dataset.url"
+      >
+        Criar conta ou Entrar
+      </button>
+
     {% endif %}
-    <button class="theme-toggle" onclick="toggleTheme(this)">🌙 Modo escuro</button>
+
+
+    <button
+      class="theme-toggle"
+      onclick="toggleTheme(this)"
+    >
+
+      <span
+        class="sl-icon sl-moon"
+        aria-hidden="true"
+      ></span>
+
+      <span class="theme-label">
+        Modo escuro
+      </span>
+
+    </button>
+
   </div>
 
   <!-- #endregion -->
 
-<!-- #region sidebar -->
 
-<div class="sidebar-trigger"></div>
+  <!-- #region sidebar -->
 
-<div class="sidebar">
+  <div class="sidebar-trigger"></div>
 
-  <a class="cat-btn cat-alimentos {% if categoria == 'Alimentos' %}cat-active{% endif %}" href="{% url 'CatAlimentos' %}">Alimentos</a>
 
-  <a class="cat-btn cat-moda {% if categoria == 'Moda' %}cat-active{% endif %}" href="{% url 'CatModa' %}">Moda</a>
+  <div class="sidebar">
 
-  <a class="cat-btn cat-esportes {% if categoria == 'Esportes' %}cat-active{% endif %}" href="{% url 'CatEsportes' %}">Esportes</a>
 
-  <a class="cat-btn cat-construcao {% if categoria == 'Construção' %}cat-active{% endif %}" href="{% url 'CatConstrucao' %}">Construção</a>
+    <a
+      class="cat-btn cat-alimentos {% if categoria == 'Alimentos' %}cat-active{% endif %}"
+      href="{% url 'CatAlimentos' %}"
+    >
+      Alimentos
+    </a>
 
-  <a class="cat-btn cat-saude {% if categoria == 'Saúde' %}cat-active{% endif %}" href="{% url 'CatSaude' %}">Saúde</a>
 
-  <a class="cat-btn cat-pets {% if categoria == 'Pets' %}cat-active{% endif %}" href="{% url 'CatPets' %}">Pets</a>
+    <a
+      class="cat-btn cat-moda {% if categoria == 'Moda' %}cat-active{% endif %}"
+      href="{% url 'CatModa' %}"
+    >
+      Moda
+    </a>
 
-  <a class="cat-btn cat-ambiente {% if categoria == 'Ambiente' %}cat-active{% endif %}" href="{% url 'CatAmbiente' %}">Ambiente</a>
 
-  <a class="cat-btn cat-tecnologia {% if categoria == 'Tecnologia' %}cat-active{% endif %}" href="{% url 'CatTecnologia' %}">Tecnologia</a>
+    <a
+      class="cat-btn cat-esportes {% if categoria == 'Esportes' %}cat-active{% endif %}"
+      href="{% url 'CatEsportes' %}"
+    >
+      Esportes
+    </a>
 
-  <a class="cat-btn cat-beleza {% if categoria == 'Beleza' %}cat-active{% endif %}" href="{% url 'CatBeleza' %}">Beleza</a>
 
-  <a class="cat-btn cat-outros {% if categoria == 'Outros' %}cat-active{% endif %}" href="{% url 'CatOutros' %}">Outros</a>
+    <a
+      class="cat-btn cat-construcao {% if categoria == 'Construção' %}cat-active{% endif %}"
+      href="{% url 'CatConstrucao' %}"
+    >
+      Construção
+    </a>
 
-</div>
+
+    <a
+      class="cat-btn cat-saude {% if categoria == 'Saúde' %}cat-active{% endif %}"
+      href="{% url 'CatSaude' %}"
+    >
+      Saúde
+    </a>
+
+
+    <a
+      class="cat-btn cat-pets {% if categoria == 'Pets' %}cat-active{% endif %}"
+      href="{% url 'CatPets' %}"
+    >
+      Pets
+    </a>
+
+
+    <a
+      class="cat-btn cat-ambiente {% if categoria == 'Ambiente' %}cat-active{% endif %}"
+      href="{% url 'CatAmbiente' %}"
+    >
+      Ambiente
+    </a>
+
+
+    <a
+      class="cat-btn cat-tecnologia {% if categoria == 'Tecnologia' %}cat-active{% endif %}"
+      href="{% url 'CatTecnologia' %}"
+    >
+      Tecnologia
+    </a>
+
+
+    <a
+      class="cat-btn cat-beleza {% if categoria == 'Beleza' %}cat-active{% endif %}"
+      href="{% url 'CatBeleza' %}"
+    >
+      Beleza
+    </a>
+
+
+    <a
+      class="cat-btn cat-outros {% if categoria == 'Outros' %}cat-active{% endif %}"
+      href="{% url 'CatOutros' %}"
+    >
+      Outros
+    </a>
+
+
+  </div>
+
   <!-- #endregion -->
 
-<!-- #region pesquisa -->
+
+  <!-- #region pesquisa -->
 
   <div class="main">
-    <img class="logo-img logo-light" src="{% static 'AppStoreLink/images/logo-light.png' %}" alt="StoreLink"><img class="logo-img logo-dark" src="{% static 'AppStoreLink/images/logo-dark.png' %}" alt="StoreLink">
-    <form class="search-container" action="{% url 'buscar' %}" method="GET">
-      <button type="submit" class="search-icon-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="7"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+
+
+    <img
+      class="logo-img logo-light"
+      src="{% static 'AppStoreLink/images/logo-light.png' %}"
+      alt="StoreLink"
+    >
+
+
+    <img
+      class="logo-img logo-dark"
+      src="{% static 'AppStoreLink/images/logo-dark.png' %}"
+      alt="StoreLink"
+    >
+
+
+    <form
+      class="search-container"
+      action="{% url 'buscar' %}"
+      method="GET"
+    >
+
+
+      <button
+        type="submit"
+        class="search-icon-btn"
+        aria-label="Pesquisar"
+      >
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+
+          <circle
+            cx="11"
+            cy="11"
+            r="7"
+          ></circle>
+
+
+          <line
+            x1="21"
+            y1="21"
+            x2="16.65"
+            y2="16.65"
+          ></line>
+
         </svg>
+
       </button>
-      <input type="text" name="q" class="search-input" placeholder="Pesquisar..." autocomplete="off">
+
+
+      <input
+        type="text"
+        name="q"
+        class="search-input"
+        placeholder="Pesquisar..."
+        autocomplete="off"
+      >
+
+
     </form>
 
-    <div class="hint-text">Pesquise alguma loja ou produto que deseje...</div>
-  </div>
-<!-- #endregion -->
 
-  <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
-  <!--É BOM TIRAR ESSA LINHA, PQ COMO O ARQUIVO "index.js" NÃO EXISTE O NAVEGADOR 
-  VAI DAR UM ERRO 404 (não quebra a pagina mas é inutil, sujeira)
-  OU ENT CRIA ESSE ARQUIVO E DEIXA VAZIO.
-  ASSINADO: MUSGOLINO MAXIMA AURA DA SILVANA-->
+    <div class="hint-text">
+      Pesquise alguma loja ou produto que deseje...
+    </div>
+
+
+  </div>
+
+  <!-- #endregion -->
+
+
+  <!-- #region javascript -->
+
+  <script
+    src="{% static 'AppStoreLink/scripts/index.js' %}"
+  ></script>
+
+
+  <script>
+
+    function atualizarTemaIndex() {
+
+      const botao =
+        document.querySelector(
+          '.theme-toggle'
+        );
+
+
+      if (!botao) {
+
+        return;
+
+      }
+
+
+      if (
+        document.body.classList.contains(
+          'dark'
+        )
+      ) {
+
+        botao.innerHTML =
+          '<span class="sl-icon sl-sun" aria-hidden="true"></span><span class="theme-label">Modo claro</span>';
+
+      } else {
+
+        botao.innerHTML =
+          '<span class="sl-icon sl-moon" aria-hidden="true"></span><span class="theme-label">Modo escuro</span>';
+
+      }
+
+    }
+
+
+
+    function toggleTheme() {
+
+      document.body.classList.toggle(
+        'dark'
+      );
+
+
+      const isDark =
+        document.body.classList.contains(
+          'dark'
+        );
+
+
+      localStorage.setItem(
+        'theme',
+        isDark
+          ? 'dark'
+          : 'light'
+      );
+
+
+      atualizarTemaIndex();
+
+    }
+
+
+
+    document.addEventListener(
+      'DOMContentLoaded',
+      function () {
+
+        atualizarTemaIndex();
+
+      }
+    );
+
+  </script>
+
+  <!-- #endregion -->
+
 
 </body>
 

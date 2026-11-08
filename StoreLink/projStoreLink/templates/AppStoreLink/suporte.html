@@ -23,14 +23,29 @@
     rel="stylesheet"
     href="{% static 'AppStoreLink/styles/suporte.css' %}"
   >
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/icons.css' %}"
+  >
 </head>
 
 <body>
 
   <script>
-    if (localStorage.getItem('theme') === 'dark') {
-      document.body.classList.add('dark');
+
+    if (
+      localStorage.getItem(
+        'theme'
+      ) === 'dark'
+    ) {
+
+      document.body.classList.add(
+        'dark'
+      );
+
     }
+
   </script>
 
 
@@ -87,7 +102,14 @@
         data-url="{% url 'perfil-consumidor' %}"
         onclick="location.href=this.dataset.url"
       >
-        👤 Minha conta
+
+        <span
+          class="sl-icon sl-user"
+          aria-hidden="true"
+        ></span>
+
+        Minha conta
+
       </button>
 
     {% else %}
@@ -105,9 +127,18 @@
 
     <button
       class="theme-toggle"
-      onclick="toggleTheme(this)"
+      onclick="toggleThemeSuporte()"
     >
-      🌙 Modo escuro
+
+      <span
+        class="sl-icon sl-moon"
+        aria-hidden="true"
+      ></span>
+
+      <span class="theme-label">
+        Modo escuro
+      </span>
+
     </button>
 
   </div>
@@ -260,9 +291,86 @@
   <!-- #endregion -->
 
 
+  <!-- #region Javascript -->
+
   <script
     src="{% static 'AppStoreLink/scripts/index.js' %}"
   ></script>
+
+
+  <script>
+
+    function atualizarTemaSuporte() {
+
+      const botao =
+        document.querySelector(
+          '.theme-toggle'
+        );
+
+
+      if (!botao) {
+        return;
+      }
+
+
+      if (
+        document.body.classList.contains(
+          'dark'
+        )
+      ) {
+
+        botao.innerHTML =
+          '<span class="sl-icon sl-sun" aria-hidden="true"></span><span class="theme-label">Modo claro</span>';
+
+      } else {
+
+        botao.innerHTML =
+          '<span class="sl-icon sl-moon" aria-hidden="true"></span><span class="theme-label">Modo escuro</span>';
+
+      }
+
+    }
+
+
+    function toggleThemeSuporte() {
+
+      document.body.classList.toggle(
+        'dark'
+      );
+
+
+      const isDark =
+        document.body.classList.contains(
+          'dark'
+        );
+
+
+      localStorage.setItem(
+        'theme',
+        isDark
+          ? 'dark'
+          : 'light'
+      );
+
+
+      atualizarTemaSuporte();
+
+    }
+
+
+    document.addEventListener(
+      'DOMContentLoaded',
+      function () {
+
+        atualizarTemaSuporte();
+
+      }
+    );
+
+  </script>
+
+  <!-- #endregion -->
+
 
 </body>
 

@@ -326,6 +326,48 @@
 }
 
 
+.info-produto-categoria {
+  width:
+    fit-content;
+
+  margin:
+    0
+    0
+    14px;
+
+  padding:
+    6px
+    12px;
+
+  display:
+    block;
+
+  border-radius:
+    20px;
+
+  background:
+    var(--cor-categoria);
+
+  color:
+    #ffffff;
+
+  font-size:
+    13px;
+
+  font-weight:
+    800;
+}
+
+
+.info-construcao
+.info-produto-categoria,
+.info-outros
+.info-produto-categoria {
+  color:
+    #222222;
+}
+
+
 .info-produto-corpo p {
   margin: 0;
 
@@ -370,6 +412,8 @@
   align-items: center;
   justify-content: center;
 
+  gap: 7px;
+
   font-family: inherit;
 
   font-size: 13px;
@@ -409,6 +453,18 @@
 
   filter:
     brightness(0.92);
+}
+
+
+.info-item-editar
+.sl-icon,
+.info-item-excluir
+.sl-icon {
+  width:
+    15px;
+
+  height:
+    15px;
 }
 
 
@@ -550,6 +606,15 @@
 }
 
 
+.info-construcao
+.info-edicao-salvar,
+.info-outros
+.info-edicao-salvar {
+  color:
+    #222222;
+}
+
+
 .info-edicao-cancelar {
   background:
     #202020;
@@ -621,6 +686,27 @@ body.dark
 .info-preco {
   color:
     #ffffff;
+}
+
+
+body.dark
+.info-produto-categoria {
+  background:
+    var(--cor-categoria);
+
+  color:
+    #ffffff;
+}
+
+
+body.dark
+.info-construcao
+.info-produto-categoria,
+body.dark
+.info-outros
+.info-produto-categoria {
+  color:
+    #222222;
 }
 
 

@@ -37,233 +37,12 @@ function toggleTheme(btn) {
 
     if (btn) {
 
-        btn.textContent =
+        btn.innerHTML =
             modoEscuro
-                ? '☀️ Modo claro'
-                : '🌙 Modo escuro';
+                ? '<i class="bi bi-sun-fill" aria-hidden="true"></i> <span class="theme-label">Modo claro</span>'
+                : '<i class="bi bi-moon-fill" aria-hidden="true"></i> <span class="theme-label">Modo escuro</span>';
 
     }
-}
-
-//#endregion
-
-
-
-//#region FAVORITOS
-
-function pegarIdLojaFavorito(form) {
-
-    if (!form) {
-        return null;
-    }
-
-
-    const action =
-        form.getAttribute('action');
-
-
-    if (!action) {
-        return null;
-    }
-
-
-    const resultado =
-        action.match(
-            /\/loja\/(\d+)\/favoritar\/?/
-        );
-
-
-    if (!resultado) {
-        return null;
-    }
-
-
-    return resultado[1];
-}
-
-
-
-function atualizarCoracoesFavoritos(
-    lojasFavoritas
-) {
-
-    const formularios =
-        document.querySelectorAll(
-            'form[action*="/favoritar/"]'
-        );
-
-
-    formularios.forEach(
-        function (form) {
-
-            const idLoja =
-                pegarIdLojaFavorito(
-                    form
-                );
-
-
-            if (!idLoja) {
-                return;
-            }
-
-
-            const botao =
-                form.querySelector(
-                    '.loja-card-fav, .resultado-card-fav, .info-favoritar'
-                );
-
-
-            if (!botao) {
-                return;
-            }
-
-
-            if (
-                lojasFavoritas.includes(
-                    idLoja
-                )
-            ) {
-
-                botao.textContent =
-                    '♥';
-
-
-                botao.setAttribute(
-                    'aria-label',
-                    'Remover dos favoritos'
-                );
-
-
-                botao.setAttribute(
-                    'title',
-                    'Remover dos favoritos'
-                );
-
-            } else {
-
-                botao.textContent =
-                    '♡';
-
-
-                botao.setAttribute(
-                    'aria-label',
-                    'Favoritar loja'
-                );
-
-
-                botao.setAttribute(
-                    'title',
-                    'Favoritar loja'
-                );
-
-            }
-
-        }
-    );
-
-}
-
-
-
-async function carregarFavoritos() {
-
-    const formulariosFavorito =
-        document.querySelectorAll(
-            'form[action*="/favoritar/"]'
-        );
-
-
-    if (
-        formulariosFavorito.length === 0
-    ) {
-
-        return;
-
-    }
-
-
-    try {
-
-        const resposta =
-            await fetch(
-                '/perfil-consumidor/',
-                {
-                    method: 'GET',
-                    credentials: 'same-origin'
-                }
-            );
-
-
-        if (!resposta.ok) {
-            return;
-        }
-
-
-        const html =
-            await resposta.text();
-
-
-        const parser =
-            new DOMParser();
-
-
-        const documento =
-            parser.parseFromString(
-                html,
-                'text/html'
-            );
-
-
-        const formulariosPerfil =
-            documento.querySelectorAll(
-                'form[action*="/favoritar/"]'
-            );
-
-
-        const lojasFavoritas =
-            [];
-
-
-        formulariosPerfil.forEach(
-            function (form) {
-
-                const idLoja =
-                    pegarIdLojaFavorito(
-                        form
-                    );
-
-
-                if (
-                    idLoja &&
-                    !lojasFavoritas.includes(
-                        idLoja
-                    )
-                ) {
-
-                    lojasFavoritas.push(
-                        idLoja
-                    );
-
-                }
-
-            }
-        );
-
-
-        atualizarCoracoesFavoritos(
-            lojasFavoritas
-        );
-
-
-    } catch (erro) {
-
-        console.error(
-            'Não foi possível carregar os favoritos.',
-            erro
-        );
-
-    }
-
 }
 
 //#endregion
@@ -317,7 +96,6 @@ function prepararProdutoCard(card) {
     }
 
 
-    // Produto que já veio com imagem
     if (
         preview.classList.contains(
             'produto-preview-existente'
@@ -333,7 +111,6 @@ function prepararProdutoCard(card) {
     }
 
 
-    // Abrir seletor de arquivo
     if (botaoAdicionar) {
 
         botaoAdicionar.onclick =
@@ -358,7 +135,6 @@ function prepararProdutoCard(card) {
     }
 
 
-    // Preview
     input.onchange =
         function () {
 
@@ -434,7 +210,7 @@ function criarProdutoCard() {
             title="Excluir produto"
             aria-label="Excluir produto"
         >
-            ✕
+            <i class="bi bi-trash3" aria-hidden="true"></i>
         </button>
 
 
@@ -452,7 +228,8 @@ function criarProdutoCard() {
                 type="button"
                 class="produto-botao-imagem"
             >
-                📷 Adicionar imagem
+                <i class="bi bi-camera-plus" aria-hidden="true"></i>
+                Adicionar imagem
             </button>
 
 
@@ -468,50 +245,43 @@ function criarProdutoCard() {
                 title="Trocar imagem"
                 aria-label="Trocar imagem"
             >
-                ✎
+                <i class="bi bi-pencil" aria-hidden="true"></i>
             </button>
 
         </div>
 
 
-        <div class="produto-card-conteudo">
-
-            <button
-                type="button"
-                class="produto-editar-info"
-                title="Editar informações"
-                aria-label="Editar informações"
-            >
-                ✎
-            </button>
-
+        <div class="produto-form">
 
             <label>
-                Nome do produto:
+                Nome do produto
             </label>
 
             <input
                 type="text"
+                name="nome_produto"
                 placeholder="Nome do produto"
             >
 
 
             <label>
-                Preço do produto:
+                Preço
             </label>
 
             <input
                 type="text"
-                placeholder="R$ 00,00"
+                name="preco_produto"
+                placeholder="0,00"
             >
 
 
             <label>
-                Descrição do produto:
+                Descrição
             </label>
 
             <textarea
-                placeholder="Descrição do produto..."
+                name="descricao_produto"
+                placeholder="Descrição do produto"
             ></textarea>
 
         </div>
@@ -519,7 +289,11 @@ function criarProdutoCard() {
     `;
 
 
+    prepararProdutoCard(card);
+
+
     return card;
+
 }
 
 
@@ -527,37 +301,24 @@ function criarProdutoCard() {
 function adicionarProduto() {
 
     const container =
-        document.getElementById(
-            'produtoCards'
-        )
-        ||
         document.querySelector(
             '.produto-cards-scroll'
         );
 
 
     if (!container) {
-
-        console.error(
-            'Não encontrei o container dos produtos.'
-        );
-
         return;
     }
+
+
+    const novoCard =
+        criarProdutoCard();
 
 
     const cardAdicionar =
         document.getElementById(
             'produtoCriarCard'
-        )
-        ||
-        container.querySelector(
-            '.produto-criar-card'
         );
-
-
-    const novoCard =
-        criarProdutoCard();
 
 
     if (cardAdicionar) {
@@ -575,41 +336,11 @@ function adicionarProduto() {
 
     }
 
-
-    prepararProdutoCard(
-        novoCard
-    );
-
-
-    const campoNome =
-        novoCard.querySelector(
-            '.produto-card-conteudo input'
-        );
-
-
-    if (campoNome) {
-
-        campoNome.focus();
-
-    }
-
-
-    novoCard.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-        inline: 'center'
-    });
-
 }
 
 
 
 function excluirProdutoCard(botao) {
-
-    if (!botao) {
-        return;
-    }
-
 
     const card =
         botao.closest(
@@ -622,18 +353,19 @@ function excluirProdutoCard(botao) {
     }
 
 
-    const confirmou =
+    const confirmar =
         confirm(
-            'Deseja realmente excluir este produto?'
+            'Deseja excluir este produto?'
         );
 
 
-    if (!confirmou) {
+    if (!confirmar) {
         return;
     }
 
 
     card.remove();
+
 }
 
 //#endregion
@@ -803,7 +535,7 @@ function criarServicoCard() {
             title="Excluir serviço"
             aria-label="Excluir serviço"
         >
-            ✕
+            <i class="bi bi-trash3" aria-hidden="true"></i>
         </button>
 
 
@@ -821,7 +553,8 @@ function criarServicoCard() {
                 type="button"
                 class="servico-botao-imagem"
             >
-                📷 Adicionar imagem
+                <i class="bi bi-camera-plus" aria-hidden="true"></i>
+                Adicionar imagem
             </button>
 
 
@@ -837,50 +570,43 @@ function criarServicoCard() {
                 title="Trocar imagem"
                 aria-label="Trocar imagem"
             >
-                ✎
+                <i class="bi bi-pencil" aria-hidden="true"></i>
             </button>
 
         </div>
 
 
-        <div class="servico-card-conteudo">
-
-            <button
-                type="button"
-                class="servico-editar-info"
-                title="Editar informações"
-                aria-label="Editar informações"
-            >
-                ✎
-            </button>
-
+        <div class="servico-form">
 
             <label>
-                Nome do serviço:
+                Nome do serviço
             </label>
 
             <input
                 type="text"
+                name="nome_servico"
                 placeholder="Nome do serviço"
             >
 
 
             <label>
-                Preço do serviço:
+                Preço
             </label>
 
             <input
                 type="text"
-                placeholder="R$ 00,00"
+                name="preco"
+                placeholder="0,00"
             >
 
 
             <label>
-                Descrição do serviço:
+                Descrição
             </label>
 
             <textarea
-                placeholder="Descrição do serviço..."
+                name="descricao"
+                placeholder="Descrição do serviço"
             ></textarea>
 
         </div>
@@ -888,7 +614,11 @@ function criarServicoCard() {
     `;
 
 
+    prepararServicoCard(card);
+
+
     return card;
+
 }
 
 
@@ -896,37 +626,24 @@ function criarServicoCard() {
 function adicionarServico() {
 
     const container =
-        document.getElementById(
-            'servicoCards'
-        )
-        ||
         document.querySelector(
             '.servico-cards-scroll'
         );
 
 
     if (!container) {
-
-        console.error(
-            'Não encontrei o container dos serviços.'
-        );
-
         return;
     }
+
+
+    const novoCard =
+        criarServicoCard();
 
 
     const cardAdicionar =
         document.getElementById(
             'servicoCriarCard'
-        )
-        ||
-        container.querySelector(
-            '.servico-criar-card'
         );
-
-
-    const novoCard =
-        criarServicoCard();
 
 
     if (cardAdicionar) {
@@ -944,41 +661,11 @@ function adicionarServico() {
 
     }
 
-
-    prepararServicoCard(
-        novoCard
-    );
-
-
-    const campoNome =
-        novoCard.querySelector(
-            '.servico-card-conteudo input'
-        );
-
-
-    if (campoNome) {
-
-        campoNome.focus();
-
-    }
-
-
-    novoCard.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-        inline: 'center'
-    });
-
 }
 
 
 
 function excluirServicoCard(botao) {
-
-    if (!botao) {
-        return;
-    }
-
 
     const card =
         botao.closest(
@@ -991,56 +678,52 @@ function excluirServicoCard(botao) {
     }
 
 
-    const confirmou =
+    const confirmar =
         confirm(
-            'Deseja realmente excluir este serviço?'
+            'Deseja excluir este serviço?'
         );
 
 
-    if (!confirmou) {
+    if (!confirmar) {
         return;
     }
 
 
     card.remove();
+
 }
 
 //#endregion
 
 
 
-//#region AVATAR PRODUTO
+//#region PREVIEWS DE AVATAR
 
-function prepararAvatarProduto() {
+function configurarPreviewImagem(
+    inputId,
+    previewId,
+    containerSeletor
+) {
 
     const input =
         document.getElementById(
-            'foto-responsavel-produto'
+            inputId
         );
 
 
     const preview =
         document.getElementById(
-            'preview-responsavel-produto'
+            previewId
         );
 
 
-    const avatar =
-        document.querySelector(
-            '.produto-avatar'
-        );
-
-
-    if (
-        !input ||
-        !preview ||
-        !avatar
-    ) {
+    if (!input || !preview) {
         return;
     }
 
 
-    input.onchange =
+    input.addEventListener(
+        'change',
         function () {
 
             const arquivo =
@@ -1053,11 +736,13 @@ function prepararAvatarProduto() {
 
 
             if (
-                !arquivo.type.startsWith('image/')
+                !arquivo.type.startsWith(
+                    'image/'
+                )
             ) {
 
                 alert(
-                    'Selecione uma imagem.'
+                    'Selecione um arquivo de imagem.'
                 );
 
                 input.value = '';
@@ -1066,31 +751,42 @@ function prepararAvatarProduto() {
             }
 
 
-            const urlImagem =
+            const url =
                 URL.createObjectURL(
                     arquivo
                 );
 
 
             preview.src =
-                urlImagem;
+                url;
 
 
-            avatar.classList.add(
-                'tem-imagem'
-            );
+            const container =
+                input.closest(
+                    containerSeletor
+                );
+
+
+            if (container) {
+
+                container.classList.add(
+                    'tem-imagem'
+                );
+
+            }
 
 
             preview.onload =
                 function () {
 
                     URL.revokeObjectURL(
-                        urlImagem
+                        url
                     );
 
                 };
 
-        };
+        }
+    );
 
 }
 
@@ -1098,88 +794,479 @@ function prepararAvatarProduto() {
 
 
 
-//#region AVATAR SERVIÇO
+//#region PERFIL CONSUMIDOR
 
-function prepararAvatarServico() {
+function editarConsumidor(botao) {
 
-    const input =
-        document.getElementById(
-            'foto-responsavel-servico'
+    const form =
+        botao.closest(
+            '.consumidor-form-edicao'
         );
 
 
-    const preview =
-        document.getElementById(
-            'preview-responsavel-servico'
-        );
-
-
-    const avatar =
-        document.querySelector(
-            '.servico-avatar'
-        );
-
-
-    if (
-        !input ||
-        !preview ||
-        !avatar
-    ) {
+    if (!form) {
         return;
     }
 
 
-    input.onchange =
-        function () {
-
-            const arquivo =
-                input.files[0];
+    form.classList.add(
+        'editando'
+    );
 
 
-            if (!arquivo) {
-                return;
-            }
+    form
+        .querySelectorAll(
+            '.consumidor-field-left input'
+        )
+        .forEach(
+            function (input) {
 
-
-            if (
-                !arquivo.type.startsWith('image/')
-            ) {
-
-                alert(
-                    'Selecione uma imagem.'
+                input.removeAttribute(
+                    'readonly'
                 );
 
-                input.value = '';
-
-                return;
             }
+        );
 
 
-            const urlImagem =
-                URL.createObjectURL(
-                    arquivo
-                );
+    botao.hidden =
+        true;
 
 
-            preview.src =
-                urlImagem;
+    const salvar =
+        form.querySelector(
+            '.consumidor-salvar-alteracoes'
+        );
 
 
-            avatar.classList.add(
-                'tem-imagem'
-            );
+    if (salvar) {
+
+        salvar.hidden =
+            false;
+
+    }
+
+}
+
+//#endregion
 
 
-            preview.onload =
-                function () {
 
-                    URL.revokeObjectURL(
-                        urlImagem
-                    );
+//#region INFORMAÇÕES DA LOJA
 
-                };
+function abrirEdicaoLoja(
+    botao,
+    nome,
+    rua,
+    numero,
+    cep,
+    email,
+    telefone,
+    cnpj,
+    link,
+    categoria
+) {
 
-        };
+    const pagina =
+        botao.closest(
+            '.info-loja-page'
+        );
+
+
+    if (!pagina) {
+        return;
+    }
+
+
+    const form =
+        pagina.querySelector(
+            '.info-loja-edicao'
+        );
+
+
+    if (!form) {
+        return;
+    }
+
+
+    const visualizacao =
+        pagina.querySelector(
+            '.info-loja-visualizacao'
+        );
+
+
+    if (visualizacao) {
+
+        visualizacao.style.display =
+            'none';
+
+    }
+
+
+    form.style.display =
+        'block';
+
+
+    form.querySelector(
+        '.js-editar-loja-nome'
+    ).value = nome || '';
+
+
+    form.querySelector(
+        '.js-editar-loja-rua'
+    ).value = rua || '';
+
+
+    form.querySelector(
+        '.js-editar-loja-numero'
+    ).value = numero || '';
+
+
+    form.querySelector(
+        '.js-editar-loja-cep'
+    ).value = cep || '';
+
+
+    form.querySelector(
+        '.js-editar-loja-email'
+    ).value = email || '';
+
+
+    form.querySelector(
+        '.js-editar-loja-telefone'
+    ).value = telefone || '';
+
+
+    form.querySelector(
+        '.js-editar-loja-cnpj'
+    ).value = cnpj || '';
+
+
+    form.querySelector(
+        '.js-editar-loja-link'
+    ).value = link || '';
+
+
+    const selectCategoria =
+        form.querySelector(
+            '.js-editar-loja-categoria'
+        );
+
+
+    if (selectCategoria) {
+
+        selectCategoria.value =
+            categoria || '';
+
+    }
+
+}
+
+
+
+function cancelarEdicaoLoja(botao) {
+
+    const form =
+        botao.closest(
+            '.info-loja-edicao'
+        );
+
+
+    if (!form) {
+        return;
+    }
+
+
+    form.style.display =
+        'none';
+
+
+    const pagina =
+        form.closest(
+            '.info-loja-page'
+        );
+
+
+    if (!pagina) {
+        return;
+    }
+
+
+    const visualizacao =
+        pagina.querySelector(
+            '.info-loja-visualizacao'
+        );
+
+
+    if (visualizacao) {
+
+        visualizacao.style.display =
+            '';
+
+    }
+
+}
+
+//#endregion
+
+
+
+//#region INFORMAÇÕES DO PRODUTO
+
+function abrirEdicaoProduto(botao) {
+
+    const card =
+        botao.closest(
+            '.info-produto-card'
+        );
+
+
+    if (!card) {
+        return;
+    }
+
+
+    card.classList.add(
+        'editando'
+    );
+
+}
+
+
+
+function cancelarEdicaoProduto(botao) {
+
+    const card =
+        botao.closest(
+            '.info-produto-card'
+        );
+
+
+    if (!card) {
+        return;
+    }
+
+
+    card.classList.remove(
+        'editando'
+    );
+
+}
+
+
+
+function salvarEdicaoProduto(botao) {
+
+    const card =
+        botao.closest(
+            '.info-produto-card'
+        );
+
+
+    if (!card) {
+        return;
+    }
+
+
+    const inputNome =
+        card.querySelector(
+            '.js-editar-nome'
+        );
+
+
+    const inputPreco =
+        card.querySelector(
+            '.js-editar-preco'
+        );
+
+
+    const inputDescricao =
+        card.querySelector(
+            '.js-editar-descricao'
+        );
+
+
+    const nome =
+        inputNome.value.trim();
+
+
+    const preco =
+        inputPreco.value.trim();
+
+
+    const descricao =
+        inputDescricao.value.trim();
+
+
+    if (!nome) {
+
+        alert(
+            'Preencha o nome do produto.'
+        );
+
+        inputNome.focus();
+
+        return;
+
+    }
+
+
+    if (!preco) {
+
+        alert(
+            'Preencha o preço do produto.'
+        );
+
+        inputPreco.focus();
+
+        return;
+
+    }
+
+
+    card.querySelector(
+        '.js-nome'
+    ).textContent =
+        nome;
+
+
+    card.querySelector(
+        '.js-preco'
+    ).textContent =
+        'R$ ' + preco;
+
+
+    card.querySelector(
+        '.js-descricao'
+    ).textContent =
+        descricao ||
+        'Sem descrição.';
+
+
+    card.classList.remove(
+        'editando'
+    );
+
+}
+
+
+
+function excluirProduto(botao) {
+
+    const card =
+        botao.closest(
+            '.info-produto-card'
+        );
+
+
+    if (!card) {
+        return;
+    }
+
+
+    const nome =
+        card.querySelector(
+            '.js-nome'
+        ).textContent.trim();
+
+
+    const confirmar =
+        confirm(
+            'Deseja excluir o produto "' +
+            nome +
+            '"?'
+        );
+
+
+    if (!confirmar) {
+        return;
+    }
+
+
+    card.remove();
+
+}
+
+//#endregion
+
+
+
+//#region INFORMAÇÕES DO SERVIÇO
+
+function abrirEdicaoServico(botao) {
+
+    const card =
+        botao.closest(
+            '.info-servico-card'
+        );
+
+
+    if (!card) {
+        return;
+    }
+
+
+    card.classList.add(
+        'editando'
+    );
+
+}
+
+
+
+function cancelarEdicaoServico(botao) {
+
+    const card =
+        botao.closest(
+            '.info-servico-card'
+        );
+
+
+    if (!card) {
+        return;
+    }
+
+
+    card.classList.remove(
+        'editando'
+    );
+
+}
+
+//#endregion
+
+
+
+//#region FAVORITOS
+
+function alternarFavorito(botao) {
+
+    if (!botao) {
+        return;
+    }
+
+
+    const ativo =
+        botao.classList.toggle(
+            'favorito-ativo'
+        );
+
+
+    const icone =
+        botao.querySelector(
+            'i'
+        );
+
+
+    if (!icone) {
+        return;
+    }
+
+
+    icone.className =
+        ativo
+            ? 'bi bi-heart-fill'
+            : 'bi bi-heart';
 
 }
 
@@ -1193,86 +1280,72 @@ document.addEventListener(
     'DOMContentLoaded',
     function () {
 
-
-        //#region TEMA
-
         const themeBtn =
             document.querySelector(
                 '.theme-toggle'
             );
 
 
-        if (
-            localStorage.getItem('theme')
-            ===
-            'dark'
-        ) {
+        if (themeBtn) {
 
-            document.body.classList.add(
-                'dark'
-            );
+            const modoEscuro =
+                document.body.classList.contains(
+                    'dark'
+                );
 
 
-            if (themeBtn) {
-
-                themeBtn.textContent =
-                    '☀️ Modo claro';
-
-            }
+            themeBtn.innerHTML =
+                modoEscuro
+                    ? '<i class="bi bi-sun-fill" aria-hidden="true"></i> <span class="theme-label">Modo claro</span>'
+                    : '<i class="bi bi-moon-fill" aria-hidden="true"></i> <span class="theme-label">Modo escuro</span>';
 
         }
 
-        //#endregion
-
-
-
-        //#region FAVORITOS
-
-        carregarFavoritos();
-
-        //#endregion
-
-
-
-        //#region PRODUTOS
 
         document
             .querySelectorAll(
                 '.produto-card'
             )
-            .forEach(function (card) {
+            .forEach(
+                prepararProdutoCard
+            );
 
-                prepararProdutoCard(
-                    card
-                );
-
-            });
-
-
-        prepararAvatarProduto();
-
-        //#endregion
-
-
-
-        //#region SERVIÇOS
 
         document
             .querySelectorAll(
                 '.servico-card'
             )
-            .forEach(function (card) {
-
-                prepararServicoCard(
-                    card
-                );
-
-            });
+            .forEach(
+                prepararServicoCard
+            );
 
 
-        prepararAvatarServico();
+        configurarPreviewImagem(
+            'foto-consumidor',
+            'preview-consumidor',
+            '.consumidor-avatar'
+        );
 
-        //#endregion
+
+        configurarPreviewImagem(
+            'foto-responsavel',
+            'preview-responsavel',
+            '.perfil-avatar'
+        );
+
+
+        configurarPreviewImagem(
+            'foto-responsavel-produto',
+            'preview-responsavel-produto',
+            '.produto-avatar'
+        );
+
+
+        configurarPreviewImagem(
+            'foto-responsavel-servico',
+            'preview-responsavel-servico',
+            '.servico-avatar'
+        );
 
     }
 );

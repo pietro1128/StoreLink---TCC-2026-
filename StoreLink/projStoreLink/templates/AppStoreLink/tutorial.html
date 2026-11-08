@@ -31,6 +31,11 @@
     href="{% static 'AppStoreLink/styles/tutorial.css' %}"
   >
 
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/icons.css' %}"
+  >
+
 </head>
 
 
@@ -42,7 +47,9 @@
   <script>
 
     if (
-      localStorage.getItem('theme') === 'dark'
+      localStorage.getItem(
+        'theme'
+      ) === 'dark'
     ) {
 
       document.body.classList.add(
@@ -54,7 +61,6 @@
   </script>
 
   <!-- #endregion -->
-
 
 
   <!-- #region navbar -->
@@ -111,7 +117,14 @@
         data-url="{% url 'perfil-consumidor' %}"
         onclick="location.href=this.dataset.url"
       >
-        👤 Minha conta
+
+        <span
+          class="sl-icon sl-user"
+          aria-hidden="true"
+        ></span>
+
+        Minha conta
+
       </button>
 
     {% else %}
@@ -129,16 +142,24 @@
 
     <button
       class="theme-toggle"
-      onclick="toggleTheme(this)"
+      onclick="toggleThemeTutorial()"
     >
-      🌙 Modo escuro
+
+      <span
+        class="sl-icon sl-moon"
+        aria-hidden="true"
+      ></span>
+
+      <span class="theme-label">
+        Modo escuro
+      </span>
+
     </button>
 
 
   </div>
 
   <!-- #endregion -->
-
 
 
   <!-- #region sidebar -->
@@ -234,7 +255,6 @@
   <!-- #endregion -->
 
 
-
   <!-- #region página -->
 
   <main class="tutorial-page">
@@ -265,14 +285,18 @@
         class="tutorial-comecar"
         href="#passo-1"
       >
-        COMEÇAR TUTORIAL ↓
+        COMEÇAR TUTORIAL
+
+        <span
+          class="sl-icon sl-arrow-down"
+          aria-hidden="true"
+        ></span>
       </a>
 
 
     </section>
 
     <!-- #endregion -->
-
 
 
     <!-- #region tutorial 1 -->
@@ -315,7 +339,6 @@
       </div>
 
 
-
       <div class="tutorial-imagem">
 
 
@@ -331,7 +354,6 @@
     </section>
 
     <!-- #endregion -->
-
 
 
     <!-- #region tutorial 2 -->
@@ -371,7 +393,6 @@
       </div>
 
 
-
       <div class="tutorial-imagem">
 
 
@@ -387,7 +408,6 @@
     </section>
 
     <!-- #endregion -->
-
 
 
     <!-- #region tutorial 3 -->
@@ -427,7 +447,6 @@
       </div>
 
 
-
       <div class="tutorial-imagem">
 
 
@@ -452,7 +471,6 @@
     </section>
 
     <!-- #endregion -->
-
 
 
     <!-- #region tutorial 4 -->
@@ -492,7 +510,6 @@
       </div>
 
 
-
       <div class="tutorial-imagem">
 
 
@@ -517,7 +534,6 @@
     </section>
 
     <!-- #endregion -->
-
 
 
     <!-- #region tutorial 5 -->
@@ -557,7 +573,6 @@
       </div>
 
 
-
       <div class="tutorial-imagem">
 
 
@@ -582,7 +597,6 @@
     </section>
 
     <!-- #endregion -->
-
 
 
     <!-- #region tutorial 6 -->
@@ -622,7 +636,6 @@
       </div>
 
 
-
       <div class="tutorial-imagem">
 
 
@@ -647,7 +660,6 @@
     </section>
 
     <!-- #endregion -->
-
 
 
     <!-- #region tutorial 7 -->
@@ -687,7 +699,6 @@
       </div>
 
 
-
       <div class="tutorial-imagem">
 
 
@@ -712,7 +723,6 @@
     </section>
 
     <!-- #endregion -->
-
 
 
     <!-- #region tutorial 8 -->
@@ -752,7 +762,6 @@
       </div>
 
 
-
       <div class="tutorial-imagem">
 
 
@@ -779,7 +788,6 @@
     <!-- #endregion -->
 
 
-
     <!-- #region recursos extras -->
 
     <section class="tutorial-extras">
@@ -797,7 +805,12 @@
 
 
           <span>
-            🌙
+
+            <span
+              class="sl-icon sl-moon"
+              aria-hidden="true"
+            ></span>
+
           </span>
 
 
@@ -815,12 +828,16 @@
         </article>
 
 
-
         <article class="tutorial-extra-card">
 
 
           <span>
-            👤
+
+            <span
+              class="sl-icon sl-user"
+              aria-hidden="true"
+            ></span>
+
           </span>
 
 
@@ -838,12 +855,16 @@
         </article>
 
 
-
         <article class="tutorial-extra-card">
 
 
           <span>
-            🛟
+
+            <span
+              class="sl-icon sl-lifebuoy"
+              aria-hidden="true"
+            ></span>
+
           </span>
 
 
@@ -872,7 +893,6 @@
     </section>
 
     <!-- #endregion -->
-
 
 
     <!-- #region final -->
@@ -909,12 +929,83 @@
   <!-- #endregion -->
 
 
-
   <!-- #region javascript -->
 
   <script
     src="{% static 'AppStoreLink/scripts/index.js' %}"
   ></script>
+
+
+  <script>
+
+    function atualizarTemaTutorial() {
+
+      const botao =
+        document.querySelector(
+          '.theme-toggle'
+        );
+
+
+      if (!botao) {
+        return;
+      }
+
+
+      if (
+        document.body.classList.contains(
+          'dark'
+        )
+      ) {
+
+        botao.innerHTML =
+          '<span class="sl-icon sl-sun" aria-hidden="true"></span><span class="theme-label">Modo claro</span>';
+
+      } else {
+
+        botao.innerHTML =
+          '<span class="sl-icon sl-moon" aria-hidden="true"></span><span class="theme-label">Modo escuro</span>';
+
+      }
+
+    }
+
+
+    function toggleThemeTutorial() {
+
+      document.body.classList.toggle(
+        'dark'
+      );
+
+
+      const isDark =
+        document.body.classList.contains(
+          'dark'
+        );
+
+
+      localStorage.setItem(
+        'theme',
+        isDark
+          ? 'dark'
+          : 'light'
+      );
+
+
+      atualizarTemaTutorial();
+
+    }
+
+
+    document.addEventListener(
+      'DOMContentLoaded',
+      function () {
+
+        atualizarTemaTutorial();
+
+      }
+    );
+
+  </script>
 
   <!-- #endregion -->
 

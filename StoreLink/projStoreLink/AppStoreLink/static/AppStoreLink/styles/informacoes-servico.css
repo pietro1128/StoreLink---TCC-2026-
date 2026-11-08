@@ -326,6 +326,90 @@
 }
 
 
+/* Categoria do serviço */
+
+.info-item-visualizacao
+.info-preco:nth-of-type(2) {
+  width:
+    fit-content;
+
+  margin:
+    0
+    0
+    14px;
+
+  padding:
+    6px
+    12px;
+
+  border-radius:
+    20px;
+
+  background:
+    var(--cor-categoria);
+
+  color:
+    #ffffff;
+
+  font-size:
+    13px;
+
+  font-weight:
+    800;
+}
+
+
+.info-item-edicao
+.info-preco {
+  width:
+    fit-content;
+
+  margin:
+    0
+    0
+    14px;
+
+  padding:
+    6px
+    12px;
+
+  border-radius:
+    20px;
+
+  background:
+    var(--cor-categoria);
+
+  color:
+    #ffffff;
+
+  font-size:
+    13px;
+
+  font-weight:
+    800;
+}
+
+
+.info-construcao
+.info-item-visualizacao
+.info-preco:nth-of-type(2),
+
+.info-outros
+.info-item-visualizacao
+.info-preco:nth-of-type(2),
+
+.info-construcao
+.info-item-edicao
+.info-preco,
+
+.info-outros
+.info-item-edicao
+.info-preco {
+  color:
+    #222222;
+}
+
+
 .info-servico-corpo p {
   margin: 0;
 
@@ -365,10 +449,12 @@
 
   border-radius: 8px;
 
-  display: flex;
+  display: inline-flex;
 
   align-items: center;
   justify-content: center;
+
+  gap: 7px;
 
   font-family: inherit;
 
@@ -409,6 +495,15 @@
 
   filter:
     brightness(0.92);
+}
+
+
+.info-item-editar
+.sl-icon,
+.info-item-excluir
+.sl-icon {
+  width: 15px;
+  height: 15px;
 }
 
 
@@ -550,6 +645,15 @@
 }
 
 
+.info-construcao
+.info-edicao-salvar,
+.info-outros
+.info-edicao-salvar {
+  color:
+    #222222;
+}
+
+
 .info-edicao-cancelar {
   background:
     #202020;
@@ -617,10 +721,50 @@ body.dark
 
 body.dark
 .info-servico-corpo h2,
+
 body.dark
 .info-preco {
   color:
     #ffffff;
+}
+
+
+body.dark
+.info-item-visualizacao
+.info-preco:nth-of-type(2),
+
+body.dark
+.info-item-edicao
+.info-preco {
+  background:
+    var(--cor-categoria);
+
+  color:
+    #ffffff;
+}
+
+
+body.dark
+.info-construcao
+.info-item-visualizacao
+.info-preco:nth-of-type(2),
+
+body.dark
+.info-outros
+.info-item-visualizacao
+.info-preco:nth-of-type(2),
+
+body.dark
+.info-construcao
+.info-item-edicao
+.info-preco,
+
+body.dark
+.info-outros
+.info-item-edicao
+.info-preco {
+  color:
+    #222222;
 }
 
 
@@ -640,6 +784,7 @@ body.dark
 
 body.dark
 .info-item-edicao input,
+
 body.dark
 .info-item-edicao textarea {
   background:
@@ -655,6 +800,7 @@ body.dark
 
 body.dark
 .info-item-edicao input:focus,
+
 body.dark
 .info-item-edicao textarea:focus {
   background:

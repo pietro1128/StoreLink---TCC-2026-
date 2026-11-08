@@ -1,3 +1,5 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
 * {
   margin: 0;
   padding: 0;
@@ -14,13 +16,8 @@
   --subtitle-color: #666666;
   --field-placeholder: #9a9a9a;
   --field-border: #d8d8d8;
-
-  --auth-gradient:
-    linear-gradient(
-      160deg,
-      #e8534f 0%,
-      #f5943a 100%
-    );
+  --accent-color: #292d30;
+  --accent-text: #ffffff;
 }
 
 
@@ -31,13 +28,8 @@ body.dark {
   --subtitle-color: #b8b8b8;
   --field-placeholder: #858585;
   --field-border: #444444;
-
-  --auth-gradient:
-    linear-gradient(
-      160deg,
-      #a83531 0%,
-      #b8672a 100%
-    );
+  --accent-color: #ffffff;
+  --accent-text: #000000;
 }
 
 /* #endregion */
@@ -49,7 +41,7 @@ body {
   min-height: 100vh;
 
   font-family:
-    'Segoe UI',
+    'Montserrat',
     Arial,
     sans-serif;
 
@@ -85,7 +77,7 @@ body {
 
   align-items: center;
 
-  gap: 6px;
+  gap: 7px;
 
   border:
     1px solid
@@ -118,6 +110,12 @@ body {
 
   transform:
     translateY(-1px);
+}
+
+
+.theme-toggle .bi {
+  font-size: 15px;
+  line-height: 1;
 }
 
 /* #endregion */
@@ -228,7 +226,6 @@ body.dark
 
   font-family:
     'Montserrat',
-    'Segoe UI',
     Arial,
     sans-serif;
 
@@ -302,7 +299,6 @@ body.dark
 
   font-family:
     'Montserrat',
-    'Segoe UI',
     Arial,
     sans-serif;
 
@@ -369,7 +365,7 @@ body.dark
 
 .login-field:focus-within {
   border-bottom-color:
-    #e8534f;
+    var(--accent-color);
 }
 
 
@@ -463,13 +459,12 @@ input::placeholder {
   text-decoration: underline;
 
   transition:
-    color 0.2s ease;
+    opacity 0.2s ease;
 }
 
 
 .login-forgot a:hover {
-  color:
-    #e8534f;
+  opacity: 0.65;
 }
 
 /* #endregion */
@@ -491,15 +486,17 @@ input::placeholder {
     12px
     20px;
 
-  border: none;
+  border:
+    2px solid
+    var(--accent-color);
 
   border-radius: 30px;
 
   background:
-    var(--auth-gradient);
+    var(--accent-color);
 
   color:
-    #ffffff;
+    var(--accent-text);
 
   font-family:
     inherit;
@@ -516,7 +513,7 @@ input::placeholder {
     0
     10px
     20px
-    rgba(232, 83, 79, 0.30);
+    rgba(0, 0, 0, 0.18);
 
   transition:
     transform 0.2s ease,
@@ -530,13 +527,13 @@ input::placeholder {
     translateY(-2px);
 
   filter:
-    brightness(1.05);
+    brightness(1.15);
 
   box-shadow:
     0
     13px
     24px
-    rgba(232, 83, 79, 0.36);
+    rgba(0, 0, 0, 0.22);
 }
 
 
@@ -562,7 +559,7 @@ input::placeholder {
 
 .login-signup a {
   color:
-    #e8534f;
+    var(--text-color);
 
   font-weight: 800;
 
@@ -654,22 +651,14 @@ body.dark
 
 
 body.dark
-.login-forgot a:hover {
-  color:
-    #f5943a;
-}
-
-
-body.dark
 .login-signup a {
   color:
-    #f5943a;
+    #f0f0f0;
 }
 
 
 body.dark
 .alert-error,
-
 body.dark
 .alert-danger {
   background:

@@ -1,6 +1,5 @@
 {% load static %}
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 
 <head>
@@ -16,15 +15,14 @@
     StoreLink - Serviços de {{ loja.nome_loja }}
   </title>
 
-
   <link
     rel="icon"
     type="image/png"
     href="{% static 'AppStoreLink/images/icon-dark.png' %}"
   >
 
-  <link 
-    rel="stylesheet" 
+  <link
+    rel="stylesheet"
     href="{% static 'AppStoreLink/styles/mensagens.css' %}"
   >
 
@@ -33,10 +31,14 @@
     href="{% static 'AppStoreLink/styles/style.css' %}"
   >
 
-
   <link
     rel="stylesheet"
     href="{% static 'AppStoreLink/styles/informacoes-servico.css' %}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/icons.css' %}"
   >
 
 </head>
@@ -48,7 +50,9 @@
   <script>
 
     if (
-      localStorage.getItem('theme') === 'dark'
+      localStorage.getItem(
+        'theme'
+      ) === 'dark'
     ) {
 
       document.body.classList.add(
@@ -58,7 +62,6 @@
     }
 
   </script>
-
 
 
   <!-- #region TOPBAR -->
@@ -115,7 +118,12 @@
         data-url="{% url 'perfil-consumidor' %}"
         onclick="location.href=this.dataset.url"
       >
-        👤 Minha conta
+        <span
+          class="sl-icon sl-user"
+          aria-hidden="true"
+        ></span>
+
+        Minha conta
       </button>
 
     {% else %}
@@ -133,16 +141,22 @@
 
     <button
       class="theme-toggle"
-      onclick="toggleTheme(this)"
+      onclick="toggleThemeServicoInfo()"
     >
-      🌙 Modo escuro
+      <span
+        class="sl-icon sl-moon"
+        aria-hidden="true"
+      ></span>
+
+      <span class="theme-label">
+        Modo escuro
+      </span>
     </button>
 
 
   </div>
 
   <!-- #endregion -->
-
 
 
   <!-- #region CONTEÚDO -->
@@ -195,8 +209,12 @@
         class="info-voltar"
         href="{% url 'InformacoesLoja' loja.id_loja %}"
         aria-label="Voltar"
+        title="Voltar"
       >
-        ←
+        <span
+          class="sl-icon sl-arrow-left"
+          aria-hidden="true"
+        ></span>
       </a>
 
 
@@ -218,9 +236,8 @@
     <!-- #endregion -->
 
 
-
     <!-- #region SERVIÇOS -->
-     
+
     {% if servicos %}
 
 
@@ -236,26 +253,43 @@
             <!-- #region AÇÕES DO PROPRIETÁRIO -->
 
             {% if eh_dono %}
+
               <div class="info-item-acoes">
 
-                <button type="button" class="info-item-editar"
-                        onclick="abrirEdicaoServico(this)">
-                  ✎ Editar
+
+                <button
+                  type="button"
+                  class="info-item-editar"
+                  onclick="abrirEdicaoServico(this)"
+                >
+                  <span
+                    class="sl-icon sl-pencil"
+                    aria-hidden="true"
+                  ></span>
+
+                  Editar
                 </button>
 
-                <form method="POST"
-                      action="{% url 'servico-excluir' servico.id_servico %}"
-                      style="display: contents;"
-                      onsubmit="return confirm('Excluir o serviço {{ servico.nome_servico|escapejs }}? Essa ação não pode ser desfeita.');">
-                  {% csrf_token %}
-                  <button type="submit" class="info-item-excluir">🗑 Excluir</button>
-                </form>
+
+                <button
+                  type="button"
+                  class="info-item-excluir"
+                  onclick="excluirServico(this)"
+                >
+                  <span
+                    class="sl-icon sl-trash"
+                    aria-hidden="true"
+                  ></span>
+
+                  Excluir
+                </button>
+
 
               </div>
+
             {% endif %}
 
             <!-- #endregion -->
-
 
 
             <!-- #region IMAGEM -->
@@ -273,7 +307,10 @@
                   "
                 >
 
-                <div class="info-sem-imagem" style="display: none;">
+                <div
+                  class="info-sem-imagem"
+                  style="display: none;"
+                >
                   Sem imagem cadastrada
                 </div>
 
@@ -288,7 +325,6 @@
             </div>
 
             <!-- #endregion -->
-
 
 
             <!-- #region CORPO -->
@@ -311,7 +347,6 @@
                 </h2>
 
 
-
                 <span class="info-label">
                   Preço do serviço:
                 </span>
@@ -321,6 +356,15 @@
                   R$ {{ servico.preco }}
                 </strong>
 
+
+                <span class="info-label">
+                  Categoria:
+                </span>
+
+
+                <strong class="info-preco">
+                  {{ servico.id_loja.id_categoria.tipo_categoria }}
+                </strong>
 
 
                 <span class="info-label">
@@ -348,33 +392,83 @@
               <!-- #endregion -->
 
 
-
               <!-- #region EDIÇÃO -->
 
               {% if eh_dono %}
-                <form method="POST"
-                      action="{% url 'servico-editar' servico.id_servico %}"
-                      class="info-item-edicao">
-                  {% csrf_token %}
 
-                  <label>Nome do serviço:</label>
-                  <input type="text" name="nome_servico"
-                        value="{{ servico.nome_servico }}" maxlength="100" required>
+                <div class="info-item-edicao">
 
-                  <label>Preço do serviço:</label>
-                  <input type="text" name="preco"
-                        value="{{ servico.preco }}" required>
 
-                  <label>Descrição do serviço:</label>
-                  <textarea name="descricao">{{ servico.descricao|default:'' }}</textarea>
+                  <label>
+                    Nome do serviço:
+                  </label>
+
+
+                  <input
+                    type="text"
+                    class="js-editar-nome"
+                    value="{{ servico.nome_servico }}"
+                  >
+
+
+                  <label>
+                    Preço do serviço:
+                  </label>
+
+
+                  <input
+                    type="text"
+                    class="js-editar-preco"
+                    value="{{ servico.preco }}"
+                  >
+
+
+                  <label>
+                    Categoria:
+                  </label>
+
+
+                  <strong class="info-preco">
+                    {{ servico.id_loja.id_categoria.tipo_categoria }}
+                  </strong>
+
+
+                  <label>
+                    Descrição do serviço:
+                  </label>
+
+
+                  <textarea
+                    class="js-editar-descricao"
+                  >{{ servico.descricao|default:'' }}</textarea>
+
 
                   <div class="info-edicao-botoes">
-                    <button type="submit" class="info-edicao-salvar">Salvar</button>
-                    <button type="button" class="info-edicao-cancelar"
-                            onclick="cancelarEdicaoServico(this)">Cancelar</button>
+
+
+                    <button
+                      type="button"
+                      class="info-edicao-salvar"
+                      onclick="salvarEdicaoServico(this)"
+                    >
+                      Salvar
+                    </button>
+
+
+                    <button
+                      type="button"
+                      class="info-edicao-cancelar"
+                      onclick="cancelarEdicaoServico(this)"
+                    >
+                      Cancelar
+                    </button>
+
+
                   </div>
 
-                </form>
+
+                </div>
+
               {% endif %}
 
               <!-- #endregion -->
@@ -417,34 +511,356 @@
 
   </main>
 
-  {% if messages %}
-    <div class="messages-container">
-      {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-      {% endfor %}
-    </div>
-  {% endif %}
-
   <!-- #endregion -->
 
+
+  {% if messages %}
+
+    <div class="messages-container">
+
+      {% for message in messages %}
+
+        <div class="alert alert-{{ message.tags }}">
+          {{ message }}
+        </div>
+
+      {% endfor %}
+
+    </div>
+
+  {% endif %}
 
 
   <!-- #region JAVASCRIPT -->
 
-  <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
+  <script
+    src="{% static 'AppStoreLink/scripts/index.js' %}"
+  ></script>
 
 
   <script>
-    function abrirEdicaoServico(botao) {
-      botao.closest('.info-servico-card').classList.add('editando');
+
+    function atualizarTemaServicoInfo() {
+
+      const botao =
+        document.querySelector(
+          '.theme-toggle'
+        );
+
+
+      if (!botao) {
+        return;
+      }
+
+
+      if (
+        document.body.classList.contains(
+          'dark'
+        )
+      ) {
+
+        botao.innerHTML =
+          '<span class="sl-icon sl-sun" aria-hidden="true"></span><span class="theme-label">Modo claro</span>';
+
+      } else {
+
+        botao.innerHTML =
+          '<span class="sl-icon sl-moon" aria-hidden="true"></span><span class="theme-label">Modo escuro</span>';
+
+      }
+
     }
 
-    function cancelarEdicaoServico(botao) {
-      const card = botao.closest('.info-servico-card');
-      card.classList.remove('editando');
-      // volta os campos para os valores que estão salvos no banco
-      card.querySelector('form.info-item-edicao').reset();
+
+    function toggleThemeServicoInfo() {
+
+      document.body.classList.toggle(
+        'dark'
+      );
+
+
+      const isDark =
+        document.body.classList.contains(
+          'dark'
+        );
+
+
+      localStorage.setItem(
+        'theme',
+        isDark
+          ? 'dark'
+          : 'light'
+      );
+
+
+      atualizarTemaServicoInfo();
+
     }
+
+
+    function abrirEdicaoServico(
+      botao
+    ) {
+
+      const card =
+        botao.closest(
+          '.info-servico-card'
+        );
+
+
+      if (!card) {
+        return;
+      }
+
+
+      const nome =
+        card.querySelector(
+          '.js-nome'
+        );
+
+
+      const preco =
+        card.querySelector(
+          '.js-preco'
+        );
+
+
+      const descricao =
+        card.querySelector(
+          '.js-descricao'
+        );
+
+
+      const inputNome =
+        card.querySelector(
+          '.js-editar-nome'
+        );
+
+
+      const inputPreco =
+        card.querySelector(
+          '.js-editar-preco'
+        );
+
+
+      const inputDescricao =
+        card.querySelector(
+          '.js-editar-descricao'
+        );
+
+
+      if (
+        !nome ||
+        !preco ||
+        !descricao ||
+        !inputNome ||
+        !inputPreco ||
+        !inputDescricao
+      ) {
+
+        return;
+
+      }
+
+
+      inputNome.value =
+        nome.textContent.trim();
+
+
+      inputPreco.value =
+        preco.textContent
+          .replace(
+            'R$',
+            ''
+          )
+          .trim();
+
+
+      const descricaoAtual =
+        descricao.textContent.trim();
+
+
+      inputDescricao.value =
+        descricaoAtual ===
+        'Sem descrição.'
+          ? ''
+          : descricaoAtual;
+
+
+      card.classList.add(
+        'editando'
+      );
+
+    }
+
+
+    function cancelarEdicaoServico(
+      botao
+    ) {
+
+      const card =
+        botao.closest(
+          '.info-servico-card'
+        );
+
+
+      if (!card) {
+        return;
+      }
+
+
+      card.classList.remove(
+        'editando'
+      );
+
+    }
+
+
+    function salvarEdicaoServico(
+      botao
+    ) {
+
+      const card =
+        botao.closest(
+          '.info-servico-card'
+        );
+
+
+      if (!card) {
+        return;
+      }
+
+
+      const inputNome =
+        card.querySelector(
+          '.js-editar-nome'
+        );
+
+
+      const inputPreco =
+        card.querySelector(
+          '.js-editar-preco'
+        );
+
+
+      const inputDescricao =
+        card.querySelector(
+          '.js-editar-descricao'
+        );
+
+
+      const nome =
+        inputNome.value.trim();
+
+
+      const preco =
+        inputPreco.value.trim();
+
+
+      const descricao =
+        inputDescricao.value.trim();
+
+
+      if (!nome) {
+
+        alert(
+          'Preencha o nome do serviço.'
+        );
+
+        inputNome.focus();
+
+        return;
+
+      }
+
+
+      if (!preco) {
+
+        alert(
+          'Preencha o preço do serviço.'
+        );
+
+        inputPreco.focus();
+
+        return;
+
+      }
+
+
+      card.querySelector(
+        '.js-nome'
+      ).textContent =
+        nome;
+
+
+      card.querySelector(
+        '.js-preco'
+      ).textContent =
+        'R$ ' + preco;
+
+
+      card.querySelector(
+        '.js-descricao'
+      ).textContent =
+        descricao ||
+        'Sem descrição.';
+
+
+      card.classList.remove(
+        'editando'
+      );
+
+    }
+
+
+    function excluirServico(
+      botao
+    ) {
+
+      const card =
+        botao.closest(
+          '.info-servico-card'
+        );
+
+
+      if (!card) {
+        return;
+      }
+
+
+      const nome =
+        card.querySelector(
+          '.js-nome'
+        ).textContent.trim();
+
+
+      const confirmar =
+        confirm(
+          'Deseja excluir o serviço "' +
+          nome +
+          '"?'
+        );
+
+
+      if (!confirmar) {
+        return;
+      }
+
+
+      card.remove();
+
+    }
+
+
+    document.addEventListener(
+      'DOMContentLoaded',
+      function () {
+
+        atualizarTemaServicoInfo();
+
+      }
+    );
+
   </script>
 
   <!-- #endregion -->
