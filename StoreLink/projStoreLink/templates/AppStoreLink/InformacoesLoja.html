@@ -304,14 +304,6 @@
 
             </div>
 
-            <form
-              id="form-excluir-loja"
-              method="POST"
-              action="{% url 'loja-excluir' loja.id_loja %}"
-            >
-              {% csrf_token %}
-            </form>
-
           {% endif %}
 
           <!-- #endregion -->
@@ -431,13 +423,9 @@
               <span class="js-loja-telefone">
 
                 {% if loja.telefone_loja %}
-
                   {{ loja.telefone_loja }}
-
                 {% else %}
-
                   Não informado
-
                 {% endif %}
 
               </span>
@@ -516,7 +504,13 @@
 
           {% if eh_dono %}
 
-            <div class="info-loja-edicao">
+            <form
+              method="POST"
+              action="{% url 'loja-editar' loja.id_loja %}"
+              class="info-loja-edicao"
+            >
+
+              {% csrf_token %}
 
 
               <h2>
@@ -530,6 +524,7 @@
 
               <input
                 type="text"
+                name="nome_loja"
                 class="js-editar-loja-nome"
                 value="{{ loja.nome_loja }}"
               >
@@ -542,6 +537,7 @@
 
               <input
                 type="text"
+                name="rua"
                 class="js-editar-loja-rua"
                 value="{{ loja.id_endereco.rua }}"
               >
@@ -559,6 +555,7 @@
 
                   <input
                     type="text"
+                    name="numero"
                     class="js-editar-loja-numero"
                     value="{{ loja.id_endereco.numero_estabelecimento }}"
                   >
@@ -575,6 +572,7 @@
 
                   <input
                     type="text"
+                    name="cep"
                     class="js-editar-loja-cep"
                     value="{{ loja.id_endereco.cep }}"
                   >
@@ -592,6 +590,7 @@
 
               <input
                 type="email"
+                name="email_loja"
                 class="js-editar-loja-email"
                 value="{{ loja.email_loja }}"
               >
@@ -604,6 +603,7 @@
 
               <input
                 type="text"
+                name="telefone_loja"
                 class="js-editar-loja-telefone"
                 value="{{ loja.telefone_loja|default:'' }}"
               >
@@ -616,6 +616,7 @@
 
               <input
                 type="text"
+                name="cnpj"
                 class="js-editar-loja-cnpj"
                 value="{{ loja.cnpj }}"
               >
@@ -628,6 +629,7 @@
 
               <input
                 type="text"
+                name="link_loja"
                 class="js-editar-loja-link"
                 value="{{ loja.link|default:'' }}"
               >
@@ -638,11 +640,24 @@
                 Classificação da Loja
               </label>
 
-              <input
-                type="text"
+              <select
+                name="categoria"
                 class="js-editar-loja-categoria"
-                value="{{ loja.id_categoria.tipo_categoria }}"
+                required
               >
+
+                {% for categoria in categorias %}
+
+                  <option
+                    value="{{ categoria.tipo_categoria }}"
+                    {% if categoria.id_categoria == loja.id_categoria.id_categoria %}selected{% endif %}
+                  >
+                    {{ categoria.tipo_categoria }}
+                  </option>
+
+                {% endfor %}
+
+              </select>
 
 
 
@@ -650,9 +665,8 @@
 
 
                 <button
-                  type="button"
+                  type="submit"
                   class="info-loja-salvar"
-                  onclick="salvarEdicaoLoja(this)"
                 >
                   Salvar alterações
                 </button>
@@ -670,7 +684,7 @@
               </div>
 
 
-            </div>
+            </form>
 
           {% endif %}
 
@@ -718,45 +732,18 @@
                 <div>
 
                   <strong>
-
                     {{ avaliacao.id_usuario.nome }}
-
                     {{ avaliacao.id_usuario.sobrenome|default:'' }}
-
                   </strong>
 
 
                   <div class="info-nota-estrelas">
 
-                    {% if avaliacao.nota >= 1 %}
-                      ★
-                    {% else %}
-                      ☆
-                    {% endif %}
-
-                    {% if avaliacao.nota >= 2 %}
-                      ★
-                    {% else %}
-                      ☆
-                    {% endif %}
-
-                    {% if avaliacao.nota >= 3 %}
-                      ★
-                    {% else %}
-                      ☆
-                    {% endif %}
-
-                    {% if avaliacao.nota >= 4 %}
-                      ★
-                    {% else %}
-                      ☆
-                    {% endif %}
-
-                    {% if avaliacao.nota >= 5 %}
-                      ★
-                    {% else %}
-                      ☆
-                    {% endif %}
+                    {% if avaliacao.nota >= 1 %}★{% else %}☆{% endif %}
+                    {% if avaliacao.nota >= 2 %}★{% else %}☆{% endif %}
+                    {% if avaliacao.nota >= 3 %}★{% else %}☆{% endif %}
+                    {% if avaliacao.nota >= 4 %}★{% else %}☆{% endif %}
+                    {% if avaliacao.nota >= 5 %}★{% else %}☆{% endif %}
 
                   </div>
 
@@ -819,9 +806,7 @@
                       {% if avaliacao.nota == 5 %}checked{% endif %}
                     >
 
-                    <label for="edit-{{ avaliacao.pk }}-5">
-                      ★
-                    </label>
+                    <label for="edit-{{ avaliacao.pk }}-5">★</label>
 
 
                     <input
@@ -832,9 +817,7 @@
                       {% if avaliacao.nota == 4 %}checked{% endif %}
                     >
 
-                    <label for="edit-{{ avaliacao.pk }}-4">
-                      ★
-                    </label>
+                    <label for="edit-{{ avaliacao.pk }}-4">★</label>
 
 
                     <input
@@ -845,9 +828,7 @@
                       {% if avaliacao.nota == 3 %}checked{% endif %}
                     >
 
-                    <label for="edit-{{ avaliacao.pk }}-3">
-                      ★
-                    </label>
+                    <label for="edit-{{ avaliacao.pk }}-3">★</label>
 
 
                     <input
@@ -858,9 +839,7 @@
                       {% if avaliacao.nota == 2 %}checked{% endif %}
                     >
 
-                    <label for="edit-{{ avaliacao.pk }}-2">
-                      ★
-                    </label>
+                    <label for="edit-{{ avaliacao.pk }}-2">★</label>
 
 
                     <input
@@ -871,9 +850,7 @@
                       {% if avaliacao.nota == 1 %}checked{% endif %}
                     >
 
-                    <label for="edit-{{ avaliacao.pk }}-1">
-                      ★
-                    </label>
+                    <label for="edit-{{ avaliacao.pk }}-1">★</label>
 
 
                   </div>
@@ -926,10 +903,7 @@
 
 
             <div class="info-comentarios-vazio">
-
-              Nenhum comentário cadastrado
-              para esta loja ainda.
-
+              Nenhum comentário cadastrado para esta loja ainda.
             </div>
 
 
@@ -958,65 +932,20 @@
           <div class="info-estrelas">
 
 
-            <input
-              type="radio"
-              id="estrela5"
-              name="nota"
-              value="5"
-              required
-            >
+            <input type="radio" id="estrela5" name="nota" value="5" required>
+            <label for="estrela5">★</label>
 
-            <label for="estrela5">
-              ★
-            </label>
+            <input type="radio" id="estrela4" name="nota" value="4">
+            <label for="estrela4">★</label>
 
+            <input type="radio" id="estrela3" name="nota" value="3">
+            <label for="estrela3">★</label>
 
-            <input
-              type="radio"
-              id="estrela4"
-              name="nota"
-              value="4"
-            >
+            <input type="radio" id="estrela2" name="nota" value="2">
+            <label for="estrela2">★</label>
 
-            <label for="estrela4">
-              ★
-            </label>
-
-
-            <input
-              type="radio"
-              id="estrela3"
-              name="nota"
-              value="3"
-            >
-
-            <label for="estrela3">
-              ★
-            </label>
-
-
-            <input
-              type="radio"
-              id="estrela2"
-              name="nota"
-              value="2"
-            >
-
-            <label for="estrela2">
-              ★
-            </label>
-
-
-            <input
-              type="radio"
-              id="estrela1"
-              name="nota"
-              value="1"
-            >
-
-            <label for="estrela1">
-              ★
-            </label>
+            <input type="radio" id="estrela1" name="nota" value="1">
+            <label for="estrela1">★</label>
 
 
           </div>
@@ -1086,11 +1015,11 @@
     }
 
 
-    function confirmarExclusaoLoja() {
+    function confirmarExclusao() {
 
-      if (confirm('Deseja excluir esta loja? Os produtos, serviços e favoritos dela também serão apagados.')) {
-        document.getElementById('form-excluir-loja').submit();
-      }
+      confirm(
+        'Deseja excluir este comentário?'
+      );
 
     }
 
@@ -1252,180 +1181,11 @@
 
 
 
-    function salvarEdicaoLoja(botao) {
-
-      const card =
-        botao.closest(
-          '.info-loja-card'
-        );
-
-
-      if (!card) {
-        return;
-      }
-
-
-      const nome =
-        card.querySelector(
-          '.js-editar-loja-nome'
-        ).value.trim();
-
-
-      const rua =
-        card.querySelector(
-          '.js-editar-loja-rua'
-        ).value.trim();
-
-
-      const numero =
-        card.querySelector(
-          '.js-editar-loja-numero'
-        ).value.trim();
-
-
-      const cep =
-        card.querySelector(
-          '.js-editar-loja-cep'
-        ).value.trim();
-
-
-      const email =
-        card.querySelector(
-          '.js-editar-loja-email'
-        ).value.trim();
-
-
-      const telefone =
-        card.querySelector(
-          '.js-editar-loja-telefone'
-        ).value.trim();
-
-
-      const cnpj =
-        card.querySelector(
-          '.js-editar-loja-cnpj'
-        ).value.trim();
-
-
-      const link =
-        card.querySelector(
-          '.js-editar-loja-link'
-        ).value.trim();
-
-
-      const categoria =
-        card.querySelector(
-          '.js-editar-loja-categoria'
-        ).value.trim();
-
-
-
-      if (
-        !nome ||
-        !rua ||
-        !numero ||
-        !cep ||
-        !email ||
-        !cnpj ||
-        !categoria
-      ) {
-
-        alert(
-          'Preencha todos os campos obrigatórios.'
-        );
-
-        return;
-
-      }
-
-
-
-      card.querySelector(
-        '.js-loja-nome'
-      ).textContent = nome;
-
-
-      card.querySelector(
-        '.js-loja-rua'
-      ).textContent = rua;
-
-
-      card.querySelector(
-        '.js-loja-numero'
-      ).textContent = numero;
-
-
-      card.querySelector(
-        '.js-loja-cep'
-      ).textContent = cep;
-
-
-      card.querySelector(
-        '.js-loja-email'
-      ).textContent = email;
-
-
-      card.querySelector(
-        '.js-loja-telefone'
-      ).textContent =
-        telefone || 'Não informado';
-
-
-      card.querySelector(
-        '.js-loja-cnpj'
-      ).textContent = cnpj;
-
-
-      const linkElemento =
-        card.querySelector(
-          '.js-loja-link'
-        );
-
-
-      linkElemento.dataset.link =
-        link;
-
-
-      if (link) {
-
-        linkElemento.textContent =
-          'Acessar loja virtual ↗';
-
-
-        if (
-          linkElemento.tagName === 'A'
-        ) {
-
-          linkElemento.href = link;
-
-        }
-
-      } else {
-
-        linkElemento.textContent =
-          'Não possui';
-
-      }
-
-
-      card.querySelector(
-        '.js-loja-categoria'
-      ).textContent = categoria;
-
-
-      card.classList.remove(
-        'editando'
-      );
-
-    }
-
-
-
     function confirmarExclusaoLoja() {
 
-      if (confirm('Deseja excluir esta loja? Os produtos, serviços e favoritos dela também serão apagados.')) {
-        document.getElementById('form-excluir-loja').submit();
-      }
+      confirm(
+        'Deseja excluir esta loja?'
+      );
 
     }
 

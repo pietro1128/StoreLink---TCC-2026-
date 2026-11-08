@@ -23,21 +23,15 @@ def index(request):
     return render(request, 'AppStoreLink/index.html')
 
 
-def _loja_atual(request):
-    usuario_id = request.session.get('usuario_id')
-    
-    if not usuario_id:
-        return None
-    
-    return (
-        Loja.objects
-        .select_related('id_endereco', 'id_categoria')
-        .filter(id_dono_id=usuario_id)
-        .order_by('-id_loja')
-        .first()
-    )
+def _loja_atual():
+    return Loja.objects.select_related('id_endereco', 'id_categoria').order_by('-id_loja').first()
 
+# |  Para testar a pagina SEM CONTA, voce precisa transformar
+# V  a linha de baixo em um comentario: "#@login_required"
+#@login_required
 def perfil_loja(request):
+    #if request.user.roler != 'admin':
+        #return HttpResponseForbidden("Você não tem permição para acessar está página.")
     
     usuario_id = request.session.get('usuario_id')
     if not usuario_id:
@@ -72,23 +66,10 @@ def perfil_loja(request):
 
         cep = dados_cep['cep'] # grava só os 8 dígitos, num formato único
 
-        # Validações para casos de valores Nulos:
-        if not nome:
-            messages.error(request, 'A loja precisa ter um nome.')
-            return render(request, 'AppStoreLink/perfil-loja.html')
-        
-        if not rua:
-            messages.error(request, 'A loja precisa ter uma localização completa.')
-            return render(request, 'AppStoreLink/perfil-loja.html')
-        
-        if not numero:
-            messages.error(request, 'A loja precisa ter uma localização completa.')
-            return render(request, 'AppStoreLink/perfil-loja.html')
-        
         # Validações de E-mail para loja:
-        padrao_email = r'^[a-zA-Z0-9_.+-]+@(gmail|hotmail|outlook|yahoo|ymail)\.com$' # -> Argumenta um padrão com characteres finais nos emails
+        padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$' # -> Argumenta um padrão com characteres finais nos emails
         if not re.match(padrao_email, email): # -> Verifica se estão nos padões argumentados estao coecidindo com as variaveis
-            messages.error(request, 'O campo E-mail deve conter "@" deve conter um serviço de email e ".com"') # -> cria uma mensagen de erro
+            messages.error(request, 'O campo E-mail deve ser um Gmail válido (exemplo: email@gmail.com).') # -> cria uma mensagens
             return render(request, 'AppStoreLink/perfil-loja.html')
 
         if Loja.objects.filter(email_loja=email).exists(): # -> ???.objects.filter(???=???) --> busca valores por filtros argumentados
@@ -145,7 +126,7 @@ def perfil_loja(request):
         return redirect('perfil-loja')
 
     # TODO: trocar pela loja do usuário logado quando existir o vínculo Usuario↔Loja
-    loja = _loja_atual(request)
+    loja = _loja_atual()
 
     return render(request, 'AppStoreLink/perfil-loja.html', {'loja': loja})
 
@@ -198,9 +179,9 @@ def cadastro(request):
         id_tipo_usuario = request.POST.get('id_tipo_usuario')
 
         # Validação de e-mail (somente Gmail)
-        padrao_email = r'^[a-zA-Z0-9_.+-]+@(gmail|hotmail|outlook|yahoo|ymail)\.com$' # -> Argumenta um padrão com characteres finais nos emails
+        padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$'
         if not re.match(padrao_email, email):
-            messages.error(request, 'O campo E-mail deve conter "@" deve conter um serviço de email e ".com"')
+            messages.error(request, 'O campo E-mail deve ser um Gmail válido (exemplo: email@gmail.com).')
             return render(request, 'registration/cadastro.html')
 
         if Usuario.objects.filter(email=email).exists():
@@ -269,9 +250,9 @@ def login(request):
         email = request.POST.get('email', '').strip()
         senha = request.POST.get('senha', '')
 
-        padrao_email = r'^[a-zA-Z0-9_.+-]+@(gmail|hotmail|outlook|yahoo|ymail)\.com$' # -> Argumenta um padrão com characteres finais nos emails
-        if not re.match(padrao_email, email): # -> Verifica se estão nos padões argumentados estao coecidindo com as variaveis
-            messages.error(request, 'O campo E-mail deve conter "@" deve conter um serviço de email e ".com"') # -> cria uma mensagen de erro
+        padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$'
+        if not re.match(padrao_email, email):
+            messages.error(request, 'O campo E-mail deve ser um Gmail válido (exemplo: email@gmail.com).')
             return render(request, 'registration/login.html')
 
         try:
@@ -520,7 +501,7 @@ def _validar_nome_preco(nome, preco_txt, rotulo='produto'):
 
 def produtos_loja(request):
     # TODO: quando existir o vínculo Usuário↔Loja, filtrar só os produtos da loja do usuário logado
-    loja = _loja_atual(request)
+    loja = _loja_atual()
     produtos = Produto.objects.filter(id_loja=loja)
     categorias = Categoria.objects.all()
 
@@ -533,15 +514,11 @@ def produtos_loja(request):
 
 @require_POST
 def produto_excluir(request, id_produto):
-    produto = Produto.objects.filter(id_produto=id_produto).first()
-    
     if not request.session.get('usuario_id'):
-        messages.error(request, 'Você precisa fazer login para excluir o produto.')
+        messages.error(request, 'Você precisa fazer login para editar o serviço.')
         return redirect('login')
-    
-    if not _eh_dono(request, produto.id_loja):
-        messages.error(request, 'Você não tem permissão para excluir esse produto.')
-        return redirect('InformacoesProduto', id_loja=produto.id_loja_id)
+
+    produto = Produto.objects.filter(id_produto=id_produto).first()
 
     if produto is None:
         messages.error(request, 'Este produto não existe mais ou ja foi excluido.')
@@ -556,10 +533,6 @@ def produto_excluir(request, id_produto):
 
 @require_POST
 def produto_criar(request):
-    if not request.session.get('usuario_id'):
-        messages.error(request, 'Você precisa fazer login para excluir o produto.')
-        return redirect('login')
-    
     nome = request.POST.get('nome_produto', '').strip()
     preco_txt = request.POST.get('preco_produto', '').strip().replace(',', '.')
     descricao = request.POST.get('descricao_produto', '').strip()
@@ -577,7 +550,7 @@ def produto_criar(request):
         erros.append('Selecione uma categoria válida.')
 
     # TODO: trocar pela loja do dono logado quando existir o vínculo Usuário↔Loja
-    loja = _loja_atual(request)
+    loja = _loja_atual()
 
     if loja is None:
         erros.append('Cadastre uma loja antes de cadastrar produto.')
@@ -602,15 +575,7 @@ def produto_criar(request):
 
 @require_POST
 def produto_editar(request, id_produto):
-    if not request.session.get('usuario_id'):
-        messages.error(request, 'Você precisa fazer login para excluir o produto.')
-        return redirect('login')
-    
     produto = get_object_or_404(Produto, id_produto=id_produto)
-    
-    if not _eh_dono(request, produto.id_loja):
-        messages.error(request, 'Você não tem permissão para excluir esse produto.')
-        return redirect('InformacoesProduto', id_loja=produto.id_loja_id)
 
     nome = request.POST.get('nome_produto', '').strip()
     preco_txt = request.POST.get('preco_produto', '').strip().replace(',', '.')
@@ -638,7 +603,7 @@ def servicos_loja(request):
     # Antes ela ficava só no final, mas agora também precisamos dela no
     # caso de erro de validação (para recarregar a página com os cards).
 
-    loja = _loja_atual(request)
+    loja = _loja_atual()
     servicos = Servico.objects.filter(id_loja=loja)
 
     if request.method == 'POST':
@@ -743,7 +708,7 @@ def servicos_loja(request):
 @require_POST
 def loja_editar(request, id_loja):
     loja = get_object_or_404(Loja.objects.select_related('id_endereco'), id_loja=id_loja)
-    
+
     if not _eh_dono(request, loja):
         messages.error(request, 'Você não tem permissão para editar esta loja.')
         return redirect('InformacoesLoja', id_loja=loja.id_loja)
@@ -783,22 +748,11 @@ def loja_editar(request, id_loja):
 
     cep = dados_cep['cep'] # grava só os 8 dígitos, num formato único
 
-    if not nome:
-        messages.error(request, 'A loja precisa ter um nome.')
-        return render(request, 'AppStoreLink/perfil-loja.html')
-    
-    if not rua:
-        messages.error(request, 'A loja precisa ter uma localização completa.')
-        return render(request, 'AppStoreLink/perfil-loja.html')
-    
-    if not numero:
-        messages.error(request, 'A loja precisa ter uma localização completa.')
-        return render(request, 'AppStoreLink/perfil-loja.html')
-    
     # Validações de E-mail para loja:
-    padrao_email = r'^[a-zA-Z0-9_.+-]+@(gmail|hotmail|outlook|yahoo|ymail)\.com$' # -> Argumenta um padrão com characteres finais nos emails
+    padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$' # -> Argumenta um padrão com characteres finais nos emails
+
     if not re.match(padrao_email, email): # -> Verifica se estão nos padões argumentados estao coecidindo com as variaveis
-        messages.error(request, 'O campo E-mail deve conter "@" deve conter um serviço de email e ".com"') # -> cria uma mensagen de erro
+        messages.error(request, 'O campo E-mail deve ser um Gmail válido (exemplo: email@gmail.com).') # -> cria uma mensagens
         return render(request, 'AppStoreLink/perfil-loja.html')
 
     # Validações de CNPJ:
@@ -851,10 +805,6 @@ def servico_editar(request, id_servico):
         return redirect('login')
 
     servico = get_object_or_404(Servico, id_servico=id_servico)
-    
-    if not _eh_dono(request, servico.id_loja):
-        messages.error(request, 'Você não tem permissão para editar esse serviço.')
-        return redirect('InformacoesServico', id_loja=servico.id_loja_id)
 
     nome = request.POST.get('nome_servico', '').strip()
     preco_txt = request.POST.get('preco', '').strip().replace(',', '.')
@@ -886,11 +836,6 @@ def servico_excluir(request, id_servico):
         return redirect('login')
 
     servico = get_object_or_404(Servico, id_servico=id_servico)
-    
-    if not _eh_dono(request, servico.id_loja):
-        messages.error(request, 'Você não tem permissão para excluir esse serviço.')
-        return redirect('InformacoesServico', id_loja=servico.id_loja_id)
-
     nome = servico.nome_servico
     servico.delete()
 
@@ -927,12 +872,13 @@ def loja_excluir(request, id_loja):
         messages.error(request, 'Você precisa fazer login para excluir uma loja.')
         return redirect('login')
     
-    loja = get_object_or_404(Loja, id_loja=id_loja)
-    
     if not _eh_dono(request, loja):
-        messages.error(request, 'Você não tem permissão para excluir esta loja.')
+        messages.error(request, 'Você não tem permissão para editar esta loja.')
         return redirect('InformacoesLoja', id_loja=loja.id_loja)
 
+    loja = get_object_or_404(Loja, id_loja=id_loja)
+
+    # TODO: quando existir o vínculo Usuario↔Loja, conferir aqui se o usuário
     # logado é o dono da loja antes de permitir a exclusão.
 
     nome = loja.nome_loja
