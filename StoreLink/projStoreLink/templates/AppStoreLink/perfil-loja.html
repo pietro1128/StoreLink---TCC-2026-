@@ -480,7 +480,7 @@
               type="hidden"
               name="categoria"
               id="categoria-input"
-              value="{{ loja.id_categoria.tipo_categoria|default:'Alimentos' }}"
+              value="{{ firstof dados.categoria loja.id_categoria.tipo_categoria 'Alimentos' }}"
             >
 
 
@@ -498,7 +498,7 @@
               <input
                 name="nome_loja"
                 type="text"
-                value="{{ loja.nome_loja }}"
+                value="{{ firstof dados.nome_loja loja.nome_loja }}"
               >
 
             </div>
@@ -518,7 +518,7 @@
               <input
                 name="rua"
                 type="text"
-                value="{{ loja.id_endereco.rua }}"
+                value="{{ firstof dados.rua loja.id_endereco.rua }}"
               >
 
             </div>
@@ -536,7 +536,7 @@
                 <input
                   name="numero"
                   type="text"
-                  value="{{ loja.id_endereco.numero_estabelecimento }}"
+                  value="{{ firstof dados.numero loja.id_endereco.numero_estabelecimento }}"
                 >
 
               </div>
@@ -551,7 +551,7 @@
                 <input
                   name="cep"
                   type="text"
-                  value="{{ loja.id_endereco.cep }}"
+                  value="{{ firstof dados.cep loja.id_endereco.cep }}"
                 >
 
               </div>
@@ -574,7 +574,7 @@
               <input
                 name="email_loja"
                 type="text"
-                value="{{ loja.email_loja }}"
+                value="{{ firstof dados.email_loja loja.email_loja }}"
               >
 
             </div>
@@ -596,7 +596,7 @@
                 <input
                   name="telefone_loja"
                   type="text"
-                  value="{{ loja.telefone_loja }}"
+                  value="{{ firstof dados.telefone_loja loja.telefone_loja }}"
                 >
 
               </div>
@@ -614,7 +614,7 @@
               <input
                 name="cnpj"
                 type="text"
-                value="{{ loja.cnpj }}"
+                value="{{ firstof dados.cnpj loja.cnpj }}"
               >
 
             </div>

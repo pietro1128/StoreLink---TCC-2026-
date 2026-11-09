@@ -39,7 +39,7 @@ def perfil_loja(request):
             return redirect('login')
 
     if request.method == 'POST': # -> verifica se o usuario enviou os dados usando o metodo HTTP 'POST'
-
+        dados = request.POST.dict()
         nome = request.POST.get('nome_loja') # -> cria uma variavel puxando o valor do banco
 #                                   L> este valor tem que ser exatamente igual ao 'name' em perfil-loja.html
         rua = request.POST.get('rua')
@@ -56,9 +56,11 @@ def perfil_loja(request):
             dados_cep = consultar_cep(cep)
         except CepInvalido:
             messages.error(request, 'CEP inválido. Digite 8 números.')
+            dados.pop('cep', None)
             return render(request, 'AppStoreLink/perfil-loja.html')
         except CepNaoEncontrado:
             messages.error(request, 'Este CEP não existe.')
+            dados.pop('cep', None)
             return render(request, 'AppStoreLink/perfil-loja.html')
         except ServicoCepIndisponivel:
             messages.error(request, 'Não foi possível validar o CEP agora. Tente novamente em instantes.')
@@ -70,37 +72,44 @@ def perfil_loja(request):
         padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$' # -> Argumenta um padrão com characteres finais nos emails
         if not re.match(padrao_email, email): # -> Verifica se estão nos padões argumentados estao coecidindo com as variaveis
             messages.error(request, 'O campo E-mail deve ser um Gmail válido (exemplo: email@gmail.com).') # -> cria uma mensagens
+            dados.pop('email', None)
             return render(request, 'AppStoreLink/perfil-loja.html')
 
         if Loja.objects.filter(email_loja=email).exists(): # -> ???.objects.filter(???=???) --> busca valores por filtros argumentados
                                                      # -> .exists() --> verifica se ja existe
             messages.error(request, 'Este e-mail já está cadastrado.')
+            dados.pop('email', None)
             return render(request, 'AppStoreLink/perfil-loja.html')
 
         # Validações de CNPJ:
         padrao_cnpj = r'^.{14,14}$' # ^.{??,??}$ -> diz que o texton precisa ter exatamente o numero de letras argumantadas
         if not re.match(padrao_cnpj, cnpj):
             messages.error(request, 'Este CNPJ deve conter exatamente 14 números.')
+            dados.pop('cnpj', None)
             return render(request, 'AppStoreLink/perfil-loja.html')
 
         if Loja.objects.filter(cnpj=cnpj).exists():
             messages.error(request, 'Este CNPJ ja foi cadastrado.')
+            dados.pop('cnpj', None)
             return render(request, 'AppStoreLink/perfil-loja.html')
 
         # Validações de Telefone para loja:
         padrao_telefone = r'^.{11,11}$'
         if not re.match(padrao_telefone, telefone):
-            messages.error(request, 'Este número esta incorreto, ele deve ter exatamente 11 números.')
+            messages.error(request, 'Este número de telefone esta incorreto, ele deve ter exatamente 11 números.')
+            dados.pop('telefone', None)
             return render(request, 'AppStoreLink/perfil-loja.html')
 
         if Loja.objects.filter(telefone_loja=telefone).exists():
-            messages.error(request, 'Este telefone ja foi cadastrado.')
+            messages.error(request, 'Este número de telefone ja foi cadastrado.')
+            dados.pop('telefone', None)
             return render(request, 'AppStoreLink/perfil-loja.html')
 
         # Validação de Categorias:
         categoria = Categoria.objects.filter(tipo_categoria=nome_categoria).first() # -> Procura no banco o registro igual ao que ele recebeu
         if categoria is None:
             messages.error(request, 'Selecione uma categoria válida.')
+            dados.pop('categoria', None)
             return render(request, 'AppStoreLink/perfil-loja.html')
 
         # Depois de todas as validações, cria endereço e loja:
@@ -140,11 +149,7 @@ def perfil_consumidor(request):
     usuario = get_object_or_404(Usuario, id_categoria=usuario_id)
     loja_fav = LojaFavoritas.objects.filter(id_usuario=usuario).select_related('id_loja')
 
-    return render(
-        request,
-        'AppStoreLink/perfil-consumidor.html',
-        {'chave_perf_consm': usuario, 'loja_fav': loja_fav}
-    )
+    return render(request, 'AppStoreLink/perfil-consumidor.html', {'chave_perf_consm': usuario, 'loja_fav': loja_fav})
 
 
 @require_POST
@@ -170,6 +175,7 @@ def editar_consumidor(request):
 
 def cadastro(request):
     if request.method == 'POST':
+        dados = request.POST.dict()
         nome = request.POST.get('nome', '').strip()
         sobrenome = request.POST.get('sobrenome', '').strip() or None # -> 'or None': diz que pode *também* receber valores vazios/'None'
         email = request.POST.get('email', '').strip()
@@ -182,10 +188,12 @@ def cadastro(request):
         padrao_email = r'^[a-zA-Z0-9_.+-]+@gmail\.com$'
         if not re.match(padrao_email, email):
             messages.error(request, 'O campo E-mail deve ser um Gmail válido (exemplo: email@gmail.com).')
+            dados.pop('email', None)
             return render(request, 'registration/cadastro.html')
 
         if Usuario.objects.filter(email=email).exists():
             messages.error(request, 'Este e-mail já está cadastrado.')
+            dados.pop('email', None)
             return render(request, 'registration/cadastro.html')
 
         # Validação de senha (mínimo 8 caracteres, maiúscula, minúscula e número)
@@ -206,11 +214,25 @@ def cadastro(request):
 
             if not re.match(padrao_cpf, cpf):
                 messages.error(request, 'O CPF deve ter exatamente 11 números.')
+                dados.pop('cpf', None)
                 return render(request, 'registration/cadastro.html')
 
             if Usuario.objects.filter(cpf=cpf).exists():
                 messages.error(request, 'Este CPF já está cadastrado.')
+                dados.pop('cpf', None)
                 return render(request, 'registration/cadastro.html')
+            
+        # Validações de Telefone para loja:
+        padrao_telefone = r'^.{11,11}$'
+        if not re.match(padrao_telefone, telefone):
+            messages.error(request, 'Este número de telefone esta incorreto, ele deve ter exatamente 11 números.')
+            dados.pop('telefone', None)
+            return render(request, 'registration/cadastro.html')
+
+        if Usuario.objects.filter(telefone=telefone).exists():
+            messages.error(request, 'Este número de telefone ja foi cadastrado.')
+            dados.pop('telefone', None)
+            return render(request, 'registration/cadastro.html')
 
         usuario = Usuario( # -> Esta criando um objeto a partir do modelo do banco
             nome=nome,
