@@ -8,8 +8,8 @@ CREATE TABLE Usuario (
     senha VARCHAR(255),
     telefone VARCHAR(15),
     cpf VARCHAR(11),
+    foto VARCHAR(255),
     id_usuario INT  PRIMARY KEY
-    id_tipo_usuario INT,
     FOREIGN KEY (id_tipo_usuario) REFERENCES TipoUsuario (id_tipo_usuario) ON DELETE CASCADE
 );
 
@@ -89,9 +89,4 @@ CREATE TABLE Endereco (
 CREATE TABLE Categoria (
     id_categoria INT,
     tipo categoria VARCHAR(20)
-);
-
-CREATE TABLE TipoUsuario (
-    id_tipo_usuario INT,
-    tipo usuario VARCHAR(12)
 );
