@@ -18,7 +18,7 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 from dotenv import load_dotenv
 
-load_dotenv(BASE_DIR / '.env')
+load_dotenv(BASE_DIR / '.env.example')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
