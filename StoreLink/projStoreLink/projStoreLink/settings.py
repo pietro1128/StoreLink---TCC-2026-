@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv # -> isso faz o 'settings.py' carregar o '.env'
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
