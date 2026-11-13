@@ -74,7 +74,7 @@ def test_ct037_clicar_no_servico_do_resultado_abre_a_tela_do_servico(page, live_
     expect(page.get_by_text("Entrega Express").first).to_be_visible()
 
 @pytest.mark.django_db(transaction=True)
-def test_ct009_cep_valido_preenche_a_rua_e_leva_o_foco_para_o_numero(page, live_server, usuario, loja, entrar, viacep):
+def test_ct010_cep_valido_preenche_a_rua_e_leva_o_foco_para_o_numero(page, live_server, usuario, loja, entrar, viacep):
     entrar(usuario)
     page.goto(live_server.url + "/perfil-loja/")
     campo_rua = page.locator('input[name="rua"]')
@@ -88,7 +88,7 @@ def test_ct009_cep_valido_preenche_a_rua_e_leva_o_foco_para_o_numero(page, live_
 
 
 @pytest.mark.django_db(transaction=True)
-def test_ct010_cep_nao_encontrado_avisa_o_usuario_e_nao_preenche_a_rua(page, live_server, usuario, loja, entrar, viacep):
+def test_ct011_cep_nao_encontrado_avisa_o_usuario_e_nao_preenche_a_rua(page, live_server, usuario, loja, entrar, viacep):
     viacep(RespostaFalsa(200, {"erro": "true"}))
     entrar(usuario)
     page.goto(live_server.url + "/perfil-loja/")
@@ -105,14 +105,14 @@ def test_ct010_cep_nao_encontrado_avisa_o_usuario_e_nao_preenche_a_rua(page, liv
     expect(campo_rua).to_have_value("")
 
 @pytest.mark.django_db(transaction=True)
-def test_ct006_ct012_usuario_cadastra_loja_escolhendo_categoria(page, live_server, usuario, categorias, entrar, viacep):
+def test_ct007_ct012_usuario_cadastra_loja_escolhendo_categoria(page, live_server, usuario, categorias, entrar, viacep):
     entrar(usuario)
     page.goto(live_server.url + "/perfil-loja/")
 
     page.fill('input[name="nome_loja"]', "Boutique Aurora")
     page.fill('input[name="cep"]', "01001-000")
     page.locator('input[name="cep"]').blur()
-    expect(page.locator('input[name="rua"]')).to_have_value("Praça da Sé")   # CT-009 em ação
+    expect(page.locator('input[name="rua"]')).to_have_value("Praça da Sé")   # CT-010 em ação
     page.fill('input[name="numero"]', "77")
     page.fill('input[name="email_loja"]', "aurora@gmail.com")
     page.fill('input[name="telefone_loja"]', "11977776666")
@@ -221,9 +221,9 @@ def test_ct015_botao_servicos_abre_o_gerenciamento_de_servicos(ir, page, live_se
     expect(page).to_have_url(live_server.url + "/servicos-loja/")
 
 
-# ------------------------------- CT-054 ------------------------------------ #
+# ------------------------------- CT-051 ------------------------------------ #
 @pytest.mark.django_db(transaction=True)
-def test_ct054_botao_adicionar_loja_favorita_leva_a_tela_inicial_com_a_busca(ir, page, live_server, usuario, entrar):
+def test_ct051_botao_adicionar_loja_favorita_leva_a_tela_inicial_com_a_busca(ir, page, live_server, usuario, entrar):
     entrar(usuario)                              # já cai no perfil do consumidor, sem favoritas
 
     page.get_by_role("button", name="Procurar lojas").click()
@@ -234,11 +234,11 @@ def test_ct054_botao_adicionar_loja_favorita_leva_a_tela_inicial_com_a_busca(ir,
 
 # --------------------- Login e logout pela interface ------------------------ #
 @pytest.mark.django_db(transaction=True)
-def test_ct019_ct056_login_e_logout_pela_interface(ir, page, live_server, usuario, entrar):
-    entrar(usuario)                              # CT-019: login válido → perfil
+def test_ct053_ct054_login_e_logout_pela_interface(ir, page, live_server, usuario, entrar):
+    entrar(usuario)                              # CT-054: login válido → perfil
     expect(page).to_have_url(live_server.url + "/perfil-consumidor/")
 
-    page.get_by_role("button", name=re.compile("Fazer Logout")).click()   # CT-056
+    page.get_by_role("button", name=re.compile("Fazer Logout")).click()   # CT-053
 
     expect(page).to_have_url(live_server.url + "/")
     expect(page.get_by_role("button", name="Criar conta ou Entrar")).to_be_visible()
@@ -248,7 +248,7 @@ def test_ct019_ct056_login_e_logout_pela_interface(ir, page, live_server, usuari
 
 
 @pytest.mark.django_db(transaction=True)
-def test_ct020_login_com_senha_errada_mostra_mensagem_e_nao_entra(ir, page, live_server, usuario):
+def test_ct055_login_com_senha_errada_mostra_mensagem_e_nao_entra(ir, page, live_server, usuario):
     ir("/login/")
     page.fill('input[name="email"]', usuario.email)
     page.fill('input[name="senha"]', "SenhaErrada1")

@@ -19,9 +19,9 @@ from tests.conftest import CORPO_VIACEP_SP, RespostaFalsa, gerar_imagem
 def test_limpar_cep_mantem_so_os_digitos(digitado, esperado):
     assert limpar_cep(digitado) == esperado
 
-# ------------------------------- CT-009 ------------------------------------ #
-def test_ct009_cep_valido_devolve_endereco_preenchido(viacep):
-    """CT-009: CEP válido → o serviço devolve rua, bairro, cidade e UF vindos da API."""
+# ------------------------------- CT-010 ------------------------------------ #
+def test_ct010_cep_valido_devolve_endereco_preenchido(viacep):
+    """CT-010: CEP válido → o serviço devolve rua, bairro, cidade e UF vindos da API."""
     endereco = consultar_cep("01001-000")
 
     assert endereco == {
@@ -33,8 +33,8 @@ def test_ct009_cep_valido_devolve_endereco_preenchido(viacep):
         "uf": "SP",
     }
 
-def test_ct009_consulta_a_url_certa_do_viacep(monkeypatch):
-    """CT-009: garante que a URL chamada é a do ViaCEP com o CEP só em dígitos."""
+def test_ct010_consulta_a_url_certa_do_viacep(monkeypatch):
+    """CT-010: garante que a URL chamada é a do ViaCEP com o CEP só em dígitos."""
     import AppStoreLink.services as services
     chamadas = []
 
@@ -47,10 +47,10 @@ def test_ct009_consulta_a_url_certa_do_viacep(monkeypatch):
 
     assert chamadas == [("https://viacep.com.br/ws/01001000/json/", services.TIMEOUT_SEGUNDOS)]
 
-# ------------------------------- CT-010 ------------------------------------ #
+# ------------------------------- CT-011 ------------------------------------ #
 @pytest.mark.parametrize("cep", ["123", "", "abcdefgh", "0100100000"])
-def test_ct010_cep_com_formato_errado_e_barrado_sem_chamar_a_api(cep, monkeypatch):
-    """CT-010: formato inválido (≠ 8 dígitos) → CepInvalido, e a API nem é consultada."""
+def test_ct011_cep_com_formato_errado_e_barrado_sem_chamar_a_api(cep, monkeypatch):
+    """CT-011: formato inválido (≠ 8 dígitos) → CepInvalido, e a API nem é consultada."""
     import AppStoreLink.services as services
 
     def nao_deveria_chamar(*a, **k):
@@ -62,31 +62,31 @@ def test_ct010_cep_com_formato_errado_e_barrado_sem_chamar_a_api(cep, monkeypatc
         consultar_cep(cep)
 
 
-def test_ct010_cep_inexistente_levanta_cep_nao_encontrado(viacep):
-    """CT-010: o ViaCEP responde 200 com {"erro": "true"} quando o CEP não existe."""
+def test_ct011_cep_inexistente_levanta_cep_nao_encontrado(viacep):
+    """CT-011: o ViaCEP responde 200 com {"erro": "true"} quando o CEP não existe."""
     viacep(RespostaFalsa(200, {"erro": "true"}))
     with pytest.raises(CepNaoEncontrado):
         consultar_cep("99999999")
 
 
-def test_ct010_erro_booleano_tambem_e_tratado(viacep):
+def test_ct011_erro_booleano_tambem_e_tratado(viacep):
     viacep(RespostaFalsa(200, {"erro": True}))
     with pytest.raises(CepNaoEncontrado):
         consultar_cep("99999999")
 
-def test_ct010_status_400_da_api_vira_cep_invalido(viacep):
+def test_ct011_status_400_da_api_vira_cep_invalido(viacep):
     viacep(RespostaFalsa(400, {}))
     with pytest.raises(CepInvalido):
         consultar_cep("01001000")
 
 @pytest.mark.parametrize("status", [429, 500, 503])
-def test_ct010_erro_do_servidor_vira_servico_indisponivel(viacep, status):
+def test_ct011_erro_do_servidor_vira_servico_indisponivel(viacep, status):
     viacep(RespostaFalsa(status, {}))
     with pytest.raises(ServicoCepIndisponivel):
         consultar_cep("01001000")
 
 @pytest.mark.parametrize("erro", [requests.ConnectionError(), requests.Timeout()])
-def test_ct010_sem_internet_ou_timeout_vira_servico_indisponivel(viacep, erro):
+def test_ct011_sem_internet_ou_timeout_vira_servico_indisponivel(viacep, erro):
     viacep(erro=erro)
     with pytest.raises(ServicoCepIndisponivel):
         consultar_cep("01001000")
@@ -95,56 +95,56 @@ def test_ct010_sem_internet_ou_timeout_vira_servico_indisponivel(viacep, erro):
     RespostaFalsa(200, json_invalido=True),   # corpo que não é JSON
     RespostaFalsa(200, ["lista", "inesperada"]),  # JSON que não é um dicionário
 ])
-def test_ct010_resposta_inesperada_vira_servico_indisponivel(viacep, resposta):
+def test_ct011_resposta_inesperada_vira_servico_indisponivel(viacep, resposta):
     viacep(resposta)
     with pytest.raises(ServicoCepIndisponivel):
         consultar_cep("01001000")
 
-# --------------------------- validar_foto (CT-013 / CT-055) ----------------- #
+# --------------------------- validar_foto (CT-013 / CT-052) ----------------- #
 @pytest.mark.parametrize("nome, formato", [
     ("foto.png", "PNG"), ("foto.jpg", "JPEG"), ("foto.jpeg", "JPEG"), ("foto.webp", "WEBP"),
     ("FOTO.PNG", "PNG"),  # extensão em maiúsculas também vale
 ])
-def test_ct055_foto_valida_e_aceita(nome, formato):
+def test_ct052_foto_valida_e_aceita(nome, formato):
     validar_foto(gerar_imagem(nome, formato))  # não pode levantar erro
 
 
-def test_ct055_foto_acima_de_2mb_e_recusada():
+def test_ct052_foto_acima_de_2mb_e_recusada():
     arquivo = SimpleUploadedFile("grande.png", b"x" * (FOTO_TAMANHO_MAXIMO + 1))
     with pytest.raises(ValidationError, match="2 MB"):
         validar_foto(arquivo)
 
 
 @pytest.mark.parametrize("nome", ["documento.pdf", "foto.gif", "foto.bmp", "foto"])
-def test_ct055_extensao_nao_permitida_e_recusada(nome):
+def test_ct052_extensao_nao_permitida_e_recusada(nome):
     with pytest.raises(ValidationError, match="Formato não permitido"):
         validar_foto(SimpleUploadedFile(nome, b"qualquer coisa"))
 
 
-def test_ct055_texto_renomeado_para_jpg_e_recusado():
+def test_ct052_texto_renomeado_para_jpg_e_recusado():
     """O conteúdo é conferido de verdade: um .txt renomeado para .jpg não passa."""
     with pytest.raises(ValidationError, match="não é uma imagem válida"):
         validar_foto(SimpleUploadedFile("falsa.jpg", b"isto e so texto"))
 
 
-def test_ct055_formato_real_diferente_da_extensao_e_recusado():
+def test_ct052_formato_real_diferente_da_extensao_e_recusado():
     """GIF verdadeiro com extensão .png: extensão ok, mas o formato real não é permitido."""
     with pytest.raises(ValidationError, match="Formato não permitido"):
         validar_foto(gerar_imagem("gif_disfarcado.png", "GIF"))
 
 
-def test_ct055_imagem_com_lado_maior_que_4000px_e_recusada():
+def test_ct052_imagem_com_lado_maior_que_4000px_e_recusada():
     with pytest.raises(ValidationError, match="grande demais"):
         validar_foto(gerar_imagem("larga.png", "PNG", (FOTO_LADO_MAXIMO + 1, 10)))
 
 
-def test_ct055_ponteiro_do_arquivo_volta_ao_inicio_para_poder_salvar():
+def test_ct052_ponteiro_do_arquivo_volta_ao_inicio_para_poder_salvar():
     arquivo = gerar_imagem()
     validar_foto(arquivo)
     assert arquivo.tell() == 0
 
 
-def test_ct055_nome_do_arquivo_salvo_e_aleatorio_e_mantem_a_extensao():
+def test_ct052_nome_do_arquivo_salvo_e_aleatorio_e_mantem_a_extensao():
     nome1 = caminho_foto_usuario(None, "Minha Foto.PNG")
     nome2 = caminho_foto_usuario(None, "Minha Foto.PNG")
     assert nome1.startswith("usuarios/") and nome1.endswith(".png")
