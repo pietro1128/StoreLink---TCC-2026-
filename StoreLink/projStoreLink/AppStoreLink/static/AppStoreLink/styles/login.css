@@ -1,11 +1,10 @@
-@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap");
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
 
 /* #region VARIÁVEIS */
 
@@ -16,10 +15,14 @@
   --subtitle-color: #666666;
   --field-placeholder: #9a9a9a;
   --field-border: #d8d8d8;
-  --accent-color: #292d30;
-  --accent-text: #ffffff;
-}
 
+  --auth-gradient:
+    linear-gradient(
+      160deg,
+      #e8534f 0%,
+      #f5943a 100%
+    );
+}
 
 body.dark {
   --bg-page: #141414;
@@ -28,12 +31,16 @@ body.dark {
   --subtitle-color: #b8b8b8;
   --field-placeholder: #858585;
   --field-border: #444444;
-  --accent-color: #ffffff;
-  --accent-text: #000000;
+
+  --auth-gradient:
+    linear-gradient(
+      160deg,
+      #a83531 0%,
+      #b8672a 100%
+    );
 }
 
 /* #endregion */
-
 
 /* #region BODY */
 
@@ -41,7 +48,7 @@ body {
   min-height: 100vh;
 
   font-family:
-    'Montserrat',
+    'Segoe UI',
     Arial,
     sans-serif;
 
@@ -57,7 +64,6 @@ body {
 }
 
 /* #endregion */
-
 
 /* #region MODO ESCURO */
 
@@ -77,7 +83,7 @@ body {
 
   align-items: center;
 
-  gap: 7px;
+  gap: 6px;
 
   border:
     1px solid
@@ -103,7 +109,6 @@ body {
     transform 0.2s ease;
 }
 
-
 .theme-toggle:hover {
   background:
     #3a3a3a;
@@ -112,14 +117,7 @@ body {
     translateY(-1px);
 }
 
-
-.theme-toggle .bi {
-  font-size: 15px;
-  line-height: 1;
-}
-
 /* #endregion */
-
 
 /* #region ÍCONE STORELINK */
 
@@ -148,7 +146,6 @@ body {
     filter 0.2s ease;
 }
 
-
 .login-page-icon:hover {
   transform:
     translateY(-2px);
@@ -157,7 +154,6 @@ body {
     brightness(0.92);
 }
 
-
 .login-page-icon img {
   width: 100%;
   height: 100%;
@@ -165,25 +161,21 @@ body {
   object-fit: contain;
 }
 
-
 .login-page-icon
 .icon-light {
   display: block;
 }
-
 
 .login-page-icon
 .icon-dark {
   display: none;
 }
 
-
 body.dark
 .login-page-icon
 .icon-light {
   display: none;
 }
-
 
 body.dark
 .login-page-icon
@@ -192,7 +184,6 @@ body.dark
 }
 
 /* #endregion */
-
 
 /* #region LOGIN */
 
@@ -214,7 +205,6 @@ body.dark
   justify-content: center;
 }
 
-
 .login-welcome {
   margin:
     0
@@ -226,6 +216,7 @@ body.dark
 
   font-family:
     'Montserrat',
+    'Segoe UI',
     Arial,
     sans-serif;
 
@@ -242,7 +233,6 @@ body.dark
 }
 
 /* #endregion */
-
 
 /* #region CARD */
 
@@ -287,7 +277,6 @@ body.dark
     border 0.25s ease;
 }
 
-
 .login-card h2 {
   margin:
     0
@@ -299,6 +288,7 @@ body.dark
 
   font-family:
     'Montserrat',
+    'Segoe UI',
     Arial,
     sans-serif;
 
@@ -306,7 +296,6 @@ body.dark
 
   font-weight: 700;
 }
-
 
 .login-subtitle {
   margin:
@@ -324,7 +313,6 @@ body.dark
 
 /* #endregion */
 
-
 /* #region FORMULÁRIO */
 
 .login-form {
@@ -336,7 +324,6 @@ body.dark
 
   gap: 28px;
 }
-
 
 .login-field {
   width: 100%;
@@ -362,12 +349,10 @@ body.dark
     border-color 0.2s ease;
 }
 
-
 .login-field:focus-within {
   border-bottom-color:
-    var(--accent-color);
+    #e8534f;
 }
-
 
 .login-field img {
   width: 21px;
@@ -378,18 +363,15 @@ body.dark
   object-fit: contain;
 }
 
-
 .login-field
 .field-icon-light {
   display: block;
 }
 
-
 .login-field
 .field-icon-dark {
   display: none;
 }
-
 
 body.dark
 .login-field
@@ -397,13 +379,11 @@ body.dark
   display: none;
 }
 
-
 body.dark
 .login-field
 .field-icon-dark {
   display: block;
 }
-
 
 .login-field input {
   width: 100%;
@@ -426,7 +406,6 @@ body.dark
   font-size: 15px;
 }
 
-
 .login-field
 input::placeholder {
   color:
@@ -434,7 +413,6 @@ input::placeholder {
 }
 
 /* #endregion */
-
 
 /* #region ESQUECEU A SENHA */
 
@@ -449,7 +427,6 @@ input::placeholder {
   text-align: center;
 }
 
-
 .login-forgot a {
   color:
     var(--text-color);
@@ -459,16 +436,15 @@ input::placeholder {
   text-decoration: underline;
 
   transition:
-    opacity 0.2s ease;
+    color 0.2s ease;
 }
 
-
 .login-forgot a:hover {
-  opacity: 0.65;
+  color:
+    #e8534f;
 }
 
 /* #endregion */
-
 
 /* #region BOTÃO ENTRAR */
 
@@ -486,17 +462,15 @@ input::placeholder {
     12px
     20px;
 
-  border:
-    2px solid
-    var(--accent-color);
+  border: none;
 
   border-radius: 30px;
 
   background:
-    var(--accent-color);
+    var(--auth-gradient);
 
   color:
-    var(--accent-text);
+    #ffffff;
 
   font-family:
     inherit;
@@ -513,7 +487,7 @@ input::placeholder {
     0
     10px
     20px
-    rgba(0, 0, 0, 0.18);
+    rgba(232, 83, 79, 0.30);
 
   transition:
     transform 0.2s ease,
@@ -521,21 +495,19 @@ input::placeholder {
     box-shadow 0.2s ease;
 }
 
-
 .login-submit-btn:hover {
   transform:
     translateY(-2px);
 
   filter:
-    brightness(1.15);
+    brightness(1.05);
 
   box-shadow:
     0
     13px
     24px
-    rgba(0, 0, 0, 0.22);
+    rgba(232, 83, 79, 0.36);
 }
-
 
 .login-submit-btn:active {
   transform:
@@ -543,7 +515,6 @@ input::placeholder {
 }
 
 /* #endregion */
-
 
 /* #region CADASTRO */
 
@@ -556,23 +527,20 @@ input::placeholder {
   text-align: center;
 }
 
-
 .login-signup a {
   color:
-    var(--text-color);
+    #e8534f;
 
   font-weight: 800;
 
   text-decoration: none;
 }
 
-
 .login-signup a:hover {
   text-decoration: underline;
 }
 
 /* #endregion */
-
 
 /* #region MENSAGENS */
 
@@ -583,7 +551,6 @@ input::placeholder {
 
   margin-bottom: 15px;
 }
-
 
 .alert {
   width: 100%;
@@ -601,7 +568,6 @@ input::placeholder {
   text-align: center;
 }
 
-
 .alert-error,
 .alert-danger {
   background:
@@ -610,7 +576,6 @@ input::placeholder {
   color:
     #a71d1d;
 }
-
 
 .alert-success {
   background:
@@ -621,7 +586,6 @@ input::placeholder {
 }
 
 /* #endregion */
-
 
 /* #region MODO ESCURO */
 
@@ -642,23 +606,27 @@ body.dark
     rgba(0, 0, 0, 0.34);
 }
 
-
 body.dark
 .login-forgot a {
   color:
     #f0f0f0;
 }
 
+body.dark
+.login-forgot a:hover {
+  color:
+    #f5943a;
+}
 
 body.dark
 .login-signup a {
   color:
-    #f0f0f0;
+    #f5943a;
 }
-
 
 body.dark
 .alert-error,
+
 body.dark
 .alert-danger {
   background:
@@ -667,7 +635,6 @@ body.dark
   color:
     #ffaaaa;
 }
-
 
 body.dark
 .alert-success {
@@ -679,7 +646,6 @@ body.dark
 }
 
 /* #endregion */
-
 
 /* #region RESPONSIVIDADE */
 
@@ -694,13 +660,11 @@ body.dark
       40px;
   }
 
-
   .login-welcome {
     margin-bottom: 25px;
 
     font-size: 28px;
   }
-
 
   .login-card {
     max-width: 100%;
@@ -713,16 +677,13 @@ body.dark
     border-radius: 22px;
   }
 
-
   .login-card h2 {
     font-size: 30px;
   }
 
-
   .login-submit-btn {
     width: 100%;
   }
-
 
   .login-page-icon {
     width: 44px;
@@ -731,7 +692,6 @@ body.dark
     top: 16px;
     left: 16px;
   }
-
 
   .theme-toggle {
     top: 16px;

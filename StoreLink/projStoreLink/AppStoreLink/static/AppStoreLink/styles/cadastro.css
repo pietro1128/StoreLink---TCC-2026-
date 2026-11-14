@@ -1,9 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap");
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
 
 :root {
   --bg-page: #ffffff;
@@ -13,7 +15,6 @@
   --field-border: #d8d8d8;
 }
 
-
 body.dark {
   --bg-page: #242424;
   --form-side-bg: #303030;
@@ -21,7 +22,6 @@ body.dark {
   --field-placeholder: #c3c3c3;
   --field-border: #666666;
 }
-
 
 body {
   font-family: 'Segoe UI', Arial, sans-serif;
@@ -31,9 +31,7 @@ body {
   transition: background 0.25s ease, color 0.25s ease;
 }
 
-
 /* #region modo escuro */
-
 
 .theme-toggle {
   position: fixed;
@@ -52,29 +50,22 @@ body {
   gap: 6px;
 }
 
-
 .theme-toggle:hover {
   background: #3a3a3a;
 }
 
-
 /* #endregion */
 
-
 /* #region pagina */
-
 
 .auth-wrapper {
   display: flex;
   min-height: 100vh;
 }
 
-
 /* #endregion */
 
-
 /* #region arte */
-
 
 .auth-side {
   width: 42%;
@@ -95,9 +86,7 @@ body {
   color: #ffffff;
 }
 
-
 /* faixas */
-
 
 .art-line {
   position: absolute;
@@ -116,51 +105,42 @@ body {
   z-index: 1;
 }
 
-
 .art-line-amarelo {
   left: -2%;
   background: #f6c344;
 }
-
 
 .art-line-vermelho {
   left: 17%;
   background: #e8534f;
 }
 
-
 .art-line-verde {
   left: 36%;
   background: #63ce2d;
 }
-
 
 .art-line-roxo {
   left: 55%;
   background: #7c5cf0;
 }
 
-
 .art-line-azul {
   left: 82%;
   background: #35b5ea;
 }
-
 
 .art-line-ciano {
   left: 101%;
   background: #21c9c9;
 }
 
-
 .art-line-laranja {
   left: 120%;
   background: #f5943a;
 }
 
-
 /* ícones */
-
 
 .art-icon {
   position: absolute;
@@ -172,7 +152,6 @@ body {
   line-height: 1;
 }
 
-
 .art-icon-construcao {
   top: 17%;
   left: 8%;
@@ -182,14 +161,12 @@ body {
   transform: rotate(-10deg);
 }
 
-
 .art-icon-ambiente {
   top: 14%;
   left: 62%;
 
   color: #63ce2d;
 }
-
 
 .art-icon-alimentos {
   top: 47%;
@@ -198,7 +175,6 @@ body {
   color: #e8534f;
 }
 
-
 .art-icon-tecnologia {
   bottom: 10%;
   left: 39%;
@@ -206,14 +182,12 @@ body {
   color: #7c5cf0;
 }
 
-
 .art-icon-saude {
   top: 57%;
   left: 60%;
 
   color: #35b5ea;
 }
-
 
 .art-icon-pets {
   top: 39%;
@@ -224,7 +198,6 @@ body {
   transform: rotate(-10deg);
 }
 
-
 .art-icon-esportes {
   bottom: 7%;
   right: 13%;
@@ -232,9 +205,7 @@ body {
   color: #f5943a;
 }
 
-
 /* logo */
-
 
 .auth-side-icon {
   position: absolute;
@@ -262,7 +233,6 @@ body {
   cursor: pointer;
 }
 
-
 .auth-side-icon img {
   width: 100%;
   height: 100%;
@@ -270,29 +240,23 @@ body {
   object-fit: contain;
 }
 
-
 .side-icon-dark {
   display: none;
 }
-
 
 body.dark .auth-side-icon {
   background: #000000;
 }
 
-
 body.dark .side-icon-light {
   display: none;
 }
-
 
 body.dark .side-icon-dark {
   display: block;
 }
 
-
 /* texto */
-
 
 .auth-side-content {
   position: relative;
@@ -306,7 +270,6 @@ body.dark .side-icon-dark {
 
   text-align: center;
 }
-
 
 .auth-side-content h1 {
   color: #ffffff;
@@ -333,7 +296,6 @@ body.dark .side-icon-dark {
     rgba(0, 0, 0, 0.35);
 }
 
-
 .auth-side-content p {
   max-width: 330px;
 
@@ -355,9 +317,7 @@ body.dark .side-icon-dark {
   line-height: 1.45;
 }
 
-
 /* botão entrar */
-
 
 .auth-btn-outline {
   display: inline-block;
@@ -390,7 +350,6 @@ body.dark .side-icon-dark {
     transform 0.2s ease;
 }
 
-
 .auth-btn-outline:hover {
   background:
     rgba(255, 255, 255, 0.08);
@@ -402,7 +361,6 @@ body.dark .side-icon-dark {
     translateY(-1px);
 }
 
-
 .auth-btn-outline:focus,
 .auth-btn-outline:focus-visible,
 .auth-btn-outline:active {
@@ -411,12 +369,9 @@ body.dark .side-icon-dark {
   box-shadow: none;
 }
 
-
 /* #endregion */
 
-
 /* #region formulario */
-
 
 .auth-form-side {
   flex: 1;
@@ -433,7 +388,6 @@ body.dark .side-icon-dark {
   transition: background 0.25s ease;
 }
 
-
 .auth-form-box {
   width: 100%;
   max-width: 380px;
@@ -446,7 +400,6 @@ body.dark .side-icon-dark {
 
   text-align: center;
 }
-
 
 .auth-form-box h2 {
   margin-bottom: 24px;
@@ -464,9 +417,7 @@ body.dark .side-icon-dark {
   color: var(--text-color);
 }
 
-
 /* google */
-
 
 .auth-google-btn {
   width: 46px;
@@ -490,7 +441,6 @@ body.dark .side-icon-dark {
   cursor: pointer;
 }
 
-
 .auth-google-btn img {
   width: 22px;
   height: 22px;
@@ -498,14 +448,11 @@ body.dark .side-icon-dark {
   object-fit: contain;
 }
 
-
 .auth-google-btn:hover {
   filter: brightness(0.97);
 }
 
-
 /* formulario */
-
 
 .auth-form {
   width: 100%;
@@ -516,7 +463,6 @@ body.dark .side-icon-dark {
 
   gap: 30px;
 }
-
 
 .auth-field {
   display: flex;
@@ -535,7 +481,6 @@ body.dark .side-icon-dark {
     var(--field-placeholder);
 }
 
-
 .auth-field img {
   width: 20px;
   height: 20px;
@@ -545,26 +490,21 @@ body.dark .side-icon-dark {
   object-fit: contain;
 }
 
-
 .field-icon-dark {
   display: none;
 }
-
 
 body.dark
 .field-icon-light {
   display: none;
 }
 
-
 body.dark
 .field-icon-dark {
   display: block;
 }
 
-
 /* telefone */
-
 
 .telefone-icon {
   display: block;
@@ -573,7 +513,6 @@ body.dark
     brightness(0)
     !important;
 }
-
 
 body.dark
 .auth-field
@@ -586,9 +525,7 @@ body.dark
     !important;
 }
 
-
 /* campos */
-
 
 .auth-field input {
   flex: 1;
@@ -605,15 +542,12 @@ body.dark
   font-size: 15px;
 }
 
-
 .auth-field input::placeholder {
   color:
     var(--field-placeholder);
 }
 
-
 /* botão criar */
-
 
 .auth-submit-btn {
   width: 200px;
@@ -652,7 +586,6 @@ body.dark
     transform 0.2s ease;
 }
 
-
 .auth-submit-btn:hover {
   background:
     rgba(128, 128, 128, 0.08);
@@ -660,7 +593,6 @@ body.dark
   transform:
     translateY(-1px);
 }
-
 
 .auth-submit-btn:focus,
 .auth-submit-btn:focus-visible,
@@ -670,19 +602,15 @@ body.dark
   box-shadow: none;
 }
 
-
 /* #endregion */
 
-
 /* #region responsivo */
-
 
 @media (max-width: 800px) {
 
   .auth-wrapper {
     flex-direction: column;
   }
-
 
   .auth-side {
     width: 100%;
@@ -693,23 +621,19 @@ body.dark
       0 0 40px 40px;
   }
 
-
   .auth-form-side {
     padding:
       50px 20px;
   }
 
-
   .auth-side-content h1 {
     font-size: 32px;
   }
-
 
   .art-icon {
     font-size: 44px;
   }
 
 }
-
 
 /* #endregion */

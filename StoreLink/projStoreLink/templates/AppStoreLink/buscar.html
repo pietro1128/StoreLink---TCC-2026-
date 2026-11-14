@@ -3,9 +3,7 @@
 <html lang="pt-BR">
 
 <head>
-
   <meta charset="UTF-8">
-
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
@@ -33,48 +31,20 @@
     rel="stylesheet"
     href="{% static 'AppStoreLink/styles/icons.css' %}"
   >
-
 </head>
-
 
 <body>
 
-
-  <!-- #region modo escuro -->
-
-  <script>
-
-    if (
-      localStorage.getItem(
-        'theme'
-      ) === 'dark'
-    ) {
-
-      document.body.classList.add(
-        'dark'
-      );
-
-    }
-
-  </script>
-
-  <!-- #endregion -->
-
-
   <!-- #region navbar -->
-
+  <!-- Barra de navegação do topo -->
   <div class="topbar">
 
-
     <div class="logo-icon">
-
       <img
         src="{% static 'AppStoreLink/images/icon-dark.png' %}"
         alt="StoreLink"
       >
-
     </div>
-
 
     <a
       class="nav-btn active"
@@ -83,14 +53,12 @@
       Início
     </a>
 
-
     <a
       class="nav-btn"
       href="{% url 'perfil-loja' %}"
     >
       Sua loja
     </a>
-
 
     <a
       class="nav-btn"
@@ -99,7 +67,6 @@
       Suporte
     </a>
 
-
     <a
       class="nav-btn"
       href="{% url 'tutorial' %}"
@@ -107,42 +74,37 @@
       Como navegar?
     </a>
 
-
     {% if usuario_logado %}
 
       <button
+        type="button"
         class="nav-account-btn"
         data-url="{% url 'perfil-consumidor' %}"
-        onclick="location.href=this.dataset.url"
       >
-
         <span
           class="sl-icon sl-user"
           aria-hidden="true"
         ></span>
 
         Minha conta
-
       </button>
 
     {% else %}
 
       <button
+        type="button"
         class="nav-account-btn"
         data-url="{% url 'cadastro' %}"
-        onclick="location.href=this.dataset.url"
       >
         Criar conta ou Entrar
       </button>
 
     {% endif %}
 
-
     <button
+      type="button"
       class="theme-toggle"
-      onclick="toggleThemeBuscar()"
     >
-
       <span
         class="sl-icon sl-moon"
         aria-hidden="true"
@@ -151,19 +113,15 @@
       <span class="theme-label">
         Modo escuro
       </span>
-
     </button>
 
-
   </div>
-
   <!-- #endregion -->
 
 
   <!-- #region sidebar -->
-
+  <!-- Menu lateral com as categorias -->
   <div class="sidebar-trigger"></div>
-
 
   <div class="sidebar">
 
@@ -238,14 +196,12 @@
     </a>
 
   </div>
-
   <!-- #endregion -->
 
 
   <!-- #region resultados -->
-
+  <!-- Tudo que foi encontrado pela pesquisa aparece aqui -->
   <main class="resultados-container">
-
 
     <div class="resultados-topo">
 
@@ -262,6 +218,7 @@
 
     {% if total_resultados == 0 %}
 
+      <!-- Caso a pesquisa não encontre nada -->
       <div class="resultado-vazio">
 
         <h2>
@@ -275,12 +232,10 @@
 
       </div>
 
-
     {% else %}
 
 
       <!-- #region lojas -->
-
       {% if lojas %}
 
         <section class="resultado-secao">
@@ -289,107 +244,76 @@
             Lojas
           </h2>
 
-
           <div class="resultado-grid">
-
 
             {% for loja in lojas %}
 
               <article
-                class="
-                  resultado-card
-
-                  {% if loja.id_categoria.tipo_categoria == 'Alimentos' %}
-                    resultado-alimentos
-
-                  {% elif loja.id_categoria.tipo_categoria == 'Moda' %}
-                    resultado-moda
-
-                  {% elif loja.id_categoria.tipo_categoria == 'Esportes' %}
-                    resultado-esportes
-
-                  {% elif loja.id_categoria.tipo_categoria == 'Construção' %}
-                    resultado-construcao
-
-                  {% elif loja.id_categoria.tipo_categoria == 'Saúde' %}
-                    resultado-saude
-
-                  {% elif loja.id_categoria.tipo_categoria == 'Pets' %}
-                    resultado-pets
-
-                  {% elif loja.id_categoria.tipo_categoria == 'Ambiente' %}
-                    resultado-ambiente
-
-                  {% elif loja.id_categoria.tipo_categoria == 'Tecnologia' %}
-                    resultado-tecnologia
-
-                  {% elif loja.id_categoria.tipo_categoria == 'Beleza' %}
-                    resultado-beleza
-
-                  {% else %}
-                    resultado-outros
-
-                  {% endif %}
-                "
-
+                class="resultado-card
+                {% if loja.id_categoria.tipo_categoria == 'Alimentos' %}
+                  resultado-alimentos
+                {% elif loja.id_categoria.tipo_categoria == 'Moda' %}
+                  resultado-moda
+                {% elif loja.id_categoria.tipo_categoria == 'Esportes' %}
+                  resultado-esportes
+                {% elif loja.id_categoria.tipo_categoria == 'Construção' %}
+                  resultado-construcao
+                {% elif loja.id_categoria.tipo_categoria == 'Saúde' %}
+                  resultado-saude
+                {% elif loja.id_categoria.tipo_categoria == 'Pets' %}
+                  resultado-pets
+                {% elif loja.id_categoria.tipo_categoria == 'Ambiente' %}
+                  resultado-ambiente
+                {% elif loja.id_categoria.tipo_categoria == 'Tecnologia' %}
+                  resultado-tecnologia
+                {% elif loja.id_categoria.tipo_categoria == 'Beleza' %}
+                  resultado-beleza
+                {% else %}
+                  resultado-outros
+                {% endif %}
+                u-pointer"
                 data-url="{% url 'InformacoesLoja' loja.id_loja %}"
-                onclick="location.href=this.dataset.url"
-                style="cursor: pointer;"
               >
 
-
+                <!-- Foto e favorito -->
                 <div class="resultado-card-capa">
 
-
                   {% if loja.foto_estabelecimento %}
-
                     <img
                       src="{{ loja.foto_estabelecimento }}"
                       alt="{{ loja.nome_loja }}"
                       class="resultado-card-imagem"
-                      onerror="this.style.display='none'"
                     >
-
                   {% endif %}
-
 
                   <form
                     method="POST"
                     action="{% url 'favoritar-loja' loja.id_loja %}"
-                    onclick="event.stopPropagation()"
                   >
-
                     {% csrf_token %}
-
 
                     <button
                       type="submit"
                       class="resultado-card-fav"
                       aria-label="Favoritar loja"
-                      title="Favoritar loja"
                     >
-
                       <span
                         class="sl-icon sl-heart"
                         aria-hidden="true"
                       ></span>
-
                     </button>
 
-
                   </form>
-
 
                 </div>
 
 
+                <!-- Informações da loja -->
                 <div class="resultado-card-corpo">
-
 
                   <h3>
                     {{ loja.nome_loja }}
                   </h3>
-
 
                   {% if loja.telefone_loja %}
 
@@ -417,10 +341,8 @@
                       </strong>
 
                       <span class="resultado-endereco">
-
                         {{ loja.id_endereco.rua }},
                         {{ loja.id_endereco.numero_estabelecimento }}
-
                       </span>
 
                     </div>
@@ -432,26 +354,21 @@
                     {{ loja.id_categoria.tipo_categoria }}
                   </span>
 
-
                 </div>
-
 
               </article>
 
             {% endfor %}
-
 
           </div>
 
         </section>
 
       {% endif %}
-
       <!-- #endregion -->
 
 
       <!-- #region produtos -->
-
       {% if produtos %}
 
         <section class="resultado-secao">
@@ -460,57 +377,39 @@
             Produtos
           </h2>
 
-
           <div class="resultado-grid">
-
 
             {% for produto in produtos %}
 
               <article
-                class="
-                  resultado-card
-
-                  {% if produto.id_categoria.tipo_categoria == 'Alimentos' %}
-                    resultado-alimentos
-
-                  {% elif produto.id_categoria.tipo_categoria == 'Moda' %}
-                    resultado-moda
-
-                  {% elif produto.id_categoria.tipo_categoria == 'Esportes' %}
-                    resultado-esportes
-
-                  {% elif produto.id_categoria.tipo_categoria == 'Construção' %}
-                    resultado-construcao
-
-                  {% elif produto.id_categoria.tipo_categoria == 'Saúde' %}
-                    resultado-saude
-
-                  {% elif produto.id_categoria.tipo_categoria == 'Pets' %}
-                    resultado-pets
-
-                  {% elif produto.id_categoria.tipo_categoria == 'Ambiente' %}
-                    resultado-ambiente
-
-                  {% elif produto.id_categoria.tipo_categoria == 'Tecnologia' %}
-                    resultado-tecnologia
-
-                  {% elif produto.id_categoria.tipo_categoria == 'Beleza' %}
-                    resultado-beleza
-
-                  {% else %}
-                    resultado-outros
-
-                  {% endif %}
-                "
-
+                class="resultado-card
+                {% if produto.id_categoria.tipo_categoria == 'Alimentos' %}
+                  resultado-alimentos
+                {% elif produto.id_categoria.tipo_categoria == 'Moda' %}
+                  resultado-moda
+                {% elif produto.id_categoria.tipo_categoria == 'Esportes' %}
+                  resultado-esportes
+                {% elif produto.id_categoria.tipo_categoria == 'Construção' %}
+                  resultado-construcao
+                {% elif produto.id_categoria.tipo_categoria == 'Saúde' %}
+                  resultado-saude
+                {% elif produto.id_categoria.tipo_categoria == 'Pets' %}
+                  resultado-pets
+                {% elif produto.id_categoria.tipo_categoria == 'Ambiente' %}
+                  resultado-ambiente
+                {% elif produto.id_categoria.tipo_categoria == 'Tecnologia' %}
+                  resultado-tecnologia
+                {% elif produto.id_categoria.tipo_categoria == 'Beleza' %}
+                  resultado-beleza
+                {% else %}
+                  resultado-outros
+                {% endif %}
+                u-pointer"
                 data-url="{% url 'InformacoesProduto' produto.id_loja.id_loja %}"
-                onclick="location.href=this.dataset.url"
-                style="cursor: pointer;"
               >
 
-
+                <!-- Foto do produto -->
                 <div class="resultado-card-capa">
-
 
                   {% if produto.foto %}
 
@@ -518,22 +417,19 @@
                       src="{{ produto.foto }}"
                       alt="{{ produto.nome_produto }}"
                       class="resultado-card-imagem"
-                      onerror="this.style.display='none'"
                     >
 
                   {% endif %}
 
-
                 </div>
 
 
+                <!-- Informações do produto -->
                 <div class="resultado-card-corpo">
-
 
                   <h3>
                     {{ produto.nome_produto }}
                   </h3>
-
 
                   <div class="resultado-info">
 
@@ -574,26 +470,21 @@
                     {{ produto.id_categoria.tipo_categoria }}
                   </span>
 
-
                 </div>
-
 
               </article>
 
             {% endfor %}
-
 
           </div>
 
         </section>
 
       {% endif %}
-
       <!-- #endregion -->
 
 
-      <!-- #region servicos -->
-
+      <!-- #region serviços -->
       {% if servicos %}
 
         <section class="resultado-secao">
@@ -602,57 +493,39 @@
             Serviços
           </h2>
 
-
           <div class="resultado-grid">
-
 
             {% for servico in servicos %}
 
               <article
-                class="
-                  resultado-card
-
-                  {% if servico.id_loja.id_categoria.tipo_categoria == 'Alimentos' %}
-                    resultado-alimentos
-
-                  {% elif servico.id_loja.id_categoria.tipo_categoria == 'Moda' %}
-                    resultado-moda
-
-                  {% elif servico.id_loja.id_categoria.tipo_categoria == 'Esportes' %}
-                    resultado-esportes
-
-                  {% elif servico.id_loja.id_categoria.tipo_categoria == 'Construção' %}
-                    resultado-construcao
-
-                  {% elif servico.id_loja.id_categoria.tipo_categoria == 'Saúde' %}
-                    resultado-saude
-
-                  {% elif servico.id_loja.id_categoria.tipo_categoria == 'Pets' %}
-                    resultado-pets
-
-                  {% elif servico.id_loja.id_categoria.tipo_categoria == 'Ambiente' %}
-                    resultado-ambiente
-
-                  {% elif servico.id_loja.id_categoria.tipo_categoria == 'Tecnologia' %}
-                    resultado-tecnologia
-
-                  {% elif servico.id_loja.id_categoria.tipo_categoria == 'Beleza' %}
-                    resultado-beleza
-
-                  {% else %}
-                    resultado-outros
-
-                  {% endif %}
-                "
-
+                class="resultado-card
+                {% if servico.id_loja.id_categoria.tipo_categoria == 'Alimentos' %}
+                  resultado-alimentos
+                {% elif servico.id_loja.id_categoria.tipo_categoria == 'Moda' %}
+                  resultado-moda
+                {% elif servico.id_loja.id_categoria.tipo_categoria == 'Esportes' %}
+                  resultado-esportes
+                {% elif servico.id_loja.id_categoria.tipo_categoria == 'Construção' %}
+                  resultado-construcao
+                {% elif servico.id_loja.id_categoria.tipo_categoria == 'Saúde' %}
+                  resultado-saude
+                {% elif servico.id_loja.id_categoria.tipo_categoria == 'Pets' %}
+                  resultado-pets
+                {% elif servico.id_loja.id_categoria.tipo_categoria == 'Ambiente' %}
+                  resultado-ambiente
+                {% elif servico.id_loja.id_categoria.tipo_categoria == 'Tecnologia' %}
+                  resultado-tecnologia
+                {% elif servico.id_loja.id_categoria.tipo_categoria == 'Beleza' %}
+                  resultado-beleza
+                {% else %}
+                  resultado-outros
+                {% endif %}
+                u-pointer"
                 data-url="{% url 'InformacoesServico' servico.id_loja.id_loja %}"
-                onclick="location.href=this.dataset.url"
-                style="cursor: pointer;"
               >
 
-
+                <!-- Foto do serviço -->
                 <div class="resultado-card-capa">
-
 
                   {% if servico.foto %}
 
@@ -660,22 +533,19 @@
                       src="{{ servico.foto }}"
                       alt="{{ servico.nome_servico }}"
                       class="resultado-card-imagem"
-                      onerror="this.style.display='none'"
                     >
 
                   {% endif %}
 
-
                 </div>
 
 
+                <!-- Informações do serviço -->
                 <div class="resultado-card-corpo">
-
 
                   <h3>
                     {{ servico.nome_servico }}
                   </h3>
-
 
                   <div class="resultado-info">
 
@@ -711,113 +581,27 @@
 
                   </div>
 
-
                 </div>
-
 
               </article>
 
             {% endfor %}
-
 
           </div>
 
         </section>
 
       {% endif %}
-
       <!-- #endregion -->
-
 
     {% endif %}
 
-
   </main>
-
   <!-- #endregion -->
 
 
-  <!-- #region javascript -->
-
-  <script
-    src="{% static 'AppStoreLink/scripts/index.js' %}"
-  ></script>
-
-
-  <script>
-
-    function atualizarTemaBuscar() {
-
-      const botao =
-        document.querySelector(
-          '.theme-toggle'
-        );
-
-
-      if (!botao) {
-        return;
-      }
-
-
-      if (
-        document.body.classList.contains(
-          'dark'
-        )
-      ) {
-
-        botao.innerHTML =
-          '<span class="sl-icon sl-sun" aria-hidden="true"></span><span class="theme-label">Modo claro</span>';
-
-      } else {
-
-        botao.innerHTML =
-          '<span class="sl-icon sl-moon" aria-hidden="true"></span><span class="theme-label">Modo escuro</span>';
-
-      }
-
-    }
-
-
-    function toggleThemeBuscar() {
-
-      document.body.classList.toggle(
-        'dark'
-      );
-
-
-      const isDark =
-        document.body.classList.contains(
-          'dark'
-        );
-
-
-      localStorage.setItem(
-        'theme',
-        isDark
-          ? 'dark'
-          : 'light'
-      );
-
-
-      atualizarTemaBuscar();
-
-    }
-
-
-    document.addEventListener(
-      'DOMContentLoaded',
-      function () {
-
-        atualizarTemaBuscar();
-
-      }
-    );
-
-  </script>
-
-  <!-- #endregion -->
-
+  <!-- JS geral do projeto -->
+  <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
 
 </body>
-
 </html>

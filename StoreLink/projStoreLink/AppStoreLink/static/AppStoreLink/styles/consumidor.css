@@ -15,7 +15,6 @@
   overflow: hidden;
 }
 
-
 .consumidor-wrapper {
   width: 100%;
 
@@ -30,7 +29,6 @@
 }
 
 /* #endregion */
-
 
 /* #region lateral consumidor */
 
@@ -57,7 +55,6 @@
 
   z-index: 5;
 }
-
 
 .consumidor-badge {
   width:
@@ -92,7 +89,6 @@
 
 /* #endregion */
 
-
 /* #region avatar */
 
 .consumidor-avatar-wrap {
@@ -106,7 +102,6 @@
     auto
     38px;
 }
-
 
 .consumidor-avatar {
   width: 155px;
@@ -127,7 +122,6 @@
   cursor: pointer;
 }
 
-
 .consumidor-avatar svg {
   width: 72%;
   height: 72%;
@@ -135,7 +129,6 @@
   fill:
     #000000;
 }
-
 
 .consumidor-avatar-image {
   width: 100%;
@@ -146,18 +139,15 @@
   display: none;
 }
 
-
 .consumidor-avatar.tem-imagem
 svg {
   display: none;
 }
 
-
 .consumidor-avatar.tem-imagem
 .consumidor-avatar-image {
   display: block;
 }
-
 
 .consumidor-camera-badge {
   position: absolute;
@@ -191,7 +181,6 @@ svg {
 }
 
 /* #endregion */
-
 
 /* #region editar consumidor */
 
@@ -229,7 +218,6 @@ svg {
     color 0.2s ease;
 }
 
-
 .consumidor-editar-btn:hover {
   background:
     #222222;
@@ -238,11 +226,9 @@ svg {
     translateY(-1px);
 }
 
-
 .consumidor-form-edicao {
   width: 100%;
 }
-
 
 .consumidor-field-left {
   display: flex;
@@ -254,7 +240,6 @@ svg {
   margin-bottom: 17px;
 }
 
-
 .consumidor-field-left label {
   color:
     var(--text-color);
@@ -263,7 +248,6 @@ svg {
 
   font-weight: 800;
 }
-
 
 .consumidor-field-left input {
   width: 100%;
@@ -290,12 +274,10 @@ svg {
   font-size: 17px;
 }
 
-
 .consumidor-field-left
 input[readonly] {
   cursor: default;
 }
-
 
 .consumidor-form-edicao.editando
 .consumidor-field-left
@@ -306,7 +288,6 @@ input {
 
   outline-offset: 1px;
 }
-
 
 .consumidor-salvar-alteracoes {
   width: 100%;
@@ -346,7 +327,6 @@ input {
     color 0.2s ease;
 }
 
-
 .consumidor-salvar-alteracoes:hover {
   filter:
     brightness(0.85);
@@ -355,13 +335,11 @@ input {
     translateY(-1px);
 }
 
-
 .consumidor-salvar-alteracoes[hidden] {
   display: none;
 }
 
 /* #endregion */
-
 
 /* #region logout */
 
@@ -405,7 +383,6 @@ input {
     transform 0.2s ease;
 }
 
-
 .consumidor-logout-btn span {
   font-size: 27px;
 
@@ -413,7 +390,6 @@ input {
 
   font-weight: 400;
 }
-
 
 .consumidor-logout-btn:hover {
   background:
@@ -424,7 +400,6 @@ input {
 }
 
 /* #endregion */
-
 
 /* #region favoritos */
 
@@ -444,7 +419,6 @@ input {
   overflow: hidden;
 }
 
-
 .favoritos-topo {
   position: relative;
 
@@ -462,7 +436,6 @@ input {
   margin-bottom: 28px;
 }
 
-
 .favoritos-topo h1 {
   margin: 0;
 
@@ -476,7 +449,6 @@ input {
 
 /* #endregion */
 
-
 /* #region fundo decorativo */
 
 .favoritos-area::before,
@@ -485,7 +457,6 @@ input {
 }
 
 /* #endregion */
-
 
 /* #region cadastrar loja */
 
@@ -523,7 +494,6 @@ input {
     background 0.2s ease;
 }
 
-
 .cadastrar-loja-btn:hover {
   background:
     #3a3a3a;
@@ -531,7 +501,6 @@ input {
   transform:
     translateY(-2px);
 }
-
 
 .cadastrar-loja-icone {
   font-size: 27px;
@@ -542,7 +511,6 @@ input {
 }
 
 /* #endregion */
-
 
 /* #region scroll favoritos */
 
@@ -571,17 +539,14 @@ input {
   scroll-behavior: smooth;
 }
 
-
 .favoritos-scroll::-webkit-scrollbar {
   height: 8px;
 }
-
 
 .favoritos-scroll::-webkit-scrollbar-track {
   background:
     transparent;
 }
-
 
 .favoritos-scroll::-webkit-scrollbar-thumb {
   background:
@@ -592,7 +557,6 @@ input {
 
 /* #endregion */
 
-
 /* #region cores categorias */
 
 .favorito-card {
@@ -600,60 +564,50 @@ input {
     #cfcfcf;
 }
 
-
 .favorito-alimentos {
   --favorito-cor:
     #e8534f;
 }
-
 
 .favorito-moda {
   --favorito-cor:
     #7a5c50;
 }
 
-
 .favorito-esportes {
   --favorito-cor:
     #f5943a;
 }
-
 
 .favorito-construcao {
   --favorito-cor:
     #f6c344;
 }
 
-
 .favorito-saude {
   --favorito-cor:
     #35b5ea;
 }
-
 
 .favorito-pets {
   --favorito-cor:
     #21c9c9;
 }
 
-
 .favorito-ambiente {
   --favorito-cor:
     #7fcf85;
 }
-
 
 .favorito-tecnologia {
   --favorito-cor:
     #7c5cf0;
 }
 
-
 .favorito-beleza {
   --favorito-cor:
     #f06ec0;
 }
-
 
 .favorito-outros {
   --favorito-cor:
@@ -661,7 +615,6 @@ input {
 }
 
 /* #endregion */
-
 
 /* #region card favorito */
 
@@ -690,7 +643,6 @@ input {
 
 /* #endregion */
 
-
 /* #region capa favorito */
 
 .favorito-capa {
@@ -709,7 +661,6 @@ input {
     #dddddd;
 }
 
-
 .favorito-imagem {
   width: 100%;
   height: 100%;
@@ -718,7 +669,6 @@ input {
 
   object-fit: cover;
 }
-
 
 .favorito-capa-placeholder {
   width: 100%;
@@ -741,7 +691,6 @@ input {
 }
 
 /* #endregion */
-
 
 /* #region coracao */
 
@@ -778,7 +727,6 @@ input {
 
 /* #endregion */
 
-
 /* #region conteudo favorito */
 
 .favorito-conteudo {
@@ -799,7 +747,6 @@ input {
   border-radius: 15px;
 }
 
-
 .favorito-conteudo h2 {
   margin:
     0
@@ -814,7 +761,6 @@ input {
   font-weight: 800;
 }
 
-
 .favorito-bloco {
   display: flex;
 
@@ -828,14 +774,12 @@ input {
   line-height: 1.35;
 }
 
-
 .favorito-label {
   color:
     #444444;
 
   font-weight: 500;
 }
-
 
 .favorito-localizacao {
   margin-top: 48px;
@@ -848,14 +792,12 @@ input {
   line-height: 1.35;
 }
 
-
 .favorito-endereco {
   color:
     var(--favorito-cor);
 }
 
 /* #endregion */
-
 
 /* #region nenhum favorito */
 
@@ -872,7 +814,6 @@ input {
 
   text-align: center;
 }
-
 
 .favoritos-adicionar {
   width: 300px;
@@ -910,7 +851,6 @@ input {
     color 0.2s ease;
 }
 
-
 .favoritos-adicionar:hover {
   transform:
     translateY(-4px);
@@ -925,7 +865,6 @@ input {
     #666666;
 }
 
-
 .favoritos-vazio h2 {
   margin:
     18px
@@ -939,7 +878,6 @@ input {
 
   font-weight: 800;
 }
-
 
 .favoritos-vazio p {
   max-width: 290px;
@@ -956,7 +894,6 @@ input {
 
 /* #endregion */
 
-
 /* #region conta ativa */
 
 .consumidor-conta-ativa {
@@ -972,7 +909,6 @@ input {
 
 /* #endregion */
 
-
 /* #region modo escuro */
 
 body.dark
@@ -984,20 +920,17 @@ body.dark
     #ffffff;
 }
 
-
 body.dark
 .consumidor-avatar {
   background:
     #3a3a3a;
 }
 
-
 body.dark
 .consumidor-avatar svg {
   fill:
     #ffffff;
 }
-
 
 body.dark
 .consumidor-field-left
@@ -1009,7 +942,6 @@ input {
     #ffffff;
 }
 
-
 body.dark
 .consumidor-editar-btn {
   background:
@@ -1019,13 +951,11 @@ body.dark
     #000000;
 }
 
-
 body.dark
 .consumidor-editar-btn:hover {
   background:
     #e5e5e5;
 }
-
 
 body.dark
 .consumidor-form-edicao.editando
@@ -1038,7 +968,6 @@ input {
   outline-offset: 1px;
 }
 
-
 body.dark
 .consumidor-salvar-alteracoes {
   background:
@@ -1048,7 +977,6 @@ body.dark
     #000000;
 }
 
-
 body.dark
 .consumidor-salvar-alteracoes:hover {
   background:
@@ -1056,7 +984,6 @@ body.dark
 
   filter: none;
 }
-
 
 body.dark
 .favorito-conteudo {
@@ -1067,13 +994,11 @@ body.dark
     #ffffff;
 }
 
-
 body.dark
 .favorito-conteudo h2 {
   color:
     #ffffff;
 }
-
 
 body.dark
 .favorito-bloco,
@@ -1085,7 +1010,6 @@ body.dark
     #d5d5d5;
 }
 
-
 body.dark
 .favorito-capa-placeholder {
   background:
@@ -1094,7 +1018,6 @@ body.dark
   color:
     #bdbdbd;
 }
-
 
 body.dark
 .favoritos-adicionar {
@@ -1107,7 +1030,6 @@ body.dark
   color:
     #bdbdbd;
 }
-
 
 body.dark
 .favoritos-adicionar:hover {
@@ -1122,7 +1044,6 @@ body.dark
 }
 
 /* #endregion */
-
 
 /* #region responsividade */
 
@@ -1140,7 +1061,6 @@ body.dark
     padding-right: 18px;
   }
 
-
   .consumidor-badge {
     width:
       calc(
@@ -1152,7 +1072,6 @@ body.dark
     font-size: 23px;
   }
 
-
   .favorito-card {
     width: 340px;
 
@@ -1160,7 +1079,6 @@ body.dark
   }
 
 }
-
 
 @media (
   max-width: 700px
@@ -1170,11 +1088,9 @@ body.dark
     overflow: visible;
   }
 
-
   .consumidor-wrapper {
     flex-direction: column;
   }
-
 
   .consumidor-left {
     width: 100%;
@@ -1188,7 +1104,6 @@ body.dark
       20px;
   }
 
-
   .consumidor-badge {
     width:
       calc(
@@ -1198,18 +1113,15 @@ body.dark
     margin-left: -20px;
   }
 
-
   .consumidor-logout-btn {
     margin-top: 15px;
   }
-
 
   .favoritos-area {
     width: 100%;
 
     padding: 20px;
   }
-
 
   .favoritos-topo {
     flex-direction: column;
@@ -1219,11 +1131,9 @@ body.dark
     gap: 15px;
   }
 
-
   .cadastrar-loja-btn {
     font-size: 16px;
   }
-
 
   .favorito-card {
     width: 300px;
@@ -1233,18 +1143,15 @@ body.dark
     height: 500px;
   }
 
-
   .favorito-capa {
     height: 155px;
   }
-
 
   .favoritos-vazio {
     width: 290px;
 
     min-width: 290px;
   }
-
 
   .favoritos-adicionar {
     width: 270px;
@@ -1254,7 +1161,6 @@ body.dark
     font-size: 80px;
   }
 
-
   .favoritos-area::before,
   .favoritos-area::after {
     display: none;
@@ -1262,4 +1168,11 @@ body.dark
 
 }
 
+/* #endregion */
+
+/* #region icones */
+.consumidor-camera-badge .sl-icon { font-size: 22px; }
+.consumidor-editar-btn { display:flex; align-items:center; justify-content:center; gap:8px; }
+.consumidor-logout-btn .sl-icon { font-size:20px; }
+.favorito-coracao .sl-icon { font-size:25px; }
 /* #endregion */

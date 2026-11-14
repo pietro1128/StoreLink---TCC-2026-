@@ -1,5 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 
 <head>
@@ -40,25 +41,7 @@
 
 <body>
 
-  <script>
-
-    if (
-      localStorage.getItem(
-        'theme'
-      ) === 'dark'
-    ) {
-
-      document.body.classList.add(
-        'dark'
-      );
-
-    }
-
-  </script>
-
-
-  <!-- #region navbar -->
-
+  <!-- #region TOPBAR -->
   <div class="topbar">
 
     <div class="logo-icon">
@@ -70,14 +53,12 @@
 
     </div>
 
-
     <a
       class="nav-btn active"
       href="{% url 'index' %}"
     >
       Início
     </a>
-
 
     <a
       class="nav-btn"
@@ -86,14 +67,12 @@
       Sua loja
     </a>
 
-
     <a
       class="nav-btn"
       href="{% url 'suporte' %}"
     >
       Suporte
     </a>
-
 
     <a
       class="nav-btn"
@@ -102,19 +81,13 @@
       Como navegar?
     </a>
 
-
     {% if usuario_logado %}
 
       <button
         class="nav-account-btn"
         data-url="{% url 'perfil-consumidor' %}"
-        onclick="location.href=this.dataset.url"
       >
-        <span
-          class="sl-icon sl-user"
-          aria-hidden="true"
-        ></span>
-
+        <span class="sl-icon sl-user" aria-hidden="true"></span>
         Minha conta
       </button>
 
@@ -123,91 +96,63 @@
       <button
         class="nav-account-btn"
         data-url="{% url 'cadastro' %}"
-        onclick="location.href=this.dataset.url"
       >
         Criar conta ou Entrar
       </button>
 
     {% endif %}
 
-
-    <button
-      class="theme-toggle"
-      onclick="toggleThemeProdutoInfo()"
-    >
-      <span
-        class="sl-icon sl-moon"
-        aria-hidden="true"
-      ></span>
-
-      <span class="theme-label">
-        Modo escuro
-      </span>
+    <button class="theme-toggle">
+      <span class="sl-icon sl-moon" aria-hidden="true"></span>
+      <span class="theme-label">Modo escuro</span>
     </button>
 
   </div>
-
   <!-- #endregion -->
 
 
-  <!-- #region página -->
-
+  <!-- #region CONTEÚDO -->
   <main
     class="
       info-produto-page
 
       {% if loja.id_categoria.tipo_categoria == 'Alimentos' %}
         info-alimentos
-
       {% elif loja.id_categoria.tipo_categoria == 'Moda' %}
         info-moda
-
       {% elif loja.id_categoria.tipo_categoria == 'Esportes' %}
         info-esportes
-
       {% elif loja.id_categoria.tipo_categoria == 'Construção' %}
         info-construcao
-
       {% elif loja.id_categoria.tipo_categoria == 'Saúde' %}
         info-saude
-
       {% elif loja.id_categoria.tipo_categoria == 'Pets' %}
         info-pets
-
       {% elif loja.id_categoria.tipo_categoria == 'Ambiente' %}
         info-ambiente
-
       {% elif loja.id_categoria.tipo_categoria == 'Tecnologia' %}
         info-tecnologia
-
       {% elif loja.id_categoria.tipo_categoria == 'Beleza' %}
         info-beleza
-
       {% else %}
         info-outros
-
       {% endif %}
     "
   >
 
-
-    <!-- #region topo -->
-
+    <!-- #region CABEÇALHO -->
     <div class="info-lista-topo">
-
 
       <a
         class="info-voltar"
         href="{% url 'InformacoesLoja' loja.id_loja %}"
         aria-label="Voltar"
-        title="Voltar"
       >
         <span
           class="sl-icon sl-arrow-left"
           aria-hidden="true"
         ></span>
       </a>
-
 
       <div>
 
@@ -221,33 +166,27 @@
 
       </div>
 
-
     </div>
-
     <!-- #endregion -->
 
 
+    <!-- #region PRODUTOS -->
     {% if produtos %}
-
 
       <div class="info-produto-grid">
 
-
         {% for produto in produtos %}
-
 
           <article class="info-produto-card">
 
-
+            <!-- #region AÇÕES DO PROPRIETÁRIO -->
             {% if eh_dono %}
 
               <div class="info-item-acoes">
 
-
                 <button
                   type="button"
                   class="info-item-editar"
-                  onclick="abrirEdicaoProduto(this)"
                 >
                   <span
                     class="sl-icon sl-pencil"
@@ -257,16 +196,13 @@
                   Editar
                 </button>
 
-
                 <form
+                  class="u-inline"
                   method="POST"
                   action="{% url 'produto-excluir' produto.id_produto %}"
-                  style="display: inline;"
-                  onsubmit="return confirm('Deseja excluir o produto {{ produto.nome_produto|escapejs }}?');"
+                  data-confirm="Deseja excluir o produto {{ produto.nome_produto|escape }}?"
                 >
-
                   {% csrf_token %}
-
 
                   <button
                     type="submit"
@@ -280,36 +216,25 @@
                     Excluir
                   </button>
 
-
                 </form>
-
 
               </div>
 
             {% endif %}
+            <!-- #endregion -->
 
 
-            <!-- #region imagem -->
-
+            <!-- #region IMAGEM -->
             <div class="info-produto-imagem">
-
 
               {% if produto.foto %}
 
                 <img
                   src="{{ produto.foto }}"
                   alt="{{ produto.nome_produto }}"
-                  onerror="
-                    this.style.display='none';
-                    this.nextElementSibling.style.display='flex';
-                  "
                 >
 
-
-                <div
-                  class="info-sem-imagem"
-                  style="display: none;"
-                >
+                <div class="info-sem-imagem u-hidden">
                   Sem imagem cadastrada
                 </div>
 
@@ -321,73 +246,51 @@
 
               {% endif %}
 
-
             </div>
-
             <!-- #endregion -->
 
 
-            <!-- #region corpo -->
-
+            <!-- #region CORPO -->
             <div class="info-produto-corpo">
 
-
+              <!-- #region VISUALIZAÇÃO -->
               <div class="info-item-visualizacao">
-
 
                 <span class="info-label">
                   Nome do produto:
                 </span>
 
-
                 <h2 class="js-nome">
                   {{ produto.nome_produto }}
                 </h2>
-
 
                 <span class="info-label">
                   Preço do produto:
                 </span>
 
-
                 <strong class="info-preco js-preco">
                   R$ {{ produto.preco }}
                 </strong>
-
-
-                <span class="info-label">
-                  Categoria:
-                </span>
-
-
-                <span class="info-produto-categoria">
-                  {{ produto.id_categoria.tipo_categoria }}
-                </span>
-
 
                 <span class="info-label">
                   Descrição do produto:
                 </span>
 
-
                 <p class="js-descricao">
 
                   {% if produto.descricao %}
-
                     {{ produto.descricao }}
-
                   {% else %}
-
                     Sem descrição.
-
                   {% endif %}
 
                 </p>
 
-
               </div>
+              <!-- #endregion -->
 
 
+              <!-- #region EDIÇÃO -->
               {% if eh_dono %}
 
                 <form
@@ -395,14 +298,11 @@
                   method="POST"
                   action="{% url 'produto-editar' produto.id_produto %}"
                 >
-
                   {% csrf_token %}
-
 
                   <label>
                     Nome do produto:
                   </label>
-
 
                   <input
                     type="text"
@@ -413,11 +313,9 @@
                     required
                   >
 
-
                   <label>
                     Preço do produto:
                   </label>
-
 
                   <input
                     type="text"
@@ -427,30 +325,16 @@
                     required
                   >
 
-
-                  <label>
-                    Categoria:
-                  </label>
-
-
-                  <div class="info-produto-categoria">
-                    {{ produto.id_categoria.tipo_categoria }}
-                  </div>
-
-
                   <label>
                     Descrição do produto:
                   </label>
-
 
                   <textarea
                     name="descricao_produto"
                     class="js-editar-descricao"
                   >{{ produto.descricao|default:'' }}</textarea>
 
-
                   <div class="info-edicao-botoes">
-
 
                     <button
                       type="submit"
@@ -459,41 +343,32 @@
                       Salvar
                     </button>
 
-
                     <button
                       type="button"
                       class="info-edicao-cancelar"
-                      onclick="cancelarEdicaoProduto(this)"
                     >
                       Cancelar
                     </button>
 
-
                   </div>
-
 
                 </form>
 
               {% endif %}
-
+              <!-- #endregion -->
 
             </div>
-
             <!-- #endregion -->
-
 
           </article>
 
-
         {% endfor %}
-
 
       </div>
 
-
     {% else %}
 
-
+      <!-- Mostra quando a loja ainda não cadastrou nenhum produto -->
       <div class="info-vazio">
 
         <h2>
@@ -506,222 +381,27 @@
 
       </div>
 
-
     {% endif %}
-
+    <!-- #endregion -->
 
   </main>
 
-  <!-- #endregion -->
 
-
+  <!-- #region MENSAGENS -->
   {% if messages %}
 
     {% for message in messages %}
-
       <p class="info-mensagem {{ message.tags }}">
         {{ message }}
       </p>
-
     {% endfor %}
 
   {% endif %}
+  <!-- #endregion -->
 
 
-  <script
-    src="{% static 'AppStoreLink/scripts/index.js' %}"
-  ></script>
-
-
-  <script>
-
-    function atualizarTemaProdutoInfo() {
-
-      const botao =
-        document.querySelector(
-          '.theme-toggle'
-        );
-
-
-      if (!botao) {
-        return;
-      }
-
-
-      if (
-        document.body.classList.contains(
-          'dark'
-        )
-      ) {
-
-        botao.innerHTML =
-          '<span class="sl-icon sl-sun" aria-hidden="true"></span><span class="theme-label">Modo claro</span>';
-
-      } else {
-
-        botao.innerHTML =
-          '<span class="sl-icon sl-moon" aria-hidden="true"></span><span class="theme-label">Modo escuro</span>';
-
-      }
-
-    }
-
-
-    function toggleThemeProdutoInfo() {
-
-      document.body.classList.toggle(
-        'dark'
-      );
-
-
-      const isDark =
-        document.body.classList.contains(
-          'dark'
-        );
-
-
-      localStorage.setItem(
-        'theme',
-        isDark
-          ? 'dark'
-          : 'light'
-      );
-
-
-      atualizarTemaProdutoInfo();
-
-    }
-
-
-    function abrirEdicaoProduto(
-      botao
-    ) {
-
-      const card =
-        botao.closest(
-          '.info-produto-card'
-        );
-
-
-      if (!card) {
-        return;
-      }
-
-
-      const nome =
-        card.querySelector(
-          '.js-nome'
-        );
-
-
-      const preco =
-        card.querySelector(
-          '.js-preco'
-        );
-
-
-      const descricao =
-        card.querySelector(
-          '.js-descricao'
-        );
-
-
-      const inputNome =
-        card.querySelector(
-          '.js-editar-nome'
-        );
-
-
-      const inputPreco =
-        card.querySelector(
-          '.js-editar-preco'
-        );
-
-
-      const inputDescricao =
-        card.querySelector(
-          '.js-editar-descricao'
-        );
-
-
-      if (
-        !nome ||
-        !preco ||
-        !descricao ||
-        !inputNome ||
-        !inputPreco ||
-        !inputDescricao
-      ) {
-
-        return;
-
-      }
-
-
-      inputNome.value =
-        nome.textContent.trim();
-
-
-      inputPreco.value =
-        preco.textContent
-          .replace(
-            'R$',
-            ''
-          )
-          .trim();
-
-
-      const descricaoAtual =
-        descricao.textContent.trim();
-
-
-      inputDescricao.value =
-        descricaoAtual ===
-        'Sem descrição.'
-          ? ''
-          : descricaoAtual;
-
-
-      card.classList.add(
-        'editando'
-      );
-
-    }
-
-
-    function cancelarEdicaoProduto(
-      botao
-    ) {
-
-      const card =
-        botao.closest(
-          '.info-produto-card'
-        );
-
-
-      if (!card) {
-        return;
-      }
-
-
-      card.classList.remove(
-        'editando'
-      );
-
-    }
-
-
-    document.addEventListener(
-      'DOMContentLoaded',
-      function () {
-
-        atualizarTemaProdutoInfo();
-
-      }
-    );
-
-  </script>
-
+  <!-- JS geral do projeto -->
+  <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
 
 </body>
 

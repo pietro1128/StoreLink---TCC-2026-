@@ -1,855 +1,381 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>StoreLink - Minha Conta</title>
 
-  <link
-    rel="icon"
-    type="image/png"
-    href="{% static 'AppStoreLink/images/icon-dark.png' %}"
-  >
-
-  <link
-    rel="stylesheet"
-    href="{% static 'AppStoreLink/styles/style.css' %}"
-  >
-
-  <link
-    rel="stylesheet"
-    href="{% static 'AppStoreLink/styles/consumidor.css' %}"
-  >
-
-  <link
-    rel="stylesheet"
-    href="{% static 'AppStoreLink/styles/mensagens.css' %}"
-  >
-
-  <link
-    rel="stylesheet"
-    href="{% static 'AppStoreLink/styles/icons.css' %}"
-  >
-
+  <link rel="icon" type="image/png" href="{% static 'AppStoreLink/images/icon-dark.png' %}">
+  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/style.css' %}">
+  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/consumidor.css' %}">
+  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/mensagens.css' %}">
 </head>
-
 
 <body>
 
-  <!-- #region modo escuro -->
-
-  <script>
-
-    if (
-      localStorage.getItem(
-        'theme'
-      ) === 'dark'
-    ) {
-
-      document.body.classList.add(
-        'dark'
-      );
-
-    }
-
-  </script>
-
-  <!-- #endregion -->
-
-
   <!-- #region mensagens -->
-
   {% if messages %}
-
     <div class="messages-container">
-
       {% for message in messages %}
-
         <div class="alert alert-{{ message.tags }}">
           {{ message }}
         </div>
-
       {% endfor %}
-
     </div>
-
   {% endif %}
-
   <!-- #endregion -->
 
 
   <!-- #region navbar -->
-
   <div class="topbar">
 
     <div class="logo-icon">
-
       <img
         src="{% static 'AppStoreLink/images/icon-dark.png' %}"
         alt="StoreLink"
       >
-
     </div>
 
-
-    <a
-      class="nav-btn"
-      href="{% url 'index' %}"
-    >
+    <a class="nav-btn" href="{% url 'index' %}">
       Início
     </a>
 
-
-    <a
-      class="nav-btn"
-      href="{% url 'perfil-loja' %}"
-    >
+    <a class="nav-btn" href="{% url 'perfil-loja' %}">
       Sua loja
     </a>
 
-
-    <a
-      class="nav-btn"
-      href="{% url 'suporte' %}"
-    >
+    <a class="nav-btn" href="{% url 'suporte' %}">
       Suporte
     </a>
 
-
-    <a
-      class="nav-btn"
-      href="{% url 'tutorial' %}"
-    >
+    <a class="nav-btn" href="{% url 'tutorial' %}">
       Como navegar?
     </a>
 
-
     <button
+      type="button"
       class="nav-account-btn consumidor-conta-ativa"
       data-url="{% url 'perfil-consumidor' %}"
-      onclick="location.href=this.dataset.url"
     >
-      <span
-        class="sl-icon sl-user"
-        aria-hidden="true"
-      ></span>
-
+      <i class="bi bi-person-circle" aria-hidden="true"></i>
       Minha conta
     </button>
 
-
     <button
+      type="button"
       class="theme-toggle"
-      onclick="toggleTheme(this)"
     >
-      <span
-        class="sl-icon sl-moon"
-        aria-hidden="true"
-      ></span>
-
-      <span class="theme-label">
-        Modo escuro
-      </span>
+      <i class="bi bi-moon-fill" aria-hidden="true"></i>
+      <span class="theme-label">Modo escuro</span>
     </button>
 
   </div>
-
   <!-- #endregion -->
 
 
-  <!-- #region pagina consumidor -->
-
+  <!-- #region perfil do consumidor -->
   <main class="page-consumidor">
 
+    <!-- Lado esquerdo com foto e dados do usuário -->
+    <aside class="consumidor-left">
 
-    <div class="consumidor-wrapper">
+      <div class="consumidor-badge">
+        Consumidor
+      </div>
 
+      <!-- Foto do perfil -->
+      <div class="consumidor-avatar-wrap">
 
-      <!-- #region lateral consumidor -->
+        <label
+          class="consumidor-avatar {% if chave_perf_consm.foto %}tem-imagem{% endif %}"
+          for="foto-consumidor"
+        >
 
-      <aside class="consumidor-left">
-
-
-        <div class="consumidor-badge">
-          Consumidor
-        </div>
-
-
-        <div class="consumidor-avatar-wrap">
-
-
-          <label
-            class="consumidor-avatar {% if chave_perf_consm.foto %}tem-imagem{% endif %}"
-            for="foto-consumidor"
+          <input
+            type="file"
+            id="foto-consumidor"
+            name="foto"
+            accept="image/jpeg,image/png,image/webp"
+            hidden
           >
 
-            <input
-              type="file"
-              id="foto-consumidor"
-              name="foto"
-              accept="image/jpeg,image/png,image/webp"
-              hidden
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"></path>
+          </svg>
+
+          {% if chave_perf_consm.foto %}
+            <img
+              id="preview-consumidor"
+              class="consumidor-avatar-image"
+              src="{{ chave_perf_consm.foto }}"
+              alt="Foto do consumidor"
             >
-
-
-            <svg
-              id="avatar-padrao-consumidor"
-              viewBox="0 0 24 24"
-            >
-
-              <path
-                d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"
-              />
-
-            </svg>
-
-
+          {% else %}
             <img
               id="preview-consumidor"
               class="consumidor-avatar-image"
               alt="Foto do consumidor"
-              {% if chave_perf_consm.foto %}
-                src="{{ chave_perf_consm.foto.url }}"
-              {% endif %}
             >
+          {% endif %}
 
+        </label>
+
+        <label
+          class="consumidor-camera-badge"
+          for="foto-consumidor"
+          title="Adicionar foto"
+        >
+          <i class="bi bi-camera-fill" aria-hidden="true"></i>
+        </label>
+
+      </div>
+
+
+      <!-- Botão que libera a edição do nome -->
+      <button
+        type="button"
+        class="consumidor-editar-btn"
+      >
+        <span class="sl-icon sl-pencil" aria-hidden="true"></span>
+        Editar usuário
+      </button>
+
+
+      <!-- Formulário com os dados do consumidor -->
+      <form
+        method="POST"
+        action="{% url 'editar-consumidor' %}"
+        id="formEditarConsumidor"
+        class="consumidor-form-edicao"
+      >
+        {% csrf_token %}
+
+        <div class="consumidor-field">
+
+          <label>
+            Nome
           </label>
 
-
-          <label
-            class="consumidor-camera-badge"
-            for="foto-consumidor"
+          <input
+            type="text"
+            name="nome"
+            value="{{ chave_perf_consm.nome }}"
+            readonly
           >
-            <span
-              class="sl-icon sl-camera"
-              aria-hidden="true"
-            ></span>
-          </label>
 
         </div>
 
+        <div class="consumidor-field">
 
-        <!-- #region editar usuario -->
+          <label>
+            Sobrenome
+          </label>
+
+          <input
+            type="text"
+            name="sobrenome"
+            value="{{ chave_perf_consm.sobrenome|default_if_none:'' }}"
+            readonly
+          >
+
+        </div>
 
         <button
-          type="button"
-          class="consumidor-editar-btn"
-          onclick="editarConsumidor(this)"
+          type="submit"
+          class="consumidor-salvar-alteracoes"
+          hidden
         >
-          <span
-            class="sl-icon sl-pencil"
-            aria-hidden="true"
-          ></span>
-
-          Editar usuário
+          SALVAR ALTERAÇÕES
         </button>
 
+      </form>
 
-        <form
-          method="POST"
-          action="{% url 'editar-consumidor' %}"
-          id="formEditarConsumidor"
-          class="consumidor-form-edicao"
+
+      <!-- Sai da conta atual -->
+      <form
+        method="POST"
+        action="{% url 'logout' %}"
+        class="consumidor-logout-form"
+      >
+        {% csrf_token %}
+
+        <button
+          type="submit"
+          class="consumidor-logout"
         >
+          Fazer Logout
 
-          {% csrf_token %}
+          <i
+            class="bi bi-box-arrow-right"
+            aria-hidden="true"
+          ></i>
+        </button>
+      </form>
 
-
-          <div class="consumidor-field-left">
-
-            <label>
-              Nome
-            </label>
-
-            <input
-              type="text"
-              name="nome"
-              value="{{ chave_perf_consm.nome }}"
-              required
-              readonly
-            >
-
-          </div>
+    </aside>
 
 
-          <div class="consumidor-field-left">
+    <!-- #region favoritos -->
+    <!-- Lista com todas as lojas que o usuário favoritou -->
+    <section class="consumidor-content">
 
-            <label>
-              Sobrenome
-            </label>
+      <div class="consumidor-topo">
 
-            <input
-              type="text"
-              name="sobrenome"
-              value="{{ chave_perf_consm.sobrenome|default_if_none:'' }}"
-              readonly
-            >
-
-          </div>
-
-
-          <button
-            type="submit"
-            class="consumidor-salvar-alteracoes"
-            hidden
-          >
-            Salvar alterações
-          </button>
-
-        </form>
-
-        <!-- #endregion -->
-
-
-        <form
-          method="POST"
-          action="{% url 'logout' %}"
-          style="display: contents;"
-        >
-
-          {% csrf_token %}
-
-
-          <button
-            type="submit"
-            class="consumidor-logout-btn"
-          >
-            Fazer Logout
-
-            <span>
-              <span
-                class="sl-icon sl-logout"
-                aria-hidden="true"
-              ></span>
-            </span>
-
-          </button>
-
-        </form>
-
-
-      </aside>
-
-      <!-- #endregion -->
-
-
-      <!-- #region favoritos -->
-
-      <section class="favoritos-area">
-
-
-        <div class="favoritos-topo">
+        <div>
+          <p class="consumidor-subtitulo">
+            Suas lojas salvas
+          </p>
 
           <h1>
-            FAVORITOS
+            LOJAS FAVORITAS
           </h1>
-
-
-          <button
-            type="button"
-            class="cadastrar-loja-btn"
-            data-url="{% url 'perfil-loja' %}"
-            onclick="location.href=this.dataset.url"
-          >
-
-            <span>
-              Cadastrar Loja
-            </span>
-
-            <span class="cadastrar-loja-icone">
-              <span
-                class="sl-icon sl-store"
-                aria-hidden="true"
-              ></span>
-            </span>
-
-          </button>
-
         </div>
 
+        <i
+          class="bi bi-heart-fill consumidor-topo-coracao"
+          aria-hidden="true"
+        ></i>
 
-        <div class="favoritos-scroll">
-
-
-          {% for favorita in loja_fav %}
-
-
-            <article
-              class="
-                favorito-card
-
-                {% if favorita.id_loja.id_categoria.tipo_categoria == 'Alimentos' %}
-                  favorito-alimentos
-
-                {% elif favorita.id_loja.id_categoria.tipo_categoria == 'Moda' %}
-                  favorito-moda
-
-                {% elif favorita.id_loja.id_categoria.tipo_categoria == 'Esportes' %}
-                  favorito-esportes
-
-                {% elif favorita.id_loja.id_categoria.tipo_categoria == 'Construção' %}
-                  favorito-construcao
-
-                {% elif favorita.id_loja.id_categoria.tipo_categoria == 'Saúde' %}
-                  favorito-saude
-
-                {% elif favorita.id_loja.id_categoria.tipo_categoria == 'Pets' %}
-                  favorito-pets
-
-                {% elif favorita.id_loja.id_categoria.tipo_categoria == 'Ambiente' %}
-                  favorito-ambiente
-
-                {% elif favorita.id_loja.id_categoria.tipo_categoria == 'Tecnologia' %}
-                  favorito-tecnologia
-
-                {% elif favorita.id_loja.id_categoria.tipo_categoria == 'Beleza' %}
-                  favorito-beleza
-
-                {% else %}
-                  favorito-outros
-
-                {% endif %}
-              "
-            >
+      </div>
 
 
-              <!-- #region capa -->
+      {% if loja_fav %}
 
-              <div class="favorito-capa">
+        <div class="consumidor-favoritos">
 
+          {% for favorito in loja_fav %}
 
-                {% if favorita.id_loja.foto_estabelecimento %}
+            <article class="consumidor-favorito-card">
 
+              <!-- Foto da loja -->
+              <div class="consumidor-favorito-imagem">
+
+                {% if favorito.id_loja.foto %}
                   <img
-                    src="{{ favorita.id_loja.foto_estabelecimento }}"
-                    alt="{{ favorita.id_loja.nome_loja }}"
-                    class="favorito-imagem"
+                    src="{{ favorito.id_loja.foto }}"
+                    alt="{{ favorito.id_loja.nome_loja }}"
                   >
-
                 {% else %}
-
-                  <div class="favorito-capa-placeholder">
-
-                    <span>
-                      Imagem da loja
-                    </span>
-
-                  </div>
-
-                {% endif %}
-
-
-                <form
-                  method="POST"
-                  action="{% url 'favoritar-loja' favorita.id_loja.id_loja %}"
-                >
-
-                  {% csrf_token %}
-
-
-                  <button
-                    type="submit"
-                    class="favorito-coracao"
-                    title="Remover dos favoritos"
-                  >
-                    <span
-                      class="sl-icon sl-heart-fill"
+                  <div class="consumidor-sem-imagem">
+                    <i
+                      class="bi bi-shop"
                       aria-hidden="true"
-                    ></span>
-                  </button>
-
-                </form>
-
+                    ></i>
+                  </div>
+                {% endif %}
 
               </div>
 
-              <!-- #endregion -->
 
-
-              <!-- #region informacoes -->
-
-              <div class="favorito-conteudo">
-
+              <!-- Informações da loja favorita -->
+              <div class="consumidor-favorito-info">
 
                 <h2>
-                  {{ favorita.id_loja.nome_loja }}
+                  {{ favorito.id_loja.nome_loja }}
                 </h2>
 
-
-                {% if favorita.id_loja.telefone_loja %}
-
-                  <div class="favorito-bloco">
-
-                    <span class="favorito-label">
-                      Telefone:
-                    </span>
-
-                    <span>
-                      {{ favorita.id_loja.telefone_loja }}
-                    </span>
-
-                  </div>
-
+                {% if favorito.id_loja.telefone_loja %}
+                  <p>
+                    <strong>Telefone:</strong>
+                    {{ favorito.id_loja.telefone_loja }}
+                  </p>
                 {% endif %}
 
+                {% if favorito.id_loja.id_endereco %}
+                  <p>
+                    <strong>Localização:</strong>
 
-                {% if favorita.id_loja.id_endereco %}
-
-                  <div class="favorito-localizacao">
-
-                    <span class="favorito-label">
-                      Localização:
-                    </span>
-
-
-                    <span class="favorito-endereco">
-
-                      {{ favorita.id_loja.id_endereco.rua }},
-
-                      {{ favorita.id_loja.id_endereco.numero_estabelecimento }}
-
-                    </span>
-
-                  </div>
-
+                    {{ favorito.id_loja.id_endereco.rua }},
+                    {{ favorito.id_loja.id_endereco.numero_estabelecimento }}
+                  </p>
                 {% endif %}
 
+                {% if favorito.id_loja.id_categoria %}
+                  <p>
+                    <strong>Categoria:</strong>
+                    {{ favorito.id_loja.id_categoria.tipo_categoria }}
+                  </p>
+                {% endif %}
 
               </div>
 
-              <!-- #endregion -->
 
+              <!-- Remove a loja dos favoritos -->
+              <form
+                method="POST"
+                action="{% url 'favoritar-loja' favorito.id_loja.id_loja %}"
+                class="consumidor-favorito-form"
+              >
+                {% csrf_token %}
+
+                <button
+                  type="submit"
+                  class="consumidor-favorito-remover"
+                  aria-label="Remover dos favoritos"
+                  title="Remover dos favoritos"
+                >
+                  <i
+                    class="bi bi-heart-fill"
+                    aria-hidden="true"
+                  ></i>
+                </button>
+              </form>
 
             </article>
 
-
-          {% empty %}
-
-
-            <!-- #region nenhum favorito -->
-
-            <div class="favoritos-vazio">
-
-
-              <button
-                type="button"
-                class="favoritos-adicionar"
-                data-url="{% url 'index' %}"
-                onclick="location.href=this.dataset.url"
-                aria-label="Procurar lojas"
-              >
-                +
-              </button>
-
-
-              <h2>
-                Nenhuma loja favoritada
-              </h2>
-
-
-              <p>
-                As lojas que você favoritar aparecerão aqui.
-              </p>
-
-
-            </div>
-
-            <!-- #endregion -->
-
-
           {% endfor %}
-
 
         </div>
 
+      {% else %}
 
-      </section>
+        <!-- Aparece quando o usuário ainda não favoritou nenhuma loja -->
+        <div class="consumidor-vazio">
 
-      <!-- #endregion -->
+          <i
+            class="bi bi-heart"
+            aria-hidden="true"
+          ></i>
 
+          <h2>
+            Você ainda não possui lojas favoritas
+          </h2>
 
-    </div>
+          <p>
+            Favorite uma loja para ela aparecer aqui.
+          </p>
+
+          <button
+            type="button"
+            class="consumidor-adicionar-favorito"
+            data-url="{% url 'index' %}"
+          >
+            <i
+              class="bi bi-plus-lg"
+              aria-hidden="true"
+            ></i>
+
+            Encontrar lojas
+          </button>
+
+        </div>
+
+      {% endif %}
+
+    </section>
+    <!-- #endregion -->
 
   </main>
-
   <!-- #endregion -->
 
 
-  <!-- #region javascript -->
-
-  <script>
-
-
-    function setActiveNav(btn) {
-
-      document
-        .querySelectorAll(
-          '.nav-btn'
-        )
-        .forEach(
-          function (b) {
-
-            b.classList.remove(
-              'active'
-            );
-
-          }
-        );
-
-
-      btn.classList.add(
-        'active'
-      );
-
-    }
-
-
-
-    function editarConsumidor(botao) {
-
-      const form =
-        document.getElementById(
-          'formEditarConsumidor'
-        );
-
-
-      if (!form) {
-
-        return;
-
-      }
-
-
-      const editando =
-        !form.classList.contains(
-          'editando'
-        );
-
-
-      form.classList.toggle(
-        'editando',
-        editando
-      );
-
-
-      form
-        .querySelectorAll(
-          'input[name="nome"], input[name="sobrenome"]'
-        )
-        .forEach(
-          function (campo) {
-
-            campo.readOnly =
-              !editando;
-
-          }
-        );
-
-
-      const salvar =
-        form.querySelector(
-          '.consumidor-salvar-alteracoes'
-        );
-
-
-      salvar.hidden =
-        !editando;
-
-
-      if (editando) {
-
-        botao.innerHTML =
-          '<span class="sl-icon sl-x" aria-hidden="true"></span> Cancelar edição';
-
-
-        form
-          .querySelector(
-            'input[name="nome"]'
-          )
-          .focus();
-
-      } else {
-
-        botao.innerHTML =
-          '<span class="sl-icon sl-pencil" aria-hidden="true"></span> Editar usuário';
-
-
-        form.reset();
-
-      }
-
-    }
-
-
-
-    function toggleTheme(btn) {
-
-      document.body.classList.toggle(
-        'dark'
-      );
-
-
-      var isDark =
-        document.body.classList.contains(
-          'dark'
-        );
-
-
-      localStorage.setItem(
-        'theme',
-        isDark
-          ? 'dark'
-          : 'light'
-      );
-
-
-      if (isDark) {
-
-        btn.innerHTML =
-          '<span class="sl-icon sl-sun" aria-hidden="true"></span><span class="theme-label">Modo claro</span>';
-
-      } else {
-
-        btn.innerHTML =
-          '<span class="sl-icon sl-moon" aria-hidden="true"></span><span class="theme-label">Modo escuro</span>';
-
-      }
-
-    }
-
-
-
-    document.addEventListener(
-      'DOMContentLoaded',
-      function () {
-
-        var themeBtn =
-          document.querySelector(
-            '.theme-toggle'
-          );
-
-
-        if (
-          themeBtn &&
-          document.body.classList.contains(
-            'dark'
-          )
-        ) {
-
-          themeBtn.innerHTML =
-            '<span class="sl-icon sl-sun" aria-hidden="true"></span><span class="theme-label">Modo claro</span>';
-
-        }
-
-      }
-    );
-
-
-
-    const fotoConsumidor =
-      document.getElementById(
-        'foto-consumidor'
-      );
-
-
-    const previewConsumidor =
-      document.getElementById(
-        'preview-consumidor'
-      );
-
-
-    const avatarConsumidor =
-      document.querySelector(
-        '.consumidor-avatar'
-      );
-
-
-
-    if (
-      fotoConsumidor &&
-      previewConsumidor &&
-      avatarConsumidor
-    ) {
-
-      fotoConsumidor.addEventListener(
-        'change',
-        function () {
-
-          const arquivo =
-            this.files[0];
-
-
-          if (!arquivo) {
-
-            return;
-
-          }
-
-
-          if (
-            !arquivo.type.startsWith(
-              'image/'
-            )
-          ) {
-
-            alert(
-              'Selecione um arquivo de imagem.'
-            );
-
-
-            this.value =
-              '';
-
-
-            return;
-
-          }
-
-
-          const imagemURL =
-            URL.createObjectURL(
-              arquivo
-            );
-
-
-          previewConsumidor.src =
-            imagemURL;
-
-
-          avatarConsumidor
-            .classList
-            .add(
-              'tem-imagem'
-            );
-
-
-          previewConsumidor.onload =
-            function () {
-
-              URL.revokeObjectURL(
-                imagemURL
-              );
-
-            };
-
-        }
-      );
-
-    }
-
-
-  </script>
-
-  <!-- #endregion -->
-
+  <!-- JS geral do projeto -->
+  <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
 
 </body>
-
 </html>

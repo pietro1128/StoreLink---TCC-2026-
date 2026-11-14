@@ -16,89 +16,37 @@
     StoreLink - Login
   </title>
 
-
   <link
     rel="icon"
     type="image/png"
     href="{% static 'AppStoreLink/images/icon-dark.png' %}"
   >
 
-
-  <link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
-  >
-
-
-  <link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
-  >
-
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet"
-  >
-
-
-  <link
+<link
     rel="stylesheet"
     href="{% static 'AppStoreLink/styles/login.css' %}"
   >
-
 
   <link
     rel="stylesheet"
     href="{% static 'AppStoreLink/styles/mensagens.css' %}"
   >
 
+  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/icons.css' %}">
+
 </head>
 
-
 <body>
-
-
-  <!-- #region TEMA SALVO -->
-
-  <script>
-
-    if (
-      localStorage.getItem('theme') === 'dark'
-    ) {
-
-      document.body.classList.add(
-        'dark'
-      );
-
-    }
-
-  </script>
-
-  <!-- #endregion -->
-
-
+<!-- #endregion -->
 
   <!-- #region MODO ESCURO -->
 
   <button
     type="button"
     class="theme-toggle"
-    onclick="toggleTheme(this)"
   >
-
-    <i
-      class="bi bi-moon-fill"
-      aria-hidden="true"
-    ></i>
-
-    <span class="theme-label">
-      Modo escuro
-    </span>
-
+    <span class="sl-icon sl-moon" aria-hidden="true"></span><span class="theme-label">Modo escuro</span>
   </button>
-
 
   <a
     class="login-page-icon"
@@ -112,7 +60,6 @@
       alt="StoreLink"
     >
 
-
     <img
       class="icon-dark"
       src="{% static 'AppStoreLink/images/icon-dark.png' %}"
@@ -122,8 +69,6 @@
   </a>
 
   <!-- #endregion -->
-
-
 
   <!-- #region MENSAGENS -->
 
@@ -145,30 +90,23 @@
 
   <!-- #endregion -->
 
-
-
   <!-- #region LOGIN -->
 
   <div class="login-wrapper">
-
 
     <h1 class="login-welcome">
       Bem vindo de volta !
     </h1>
 
-
     <div class="login-card">
-
 
       <h2>
         User Login
       </h2>
 
-
       <p class="login-subtitle">
         Insira suas informações para realizar o login
       </p>
-
 
       <form
         class="login-form"
@@ -178,9 +116,7 @@
 
         {% csrf_token %}
 
-
         <label class="login-field">
-
 
           <img
             class="field-icon-light"
@@ -188,13 +124,11 @@
             alt=""
           >
 
-
           <img
             class="field-icon-dark"
             src="{% static 'AppStoreLink/images/e-mail-dark.png' %}"
             alt=""
           >
-
 
           <input
             type="email"
@@ -203,12 +137,9 @@
             required
           >
 
-
         </label>
 
-
         <label class="login-field">
-
 
           <img
             class="field-icon-light"
@@ -216,13 +147,11 @@
             alt=""
           >
 
-
           <img
             class="field-icon-dark"
             src="{% static 'AppStoreLink/images/bloqueado-dark.png' %}"
             alt=""
           >
-
 
           <input
             type="password"
@@ -231,9 +160,7 @@
             required
           >
 
-
         </label>
-
 
         <div class="login-forgot">
 
@@ -245,14 +172,12 @@
 
         </div>
 
-
         <button
           type="submit"
           class="login-submit-btn"
         >
           ENTRAR
         </button>
-
 
         <div class="login-signup">
 
@@ -264,95 +189,15 @@
 
         </div>
 
-
       </form>
 
-
     </div>
-
 
   </div>
 
   <!-- #endregion -->
-
-
-
-  <!-- #region MODO ESCURO JS -->
-
-  <script>
-
-    function atualizarBotaoTema() {
-
-      const botao =
-        document.querySelector(
-          '.theme-toggle'
-        );
-
-
-      if (!botao) {
-        return;
-      }
-
-
-      if (
-        document.body.classList.contains(
-          'dark'
-        )
-      ) {
-
-        botao.innerHTML =
-          '<i class="bi bi-sun-fill" aria-hidden="true"></i><span class="theme-label">Modo claro</span>';
-
-      } else {
-
-        botao.innerHTML =
-          '<i class="bi bi-moon-fill" aria-hidden="true"></i><span class="theme-label">Modo escuro</span>';
-
-      }
-
-    }
-
-
-    function toggleTheme() {
-
-      document.body.classList.toggle(
-        'dark'
-      );
-
-
-      const isDark =
-        document.body.classList.contains(
-          'dark'
-        );
-
-
-      localStorage.setItem(
-        'theme',
-        isDark
-          ? 'dark'
-          : 'light'
-      );
-
-
-      atualizarBotaoTema();
-
-    }
-
-
-    document.addEventListener(
-      'DOMContentLoaded',
-      function () {
-
-        atualizarBotaoTema();
-
-      }
-    );
-
-  </script>
-
-  <!-- #endregion -->
-
-
+  <!-- JS geral do projeto -->
+  <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
 </body>
 
 </html>

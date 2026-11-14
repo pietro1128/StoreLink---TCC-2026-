@@ -13,11 +13,9 @@
   color: var(--text-color);
 }
 
-
 .resultados-topo {
   margin-bottom: 30px;
 }
-
 
 .resultados-topo h1 {
   margin: 0;
@@ -29,7 +27,6 @@
   color: var(--text-color);
 }
 
-
 .resultados-topo p {
   margin-top: 5px;
 
@@ -40,13 +37,11 @@
 
 /* #endregion */
 
-
 /* #region secoes */
 
 .resultado-secao {
   margin-bottom: 45px;
 }
-
 
 .resultado-secao-titulo {
   margin:
@@ -61,7 +56,6 @@
   color: var(--text-color);
 }
 
-
 .resultado-grid {
   display: flex;
 
@@ -71,7 +65,6 @@
 }
 
 /* #endregion */
-
 
 /* #region card */
 
@@ -99,7 +92,6 @@
     box-shadow 0.2s ease;
 }
 
-
 .resultado-card:hover {
   transform: translateY(-3px);
 
@@ -110,60 +102,49 @@
 
 /* #endregion */
 
-
 /* #region cores */
 
 .resultado-alimentos {
   --cor-categoria: #e8534f;
 }
 
-
 .resultado-moda {
   --cor-categoria: #7a5c50;
 }
-
 
 .resultado-esportes {
   --cor-categoria: #f5943a;
 }
 
-
 .resultado-construcao {
   --cor-categoria: #f6c344;
 }
-
 
 .resultado-saude {
   --cor-categoria: #35b5ea;
 }
 
-
 .resultado-pets {
   --cor-categoria: #21c9c9;
 }
-
 
 .resultado-ambiente {
   --cor-categoria: #7fcf85;
 }
 
-
 .resultado-tecnologia {
   --cor-categoria: #7c5cf0;
 }
 
-
 .resultado-beleza {
   --cor-categoria: #f06ec0;
 }
-
 
 .resultado-outros {
   --cor-categoria: #cfcfcf;
 }
 
 /* #endregion */
-
 
 /* #region capa */
 
@@ -181,7 +162,6 @@
   background: #d4d4d4;
 }
 
-
 .resultado-card-imagem {
   width: 100%;
 
@@ -193,7 +173,6 @@
 }
 
 /* #endregion */
-
 
 /* #region favorito */
 
@@ -235,7 +214,6 @@
     background 0.2s ease;
 }
 
-
 .resultado-card-fav:hover {
   transform: scale(1.08);
 
@@ -243,7 +221,6 @@
 }
 
 /* #endregion */
-
 
 /* #region corpo */
 
@@ -268,7 +245,6 @@
   color: #222222;
 }
 
-
 .resultado-card-corpo h3 {
   margin:
     0
@@ -282,7 +258,6 @@
   font-weight: 800;
 }
 
-
 .resultado-info {
   display: flex;
 
@@ -295,11 +270,9 @@
   font-size: 14px;
 }
 
-
 .resultado-label {
   font-weight: 800;
 }
-
 
 .resultado-preco {
   margin-top: 2px;
@@ -308,7 +281,6 @@
 
   font-weight: 700;
 }
-
 
 .resultado-localizacao {
   margin-top: 13px;
@@ -320,11 +292,9 @@
   line-height: 1.4;
 }
 
-
 .resultado-endereco {
   color: var(--cor-categoria);
 }
-
 
 .resultado-descricao {
   margin-bottom: 15px;
@@ -336,7 +306,6 @@
   line-height: 1.4;
 }
 
-
 .resultado-loja {
   margin-top: 13px;
 
@@ -345,11 +314,9 @@
   color: #333333;
 }
 
-
 .resultado-loja span {
   color: var(--cor-categoria);
 }
-
 
 .resultado-categoria {
   display: inline-block;
@@ -373,7 +340,6 @@
 
 /* #endregion */
 
-
 /* #region vazio */
 
 .resultado-vazio {
@@ -388,7 +354,6 @@
   background: #ededed;
 }
 
-
 .resultado-vazio h2 {
   margin:
     0
@@ -400,7 +365,6 @@
   font-size: 20px;
 }
 
-
 .resultado-vazio p {
   margin: 0;
 
@@ -411,7 +375,6 @@
 
 /* #endregion */
 
-
 /* #region modo escuro */
 
 body.dark .resultado-card-corpo {
@@ -420,11 +383,9 @@ body.dark .resultado-card-corpo {
   color: #ffffff;
 }
 
-
 body.dark .resultado-card-corpo h3 {
   color: #ffffff;
 }
-
 
 body.dark .resultado-info,
 body.dark .resultado-localizacao,
@@ -432,33 +393,27 @@ body.dark .resultado-loja {
   color: #dddddd;
 }
 
-
 body.dark .resultado-descricao {
   color: #bdbdbd;
 }
-
 
 body.dark .resultado-card-capa {
   background: #333333;
 }
 
-
 body.dark .resultado-vazio {
   background: #242424;
 }
 
-
 body.dark .resultado-vazio h2 {
   color: #ffffff;
 }
-
 
 body.dark .resultado-vazio p {
   color: #bbbbbb;
 }
 
 /* #endregion */
-
 
 /* #region responsividade */
 
@@ -471,16 +426,13 @@ body.dark .resultado-vazio p {
       50px;
   }
 
-
   .resultados-topo h1 {
     font-size: 23px;
   }
 
-
   .resultado-grid {
     gap: 20px;
   }
-
 
   .resultado-card {
     width: 100%;

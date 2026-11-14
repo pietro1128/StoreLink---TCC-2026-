@@ -8,108 +8,52 @@
 
   <title>StoreLink - Esportes</title>
 
-  <link
-    rel="icon"
-    type="image/png"
-    href="{% static 'AppStoreLink/images/icon-dark.png' %}"
-  >
-
-  <link
-    rel="stylesheet"
-    href="{% static 'AppStoreLink/styles/style.css' %}"
-  >
-
-  <link
-    rel="stylesheet"
-    href="{% static 'AppStoreLink/styles/catesportes.css' %}"
-  >
-
-  <link
-    rel="stylesheet"
-    href="{% static 'AppStoreLink/styles/icons.css' %}"
-  >
+  <link rel="icon" type="image/png" href="{% static 'AppStoreLink/images/icon-dark.png' %}">
+  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/style.css' %}">
+  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/catesportes.css' %}">
+  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/icons.css' %}">
 </head>
 
 <body>
 
-  <script>
-
-    if (
-      localStorage.getItem(
-        'theme'
-      ) === 'dark'
-    ) {
-
-      document.body.classList.add(
-        'dark'
-      );
-
-    }
-
-  </script>
-
-
   <!-- #region Topbar -->
-
   <div class="topbar">
 
     <div class="logo-icon">
-
       <img
         src="{% static 'AppStoreLink/images/icon-dark.png' %}"
         alt="StoreLink"
       >
-
     </div>
 
-
-    <a
-      class="nav-btn"
-      href="{% url 'index' %}"
-    >
+    <a class="nav-btn" href="{% url 'index' %}">
       Início
     </a>
 
-
-    <a
-      class="nav-btn"
-      href="{% url 'perfil-loja' %}"
-    >
+    <a class="nav-btn" href="{% url 'perfil-loja' %}">
       Sua loja
     </a>
 
-
-    <a
-      class="nav-btn"
-      href="{% url 'suporte' %}"
-    >
+    <a class="nav-btn" href="{% url 'suporte' %}">
       Suporte
     </a>
 
-
-    <a
-      class="nav-btn"
-      href="{% url 'tutorial' %}"
-    >
+    <a class="nav-btn" href="{% url 'tutorial' %}">
       Como navegar?
     </a>
-
 
     {% if usuario_logado %}
 
       <button
         class="nav-account-btn"
         data-url="{% url 'perfil-consumidor' %}"
-        onclick="location.href=this.dataset.url"
       >
-
         <span
           class="sl-icon sl-user"
           aria-hidden="true"
         ></span>
 
         Minha conta
-
       </button>
 
     {% else %}
@@ -117,19 +61,13 @@
       <button
         class="nav-account-btn"
         data-url="{% url 'cadastro' %}"
-        onclick="location.href=this.dataset.url"
       >
         Criar conta ou Entrar
       </button>
 
     {% endif %}
 
-
-    <button
-      class="theme-toggle"
-      onclick="toggleThemeCatEsportes()"
-    >
-
+    <button class="theme-toggle">
       <span
         class="sl-icon sl-moon"
         aria-hidden="true"
@@ -138,18 +76,15 @@
       <span class="theme-label">
         Modo escuro
       </span>
-
     </button>
 
   </div>
-
   <!-- #endregion -->
 
 
   <!-- #region sidebar -->
-
+  <!-- Menu lateral com todas as categorias -->
   <div class="sidebar-trigger"></div>
-
 
   <div class="sidebar">
 
@@ -160,14 +95,12 @@
       Alimentos
     </a>
 
-
     <a
       class="cat-btn cat-moda {% if categoria == 'Moda' %}cat-active{% endif %}"
       href="{% url 'CatModa' %}"
     >
       Moda
     </a>
-
 
     <a
       class="cat-btn cat-esportes {% if categoria == 'Esportes' %}cat-active{% endif %}"
@@ -176,14 +109,12 @@
       Esportes
     </a>
 
-
     <a
       class="cat-btn cat-construcao {% if categoria == 'Construção' %}cat-active{% endif %}"
       href="{% url 'CatConstrucao' %}"
     >
       Construção
     </a>
-
 
     <a
       class="cat-btn cat-saude {% if categoria == 'Saúde' %}cat-active{% endif %}"
@@ -192,14 +123,12 @@
       Saúde
     </a>
 
-
     <a
       class="cat-btn cat-pets {% if categoria == 'Pets' %}cat-active{% endif %}"
       href="{% url 'CatPets' %}"
     >
       Pets
     </a>
-
 
     <a
       class="cat-btn cat-ambiente {% if categoria == 'Ambiente' %}cat-active{% endif %}"
@@ -208,7 +137,6 @@
       Ambiente
     </a>
 
-
     <a
       class="cat-btn cat-tecnologia {% if categoria == 'Tecnologia' %}cat-active{% endif %}"
       href="{% url 'CatTecnologia' %}"
@@ -216,14 +144,12 @@
       Tecnologia
     </a>
 
-
     <a
       class="cat-btn cat-beleza {% if categoria == 'Beleza' %}cat-active{% endif %}"
       href="{% url 'CatBeleza' %}"
     >
       Beleza
     </a>
-
 
     <a
       class="cat-btn cat-outros {% if categoria == 'Outros' %}cat-active{% endif %}"
@@ -233,91 +159,69 @@
     </a>
 
   </div>
-
   <!-- #endregion -->
 
 
-  <!-- #region conteudo -->
-
+  <!-- #region conteúdo -->
+  <!-- Lojas cadastradas na categoria Esportes -->
   <div class="categoria-container">
 
     <h1 class="categoria-titulo">
       Lojas de Esportes
     </h1>
 
-
     {% if lojas %}
 
       <div class="loja-grid">
 
-
         {% for loja in lojas %}
 
           <div
-            class="loja-card"
+            class="loja-card u-pointer"
             data-url="{% url 'InformacoesLoja' loja.id_loja %}"
-            onclick="location.href=this.dataset.url"
-            style="cursor: pointer;"
           >
 
-
+            <!-- Foto e botão de favorito -->
             <div class="loja-card-capa">
-
 
               {% if loja.foto_estabelecimento %}
 
                 <img
+                  class="u-cover-image"
                   src="{{ loja.foto_estabelecimento }}"
                   alt="{{ loja.nome_loja }}"
-                  style="
-                    width: 100%;
-                    height: 100%;
-                    display: block;
-                    object-fit: cover;
-                  "
-                  onerror="this.style.display='none'"
                 >
 
               {% endif %}
 
-
               <form
                 method="POST"
                 action="{% url 'favoritar-loja' loja.id_loja %}"
-                onclick="event.stopPropagation()"
               >
-
                 {% csrf_token %}
-
 
                 <button
                   type="submit"
                   class="loja-card-fav"
                   aria-label="Favoritar"
-                  title="Favoritar loja"
                 >
-
                   <span
                     class="sl-icon sl-heart"
                     aria-hidden="true"
                   ></span>
-
                 </button>
 
-
               </form>
-
 
             </div>
 
 
+            <!-- Informações da loja -->
             <div class="loja-card-corpo">
-
 
               <h3>
                 {{ loja.nome_loja }}
               </h3>
-
 
               {% if loja.telefone_loja %}
 
@@ -331,33 +235,26 @@
 
               {% endif %}
 
-
               {% if loja.id_endereco %}
 
                 <p class="loja-card-label">
-
                   Localização:
 
                   <span class="loja-card-endereco">
                     {{ loja.id_endereco.rua }},
                     {{ loja.id_endereco.numero_estabelecimento }}
                   </span>
-
                 </p>
 
               {% endif %}
 
-
             </div>
-
 
           </div>
 
         {% endfor %}
 
-
       </div>
-
 
     {% else %}
 
@@ -367,92 +264,12 @@
 
     {% endif %}
 
-
   </div>
-
   <!-- #endregion -->
 
 
-  <!-- #region javascript -->
-
-  <script
-    src="{% static 'AppStoreLink/scripts/index.js' %}"
-  ></script>
-
-
-  <script>
-
-    function atualizarTemaCatEsportes() {
-
-      const botao =
-        document.querySelector(
-          '.theme-toggle'
-        );
-
-
-      if (!botao) {
-        return;
-      }
-
-
-      if (
-        document.body.classList.contains(
-          'dark'
-        )
-      ) {
-
-        botao.innerHTML =
-          '<span class="sl-icon sl-sun" aria-hidden="true"></span><span class="theme-label">Modo claro</span>';
-
-      } else {
-
-        botao.innerHTML =
-          '<span class="sl-icon sl-moon" aria-hidden="true"></span><span class="theme-label">Modo escuro</span>';
-
-      }
-
-    }
-
-
-    function toggleThemeCatEsportes() {
-
-      document.body.classList.toggle(
-        'dark'
-      );
-
-
-      const isDark =
-        document.body.classList.contains(
-          'dark'
-        );
-
-
-      localStorage.setItem(
-        'theme',
-        isDark
-          ? 'dark'
-          : 'light'
-      );
-
-
-      atualizarTemaCatEsportes();
-
-    }
-
-
-    document.addEventListener(
-      'DOMContentLoaded',
-      function () {
-
-        atualizarTemaCatEsportes();
-
-      }
-    );
-
-  </script>
-
-  <!-- #endregion -->
-
+  <!-- JS geral do projeto -->
+  <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
 
 </body>
 

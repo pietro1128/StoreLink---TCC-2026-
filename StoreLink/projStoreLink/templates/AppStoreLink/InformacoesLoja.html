@@ -1,5 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 
 <head>
@@ -31,33 +32,12 @@
     href="{% static 'AppStoreLink/styles/informacoes-loja.css' %}"
   >
 
-  <link
-    rel="stylesheet"
-    href="{% static 'AppStoreLink/styles/icons.css' %}"
-  >
+  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/icons.css' %}">
 
 </head>
 
 <body>
-
-  <script>
-
-    if (
-      localStorage.getItem(
-        'theme'
-      ) === 'dark'
-    ) {
-
-      document.body.classList.add(
-        'dark'
-      );
-
-    }
-
-  </script>
-
-
-  <!-- #region navbar -->
+<!-- #region TOPBAR -->
 
   <div class="topbar">
 
@@ -70,14 +50,12 @@
 
     </div>
 
-
     <a
       class="nav-btn active"
       href="{% url 'index' %}"
     >
       Início
     </a>
-
 
     <a
       class="nav-btn"
@@ -86,14 +64,12 @@
       Sua loja
     </a>
 
-
     <a
       class="nav-btn"
       href="{% url 'suporte' %}"
     >
       Suporte
     </a>
-
 
     <a
       class="nav-btn"
@@ -102,20 +78,13 @@
       Como navegar?
     </a>
 
-
     {% if usuario_logado %}
 
       <button
         class="nav-account-btn"
         data-url="{% url 'perfil-consumidor' %}"
-        onclick="location.href=this.dataset.url"
       >
-        <span
-          class="sl-icon sl-user"
-          aria-hidden="true"
-        ></span>
-
-        Minha conta
+        <span class="sl-icon sl-user" aria-hidden="true"></span> Minha conta
       </button>
 
     {% else %}
@@ -123,34 +92,23 @@
       <button
         class="nav-account-btn"
         data-url="{% url 'cadastro' %}"
-        onclick="location.href=this.dataset.url"
       >
         Criar conta ou Entrar
       </button>
 
     {% endif %}
 
-
     <button
       class="theme-toggle"
-      onclick="toggleThemeLoja()"
     >
-      <span
-        class="sl-icon sl-moon"
-        aria-hidden="true"
-      ></span>
-
-      <span class="theme-label">
-        Modo escuro
-      </span>
+      <span class="sl-icon sl-moon" aria-hidden="true"></span><span class="theme-label">Modo escuro</span>
     </button>
 
   </div>
 
   <!-- #endregion -->
 
-
-  <!-- #region página -->
+  <!-- #region CONTEÚDO -->
 
   <main
     class="
@@ -190,51 +148,34 @@
     "
   >
 
-
     <a
       class="info-voltar"
       href="{% url 'index' %}"
       aria-label="Voltar"
-      title="Voltar"
     >
-      <span
-        class="sl-icon sl-arrow-left"
-        aria-hidden="true"
-      ></span>
+      <span class="sl-icon sl-arrow-left" aria-hidden="true"></span>
     </a>
-
 
     <div class="info-loja-layout">
 
-
-      <!-- #region loja -->
+      <!-- #region LOJA -->
 
       <section class="info-loja-card">
 
-
-        <!-- #region esquerda -->
-
         <div class="info-loja-esquerda">
 
-
           <div class="info-loja-foto">
-
 
             {% if loja.foto_estabelecimento %}
 
               <img
                 src="{{ loja.foto_estabelecimento }}"
                 alt="{{ loja.nome_loja }}"
-                onerror="
-                  this.style.display='none';
-                  this.nextElementSibling.style.display='flex';
-                "
               >
 
-
               <div
-                class="info-sem-imagem"
-                style="display: none;"
+                class="info-sem-imagem u-hidden"
+
               >
                 Sem imagem cadastrada
               </div>
@@ -247,7 +188,6 @@
 
             {% endif %}
 
-
             <form
               method="POST"
               action="{% url 'favoritar-loja' loja.id_loja %}"
@@ -255,30 +195,21 @@
 
               {% csrf_token %}
 
-
               <button
                 type="submit"
                 class="info-favoritar"
                 aria-label="Favoritar loja"
-                title="Favoritar loja"
               >
-                <span
-                  class="sl-icon sl-heart"
-                  aria-hidden="true"
-                ></span>
+                <span class="sl-icon sl-heart" aria-hidden="true"></span>
               </button>
-
 
             </form>
 
-
           </div>
-
 
           <p class="info-subtitulo">
             Fotos e informações
           </p>
-
 
           <a
             class="info-acesso-btn"
@@ -287,7 +218,6 @@
             PRODUTOS
           </a>
 
-
           <a
             class="info-acesso-btn"
             href="{% url 'InformacoesServico' loja.id_loja %}"
@@ -295,73 +225,45 @@
             SERVIÇOS
           </a>
 
+          <!-- #region AÇÕES DO PROPRIETÁRIO -->
 
           {% if eh_dono %}
 
             <div class="info-loja-acoes">
 
-
               <button
                 type="button"
                 class="info-editar-loja"
-                onclick="abrirEdicaoLoja(this)"
               >
-                <span
-                  class="sl-icon sl-pencil"
-                  aria-hidden="true"
-                ></span>
-
-                EDITAR LOJA
+                <span class="sl-icon sl-pencil" aria-hidden="true"></span> EDITAR LOJA
               </button>
 
-
-              <form
-                method="POST"
-                action="{% url 'loja-excluir' loja.id_loja %}"
-                onsubmit="return confirm('Deseja excluir a loja {{ loja.nome_loja|escapejs }}? Essa ação não pode ser desfeita.');"
+              <button
+                type="button"
+                class="info-excluir-loja" data-confirm-click="Deseja excluir esta loja?"
               >
-
-                {% csrf_token %}
-
-
-                <button
-                  type="submit"
-                  class="info-excluir-loja"
-                >
-                  <span
-                    class="sl-icon sl-trash"
-                    aria-hidden="true"
-                  ></span>
-
-                  EXCLUIR LOJA
-                </button>
-
-
-              </form>
-
+                <span class="sl-icon sl-trash" aria-hidden="true"></span> EXCLUIR LOJA
+              </button>
 
             </div>
 
           {% endif %}
 
+          <!-- #endregion -->
 
         </div>
 
-        <!-- #endregion -->
-
-
-        <!-- #region dados -->
+        <!-- #region DADOS -->
 
         <div class="info-loja-dados">
 
+          <!-- #region VISUALIZAÇÃO -->
 
           <div class="info-loja-visualizacao">
-
 
             <h2>
               NOME
             </h2>
-
 
             <div class="info-campo">
 
@@ -375,14 +277,11 @@
 
             </div>
 
-
             <h2>
               LOCALIZAÇÃO
             </h2>
 
-
             <div class="info-localizacao-grid">
-
 
               <div class="info-campo">
 
@@ -396,7 +295,6 @@
 
               </div>
 
-
               <div class="info-campo">
 
                 <strong>
@@ -408,7 +306,6 @@
                 </span>
 
               </div>
-
 
               <div class="info-campo">
 
@@ -422,14 +319,11 @@
 
               </div>
 
-
             </div>
-
 
             <h2>
               INFORMAÇÕES
             </h2>
-
 
             <div class="info-campo">
 
@@ -443,7 +337,6 @@
 
             </div>
 
-
             <div class="info-campo">
 
               <strong>
@@ -453,19 +346,14 @@
               <span class="js-loja-telefone">
 
                 {% if loja.telefone_loja %}
-
                   {{ loja.telefone_loja }}
-
                 {% else %}
-
                   Não informado
-
                 {% endif %}
 
               </span>
 
             </div>
-
 
             <div class="info-campo">
 
@@ -479,13 +367,11 @@
 
             </div>
 
-
             <div class="info-campo">
 
               <strong>
                 Link de Loja virtual
               </strong>
-
 
               {% if loja.link %}
 
@@ -496,12 +382,7 @@
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Acessar loja virtual
-
-                  <span
-                    class="sl-icon sl-external"
-                    aria-hidden="true"
-                  ></span>
+                  Acessar loja virtual <span class="sl-icon sl-external" aria-hidden="true"></span>
                 </a>
 
               {% else %}
@@ -515,9 +396,7 @@
 
               {% endif %}
 
-
             </div>
-
 
             <div class="info-classificacao">
 
@@ -531,11 +410,11 @@
 
             </div>
 
-
           </div>
 
+          <!-- #endregion -->
 
-          <!-- #region editar loja -->
+          <!-- #region EDIÇÃO -->
 
           {% if eh_dono %}
 
@@ -547,11 +426,9 @@
 
               {% csrf_token %}
 
-
               <h2>
                 EDITAR LOJA
               </h2>
-
 
               <label>
                 Nome do Estabelecimento
@@ -564,7 +441,6 @@
                 value="{{ loja.nome_loja }}"
               >
 
-
               <label>
                 Rua
               </label>
@@ -576,9 +452,7 @@
                 value="{{ loja.id_endereco.rua }}"
               >
 
-
               <div class="info-loja-edicao-row">
-
 
                 <div>
 
@@ -595,7 +469,6 @@
 
                 </div>
 
-
                 <div>
 
                   <label>
@@ -611,9 +484,7 @@
 
                 </div>
 
-
               </div>
-
 
               <label>
                 E-mail
@@ -626,7 +497,6 @@
                 value="{{ loja.email_loja }}"
               >
 
-
               <label>
                 Telefone
               </label>
@@ -637,7 +507,6 @@
                 class="js-editar-loja-telefone"
                 value="{{ loja.telefone_loja|default:'' }}"
               >
-
 
               <label>
                 CNPJ
@@ -650,7 +519,6 @@
                 value="{{ loja.cnpj }}"
               >
 
-
               <label>
                 Link de Loja virtual
               </label>
@@ -661,7 +529,6 @@
                 class="js-editar-loja-link"
                 value="{{ loja.link|default:'' }}"
               >
-
 
               <label>
                 Classificação da Loja
@@ -686,9 +553,7 @@
 
               </select>
 
-
               <div class="info-loja-edicao-botoes">
-
 
                 <button
                   type="submit"
@@ -697,18 +562,14 @@
                   Salvar alterações
                 </button>
 
-
                 <button
                   type="button"
                   class="info-loja-cancelar"
-                  onclick="cancelarEdicaoLoja(this)"
                 >
                   Cancelar
                 </button>
 
-
               </div>
-
 
             </form>
 
@@ -716,178 +577,180 @@
 
           <!-- #endregion -->
 
-
         </div>
 
         <!-- #endregion -->
-
 
       </section>
 
       <!-- #endregion -->
 
-
-      <!-- #region comentários -->
+      <!-- #region COMENTÁRIOS -->
 
       <aside class="info-comentarios">
-
 
         <h2>
           COMENTÁRIOS
         </h2>
 
-
         <div class="info-comentarios-lista">
-
 
           {% for avaliacao in avaliacoes %}
 
-
             <article class="info-comentario-card">
-
 
               <div class="info-comentario-topo">
 
-
                 <div class="info-comentario-avatar">
-
-                  <span
-                    class="sl-icon sl-user"
-                    aria-hidden="true"
-                  ></span>
-
+                  <span class="sl-icon sl-user" aria-hidden="true"></span>
                 </div>
 
-
                 <div>
-
 
                   <strong>
                     {{ avaliacao.id_usuario.nome }}
                     {{ avaliacao.id_usuario.sobrenome|default:'' }}
                   </strong>
 
-
                   <div class="info-nota-estrelas">
 
-
-                    {% if avaliacao.nota >= 1 %}
-
-                      <span
-                        class="sl-icon sl-star-fill"
-                        aria-hidden="true"
-                      ></span>
-
-                    {% else %}
-
-                      <span
-                        class="sl-icon sl-star"
-                        aria-hidden="true"
-                      ></span>
-
-                    {% endif %}
-
-
-                    {% if avaliacao.nota >= 2 %}
-
-                      <span
-                        class="sl-icon sl-star-fill"
-                        aria-hidden="true"
-                      ></span>
-
-                    {% else %}
-
-                      <span
-                        class="sl-icon sl-star"
-                        aria-hidden="true"
-                      ></span>
-
-                    {% endif %}
-
-
-                    {% if avaliacao.nota >= 3 %}
-
-                      <span
-                        class="sl-icon sl-star-fill"
-                        aria-hidden="true"
-                      ></span>
-
-                    {% else %}
-
-                      <span
-                        class="sl-icon sl-star"
-                        aria-hidden="true"
-                      ></span>
-
-                    {% endif %}
-
-
-                    {% if avaliacao.nota >= 4 %}
-
-                      <span
-                        class="sl-icon sl-star-fill"
-                        aria-hidden="true"
-                      ></span>
-
-                    {% else %}
-
-                      <span
-                        class="sl-icon sl-star"
-                        aria-hidden="true"
-                      ></span>
-
-                    {% endif %}
-
-
-                    {% if avaliacao.nota >= 5 %}
-
-                      <span
-                        class="sl-icon sl-star-fill"
-                        aria-hidden="true"
-                      ></span>
-
-                    {% else %}
-
-                      <span
-                        class="sl-icon sl-star"
-                        aria-hidden="true"
-                      ></span>
-
-                    {% endif %}
-
+                    {% if avaliacao.nota >= 1 %}<span class="sl-icon sl-star-fill" aria-hidden="true"></span>{% else %}<span class="sl-icon sl-star" aria-hidden="true"></span>{% endif %}
+                    {% if avaliacao.nota >= 2 %}<span class="sl-icon sl-star-fill" aria-hidden="true"></span>{% else %}<span class="sl-icon sl-star" aria-hidden="true"></span>{% endif %}
+                    {% if avaliacao.nota >= 3 %}<span class="sl-icon sl-star-fill" aria-hidden="true"></span>{% else %}<span class="sl-icon sl-star" aria-hidden="true"></span>{% endif %}
+                    {% if avaliacao.nota >= 4 %}<span class="sl-icon sl-star-fill" aria-hidden="true"></span>{% else %}<span class="sl-icon sl-star" aria-hidden="true"></span>{% endif %}
+                    {% if avaliacao.nota >= 5 %}<span class="sl-icon sl-star-fill" aria-hidden="true"></span>{% else %}<span class="sl-icon sl-star" aria-hidden="true"></span>{% endif %}
 
                   </div>
 
-
                 </div>
 
-
               </div>
-
 
               <p>
                 {{ avaliacao.comentario }}
               </p>
 
+              {% if request.session.usuario_id == avaliacao.id_usuario_id %}
+
+                <div class="info-comentario-acoes">
+
+                  <button
+                    type="button"
+                    class="info-comentario-editar"
+                  >
+                    <span class="sl-icon sl-pencil" aria-hidden="true"></span> Editar
+                  </button>
+
+                  <button
+                    type="button"
+                    class="info-comentario-excluir" data-confirm-click="Deseja excluir este comentário?"
+                  >
+                    <span class="sl-icon sl-trash" aria-hidden="true"></span> Excluir
+                  </button>
+
+                </div>
+
+                <div class="info-comentario-edicao">
+
+                  <label>
+                    Nota
+                  </label>
+
+                  <div class="info-estrelas info-estrelas-edicao">
+
+                    <input
+                      type="radio"
+                      id="edit-{{ avaliacao.pk }}-5"
+                      name="nota-{{ avaliacao.pk }}"
+                      value="5"
+                      {% if avaliacao.nota == 5 %}checked{% endif %}
+                    >
+
+                    <label for="edit-{{ avaliacao.pk }}-5"><span class="sl-icon sl-star-fill" aria-hidden="true"></span></label>
+
+                    <input
+                      type="radio"
+                      id="edit-{{ avaliacao.pk }}-4"
+                      name="nota-{{ avaliacao.pk }}"
+                      value="4"
+                      {% if avaliacao.nota == 4 %}checked{% endif %}
+                    >
+
+                    <label for="edit-{{ avaliacao.pk }}-4"><span class="sl-icon sl-star-fill" aria-hidden="true"></span></label>
+
+                    <input
+                      type="radio"
+                      id="edit-{{ avaliacao.pk }}-3"
+                      name="nota-{{ avaliacao.pk }}"
+                      value="3"
+                      {% if avaliacao.nota == 3 %}checked{% endif %}
+                    >
+
+                    <label for="edit-{{ avaliacao.pk }}-3"><span class="sl-icon sl-star-fill" aria-hidden="true"></span></label>
+
+                    <input
+                      type="radio"
+                      id="edit-{{ avaliacao.pk }}-2"
+                      name="nota-{{ avaliacao.pk }}"
+                      value="2"
+                      {% if avaliacao.nota == 2 %}checked{% endif %}
+                    >
+
+                    <label for="edit-{{ avaliacao.pk }}-2"><span class="sl-icon sl-star-fill" aria-hidden="true"></span></label>
+
+                    <input
+                      type="radio"
+                      id="edit-{{ avaliacao.pk }}-1"
+                      name="nota-{{ avaliacao.pk }}"
+                      value="1"
+                      {% if avaliacao.nota == 1 %}checked{% endif %}
+                    >
+
+                    <label for="edit-{{ avaliacao.pk }}-1"><span class="sl-icon sl-star-fill" aria-hidden="true"></span></label>
+
+                  </div>
+
+                  <label>
+                    Comentário
+                  </label>
+
+                  <textarea
+                    maxlength="1000"
+                  >{{ avaliacao.comentario|default:'' }}</textarea>
+
+                  <div class="info-edicao-acoes">
+
+                    <button
+                      type="button"
+                      class="info-edicao-salvar"
+                    >
+                      Salvar
+                    </button>
+
+                    <button
+                      type="button"
+                      class="info-edicao-cancelar"
+                    >
+                      Cancelar
+                    </button>
+
+                  </div>
+
+                </div>
+
+              {% endif %}
 
             </article>
 
-
           {% empty %}
-
 
             <div class="info-comentarios-vazio">
               Nenhum comentário cadastrado para esta loja ainda.
             </div>
 
-
           {% endfor %}
 
-
         </div>
-
-
-        <!-- #region adicionar comentário -->
 
         <form
           method="POST"
@@ -897,98 +760,32 @@
 
           {% csrf_token %}
 
-
           <label>
             Nota
           </label>
 
-
           <div class="info-estrelas">
 
+            <input type="radio" id="estrela5" name="nota" value="5" required>
+            <label for="estrela5"><span class="sl-icon sl-star-fill" aria-hidden="true"></span></label>
 
-            <input
-              type="radio"
-              id="estrela5"
-              name="nota"
-              value="5"
-              required
-            >
+            <input type="radio" id="estrela4" name="nota" value="4">
+            <label for="estrela4"><span class="sl-icon sl-star-fill" aria-hidden="true"></span></label>
 
-            <label for="estrela5">
-              <span
-                class="sl-icon sl-star-fill"
-                aria-hidden="true"
-              ></span>
-            </label>
+            <input type="radio" id="estrela3" name="nota" value="3">
+            <label for="estrela3"><span class="sl-icon sl-star-fill" aria-hidden="true"></span></label>
 
+            <input type="radio" id="estrela2" name="nota" value="2">
+            <label for="estrela2"><span class="sl-icon sl-star-fill" aria-hidden="true"></span></label>
 
-            <input
-              type="radio"
-              id="estrela4"
-              name="nota"
-              value="4"
-            >
-
-            <label for="estrela4">
-              <span
-                class="sl-icon sl-star-fill"
-                aria-hidden="true"
-              ></span>
-            </label>
-
-
-            <input
-              type="radio"
-              id="estrela3"
-              name="nota"
-              value="3"
-            >
-
-            <label for="estrela3">
-              <span
-                class="sl-icon sl-star-fill"
-                aria-hidden="true"
-              ></span>
-            </label>
-
-
-            <input
-              type="radio"
-              id="estrela2"
-              name="nota"
-              value="2"
-            >
-
-            <label for="estrela2">
-              <span
-                class="sl-icon sl-star-fill"
-                aria-hidden="true"
-              ></span>
-            </label>
-
-
-            <input
-              type="radio"
-              id="estrela1"
-              name="nota"
-              value="1"
-            >
-
-            <label for="estrela1">
-              <span
-                class="sl-icon sl-star-fill"
-                aria-hidden="true"
-              ></span>
-            </label>
-
+            <input type="radio" id="estrela1" name="nota" value="1">
+            <label for="estrela1"><span class="sl-icon sl-star-fill" aria-hidden="true"></span></label>
 
           </div>
-
 
           <label for="comentario-loja">
             Comentário
           </label>
-
 
           <textarea
             id="comentario-loja"
@@ -997,274 +794,23 @@
             placeholder="Escreva seu comentário..."
           ></textarea>
 
-
           <button type="submit">
-
-            <span
-              class="sl-icon sl-chat"
-              aria-hidden="true"
-            ></span>
-
-            ENVIAR COMENTÁRIO
-
+            <span class="sl-icon sl-chat" aria-hidden="true"></span> ENVIAR COMENTÁRIO
           </button>
 
-
         </form>
-
-        <!-- #endregion -->
-
 
       </aside>
 
       <!-- #endregion -->
 
-
     </div>
-
 
   </main>
 
   <!-- #endregion -->
-
-
-  <script
-    src="{% static 'AppStoreLink/scripts/index.js' %}"
-  ></script>
-
-
-  <script>
-
-    function atualizarTemaLoja() {
-
-      const botao =
-        document.querySelector(
-          '.theme-toggle'
-        );
-
-
-      if (!botao) {
-        return;
-      }
-
-
-      if (
-        document.body.classList.contains(
-          'dark'
-        )
-      ) {
-
-        botao.innerHTML =
-          '<span class="sl-icon sl-sun" aria-hidden="true"></span><span class="theme-label">Modo claro</span>';
-
-      } else {
-
-        botao.innerHTML =
-          '<span class="sl-icon sl-moon" aria-hidden="true"></span><span class="theme-label">Modo escuro</span>';
-
-      }
-
-    }
-
-
-    function toggleThemeLoja() {
-
-      document.body.classList.toggle(
-        'dark'
-      );
-
-
-      const isDark =
-        document.body.classList.contains(
-          'dark'
-        );
-
-
-      localStorage.setItem(
-        'theme',
-        isDark
-          ? 'dark'
-          : 'light'
-      );
-
-
-      atualizarTemaLoja();
-
-    }
-
-
-    function abrirEdicaoLoja(
-      botao
-    ) {
-
-      const card =
-        botao.closest(
-          '.info-loja-card'
-        );
-
-
-      if (!card) {
-        return;
-      }
-
-
-      const nome =
-        card.querySelector(
-          '.js-loja-nome'
-        ).textContent.trim();
-
-
-      const rua =
-        card.querySelector(
-          '.js-loja-rua'
-        ).textContent.trim();
-
-
-      const numero =
-        card.querySelector(
-          '.js-loja-numero'
-        ).textContent.trim();
-
-
-      const cep =
-        card.querySelector(
-          '.js-loja-cep'
-        ).textContent.trim();
-
-
-      const email =
-        card.querySelector(
-          '.js-loja-email'
-        ).textContent.trim();
-
-
-      const telefone =
-        card.querySelector(
-          '.js-loja-telefone'
-        ).textContent.trim();
-
-
-      const cnpj =
-        card.querySelector(
-          '.js-loja-cnpj'
-        ).textContent.trim();
-
-
-      const linkElemento =
-        card.querySelector(
-          '.js-loja-link'
-        );
-
-
-      const link =
-        linkElemento.dataset.link ||
-        '';
-
-
-      const categoria =
-        card.querySelector(
-          '.js-loja-categoria'
-        ).textContent.trim();
-
-
-      card.querySelector(
-        '.js-editar-loja-nome'
-      ).value =
-        nome;
-
-
-      card.querySelector(
-        '.js-editar-loja-rua'
-      ).value =
-        rua;
-
-
-      card.querySelector(
-        '.js-editar-loja-numero'
-      ).value =
-        numero;
-
-
-      card.querySelector(
-        '.js-editar-loja-cep'
-      ).value =
-        cep;
-
-
-      card.querySelector(
-        '.js-editar-loja-email'
-      ).value =
-        email;
-
-
-      card.querySelector(
-        '.js-editar-loja-telefone'
-      ).value =
-        telefone ===
-        'Não informado'
-          ? ''
-          : telefone;
-
-
-      card.querySelector(
-        '.js-editar-loja-cnpj'
-      ).value =
-        cnpj;
-
-
-      card.querySelector(
-        '.js-editar-loja-link'
-      ).value =
-        link;
-
-
-      card.querySelector(
-        '.js-editar-loja-categoria'
-      ).value =
-        categoria;
-
-
-      card.classList.add(
-        'editando'
-      );
-
-    }
-
-
-    function cancelarEdicaoLoja(
-      botao
-    ) {
-
-      const card =
-        botao.closest(
-          '.info-loja-card'
-        );
-
-
-      if (!card) {
-        return;
-      }
-
-
-      card.classList.remove(
-        'editando'
-      );
-
-    }
-
-
-    document.addEventListener(
-      'DOMContentLoaded',
-      function () {
-
-        atualizarTemaLoja();
-
-      }
-    );
-
-  </script>
-
-
+  <!-- JS geral do projeto -->
+  <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
 </body>
 
 </html>

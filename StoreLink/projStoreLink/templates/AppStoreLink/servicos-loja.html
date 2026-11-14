@@ -8,143 +8,50 @@
 
   <title>StoreLink - Serviços</title>
 
-  <link
-    rel="icon"
-    type="image/png"
-    href="{% static 'AppStoreLink/images/icon-dark.png' %}"
-  >
-
-  <link
-    rel="stylesheet"
-    href="{% static 'AppStoreLink/styles/style.css' %}"
-  >
-
-  <link
-    rel="stylesheet"
-    href="{% static 'AppStoreLink/styles/servicos-loja.css' %}"
-  >
-
-  <link
-    rel="stylesheet"
-    href="{% static 'AppStoreLink/styles/mensagens.css' %}"
-  >
-
-  <link
-    rel="stylesheet"
-    href="{% static 'AppStoreLink/styles/icons.css' %}"
-  >
-
-  <style>
-
-    .servico-page {
-      --servico-loja-cor: #e8534f;
-      --servico-loja-cor-texto: #ffffff;
-    }
-
-    .servico-voltar {
-      border-color: var(--servico-loja-cor);
-      color: var(--servico-loja-cor);
-    }
-
-    .servico-voltar:hover {
-      background: var(--servico-loja-cor);
-    }
-
-    .servico-titulo-box {
-      background: var(--servico-loja-cor);
-      color: var(--servico-loja-cor-texto);
-    }
-
-    .servico-dinheiro {
-      border-color: var(--servico-loja-cor-texto);
-      color: var(--servico-loja-cor-texto);
-    }
-
-    .servico-cards-scroll::-webkit-scrollbar-thumb {
-      background: var(--servico-loja-cor);
-    }
-
-    .servico-card {
-      --servico-cor: var(--servico-loja-cor);
-      --servico-cor-texto: var(--servico-loja-cor-texto);
-    }
-
-    .servico-criar-card-btn {
-      border-color: var(--servico-loja-cor);
-      color: var(--servico-loja-cor);
-    }
-
-    body.dark .servico-criar-card-btn {
-      border-color: var(--servico-loja-cor);
-      color: var(--servico-loja-cor);
-    }
-
-  </style>
-
+  <link rel="icon" type="image/png" href="{% static 'AppStoreLink/images/icon-dark.png' %}">
+  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/style.css' %}">
+  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/servicos-loja.css' %}">
+  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/mensagens.css' %}">
+  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/icons.css' %}">
 </head>
 
 <body>
 
-  <script>
-    if (localStorage.getItem('theme') === 'dark') {
-      document.body.classList.add('dark');
-    }
-  </script>
-
-
-  <!-- #region navbar -->
-
+  <!-- #region NAVBAR -->
   <div class="topbar">
 
     <div class="logo-icon">
-
       <img
         src="{% static 'AppStoreLink/images/icon-dark.png' %}"
         alt="StoreLink"
       >
-
     </div>
 
-
-    <a
-      class="nav-btn"
-      href="{% url 'index' %}"
-    >
+    <a class="nav-btn" href="{% url 'index' %}">
       Início
     </a>
 
-
-    <a
-      class="nav-btn active"
-      href="{% url 'perfil-loja' %}"
-    >
+    <a class="nav-btn active" href="{% url 'perfil-loja' %}">
       Sua loja
     </a>
 
-
     <a
+      id="suporte"
       class="nav-btn"
       href="{% url 'suporte' %}"
     >
       Suporte
     </a>
 
-
-    <a
-      class="nav-btn"
-      href="{% url 'tutorial' %}"
-    >
+    <a class="nav-btn" href="{% url 'tutorial' %}">
       Como navegar?
     </a>
 
-
     {% if usuario_logado %}
-
       <button
         type="button"
         class="nav-account-btn"
         data-url="{% url 'perfil-consumidor' %}"
-        onclick="location.href=this.dataset.url"
       >
         <span
           class="sl-icon sl-user"
@@ -153,25 +60,19 @@
 
         Minha conta
       </button>
-
     {% else %}
-
       <button
         type="button"
         class="nav-account-btn"
         data-url="{% url 'cadastro' %}"
-        onclick="location.href=this.dataset.url"
       >
         Criar conta ou Entrar
       </button>
-
     {% endif %}
-
 
     <button
       type="button"
       class="theme-toggle"
-      onclick="toggleThemeServicos()"
     >
       <span
         class="sl-icon sl-moon"
@@ -184,28 +85,26 @@
     </button>
 
   </div>
-
   <!-- #endregion -->
 
 
+  <!-- #region PÁGINA -->
   <main
     class="servico-page"
     data-categoria-loja="{{ loja.id_categoria.tipo_categoria|default:'Alimentos' }}"
   >
 
-
-    <!-- #region perfil -->
-
+    <!-- #region PERFIL LATERAL -->
+    <!-- Dados do responsável pela loja -->
     <aside class="servico-perfil">
-
 
       <div class="servico-badge">
         Estabelecimento
       </div>
 
 
+      <!-- Foto do responsável -->
       <div class="servico-avatar-wrap">
-
 
         <div
           class="servico-avatar {% if usuario_logado.foto %}tem-imagem{% endif %}"
@@ -217,9 +116,8 @@
           >
             <path
               d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"
-            />
+            ></path>
           </svg>
-
 
           <img
             id="preview-responsavel-servico"
@@ -232,12 +130,11 @@
 
         </div>
 
-
       </div>
 
 
+      <!-- Nome e sobrenome ficam só para visualização -->
       <div class="servico-perfil-fields">
-
 
         <div class="servico-perfil-field">
 
@@ -268,18 +165,16 @@
 
         </div>
 
-
       </div>
 
 
+      <!-- Sai da conta atual -->
       <form
         method="POST"
         action="{% url 'logout' %}"
         class="servico-logout-form"
       >
-
         {% csrf_token %}
-
 
         <button
           type="submit"
@@ -287,28 +182,26 @@
         >
           Fazer Logout
 
-          <span
-            class="sl-icon sl-logout"
-            aria-hidden="true"
-          ></span>
-
+          <span>
+            <span
+              class="sl-icon sl-logout"
+              aria-hidden="true"
+            ></span>
+          </span>
         </button>
 
       </form>
 
-
     </aside>
-
     <!-- #endregion -->
 
 
-    <!-- #region conteudo -->
-
+    <!-- #region CONTEÚDO -->
+    <!-- Área onde ficam todos os serviços cadastrados -->
     <section class="servico-conteudo">
 
-
+      <!-- Cabeçalho da página -->
       <div class="servico-topo">
-
 
         <a
           class="servico-voltar"
@@ -325,75 +218,65 @@
 
         <div class="servico-topo-info">
 
-
           <p class="servico-editar-texto">
             Editar fotos e informações dos serviços
           </p>
 
-
           <div class="servico-titulo-box">
-
 
             <h1>
               SERVIÇOS{% if loja %} - {{ loja.nome_loja }}{% endif %}
             </h1>
 
-
             <div class="servico-dinheiro">
               $
             </div>
 
-
           </div>
 
-
         </div>
-
 
       </div>
 
 
+      <!-- #region MENSAGENS -->
       {% if messages %}
-
         <div class="messages-container">
 
           {% for message in messages %}
-
             <div class="alert alert-{{ message.tags }}">
               {{ message }}
             </div>
-
           {% endfor %}
 
         </div>
-
       {% endif %}
+      <!-- #endregion -->
 
 
+      <!-- #region CARDS -->
       <div
         class="servico-cards-scroll"
         id="servicoCards"
       >
 
-
+        <!-- #region SERVIÇOS SALVOS -->
+        <!-- Serviços que já estão cadastrados -->
         {% for servico in servicos %}
-
 
           <div
             class="servico-card servico-card-salvo"
             data-categoria="{{ loja.id_categoria.tipo_categoria }}"
           >
 
-
+            <!-- Exclui o serviço -->
             <form
+              class="u-contents"
               method="POST"
               action="{% url 'servico-excluir' servico.id_servico %}"
-              style="display: contents;"
-              onsubmit="return confirm('Excluir o serviço {{ servico.nome_servico|escapejs }}? Essa ação não pode ser desfeita.');"
+              data-confirm="Excluir o serviço {{ servico.nome_servico|escape }}? Essa ação não pode ser desfeita."
             >
-
               {% csrf_token %}
-
 
               <button
                 type="submit"
@@ -407,12 +290,11 @@
                 ></span>
               </button>
 
-
             </form>
 
 
+            <!-- Foto do serviço -->
             <div class="servico-imagem">
-
 
               <input
                 class="servico-imagem-input"
@@ -422,7 +304,6 @@
                 accept="image/*"
                 hidden
               >
-
 
               {% if servico.foto %}
 
@@ -446,7 +327,6 @@
                   Adicionar imagem
                 </button>
 
-
                 <img
                   class="servico-preview"
                   alt="Imagem do serviço"
@@ -467,17 +347,15 @@
                 ></span>
               </button>
 
-
             </div>
 
 
+            <!-- Informações do serviço -->
             <div class="servico-card-conteudo">
-
 
               <button
                 type="button"
                 class="servico-editar-info"
-                onclick="editarServico(this)"
                 aria-label="Editar informações"
                 title="Editar informações"
               >
@@ -495,14 +373,12 @@
                 class="servico-form-salvo"
                 enctype="multipart/form-data"
               >
-
                 {% csrf_token %}
 
 
                 <label>
                   Nome do serviço:
                 </label>
-
 
                 <input
                   name="nome_servico"
@@ -517,7 +393,6 @@
                   Preço do serviço:
                 </label>
 
-
                 <input
                   name="preco"
                   type="text"
@@ -531,7 +406,6 @@
                   Categoria:
                 </label>
 
-
                 <div class="servico-categoria-salva">
                   {{ loja.id_categoria.tipo_categoria }}
                 </div>
@@ -540,7 +414,6 @@
                 <label>
                   Descrição do serviço:
                 </label>
-
 
                 <textarea
                   name="descricao"
@@ -557,43 +430,39 @@
                   SALVAR ALTERAÇÕES
                 </button>
 
-
               </form>
-
 
             </div>
 
-
           </div>
 
-
         {% endfor %}
+        <!-- #endregion -->
 
 
-        <!-- #region novo serviço -->
-
+        <!-- #region NOVO SERVIÇO -->
+        <!-- Card que aparece quando o usuário vai cadastrar outro serviço -->
         <div
           class="servico-card servico-card-novo"
           id="servicoCardNovo"
         >
 
-
+          <!-- Cancela o cadastro -->
           <button
             type="button"
             class="servico-excluir-card servico-cancelar-card"
-            onclick="cancelarNovoServico()"
             aria-label="Cancelar novo serviço"
             title="Cancelar novo serviço"
           >
             <span
-              class="sl-icon sl-trash"
+              class="sl-icon sl-x"
               aria-hidden="true"
             ></span>
           </button>
 
 
+          <!-- Foto do novo serviço -->
           <div class="servico-imagem servico-imagem-nova">
-
 
             <input
               class="servico-imagem-input"
@@ -603,7 +472,6 @@
               accept="image/*"
               hidden
             >
-
 
             <button
               type="button"
@@ -617,12 +485,10 @@
               Adicionar imagem
             </button>
 
-
             <img
               class="servico-preview"
               alt="Imagem do novo serviço"
             >
-
 
             <button
               type="button"
@@ -636,12 +502,11 @@
               ></span>
             </button>
 
-
           </div>
 
 
+          <!-- Formulário para cadastrar o serviço -->
           <div class="servico-card-conteudo">
-
 
             <form
               method="POST"
@@ -649,14 +514,12 @@
               id="formNovoServico"
               enctype="multipart/form-data"
             >
-
               {% csrf_token %}
 
 
               <label>
                 Nome do serviço:
               </label>
-
 
               <input
                 name="nome_servico"
@@ -670,7 +533,6 @@
                 Preço do serviço:
               </label>
 
-
               <input
                 name="preco"
                 type="text"
@@ -683,7 +545,6 @@
                 Categoria:
               </label>
 
-
               <div class="servico-categoria-selecionada">
                 {{ loja.id_categoria.tipo_categoria }}
               </div>
@@ -692,7 +553,6 @@
               <label>
                 Descrição do serviço:
               </label>
-
 
               <textarea
                 name="descricao"
@@ -707,30 +567,24 @@
                 SALVAR SERVIÇO
               </button>
 
-
             </form>
-
 
           </div>
 
-
         </div>
-
         <!-- #endregion -->
 
 
-        <!-- #region adicionar serviço -->
-
+        <!-- #region ADICIONAR SERVIÇO -->
+        <!-- Card com o + para abrir um novo cadastro -->
         <div
           class="servico-criar-card"
           id="servicoCriarCard"
         >
 
-
           <button
             type="button"
             class="servico-criar-card-btn"
-            onclick="adicionarServico()"
             aria-label="Adicionar serviço"
             title="Adicionar serviço"
           >
@@ -740,475 +594,29 @@
             ></span>
           </button>
 
-
           <h2>
             Adicionar serviço
           </h2>
 
-
           <p>
-            Clique no botão acima para cadastrar outro serviço.
+            Clique no + para cadastrar outro serviço.
           </p>
 
-
         </div>
-
         <!-- #endregion -->
 
-
       </div>
-
+      <!-- #endregion -->
 
     </section>
-
     <!-- #endregion -->
 
-
   </main>
+  <!-- #endregion -->
 
 
-  <script
-    src="{% static 'AppStoreLink/scripts/index.js' %}"
-  ></script>
-
-
-  <script>
-
-    const coresCategoriasServico = {
-      'Alimentos': '#e8534f',
-      'Moda': '#7a5c50',
-      'Esportes': '#f5943a',
-      'Construção': '#f6c344',
-      'Saúde': '#35b5ea',
-      'Pets': '#21c9c9',
-      'Ambiente': '#7fcf85',
-      'Tecnologia': '#7c5cf0',
-      'Beleza': '#f06ec0',
-      'Outros': '#cfcfcf'
-    };
-
-
-    function atualizarTemaServicos() {
-
-      const botao =
-        document.querySelector(
-          '.theme-toggle'
-        );
-
-      if (!botao) {
-        return;
-      }
-
-      if (
-        document.body.classList.contains(
-          'dark'
-        )
-      ) {
-
-        botao.innerHTML =
-          '<span class="sl-icon sl-sun" aria-hidden="true"></span><span class="theme-label">Modo claro</span>';
-
-      } else {
-
-        botao.innerHTML =
-          '<span class="sl-icon sl-moon" aria-hidden="true"></span><span class="theme-label">Modo escuro</span>';
-
-      }
-
-    }
-
-
-    function toggleThemeServicos() {
-
-      document.body.classList.toggle(
-        'dark'
-      );
-
-      const isDark =
-        document.body.classList.contains(
-          'dark'
-        );
-
-      localStorage.setItem(
-        'theme',
-        isDark
-          ? 'dark'
-          : 'light'
-      );
-
-      atualizarTemaServicos();
-
-    }
-
-
-    function aplicarCorLojaServico() {
-
-      const pagina =
-        document.querySelector(
-          '.servico-page'
-        );
-
-      if (!pagina) {
-        return;
-      }
-
-      const categoria =
-        pagina.dataset.categoriaLoja ||
-        'Alimentos';
-
-      const cor =
-        coresCategoriasServico[categoria] ||
-        '#e8534f';
-
-      const textoEscuro =
-        categoria === 'Construção' ||
-        categoria === 'Outros';
-
-      pagina.style.setProperty(
-        '--servico-loja-cor',
-        cor
-      );
-
-      pagina.style.setProperty(
-        '--servico-loja-cor-texto',
-        textoEscuro
-          ? '#222222'
-          : '#ffffff'
-      );
-
-    }
-
-
-    function definirCorServico(
-      card,
-      categoria
-    ) {
-
-      const pagina =
-        document.querySelector(
-          '.servico-page'
-        );
-
-      if (!pagina) {
-        return;
-      }
-
-      const estiloPagina =
-        window.getComputedStyle(
-          pagina
-        );
-
-      const cor =
-        estiloPagina
-          .getPropertyValue(
-            '--servico-loja-cor'
-          )
-          .trim() ||
-        '#e8534f';
-
-      const texto =
-        estiloPagina
-          .getPropertyValue(
-            '--servico-loja-cor-texto'
-          )
-          .trim() ||
-        '#ffffff';
-
-      card.style.setProperty(
-        '--servico-cor',
-        cor
-      );
-
-      card.style.setProperty(
-        '--servico-cor-texto',
-        texto
-      );
-
-    }
-
-
-    function adicionarServico() {
-
-      const cardNovo =
-        document.getElementById(
-          'servicoCardNovo'
-        );
-
-      const criarCard =
-        document.getElementById(
-          'servicoCriarCard'
-        );
-
-      cardNovo.classList.add(
-        'aberto'
-      );
-
-      criarCard.classList.add(
-        'oculto'
-      );
-
-      cardNovo.scrollIntoView({
-        behavior: 'smooth',
-        inline: 'center',
-        block: 'nearest'
-      });
-
-      const primeiroCampo =
-        cardNovo.querySelector(
-          'input[name="nome_servico"]'
-        );
-
-      primeiroCampo.focus();
-
-    }
-
-
-    function cancelarNovoServico() {
-
-      const cardNovo =
-        document.getElementById(
-          'servicoCardNovo'
-        );
-
-      const criarCard =
-        document.getElementById(
-          'servicoCriarCard'
-        );
-
-      const form =
-        document.getElementById(
-          'formNovoServico'
-        );
-
-      form.reset();
-
-      const imagem =
-        cardNovo.querySelector(
-          '.servico-imagem'
-        );
-
-      const preview =
-        imagem.querySelector(
-          '.servico-preview'
-        );
-
-      imagem.classList.remove(
-        'tem-imagem'
-      );
-
-      preview.removeAttribute(
-        'src'
-      );
-
-      definirCorServico(
-        cardNovo,
-        ''
-      );
-
-      cardNovo.classList.remove(
-        'aberto'
-      );
-
-      criarCard.classList.remove(
-        'oculto'
-      );
-
-    }
-
-
-    function editarServico(
-      botao
-    ) {
-
-      const card =
-        botao.closest(
-          '.servico-card-salvo'
-        );
-
-      if (!card) {
-        return;
-      }
-
-      const editando =
-        !card.classList.contains(
-          'editando'
-        );
-
-      card.classList.toggle(
-        'editando',
-        editando
-      );
-
-      card
-        .querySelectorAll(
-          '.servico-form-salvo input, .servico-form-salvo textarea'
-        )
-        .forEach(
-          function (campo) {
-
-            campo.readOnly =
-              !editando;
-
-          }
-        );
-
-      const salvar =
-        card.querySelector(
-          '.servico-salvar-alteracoes'
-        );
-
-      salvar.hidden =
-        !editando;
-
-      if (editando) {
-
-        card
-          .querySelector(
-            'input[name="nome_servico"]'
-          )
-          .focus();
-
-      }
-
-    }
-
-
-    function prepararImagemServico(
-      imagem
-    ) {
-
-      const input =
-        imagem.querySelector(
-          '.servico-imagem-input'
-        );
-
-      const botaoAdicionar =
-        imagem.querySelector(
-          '.servico-botao-imagem'
-        );
-
-      const botaoTrocar =
-        imagem.querySelector(
-          '.servico-trocar-imagem'
-        );
-
-      const preview =
-        imagem.querySelector(
-          '.servico-preview'
-        );
-
-      if (botaoAdicionar) {
-
-        botaoAdicionar.addEventListener(
-          'click',
-          function () {
-
-            input.click();
-
-          }
-        );
-
-      }
-
-      if (botaoTrocar) {
-
-        botaoTrocar.addEventListener(
-          'click',
-          function () {
-
-            input.click();
-
-          }
-        );
-
-      }
-
-      input.addEventListener(
-        'change',
-        function () {
-
-          const arquivo =
-            input.files[0];
-
-          if (!arquivo) {
-            return;
-          }
-
-          const leitor =
-            new FileReader();
-
-          leitor.onload =
-            function (evento) {
-
-              preview.src =
-                evento.target.result;
-
-              imagem.classList.add(
-                'tem-imagem'
-              );
-
-            };
-
-          leitor.readAsDataURL(
-            arquivo
-          );
-
-        }
-      );
-
-    }
-
-
-    document.addEventListener(
-      'DOMContentLoaded',
-      function () {
-
-        atualizarTemaServicos();
-
-        aplicarCorLojaServico();
-
-        document
-          .querySelectorAll(
-            '.servico-card-salvo'
-          )
-          .forEach(
-            function (card) {
-
-              definirCorServico(
-                card,
-                card.dataset.categoria
-              );
-
-            }
-          );
-
-        const cardNovo =
-          document.getElementById(
-            'servicoCardNovo'
-          );
-
-        if (cardNovo) {
-
-          definirCorServico(
-            cardNovo,
-            ''
-          );
-
-        }
-
-        document
-          .querySelectorAll(
-            '.servico-imagem'
-          )
-          .forEach(
-            prepararImagemServico
-          );
-
-      }
-    );
-
-  </script>
+  <!-- JS geral do projeto -->
+  <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
 
 </body>
-
-</html>
+</html>w
