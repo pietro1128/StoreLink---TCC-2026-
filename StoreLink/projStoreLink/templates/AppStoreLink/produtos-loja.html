@@ -1,23 +1,23 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>StoreLink - Produtos</title>
+  <title>StoreLink - Serviços</title>
 
   <link rel="icon" type="image/png" href="{% static 'AppStoreLink/images/icon-dark.png' %}">
   <link rel="stylesheet" href="{% static 'AppStoreLink/styles/style.css' %}">
-  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/produtos-loja.css' %}">
+  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/servicos-loja.css' %}">
   <link rel="stylesheet" href="{% static 'AppStoreLink/styles/mensagens.css' %}">
   <link rel="stylesheet" href="{% static 'AppStoreLink/styles/icons.css' %}">
 </head>
 
 <body>
 
-  <!-- #region navbar -->
-  <!-- Barra de navegação do topo -->
+  <!-- #region NAVBAR -->
   <div class="topbar">
 
     <div class="logo-icon">
@@ -88,27 +88,26 @@
   <!-- #endregion -->
 
 
-  <!-- #region página -->
-  <!-- Página que mostra e edita os produtos da loja -->
+  <!-- #region PÁGINA -->
   <main
-    class="produto-page"
+    class="servico-page"
     data-categoria-loja="{{ loja.id_categoria.tipo_categoria|default:'Alimentos' }}"
   >
 
-    <!-- #region estabelecimento -->
+    <!-- #region PERFIL LATERAL -->
     <!-- Dados do responsável pela loja -->
-    <aside class="produto-perfil">
+    <aside class="servico-perfil">
 
-      <div class="produto-badge">
+      <div class="servico-badge">
         Estabelecimento
       </div>
 
 
       <!-- Foto do responsável -->
-      <div class="produto-avatar-wrap">
+      <div class="servico-avatar-wrap">
 
         <div
-          class="produto-avatar {% if usuario_logado.foto %}tem-imagem{% endif %}"
+          class="servico-avatar {% if usuario_logado.foto %}tem-imagem{% endif %}"
         >
 
           <svg
@@ -121,8 +120,8 @@
           </svg>
 
           <img
-            id="preview-responsavel-produto"
-            class="produto-avatar-image"
+            id="preview-responsavel-servico"
+            class="servico-avatar-image"
             alt="Foto do responsável"
             {% if usuario_logado.foto %}
               src="{{ usuario_logado.foto.url }}"
@@ -135,9 +134,9 @@
 
 
       <!-- Nome e sobrenome ficam só para visualização -->
-      <div class="produto-perfil-fields">
+      <div class="servico-perfil-fields">
 
-        <div class="produto-perfil-field">
+        <div class="servico-perfil-field">
 
           <label>
             Nome do responsável
@@ -152,7 +151,7 @@
         </div>
 
 
-        <div class="produto-perfil-field">
+        <div class="servico-perfil-field">
 
           <label>
             Sobrenome
@@ -173,13 +172,13 @@
       <form
         method="POST"
         action="{% url 'logout' %}"
-        class="produto-logout-form"
+        class="servico-logout-form"
       >
         {% csrf_token %}
 
         <button
           type="submit"
-          class="produto-logout"
+          class="servico-logout"
         >
           Fazer Logout
 
@@ -197,15 +196,15 @@
     <!-- #endregion -->
 
 
-    <!-- #region conteúdo -->
-    <!-- Área onde ficam todos os cards dos produtos -->
-    <section class="produto-conteudo">
+    <!-- #region CONTEÚDO -->
+    <!-- Área onde ficam todos os serviços cadastrados -->
+    <section class="servico-conteudo">
 
       <!-- Cabeçalho da página -->
-      <div class="produto-topo">
+      <div class="servico-topo">
 
         <a
-          class="produto-voltar"
+          class="servico-voltar"
           href="{% url 'perfil-loja' %}"
           aria-label="Voltar"
           title="Voltar"
@@ -217,36 +216,21 @@
         </a>
 
 
-        <div class="produto-topo-info">
+        <div class="servico-topo-info">
 
-          <p class="produto-editar-texto">
-            Editar fotos e informações dos produtos
+          <p class="servico-editar-texto">
+            Editar fotos e informações dos serviços
           </p>
 
-          <div class="produto-titulo-box">
+          <div class="servico-titulo-box">
 
             <h1>
-              PRODUTOS{% if loja %} - {{ loja.nome_loja }}{% endif %}
+              SERVIÇOS{% if loja %} - {{ loja.nome_loja }}{% endif %}
             </h1>
 
-            <svg
-              class="produto-sacola"
-              viewBox="0 0 64 64"
-              fill="none"
-              aria-hidden="true"
-            >
-              <path
-                d="M16 22H48L52 56H12L16 22Z"
-                stroke="currentColor"
-                stroke-width="3"
-              ></path>
-
-              <path
-                d="M23 23V17C23 11 27 7 32 7C37 7 41 11 41 17V23"
-                stroke="currentColor"
-                stroke-width="3"
-              ></path>
-            </svg>
+            <div class="servico-dinheiro">
+              $
+            </div>
 
           </div>
 
@@ -255,8 +239,7 @@
       </div>
 
 
-      <!-- #region mensagens -->
-      <!-- Mensagens de sucesso ou erro do Django -->
+      <!-- #region MENSAGENS -->
       {% if messages %}
         <div class="messages-container">
 
@@ -271,69 +254,70 @@
       <!-- #endregion -->
 
 
-      <!-- #region cards -->
+      <!-- #region CARDS -->
       <div
-        class="produto-cards-scroll"
-        id="produtoCards"
+        class="servico-cards-scroll"
+        id="servicoCards"
       >
 
-        <!-- #region produtos salvos -->
-        <!-- Produtos que já estão cadastrados no banco -->
-        {% for produto in produtos %}
+        <!-- #region SERVIÇOS SALVOS -->
+        <!-- Serviços que já estão cadastrados -->
+        {% for servico in servicos %}
 
           <div
-            class="produto-card produto-card-salvo"
-            data-categoria="{{ produto.id_categoria.tipo_categoria }}"
+            class="servico-card servico-card-salvo"
+            data-categoria="{{ loja.id_categoria.tipo_categoria }}"
           >
 
-            <!-- Exclui o produto -->
+            <!-- Exclui o serviço -->
             <form
               class="u-contents"
               method="POST"
-              action="{% url 'produto-excluir' produto.id_produto %}"
-              data-confirm="Excluir o produto {{ produto.nome_produto|escape }}? Essa ação não pode ser desfeita."
+              action="{% url 'servico-excluir' servico.id_servico %}"
+              data-confirm="Excluir o serviço {{ servico.nome_servico|escape }}? Essa ação não pode ser desfeita."
             >
               {% csrf_token %}
 
               <button
                 type="submit"
-                class="produto-excluir-card"
-                aria-label="Excluir produto"
-                title="Excluir produto"
+                class="servico-excluir-card"
+                aria-label="Excluir serviço"
+                title="Excluir serviço"
               >
                 <span
                   class="sl-icon sl-trash"
                   aria-hidden="true"
                 ></span>
               </button>
+
             </form>
 
 
-            <!-- Foto do produto -->
-            <div class="produto-imagem">
+            <!-- Foto do serviço -->
+            <div class="servico-imagem">
 
               <input
-                class="produto-imagem-input"
+                class="servico-imagem-input"
                 type="file"
                 name="foto"
-                form="formProduto{{ produto.id_produto }}"
+                form="formServico{{ servico.id_servico }}"
                 accept="image/*"
                 hidden
               >
 
-              {% if produto.foto %}
+              {% if servico.foto %}
 
                 <img
-                  class="produto-preview produto-preview-existente"
-                  src="{{ produto.foto.url }}"
-                  alt="{{ produto.nome_produto }}"
+                  class="servico-preview servico-preview-existente"
+                  src="{{ servico.foto.url }}"
+                  alt="{{ servico.nome_servico }}"
                 >
 
               {% else %}
 
                 <button
                   type="button"
-                  class="produto-botao-imagem"
+                  class="servico-botao-imagem"
                 >
                   <span
                     class="sl-icon sl-camera-plus"
@@ -344,8 +328,8 @@
                 </button>
 
                 <img
-                  class="produto-preview"
-                  alt="Imagem do produto"
+                  class="servico-preview"
+                  alt="Imagem do serviço"
                 >
 
               {% endif %}
@@ -353,7 +337,7 @@
 
               <button
                 type="button"
-                class="produto-trocar-imagem"
+                class="servico-trocar-imagem"
                 aria-label="Trocar imagem"
                 title="Trocar imagem"
               >
@@ -366,12 +350,12 @@
             </div>
 
 
-            <!-- Informações do produto -->
-            <div class="produto-card-conteudo">
+            <!-- Informações do serviço -->
+            <div class="servico-card-conteudo">
 
               <button
                 type="button"
-                class="produto-editar-info"
+                class="servico-editar-info"
                 aria-label="Editar informações"
                 title="Editar informações"
               >
@@ -384,34 +368,35 @@
 
               <form
                 method="POST"
-                action="{% url 'produto-editar' produto.id_produto %}"
-                id="formProduto{{ produto.id_produto }}"
-                class="produto-form-salvo"
+                action="{% url 'servico-editar' servico.id_servico %}"
+                id="formServico{{ servico.id_servico }}"
+                class="servico-form-salvo"
                 enctype="multipart/form-data"
               >
                 {% csrf_token %}
 
+
                 <label>
-                  Nome do produto:
+                  Nome do serviço:
                 </label>
 
                 <input
+                  name="nome_servico"
                   type="text"
-                  name="nome_produto"
-                  value="{{ produto.nome_produto }}"
-                  placeholder="Nome do produto"
+                  value="{{ servico.nome_servico }}"
+                  placeholder="Nome do serviço"
                   readonly
                 >
 
 
                 <label>
-                  Preço do produto:
+                  Preço do serviço:
                 </label>
 
                 <input
+                  name="preco"
                   type="text"
-                  name="preco_produto"
-                  value="{{ produto.preco }}"
+                  value="{{ servico.preco }}"
                   placeholder="R$ 00,00"
                   readonly
                 >
@@ -421,25 +406,25 @@
                   Categoria:
                 </label>
 
-                <div class="produto-categoria-salva">
-                  {{ produto.id_categoria.tipo_categoria }}
+                <div class="servico-categoria-salva">
+                  {{ loja.id_categoria.tipo_categoria }}
                 </div>
 
 
                 <label>
-                  Descrição do produto:
+                  Descrição do serviço:
                 </label>
 
                 <textarea
-                  name="descricao_produto"
-                  placeholder="Descrição do produto..."
+                  name="descricao"
+                  placeholder="Descrição do serviço..."
                   readonly
-                >{{ produto.descricao|default:'' }}</textarea>
+                >{{ servico.descricao|default:'' }}</textarea>
 
 
                 <button
                   type="submit"
-                  class="produto-salvar-alteracoes"
+                  class="servico-salvar-alteracoes"
                   hidden
                 >
                   SALVAR ALTERAÇÕES
@@ -455,19 +440,19 @@
         <!-- #endregion -->
 
 
-        <!-- #region novo produto -->
-        <!-- Card que aparece quando o usuário vai cadastrar outro produto -->
+        <!-- #region NOVO SERVIÇO -->
+        <!-- Card que aparece quando o usuário vai cadastrar outro serviço -->
         <div
-          class="produto-card produto-card-novo"
-          id="produtoCardNovo"
+          class="servico-card servico-card-novo"
+          id="servicoCardNovo"
         >
 
           <!-- Cancela o cadastro -->
           <button
             type="button"
-            class="produto-excluir-card produto-cancelar-card"
-            aria-label="Cancelar novo produto"
-            title="Cancelar novo produto"
+            class="servico-excluir-card servico-cancelar-card"
+            aria-label="Cancelar novo serviço"
+            title="Cancelar novo serviço"
           >
             <span
               class="sl-icon sl-x"
@@ -476,21 +461,21 @@
           </button>
 
 
-          <!-- Foto do novo produto -->
-          <div class="produto-imagem produto-imagem-nova">
+          <!-- Foto do novo serviço -->
+          <div class="servico-imagem servico-imagem-nova">
 
             <input
-              class="produto-imagem-input"
+              class="servico-imagem-input"
               type="file"
               name="foto"
-              form="formNovoProduto"
+              form="formNovoServico"
               accept="image/*"
               hidden
             >
 
             <button
               type="button"
-              class="produto-botao-imagem"
+              class="servico-botao-imagem"
             >
               <span
                 class="sl-icon sl-camera-plus"
@@ -501,13 +486,13 @@
             </button>
 
             <img
-              class="produto-preview"
-              alt="Imagem do novo produto"
+              class="servico-preview"
+              alt="Imagem do novo serviço"
             >
 
             <button
               type="button"
-              class="produto-trocar-imagem"
+              class="servico-trocar-imagem"
               aria-label="Trocar imagem"
               title="Trocar imagem"
             >
@@ -520,36 +505,37 @@
           </div>
 
 
-          <!-- Formulário para cadastrar o produto -->
-          <div class="produto-card-conteudo">
+          <!-- Formulário para cadastrar o serviço -->
+          <div class="servico-card-conteudo">
 
             <form
               method="POST"
-              action="{% url 'produto-criar' %}"
-              id="formNovoProduto"
+              action="{% url 'servicos-loja' %}"
+              id="formNovoServico"
               enctype="multipart/form-data"
             >
               {% csrf_token %}
 
+
               <label>
-                Nome do produto:
+                Nome do serviço:
               </label>
 
               <input
+                name="nome_servico"
                 type="text"
-                name="nome_produto"
-                placeholder="Nome do produto"
+                placeholder="Nome do serviço"
                 required
               >
 
 
               <label>
-                Preço do produto:
+                Preço do serviço:
               </label>
 
               <input
+                name="preco"
                 type="text"
-                name="preco_produto"
                 placeholder="R$ 00,00"
                 required
               >
@@ -559,54 +545,26 @@
                 Categoria:
               </label>
 
-              <select
-                name="id_categoria"
-                class="produto-categoria-select"
-                required
-              >
-
-                <option
-                  value=""
-                  data-categoria=""
-                >
-                  Selecione...
-                </option>
-
-                {% for c in categorias %}
-
-                  <option
-                    value="{{ c.id_categoria }}"
-                    data-categoria="{{ c.tipo_categoria }}"
-                  >
-                    {{ c.tipo_categoria }}
-                  </option>
-
-                {% endfor %}
-
-              </select>
-
-
-              <!-- Mostra visualmente a categoria escolhida -->
-              <div class="produto-categoria-selecionada">
-                Nenhuma categoria selecionada
+              <div class="servico-categoria-selecionada">
+                {{ loja.id_categoria.tipo_categoria }}
               </div>
 
 
               <label>
-                Descrição do produto:
+                Descrição do serviço:
               </label>
 
               <textarea
-                name="descricao_produto"
-                placeholder="Descrição do produto..."
+                name="descricao"
+                placeholder="Descrição do serviço..."
               ></textarea>
 
 
               <button
                 type="submit"
-                class="produto-salvar"
+                class="servico-salvar"
               >
-                CADASTRAR PRODUTO
+                SALVAR SERVIÇO
               </button>
 
             </form>
@@ -617,18 +575,18 @@
         <!-- #endregion -->
 
 
-        <!-- #region adicionar produto -->
-        <!-- Card com o + para abrir o cadastro -->
+        <!-- #region ADICIONAR SERVIÇO -->
+        <!-- Card com o + para abrir um novo cadastro -->
         <div
-          class="produto-criar-card"
-          id="produtoCriarCard"
+          class="servico-criar-card"
+          id="servicoCriarCard"
         >
 
           <button
             type="button"
-            class="produto-criar-card-btn"
-            aria-label="Adicionar produto"
-            title="Adicionar produto"
+            class="servico-criar-card-btn"
+            aria-label="Adicionar serviço"
+            title="Adicionar serviço"
           >
             <span
               class="sl-icon sl-plus"
@@ -637,11 +595,11 @@
           </button>
 
           <h2>
-            Adicionar produto
+            Adicionar serviço
           </h2>
 
           <p>
-            Clique no + para cadastrar outro produto.
+            Clique no + para cadastrar outro serviço.
           </p>
 
         </div>
