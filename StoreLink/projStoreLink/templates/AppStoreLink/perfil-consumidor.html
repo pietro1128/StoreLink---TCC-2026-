@@ -1,381 +1,533 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>StoreLink - Minha Conta</title>
 
-  <link rel="icon" type="image/png" href="{% static 'AppStoreLink/images/icon-dark.png' %}">
-  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/style.css' %}">
-  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/consumidor.css' %}">
-  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/mensagens.css' %}">
+  <link
+    rel="icon"
+    type="image/png"
+    href="{% static 'AppStoreLink/images/icon-dark.png' %}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/style.css' %}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/consumidor.css' %}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/mensagens.css' %}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/icons.css' %}"
+  >
+
 </head>
 
 <body>
 
   <!-- #region mensagens -->
+
   {% if messages %}
+
     <div class="messages-container">
+
       {% for message in messages %}
+
         <div class="alert alert-{{ message.tags }}">
           {{ message }}
         </div>
+
       {% endfor %}
+
     </div>
+
   {% endif %}
+
   <!-- #endregion -->
 
 
   <!-- #region navbar -->
+
   <div class="topbar">
 
     <div class="logo-icon">
+
       <img
         src="{% static 'AppStoreLink/images/icon-dark.png' %}"
         alt="StoreLink"
       >
+
     </div>
 
-    <a class="nav-btn" href="{% url 'index' %}">
+    <a
+      class="nav-btn"
+      href="{% url 'index' %}"
+    >
       Início
     </a>
 
-    <a class="nav-btn" href="{% url 'perfil-loja' %}">
+    <a
+      class="nav-btn"
+      href="{% url 'perfil-loja' %}"
+    >
       Sua loja
     </a>
 
-    <a class="nav-btn" href="{% url 'suporte' %}">
+    <a
+      class="nav-btn"
+      href="{% url 'suporte' %}"
+    >
       Suporte
     </a>
 
-    <a class="nav-btn" href="{% url 'tutorial' %}">
+    <a
+      class="nav-btn"
+      href="{% url 'tutorial' %}"
+    >
       Como navegar?
     </a>
 
     <button
-      type="button"
       class="nav-account-btn consumidor-conta-ativa"
       data-url="{% url 'perfil-consumidor' %}"
     >
-      <i class="bi bi-person-circle" aria-hidden="true"></i>
+      <span
+        class="sl-icon sl-user"
+        aria-hidden="true"
+      ></span>
+
       Minha conta
     </button>
 
     <button
-      type="button"
       class="theme-toggle"
     >
-      <i class="bi bi-moon-fill" aria-hidden="true"></i>
-      <span class="theme-label">Modo escuro</span>
+      <span
+        class="sl-icon sl-moon"
+        aria-hidden="true"
+      ></span>
+
+      <span class="theme-label">
+        Modo escuro
+      </span>
     </button>
 
   </div>
+
   <!-- #endregion -->
 
 
-  <!-- #region perfil do consumidor -->
+  <!-- #region pagina consumidor -->
+
   <main class="page-consumidor">
 
-    <!-- Lado esquerdo com foto e dados do usuário -->
-    <aside class="consumidor-left">
+    <div class="consumidor-wrapper">
 
-      <div class="consumidor-badge">
-        Consumidor
-      </div>
+      <!-- #region lateral consumidor -->
 
-      <!-- Foto do perfil -->
-      <div class="consumidor-avatar-wrap">
+      <aside class="consumidor-left">
 
-        <label
-          class="consumidor-avatar {% if chave_perf_consm.foto %}tem-imagem{% endif %}"
-          for="foto-consumidor"
+        <div class="consumidor-badge">
+          Consumidor
+        </div>
+
+
+        <div class="consumidor-avatar-wrap">
+
+          <label
+            class="consumidor-avatar {% if chave_perf_consm.foto %}tem-imagem{% endif %}"
+            for="foto-consumidor"
+          >
+
+            <input
+              type="file"
+              id="foto-consumidor"
+              name="foto"
+              accept="image/jpeg,image/png,image/webp"
+              hidden
+            >
+
+            <svg
+              id="avatar-padrao-consumidor"
+              viewBox="0 0 24 24"
+            >
+
+              <path
+                d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"
+              />
+
+            </svg>
+
+            <img
+              id="preview-consumidor"
+              class="consumidor-avatar-image"
+              alt="Foto do consumidor"
+              {% if chave_perf_consm.foto %}
+                src="{{ chave_perf_consm.foto.url }}"
+              {% endif %}
+            >
+
+          </label>
+
+          <label
+            class="consumidor-camera-badge"
+            for="foto-consumidor"
+          >
+            <span
+              class="sl-icon sl-camera"
+              aria-hidden="true"
+            ></span>
+          </label>
+
+        </div>
+
+
+        <!-- #region editar usuario -->
+
+        <button
+          type="button"
+          class="consumidor-editar-btn"
+        >
+          <span
+            class="sl-icon sl-pencil"
+            aria-hidden="true"
+          ></span>
+
+          Editar usuário
+        </button>
+
+
+        <form
+          method="POST"
+          action="{% url 'editar-consumidor' %}"
+          id="formEditarConsumidor"
+          class="consumidor-form-edicao"
         >
 
-          <input
-            type="file"
-            id="foto-consumidor"
-            name="foto"
-            accept="image/jpeg,image/png,image/webp"
+          {% csrf_token %}
+
+          <div class="consumidor-field-left">
+
+            <label>
+              Nome
+            </label>
+
+            <input
+              type="text"
+              name="nome"
+              value="{{ chave_perf_consm.nome }}"
+              required
+              readonly
+            >
+
+          </div>
+
+
+          <div class="consumidor-field-left">
+
+            <label>
+              Sobrenome
+            </label>
+
+            <input
+              type="text"
+              name="sobrenome"
+              value="{{ chave_perf_consm.sobrenome|default_if_none:'' }}"
+              readonly
+            >
+
+          </div>
+
+
+          <button
+            type="submit"
+            class="consumidor-salvar-alteracoes"
             hidden
           >
+            Salvar alterações
+          </button>
 
-          <svg
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"></path>
-          </svg>
+        </form>
 
-          {% if chave_perf_consm.foto %}
-            <img
-              id="preview-consumidor"
-              class="consumidor-avatar-image"
-              src="{{ chave_perf_consm.foto }}"
-              alt="Foto do consumidor"
-            >
-          {% else %}
-            <img
-              id="preview-consumidor"
-              class="consumidor-avatar-image"
-              alt="Foto do consumidor"
-            >
-          {% endif %}
+        <!-- #endregion -->
 
-        </label>
 
-        <label
-          class="consumidor-camera-badge"
-          for="foto-consumidor"
-          title="Adicionar foto"
+        <form
+          class="u-contents"
+          method="POST"
+          action="{% url 'logout' %}"
         >
-          <i class="bi bi-camera-fill" aria-hidden="true"></i>
-        </label>
 
-      </div>
+          {% csrf_token %}
 
-
-      <!-- Botão que libera a edição do nome -->
-      <button
-        type="button"
-        class="consumidor-editar-btn"
-      >
-        <span class="sl-icon sl-pencil" aria-hidden="true"></span>
-        Editar usuário
-      </button>
-
-
-      <!-- Formulário com os dados do consumidor -->
-      <form
-        method="POST"
-        action="{% url 'editar-consumidor' %}"
-        id="formEditarConsumidor"
-        class="consumidor-form-edicao"
-      >
-        {% csrf_token %}
-
-        <div class="consumidor-field">
-
-          <label>
-            Nome
-          </label>
-
-          <input
-            type="text"
-            name="nome"
-            value="{{ chave_perf_consm.nome }}"
-            readonly
+          <button
+            type="submit"
+            class="consumidor-logout-btn"
           >
+            Fazer Logout
 
-        </div>
+            <span>
+              <span
+                class="sl-icon sl-logout"
+                aria-hidden="true"
+              ></span>
+            </span>
 
-        <div class="consumidor-field">
+          </button>
 
-          <label>
-            Sobrenome
-          </label>
+        </form>
 
-          <input
-            type="text"
-            name="sobrenome"
-            value="{{ chave_perf_consm.sobrenome|default_if_none:'' }}"
-            readonly
-          >
+      </aside>
 
-        </div>
-
-        <button
-          type="submit"
-          class="consumidor-salvar-alteracoes"
-          hidden
-        >
-          SALVAR ALTERAÇÕES
-        </button>
-
-      </form>
+      <!-- #endregion -->
 
 
-      <!-- Sai da conta atual -->
-      <form
-        method="POST"
-        action="{% url 'logout' %}"
-        class="consumidor-logout-form"
-      >
-        {% csrf_token %}
+      <!-- #region favoritos -->
 
-        <button
-          type="submit"
-          class="consumidor-logout"
-        >
-          Fazer Logout
+      <section class="favoritos-area">
 
-          <i
-            class="bi bi-box-arrow-right"
-            aria-hidden="true"
-          ></i>
-        </button>
-      </form>
-
-    </aside>
-
-
-    <!-- #region favoritos -->
-    <!-- Lista com todas as lojas que o usuário favoritou -->
-    <section class="consumidor-content">
-
-      <div class="consumidor-topo">
-
-        <div>
-          <p class="consumidor-subtitulo">
-            Suas lojas salvas
-          </p>
+        <div class="favoritos-topo">
 
           <h1>
-            LOJAS FAVORITAS
+            FAVORITOS
           </h1>
+
+
+          <button
+            type="button"
+            class="cadastrar-loja-btn"
+            data-url="{% url 'perfil-loja' %}"
+          >
+
+            <span>
+              Cadastrar Loja
+            </span>
+
+            <span class="cadastrar-loja-icone">
+
+              <span
+                class="sl-icon sl-store"
+                aria-hidden="true"
+              ></span>
+
+            </span>
+
+          </button>
+
         </div>
 
-        <i
-          class="bi bi-heart-fill consumidor-topo-coracao"
-          aria-hidden="true"
-        ></i>
 
-      </div>
+        <div class="favoritos-scroll">
 
+          {% for favorita in loja_fav %}
 
-      {% if loja_fav %}
+            <article
+              class="
+                favorito-card
 
-        <div class="consumidor-favoritos">
+                {% if favorita.id_loja.id_categoria.tipo_categoria == 'Alimentos' %}
+                  favorito-alimentos
 
-          {% for favorito in loja_fav %}
+                {% elif favorita.id_loja.id_categoria.tipo_categoria == 'Moda' %}
+                  favorito-moda
 
-            <article class="consumidor-favorito-card">
+                {% elif favorita.id_loja.id_categoria.tipo_categoria == 'Esportes' %}
+                  favorito-esportes
 
-              <!-- Foto da loja -->
-              <div class="consumidor-favorito-imagem">
+                {% elif favorita.id_loja.id_categoria.tipo_categoria == 'Construção' %}
+                  favorito-construcao
 
-                {% if favorito.id_loja.foto %}
-                  <img
-                    src="{{ favorito.id_loja.foto }}"
-                    alt="{{ favorito.id_loja.nome_loja }}"
-                  >
+                {% elif favorita.id_loja.id_categoria.tipo_categoria == 'Saúde' %}
+                  favorito-saude
+
+                {% elif favorita.id_loja.id_categoria.tipo_categoria == 'Pets' %}
+                  favorito-pets
+
+                {% elif favorita.id_loja.id_categoria.tipo_categoria == 'Ambiente' %}
+                  favorito-ambiente
+
+                {% elif favorita.id_loja.id_categoria.tipo_categoria == 'Tecnologia' %}
+                  favorito-tecnologia
+
+                {% elif favorita.id_loja.id_categoria.tipo_categoria == 'Beleza' %}
+                  favorito-beleza
+
                 {% else %}
-                  <div class="consumidor-sem-imagem">
-                    <i
-                      class="bi bi-shop"
-                      aria-hidden="true"
-                    ></i>
-                  </div>
+                  favorito-outros
+
                 {% endif %}
+              "
+            >
+
+
+              <!-- #region capa -->
+
+              <div class="favorito-capa">
+
+                {% if favorita.id_loja.foto_estabelecimento %}
+
+                  <img
+                    src="{{ favorita.id_loja.foto_estabelecimento }}"
+                    alt="{{ favorita.id_loja.nome_loja }}"
+                    class="favorito-imagem"
+                  >
+
+                {% else %}
+
+                  <div class="favorito-capa-placeholder">
+
+                    <span>
+                      Imagem da loja
+                    </span>
+
+                  </div>
+
+                {% endif %}
+
+
+                <form
+                  method="POST"
+                  action="{% url 'favoritar-loja' favorita.id_loja.id_loja %}"
+                >
+
+                  {% csrf_token %}
+
+                  <button
+                    type="submit"
+                    class="favorito-coracao"
+                    title="Remover dos favoritos"
+                  >
+
+                    <span
+                      class="sl-icon sl-heart-fill"
+                      aria-hidden="true"
+                    ></span>
+
+                  </button>
+
+                </form>
 
               </div>
 
+              <!-- #endregion -->
 
-              <!-- Informações da loja favorita -->
-              <div class="consumidor-favorito-info">
+
+              <!-- #region informacoes -->
+
+              <div class="favorito-conteudo">
 
                 <h2>
-                  {{ favorito.id_loja.nome_loja }}
+                  {{ favorita.id_loja.nome_loja }}
                 </h2>
 
-                {% if favorito.id_loja.telefone_loja %}
-                  <p>
-                    <strong>Telefone:</strong>
-                    {{ favorito.id_loja.telefone_loja }}
-                  </p>
+
+                {% if favorita.id_loja.telefone_loja %}
+
+                  <div class="favorito-bloco">
+
+                    <span class="favorito-label">
+                      Telefone:
+                    </span>
+
+                    <span>
+                      {{ favorita.id_loja.telefone_loja }}
+                    </span>
+
+                  </div>
+
                 {% endif %}
 
-                {% if favorito.id_loja.id_endereco %}
-                  <p>
-                    <strong>Localização:</strong>
 
-                    {{ favorito.id_loja.id_endereco.rua }},
-                    {{ favorito.id_loja.id_endereco.numero_estabelecimento }}
-                  </p>
-                {% endif %}
+                {% if favorita.id_loja.id_endereco %}
 
-                {% if favorito.id_loja.id_categoria %}
-                  <p>
-                    <strong>Categoria:</strong>
-                    {{ favorito.id_loja.id_categoria.tipo_categoria }}
-                  </p>
+                  <div class="favorito-localizacao">
+
+                    <span class="favorito-label">
+                      Localização:
+                    </span>
+
+                    <span class="favorito-endereco">
+
+                      {{ favorita.id_loja.id_endereco.rua }},
+
+                      {{ favorita.id_loja.id_endereco.numero_estabelecimento }}
+
+                    </span>
+
+                  </div>
+
                 {% endif %}
 
               </div>
 
-
-              <!-- Remove a loja dos favoritos -->
-              <form
-                method="POST"
-                action="{% url 'favoritar-loja' favorito.id_loja.id_loja %}"
-                class="consumidor-favorito-form"
-              >
-                {% csrf_token %}
-
-                <button
-                  type="submit"
-                  class="consumidor-favorito-remover"
-                  aria-label="Remover dos favoritos"
-                  title="Remover dos favoritos"
-                >
-                  <i
-                    class="bi bi-heart-fill"
-                    aria-hidden="true"
-                  ></i>
-                </button>
-              </form>
+              <!-- #endregion -->
 
             </article>
+
+
+          {% empty %}
+
+            <!-- #region nenhum favorito -->
+
+            <div class="favoritos-vazio">
+
+              <button
+                type="button"
+                class="favoritos-adicionar"
+                data-url="{% url 'index' %}"
+                aria-label="Procurar lojas"
+              >
+                +
+              </button>
+
+              <h2>
+                Nenhuma loja favoritada
+              </h2>
+
+              <p>
+                As lojas que você favoritar aparecerão aqui.
+              </p>
+
+            </div>
+
+            <!-- #endregion -->
 
           {% endfor %}
 
         </div>
 
-      {% else %}
+      </section>
 
-        <!-- Aparece quando o usuário ainda não favoritou nenhuma loja -->
-        <div class="consumidor-vazio">
+      <!-- #endregion -->
 
-          <i
-            class="bi bi-heart"
-            aria-hidden="true"
-          ></i>
-
-          <h2>
-            Você ainda não possui lojas favoritas
-          </h2>
-
-          <p>
-            Favorite uma loja para ela aparecer aqui.
-          </p>
-
-          <button
-            type="button"
-            class="consumidor-adicionar-favorito"
-            data-url="{% url 'index' %}"
-          >
-            <i
-              class="bi bi-plus-lg"
-              aria-hidden="true"
-            ></i>
-
-            Encontrar lojas
-          </button>
-
-        </div>
-
-      {% endif %}
-
-    </section>
-    <!-- #endregion -->
+    </div>
 
   </main>
+
   <!-- #endregion -->
 
 
   <!-- JS geral do projeto -->
+
   <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
 
 </body>
+
 </html>
