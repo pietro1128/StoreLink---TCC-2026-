@@ -703,5 +703,4 @@ function iniciarEnvioAutomaticoFotos() {
     });
   });
 }
-//#endregiongit restore --staged StoreLink/projStoreLink/AppStoreLink/__pycache__/urls.cpython-313.pyc
-git restore --staged StoreLink/projStoreLink/AppStoreLink/__pycache__/views.cpython-313.pyc
+//#endregion
