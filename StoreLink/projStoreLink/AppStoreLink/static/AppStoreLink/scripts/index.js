@@ -627,3 +627,24 @@ document.querySelectorAll('.info-comentario-card').forEach(function (card) {
     acoes.style.display = '';
   });
 });
+
+
+document.querySelectorAll('.info-servico-card').forEach(function (card) {
+    var editar = card.querySelector('.info-item-editar');
+    var cancelar = card.querySelector('.info-edicao-cancelar');
+    var visualizacao = card.querySelector('.info-item-visualizacao');
+    var edicao = card.querySelector('.info-item-edicao');
+
+    if (!editar || !edicao) return;
+
+    editar.addEventListener('click', function () {
+      visualizacao.style.display = 'none';   // esconde os textos
+      edicao.style.display = 'block';        // mostra os campos para editar
+    });
+
+    cancelar.addEventListener('click', function () {
+      edicao.reset();                        // desfaz o que foi digitado
+      edicao.style.display = '';             // volta ao padrão do CSS
+      visualizacao.style.display = '';
+    });
+  });

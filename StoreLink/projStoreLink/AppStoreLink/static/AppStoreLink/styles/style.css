@@ -521,6 +521,9 @@ body.dark .loja-card-capa {
 
 }
 
+.info-item-edicao {
+  display: none;
+}
 /* #endregion */
 
 /* #region CLASSES AUXILIARES */

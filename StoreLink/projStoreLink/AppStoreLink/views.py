@@ -903,10 +903,11 @@ def servico_excluir(request, id_servico):
         return redirect('InformacoesServico', id_loja=servico.id_loja_id)
 
     nome = servico.nome_servico
+    id_loja = servico.id_loja_id
     servico.delete()
 
     messages.success(request, f'O serviço "{nome}" foi excluído.')
-    return redirect('servicos-loja')
+    return redirect('InformacoesServico', id_loja=id_loja)
 
 
 @require_POST # -> so deixa executar a função se a requisição usar o metodo HTTP 'POST'

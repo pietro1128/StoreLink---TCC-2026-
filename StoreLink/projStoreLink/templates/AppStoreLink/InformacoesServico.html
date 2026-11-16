@@ -228,7 +228,7 @@
                   class="u-contents"
                   method="POST"
                   action="{% url 'servico-excluir' servico.id_servico %}"
-                  data-confirm="Excluir o serviço {{ servico.nome_servico|escape }}? Essa ação não pode ser desfeita."
+                  onsubmit="return confirm('Excluir o serviço {{ servico.nome_servico|escapejs }}? Essa ação não pode ser desfeita.');"
                 >
                   {% csrf_token %}
 
@@ -341,6 +341,7 @@
                   <input
                     type="text"
                     name="nome_servico"
+                    class="js-editar-nome"
                     value="{{ servico.nome_servico }}"
                     maxlength="100"
                     required
@@ -354,6 +355,7 @@
                   <input
                     type="text"
                     name="preco"
+                    class="js-editar-preco"
                     value="{{ servico.preco }}"
                     required
                   >
@@ -363,7 +365,7 @@
                     Descrição do serviço:
                   </label>
 
-                  <textarea name="descricao">{{ servico.descricao|default:'' }}</textarea>
+                  <textarea name="descricao" class="js-editar-descricao">{{ servico.descricao|default:'' }}</textarea>
 
 
                   <div class="info-edicao-botoes">
