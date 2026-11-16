@@ -55,6 +55,19 @@ def caminho_foto_usuario(instance, nome_arquivo):
     extensao = os.path.splitext(nome_arquivo)[1].lower()
     return f'usuarios/{uuid.uuid4().hex}{extensao}'
 
+def _caminho_aleatorio(pasta, nome_arquivo):
+    extensao = os.path.splitext(nome_arquivo)[1].lower()
+    return f'{pasta}/{uuid.uuid4().hex}{extensao}'
+
+def caminho_foto_loja(instance, nome_arquivo):
+    return _caminho_aleatorio('lojas', nome_arquivo)
+
+def caminho_foto_produto(instance, nome_arquivo):
+    return _caminho_aleatorio('produtos', nome_arquivo)
+
+def caminho_foto_servico(instance, nome_arquivo):
+    return _caminho_aleatorio('servicos', nome_arquivo)
+
 
 class TipoUsuario(models.Model):
     id_tipo_usuario = models.AutoField(primary_key=True)
@@ -109,8 +122,11 @@ class Loja(models.Model):
     nome_loja = models.CharField(max_length=100)
     telefone_loja = models.CharField(max_length=15, blank=True, null=True)
     email_loja = models.EmailField(max_length=100)
-    cnpj = models.CharField(max_length=18, unique=True) # !--!--!--!--!--!--!--! {{MUDAR PARA RECEBER TAMBEM CARACTERES "pois o CNPJ atual recebe letras tembem"}}  !--!--!--!--!--!--!--!
-    foto_estabelecimento = models.CharField(max_length=255, blank=True, null=True)
+    cnpj = models.CharField(max_length=18, unique=True)
+    foto_estabelecimento = models.ImageField(
+        upload_to=caminho_foto_loja, max_length=255,
+        blank=True, null=True, validators=[validar_foto],
+    )
     link = models.URLField(max_length=255, blank=True, null=True)
     id_endereco = models.ForeignKey(
         Endereco, on_delete=models.CASCADE, db_column="id_endereco"
@@ -133,7 +149,10 @@ class Produto(models.Model):
     nome_produto = models.CharField(max_length=100)
     preco = models.DecimalField(max_digits=10, decimal_places=2)
     descricao = models.TextField(blank=True, null=True)
-    foto = models.CharField(max_length=255, blank=True, null=True)
+    foto = models.ImageField(
+        upload_to=caminho_foto_produto, max_length=255,
+        blank=True, null=True, validators=[validar_foto],
+    )
     id_loja = models.ForeignKey(
         Loja, on_delete=models.CASCADE, db_column="id_loja"
     )
@@ -150,7 +169,10 @@ class Servico(models.Model):
     nome_servico = models.CharField(max_length=100)
     preco = models.DecimalField(max_digits=10, decimal_places=2)
     descricao = models.TextField(blank=True, null=True)
-    foto = models.CharField(max_length=255, blank=True, null=True)
+    foto = models.ImageField(
+        upload_to=caminho_foto_servico, max_length=255,
+        blank=True, null=True, validators=[validar_foto],
+    )
     id_loja = models.ForeignKey(
         Loja, on_delete=models.CASCADE, db_column="id_loja"
     )

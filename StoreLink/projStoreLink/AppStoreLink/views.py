@@ -16,8 +16,16 @@ from django.views.decorators.http import require_GET
 from AppStoreLink.services import (
     consultar_cep, CepInvalido, CepNaoEncontrado, ServicoCepIndisponivel,
 )
+from django.core.exceptions import ValidationError
+from AppStoreLink.models import validar_foto
 
-
+def _erro_foto(arquivo):
+    # Devolve a mensagem de erro se a foto for inválida, ou None se estiver certo
+    try:
+        validar_foto(arquivo)
+    except ValidationError as e:
+        return e.messages[0]
+    return None
 
 def index(request):
     return render(request, 'AppStoreLink/index.html')
@@ -26,13 +34,8 @@ def index(request):
 def _loja_atual():
     return Loja.objects.select_related('id_endereco', 'id_categoria').order_by('-id_loja').first()
 
-# |  Para testar a pagina SEM CONTA, voce precisa transformar
-# V  a linha de baixo em um comentario: "#@login_required"
-#@login_required
+
 def perfil_loja(request):
-    #if request.user.roler != 'admin':
-        #return HttpResponseForbidden("Você não tem permição para acessar está página.")
-    
     usuario_id = request.session.get('usuario_id')
     if not usuario_id:
             messages.error(request, 'Você precisa fazer login para editar a loja.')
@@ -51,7 +54,8 @@ def perfil_loja(request):
         cnpj = request.POST.get('cnpj')
         link = request.POST.get('link_loja')
         nome_categoria = request.POST.get('categoria', '').strip() # -> era nescessario que o codigo pegue esse valor para conseguir comparar mais a frente no codigo
-
+        foto = request.FILES.get('foto_estabelecimento')
+        
         try:
             dados_cep = consultar_cep(cep)
         except CepInvalido:
@@ -111,6 +115,13 @@ def perfil_loja(request):
             messages.error(request, 'Selecione uma categoria válida.')
             dados.pop('categoria', None)
             return render(request, 'AppStoreLink/perfil-loja.html')
+        
+        if foto:
+            erro_foto = _erro_foto(foto)
+
+        if erro_foto:
+            messages.error(request, erro_foto)
+            return render(request, 'AppStoreLink/perfil-loja.html')
 
         # Depois de todas as validações, cria endereço e loja:
         endereco = Endereco.objects.create(
@@ -128,6 +139,7 @@ def perfil_loja(request):
             email_loja=email,
             telefone_loja=telefone,
             cnpj=cnpj,
+            foto_estabelecimento=foto,
             link=link
         )
 
@@ -160,10 +172,18 @@ def editar_consumidor(request):
 
     nome = request.POST.get('nome', '').strip()
     sobrenome = request.POST.get('sobrenome', '').strip() or None
+    foto = request.FILES.get('foto')
 
     if not nome:
         messages.error(request, 'O consumidor precisa ter um nome.')
         return redirect('perfil-consumidor')
+    
+    if foto:
+        erro_foto = _erro_foto(foto)
+        if erro_foto:
+            messages.error(request, erro_foto)
+            return redirect('perfil-consumidor')
+        usuario.foto = foto
 
     usuario.nome = nome
     usuario.sobrenome = sobrenome
@@ -318,7 +338,6 @@ def recuperar_senha(request):
         return redirect('login')
 
     return render(request, 'registration/recuperar-senha.html')
-
 
 def buscar(request):
     query = request.GET.get('q', '').strip()
@@ -559,8 +578,14 @@ def produto_criar(request):
     preco_txt = request.POST.get('preco_produto', '').strip().replace(',', '.')
     descricao = request.POST.get('descricao_produto', '').strip()
     id_categoria = request.POST.get('id_categoria', '')
+    foto = request.FILES.get('foto')
 
     erros, preco = _validar_nome_preco(nome, preco_txt)
+
+    if foto:
+        erro_foto = _erro_foto(foto)
+        if erro_foto:
+            erros.append(erro_foto)
 
     # A categoria é obrigatória no model e o POST pode ser forjado, então confere no banco
     categoria = None
@@ -602,8 +627,14 @@ def produto_editar(request, id_produto):
     nome = request.POST.get('nome_produto', '').strip()
     preco_txt = request.POST.get('preco_produto', '').strip().replace(',', '.')
     descricao = request.POST.get('descricao_produto', '').strip()
+    foto = request.FILES.get('foto')
 
     erros, preco = _validar_nome_preco(nome, preco_txt)
+    
+    if foto:
+        erro_foto = _erro_foto(foto)
+    if erro_foto:
+        erros.append(erro_foto)
 
     if erros:
         for erro in erros:
@@ -614,6 +645,8 @@ def produto_editar(request, id_produto):
     produto.nome_produto = nome
     produto.preco = preco
     produto.descricao = descricao or None
+    if foto:
+        produto.foto = foto
     produto.save()
 
     messages.success(request, 'Produto atualizado com sucesso!')
@@ -635,8 +668,8 @@ def servicos_loja(request):
         # (o nome da variável mudou de 'preco' para 'preco_txt' porque aqui
         # ela ainda é TEXTO; o número de verdade fica na variável 'preco')
         preco_txt = request.POST.get('preco', '').strip().replace(',', '.')
-
         descricao = request.POST.get('descricao', '').strip()
+        foto = request.FILES.get('foto')
 
         # NOVO: lista que acumula os erros encontrados. Só salvamos no banco se ela terminar vazia.
         erros = []
@@ -672,7 +705,12 @@ def servicos_loja(request):
         # Atenção: isso coloca TODO serviço na mesma loja, não importa quem cadastrou.
         # É uma limitação conhecida, só dá para resolver quando existir o vínculo Usuario -> Loja no banco.
         # TODO: trocar pela loja do usuário logado.
-
+        if foto:
+            erro_foto = _erro_foto(foto)
+        if erro_foto:
+            erros.append(erro_foto)
+        
+        
         if loja is None:
             erros.append('Cadastre uma loja antes de cadastrar serviço.')
 
@@ -750,11 +788,18 @@ def loja_editar(request, id_loja):
     cnpj = request.POST.get('cnpj')
     link = request.POST.get('link_loja')
     nome_categoria = request.POST.get('categoria', '').strip() # -> era nescessario que o codigo pegue esse valor para conseguir comparar mais a frente no codigo
+    foto = request.FILES.get('foto_estabelecimento')
 
     erros = []
 
     if not nome:
         erros.append('O nome da loja é obrigatorio.')
+        
+    if foto:
+        erro_foto = _erro_foto(foto)
+    if erro_foto:
+        messages.error(request, erro_foto)
+        return redirect('InformacoesLoja', id_loja=loja.id_loja)
 
     try:
         dados_cep = consultar_cep(cep)
@@ -812,6 +857,8 @@ def loja_editar(request, id_loja):
         loja.telefone_loja = telefone
         loja.cnpj = cnpj
         loja.link = link
+        if foto:
+            loja.foto_estabelecimento = foto
         loja.save()
 
     messages.success(request, 'Sua loja foi atualizada com sucesso!')
@@ -831,9 +878,15 @@ def servico_editar(request, id_servico):
     nome = request.POST.get('nome_servico', '').strip()
     preco_txt = request.POST.get('preco', '').strip().replace(',', '.')
     descricao = request.POST.get('descricao', '').strip()
+    foto = request.FILES.get('foto')
 
     erros, preco = _validar_nome_preco(nome, preco_txt, 'servico') # -> puxa a função de validar preços
 
+    if foto:
+        erro_foto = _erro_foto(foto)
+    if erro_foto:
+        erros.append(erro_foto)
+    
     if erros: # -> verifica erros da tal função
         for erro in erros:
             messages.error(request, erro)
@@ -843,6 +896,8 @@ def servico_editar(request, id_servico):
     servico.nome_servico = nome
     servico.preco = preco
     servico.descricao = descricao or None
+    if foto:
+        servico.foto = foto
     servico.save() # -> salva novamente os dados
 
     messages.success(request, 'Serviço atualizado com sucesso!')

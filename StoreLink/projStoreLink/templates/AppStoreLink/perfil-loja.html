@@ -13,6 +13,14 @@
   <link rel="stylesheet" href="{% static 'AppStoreLink/styles/icons.css' %}">
 </head>
 
+<script>
+  document.querySelectorAll('.produto-card-salvo .produto-imagem-input').forEach(function (input) {
+    input.addEventListener('change', function () {
+      if (input.files.length) input.form.submit();
+    });
+  });
+</script>
+
 <body>
 
   <!-- #region mensagens -->
@@ -245,17 +253,16 @@
               for="foto-estabelecimento"
             >
 
-              <input
-                type="file"
-                id="foto-estabelecimento"
-                accept="image/*"
-                hidden
-              >
+              <input type="file" id="foto-estabelecimento" name="foto_estabelecimento" form="formLoja" accept="image/jpeg,image/png,image/webp" hidden>
 
+              
               <img
                 id="preview-estabelecimento"
                 class="perfil-cover-image"
                 alt="Imagem do estabelecimento"
+                {% if loja.foto_estabelecimento %}
+                  src="{{ loja.foto_estabelecimento.url }}"
+                {% endif %}
               >
 
               <span id="texto-adicionar-imagem">
@@ -301,6 +308,7 @@
               type="submit"
               class="perfil-delete-btn"
               form="formLoja"
+              
             >
               Salvar Loja
             </button>
@@ -334,6 +342,7 @@
             <form
               method="POST"
               id="formLoja"
+              enctype="multipart/form-data"
             >
               {% csrf_token %}
 

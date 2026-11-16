@@ -98,6 +98,7 @@
             id="foto-consumidor"
             name="foto"
             accept="image/jpeg,image/png,image/webp"
+            form="formEditarConsumidor"
             hidden
           >
 
@@ -112,7 +113,7 @@
             <img
               id="preview-consumidor"
               class="consumidor-avatar-image"
-              src="{{ chave_perf_consm.foto }}"
+              src="{{ chave_perf_consm.foto.url }}"
               alt="Foto do consumidor"
             >
           {% else %}
@@ -152,6 +153,7 @@
         action="{% url 'editar-consumidor' %}"
         id="formEditarConsumidor"
         class="consumidor-form-edicao"
+        enctype="multipart/form-data"
       >
         {% csrf_token %}
 
@@ -257,7 +259,7 @@
 
                 {% if favorito.id_loja.foto %}
                   <img
-                    src="{{ favorito.id_loja.foto }}"
+                    src="{{ favorito.id_loja.foto_estabelecimento }}"
                     alt="{{ favorito.id_loja.nome_loja }}"
                   >
                 {% else %}
@@ -376,6 +378,12 @@
 
   <!-- JS geral do projeto -->
   <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
+
+  <script>
+    document.getElementById('foto-consumidor').addEventListener('change', function () {
+      if (this.files.length) document.getElementById('formEditarConsumidor').submit();
+    });
+  </script>
 
 </body>
 </html>
