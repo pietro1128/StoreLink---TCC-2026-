@@ -21,7 +21,7 @@
 
   <link
     rel="stylesheet"
-    href="{% static 'AppStoreLink/styles/catmoda.css' %}"
+    href="{% static 'AppStoreLink/styles/CatModa.css' %}"
   >
 
   <link
@@ -33,6 +33,7 @@
 <body>
 
   <!-- #region Topbar -->
+
   <div class="topbar">
 
     <div class="logo-icon">
@@ -68,6 +69,7 @@
           class="sl-icon sl-user"
           aria-hidden="true"
         ></span>
+
         Minha conta
       </button>
 
@@ -83,6 +85,7 @@
     {% endif %}
 
     <button class="theme-toggle">
+
       <span
         class="sl-icon sl-moon"
         aria-hidden="true"
@@ -91,14 +94,16 @@
       <span class="theme-label">
         Modo escuro
       </span>
+
     </button>
 
   </div>
+
   <!-- #endregion -->
 
 
   <!-- #region sidebar -->
-  <!-- Menu lateral com todas as categorias -->
+
   <div class="sidebar-trigger"></div>
 
   <div class="sidebar">
@@ -174,11 +179,12 @@
     </a>
 
   </div>
+
   <!-- #endregion -->
 
 
   <!-- #region conteúdo -->
-  <!-- Lojas cadastradas na categoria Moda -->
+
   <div class="categoria-container">
 
     <h1 class="categoria-titulo">
@@ -196,7 +202,6 @@
             data-url="{% url 'InformacoesLoja' loja.id_loja %}"
           >
 
-            <!-- Foto e botão de favorito -->
             <div class="loja-card-capa">
 
               {% if loja.foto_estabelecimento %}
@@ -213,6 +218,7 @@
                 method="POST"
                 action="{% url 'favoritar-loja' loja.id_loja %}"
               >
+
                 {% csrf_token %}
 
                 <button
@@ -220,18 +226,18 @@
                   class="loja-card-fav"
                   aria-label="Favoritar"
                 >
+
                   <span
                     class="sl-icon sl-heart"
                     aria-hidden="true"
                   ></span>
+
                 </button>
 
               </form>
 
             </div>
 
-
-            <!-- Informações da loja -->
             <div class="loja-card-corpo">
 
               <h3>
@@ -259,6 +265,7 @@
                     {{ loja.id_endereco.rua }},
                     {{ loja.id_endereco.numero_estabelecimento }}
                   </span>
+
                 </p>
 
               {% endif %}
@@ -280,10 +287,9 @@
     {% endif %}
 
   </div>
+
   <!-- #endregion -->
 
-
-  <!-- JS geral do projeto -->
   <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
 
 </body>

@@ -10,7 +10,7 @@
 
   <link rel="icon" type="image/png" href="{% static 'AppStoreLink/images/icon-dark.png' %}">
   <link rel="stylesheet" href="{% static 'AppStoreLink/styles/style.css' %}">
-  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/catesportes.css' %}">
+  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/CatEsportes.css' %}">
   <link rel="stylesheet" href="{% static 'AppStoreLink/styles/icons.css' %}">
 </head>
 
@@ -83,7 +83,7 @@
 
 
   <!-- #region sidebar -->
-  <!-- Menu lateral com todas as categorias -->
+
   <div class="sidebar-trigger"></div>
 
   <div class="sidebar">
@@ -159,11 +159,12 @@
     </a>
 
   </div>
+
   <!-- #endregion -->
 
 
   <!-- #region conteúdo -->
-  <!-- Lojas cadastradas na categoria Esportes -->
+
   <div class="categoria-container">
 
     <h1 class="categoria-titulo">
@@ -181,7 +182,6 @@
             data-url="{% url 'InformacoesLoja' loja.id_loja %}"
           >
 
-            <!-- Foto e botão de favorito -->
             <div class="loja-card-capa">
 
               {% if loja.foto_estabelecimento %}
@@ -215,8 +215,6 @@
 
             </div>
 
-
-            <!-- Informações da loja -->
             <div class="loja-card-corpo">
 
               <h3>
@@ -265,10 +263,9 @@
     {% endif %}
 
   </div>
+
   <!-- #endregion -->
 
-
-  <!-- JS geral do projeto -->
   <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
 
 </body>

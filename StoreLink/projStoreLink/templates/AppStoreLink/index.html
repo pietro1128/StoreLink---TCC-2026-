@@ -1,68 +1,116 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>StoreLink</title>
 
-  <link rel="icon" type="image/png" href="{% static 'AppStoreLink/images/icon-dark.png' %}">
-  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/style.css' %}">
-  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/mensagens.css' %}">
+  <link
+    rel="icon"
+    type="image/png"
+    href="{% static 'AppStoreLink/images/icon-dark.png' %}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/style.css' %}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/mensagens.css' %}"
+  >
+
+  <link
+    rel="stylesheet"
+    href="{% static 'AppStoreLink/styles/icons.css' %}"
+  >
+
 </head>
 
 <body>
 
   <!-- #region mensagens -->
+
   {% if messages %}
+
     <div class="messages-container">
+
       {% for message in messages %}
+
         <div class="alert alert-{{ message.tags }}">
           {{ message }}
         </div>
+
       {% endfor %}
+
     </div>
+
   {% endif %}
+
   <!-- #endregion -->
 
-
   <!-- #region navbar -->
+
   <div class="topbar">
 
     <div class="logo-icon">
+
       <img
         src="{% static 'AppStoreLink/images/icon-dark.png' %}"
         alt="StoreLink"
       >
+
     </div>
 
-    <a class="nav-btn active" href="{% url 'index' %}">
+    <a
+      class="nav-btn active"
+      href="{% url 'index' %}"
+    >
       Início
     </a>
 
-    <a class="nav-btn" href="{% url 'perfil-loja' %}">
+    <a
+      class="nav-btn"
+      href="{% url 'perfil-loja' %}"
+    >
       Sua loja
     </a>
 
-    <a class="nav-btn" href="{% url 'suporte' %}">
+    <a
+      class="nav-btn"
+      href="{% url 'suporte' %}"
+    >
       Suporte
     </a>
 
-    <a class="nav-btn" href="{% url 'tutorial' %}">
+    <a
+      class="nav-btn"
+      href="{% url 'tutorial' %}"
+    >
       Como navegar?
     </a>
 
     {% if usuario_logado %}
+
       <button
         type="button"
         class="nav-account-btn"
         data-url="{% url 'perfil-consumidor' %}"
       >
-        <i class="bi bi-person-circle" aria-hidden="true"></i>
+        <span
+          class="sl-icon sl-user"
+          aria-hidden="true"
+        ></span>
+
         Minha conta
       </button>
+
     {% else %}
+
       <button
         type="button"
         class="nav-account-btn"
@@ -70,22 +118,29 @@
       >
         Criar conta ou Entrar
       </button>
+
     {% endif %}
 
     <button
       type="button"
       class="theme-toggle"
     >
-      <i class="bi bi-moon-fill" aria-hidden="true"></i>
-      <span class="theme-label">Modo escuro</span>
+      <span
+        class="sl-icon sl-moon"
+        aria-hidden="true"
+      ></span>
+
+      <span class="theme-label">
+        Modo escuro
+      </span>
     </button>
 
   </div>
+
   <!-- #endregion -->
 
-
   <!-- #region sidebar -->
-  <!-- Menu lateral com todas as categorias -->
+
   <div class="sidebar-trigger"></div>
 
   <div class="sidebar">
@@ -161,12 +216,12 @@
     </a>
 
   </div>
+
   <!-- #endregion -->
 
+  <!-- #region pesquisa -->
 
-  <!-- #region conteúdo principal -->
-  <!-- Logo e barra de pesquisa da página inicial -->
-  <main class="main">
+  <div class="main">
 
     <img
       class="logo-img logo-light"
@@ -191,6 +246,7 @@
         class="search-icon-btn"
         aria-label="Pesquisar"
       >
+
         <svg
           viewBox="0 0 24 24"
           fill="none"
@@ -198,9 +254,22 @@
           stroke-linecap="round"
           stroke-linejoin="round"
         >
-          <circle cx="11" cy="11" r="7"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+
+          <circle
+            cx="11"
+            cy="11"
+            r="7"
+          ></circle>
+
+          <line
+            x1="21"
+            y1="21"
+            x2="16.65"
+            y2="16.65"
+          ></line>
+
         </svg>
+
       </button>
 
       <input
@@ -217,12 +286,14 @@
       Pesquise alguma loja ou produto que deseje...
     </div>
 
-  </main>
+  </div>
+
   <!-- #endregion -->
 
-
   <!-- JS geral do projeto -->
+
   <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
 
 </body>
+
 </html>
