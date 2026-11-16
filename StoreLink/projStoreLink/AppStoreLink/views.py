@@ -1029,6 +1029,24 @@ def avaliacao_criar(request, tipo, id_alvo):
     messages.success(request, 'Avaliação salva com sucesso!')
     return _voltar(request)
 
+@require_POST
+def avaliacao_excluir(request, id_avaliacao):
+    usuario_id = request.session.get('usuario_id')
+
+    if not usuario_id:
+        messages.error(request, 'Você precisa fazer login para excluir o comentário.')
+        return redirect('login')
+
+    avaliacao = get_object_or_404(Avaliacao, pk=id_avaliacao)
+
+    if avaliacao.id_usuario_id != usuario_id: # -> só quem escreveu o comentário pode apagar
+        messages.error(request, 'Você não tem permissão para excluir este comentário.')
+        return _voltar(request)
+
+    avaliacao.delete()
+
+    messages.success(request, 'Comentário excluído com sucesso!')
+    return _voltar(request)
 
 # region PÁGINAS DE INFORMAÇÕES
 

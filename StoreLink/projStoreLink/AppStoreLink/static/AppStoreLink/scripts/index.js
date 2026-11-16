@@ -602,3 +602,28 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 });
+
+
+document.querySelectorAll('.info-comentario-card').forEach(function (card) {
+  var edicao = card.querySelector('.info-comentario-edicao');
+  if (!edicao) return; // comentário de outra pessoa, não tem botões
+
+  var texto = card.querySelector(':scope > p');
+  var acoes = card.querySelector('.info-comentario-acoes');
+  var btnEditar = card.querySelector('.info-comentario-editar');
+  var btnCancelar = card.querySelector('.info-edicao-cancelar');
+
+  edicao.style.display = 'none'; // começa escondido
+
+  btnEditar.addEventListener('click', function () {
+    texto.style.display = 'none';
+    acoes.style.display = 'none';
+    edicao.style.display = 'block';
+  });
+
+  btnCancelar.addEventListener('click', function () {
+    edicao.style.display = 'none';
+    texto.style.display = '';
+    acoes.style.display = '';
+  });
+});

@@ -636,109 +636,50 @@
 
                 <div class="info-comentario-acoes">
 
-                  <button
-                    type="button"
-                    class="info-comentario-editar"
-                  >
+                  <button type="button" class="info-comentario-editar">
                     <span class="sl-icon sl-pencil" aria-hidden="true"></span> Editar
                   </button>
 
-                  <button
-                    type="button"
-                    class="info-comentario-excluir" data-confirm-click="Deseja excluir este comentário?"
-                  >
-                    <span class="sl-icon sl-trash" aria-hidden="true"></span> Excluir
-                  </button>
+                  <form method="POST" action="{% url 'avaliacao-excluir' avaliacao.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="info-comentario-excluir" data-confirm-click="Deseja excluir este comentário?">
+                      <span class="sl-icon sl-trash" aria-hidden="true"></span> Excluir
+                    </button>
+                  </form>
 
                 </div>
 
-                <div class="info-comentario-edicao">
+                <form method="POST" action="{% url 'avaliar-loja' loja.id_loja %}" class="info-comentario-edicao">
+                  {% csrf_token %}
 
-                  <label>
-                    Nota
-                  </label>
+                  <label>Nota</label>
 
                   <div class="info-estrelas info-estrelas-edicao">
-
-                    <input
-                      type="radio"
-                      id="edit-{{ avaliacao.pk }}-5"
-                      name="nota-{{ avaliacao.pk }}"
-                      value="5"
-                      {% if avaliacao.nota == 5 %}checked{% endif %}
-                    >
-
+                    <input type="radio" id="edit-{{ avaliacao.pk }}-5" name="nota" value="5" {% if avaliacao.nota == 5 %}checked{% endif %}>
                     <label for="edit-{{ avaliacao.pk }}-5"><span class="sl-icon sl-star-fill" aria-hidden="true"></span></label>
 
-                    <input
-                      type="radio"
-                      id="edit-{{ avaliacao.pk }}-4"
-                      name="nota-{{ avaliacao.pk }}"
-                      value="4"
-                      {% if avaliacao.nota == 4 %}checked{% endif %}
-                    >
-
+                    <input type="radio" id="edit-{{ avaliacao.pk }}-4" name="nota" value="4" {% if avaliacao.nota == 4 %}checked{% endif %}>
                     <label for="edit-{{ avaliacao.pk }}-4"><span class="sl-icon sl-star-fill" aria-hidden="true"></span></label>
 
-                    <input
-                      type="radio"
-                      id="edit-{{ avaliacao.pk }}-3"
-                      name="nota-{{ avaliacao.pk }}"
-                      value="3"
-                      {% if avaliacao.nota == 3 %}checked{% endif %}
-                    >
-
+                    <input type="radio" id="edit-{{ avaliacao.pk }}-3" name="nota" value="3" {% if avaliacao.nota == 3 %}checked{% endif %}>
                     <label for="edit-{{ avaliacao.pk }}-3"><span class="sl-icon sl-star-fill" aria-hidden="true"></span></label>
 
-                    <input
-                      type="radio"
-                      id="edit-{{ avaliacao.pk }}-2"
-                      name="nota-{{ avaliacao.pk }}"
-                      value="2"
-                      {% if avaliacao.nota == 2 %}checked{% endif %}
-                    >
-
+                    <input type="radio" id="edit-{{ avaliacao.pk }}-2" name="nota" value="2" {% if avaliacao.nota == 2 %}checked{% endif %}>
                     <label for="edit-{{ avaliacao.pk }}-2"><span class="sl-icon sl-star-fill" aria-hidden="true"></span></label>
 
-                    <input
-                      type="radio"
-                      id="edit-{{ avaliacao.pk }}-1"
-                      name="nota-{{ avaliacao.pk }}"
-                      value="1"
-                      {% if avaliacao.nota == 1 %}checked{% endif %}
-                    >
-
+                    <input type="radio" id="edit-{{ avaliacao.pk }}-1" name="nota" value="1" {% if avaliacao.nota == 1 %}checked{% endif %}>
                     <label for="edit-{{ avaliacao.pk }}-1"><span class="sl-icon sl-star-fill" aria-hidden="true"></span></label>
-
                   </div>
 
-                  <label>
-                    Comentário
-                  </label>
+                  <label>Comentário</label>
 
-                  <textarea
-                    maxlength="1000"
-                  >{{ avaliacao.comentario|default:'' }}</textarea>
+                  <textarea name="comentario" maxlength="1000" required>{{ avaliacao.comentario|default:'' }}</textarea>
 
                   <div class="info-edicao-acoes">
-
-                    <button
-                      type="button"
-                      class="info-edicao-salvar"
-                    >
-                      Salvar
-                    </button>
-
-                    <button
-                      type="button"
-                      class="info-edicao-cancelar"
-                    >
-                      Cancelar
-                    </button>
-
+                    <button type="submit" class="info-edicao-salvar">Salvar</button>
+                    <button type="button" class="info-edicao-cancelar">Cancelar</button>
                   </div>
-
-                </div>
+                </form>
 
               {% endif %}
 

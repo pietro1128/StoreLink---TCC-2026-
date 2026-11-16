@@ -69,6 +69,8 @@ urlpatterns = [
     path('api/cep/<str:cep>/', views.api_cep, name='api-cep'),
 
     path('logout/', views.logout_view, name='logout'),
+    
+    path('avaliacao/<int:id_avaliacao>/excluir/', views.avaliacao_excluir, name='avaliacao-excluir'),
 
     path('loja/<int:id_loja>/', views.InformacoesLoja, name='InformacoesLoja'),
     path('loja/<int:id_loja>/editar/', views.loja_editar, name='loja-editar'),
