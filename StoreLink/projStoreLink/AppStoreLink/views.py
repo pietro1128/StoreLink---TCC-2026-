@@ -185,6 +185,7 @@ def editar_consumidor(request):
     nome = request.POST.get('nome', '').strip()
     sobrenome = request.POST.get('sobrenome', '').strip() or None
     foto = request.FILES.get('foto')
+    erro_foto = None
 
     if not nome:
         messages.error(request, 'O consumidor precisa ter um nome.')
@@ -583,6 +584,7 @@ def produto_criar(request):
     descricao = request.POST.get('descricao_produto', '').strip()
     id_categoria = request.POST.get('id_categoria', '')
     foto = request.FILES.get('foto')
+    erro_foto = None
 
     erros, preco = _validar_nome_preco(nome, preco_txt)
     
@@ -618,6 +620,7 @@ def produto_criar(request):
         descricao=descricao or None,
         id_loja=loja,
         id_categoria=categoria,
+        foto=foto,
     )
 
     messages.success(request, 'Produto cadastrado com sucesso!')
@@ -640,6 +643,7 @@ def produto_editar(request, id_produto):
     preco_txt = request.POST.get('preco_produto', '').strip().replace(',', '.')
     descricao = request.POST.get('descricao_produto', '').strip()
     foto = request.FILES.get('foto')
+    erro_foto = None
 
     erros, preco = _validar_nome_preco(nome, preco_txt)
     
@@ -682,6 +686,7 @@ def servicos_loja(request):
         preco_txt = request.POST.get('preco', '').strip().replace(',', '.')
         descricao = request.POST.get('descricao', '').strip()
         foto = request.FILES.get('foto')
+        erro_foto = None
         # NOVO: lista que acumula os erros encontrados. Só salvamos no banco se ela terminar vazia.
         erros = []
 
@@ -800,6 +805,7 @@ def loja_editar(request, id_loja):
     link = request.POST.get('link_loja')
     nome_categoria = request.POST.get('categoria', '').strip() # -> era nescessario que o codigo pegue esse valor para conseguir comparar mais a frente no codigo
     foto = request.FILES.get('foto_estabelecimento')
+    erro_foto = None
 
     erros = []
 
@@ -911,6 +917,7 @@ def servico_editar(request, id_servico):
     preco_txt = request.POST.get('preco', '').strip().replace(',', '.')
     descricao = request.POST.get('descricao', '').strip()
     foto = request.FILES.get('foto')
+    erro_foto = None
 
     erros, preco = _validar_nome_preco(nome, preco_txt, 'servico') # -> puxa a função de validar preços
 
@@ -1024,6 +1031,47 @@ def _voltar(request):
 def _eh_dono(request, loja):
     usuario_id = request.session.get('usuario_id')
     return usuario_id is not None and loja.id_dono_id == usuario_id
+
+@require_POST
+def loja_foto_atualizar(request, id_loja):
+    if not request.session.get('usuario_id'):
+        messages.error(request, 'Você precisa fazer login para alterar a foto da loja.')
+        return redirect('login')
+
+    loja = get_object_or_404(Loja, id_loja=id_loja)
+
+    if not _eh_dono(request, loja):
+        messages.error(request, 'Você não tem permissão para alterar a foto desta loja.')
+        return redirect('InformacoesLoja', id_loja=loja.id_loja)
+
+    if request.POST.get('remover_foto') == '1':
+        if loja.foto_estabelecimento:
+            loja.foto_estabelecimento.delete(save=False)
+            loja.foto_estabelecimento = None
+            loja.save(update_fields=['foto_estabelecimento'])
+
+        messages.success(request, 'Imagem da loja removida com sucesso!')
+        return _voltar(request)
+
+    foto = request.FILES.get('foto_estabelecimento')
+
+    if not foto:
+        messages.error(request, 'Selecione uma imagem para a loja.')
+        return _voltar(request)
+
+    erro_foto = _erro_foto(foto)
+    if erro_foto:
+        messages.error(request, erro_foto)
+        return _voltar(request)
+
+    if loja.foto_estabelecimento:
+        loja.foto_estabelecimento.delete(save=False)
+
+    loja.foto_estabelecimento = foto
+    loja.save(update_fields=['foto_estabelecimento'])
+
+    messages.success(request, 'Imagem da loja atualizada com sucesso!')
+    return _voltar(request)
 
 @require_POST
 def avaliacao_criar(request, tipo, id_alvo):

@@ -1428,6 +1428,89 @@ body.dark
 
 /* #endregion */
 
+
+/* #region EDIÇÃO DA FOTO DA LOJA */
+
+.info-loja-foto-form {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: rgba(0, 0, 0, 0.22);
+  pointer-events: none;
+}
+
+.info-loja-card.editando
+.info-loja-foto-form {
+  display: block;
+}
+
+.info-loja-card.editando
+.info-favoritar {
+  display: none;
+}
+
+.info-loja-foto-acoes {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  pointer-events: auto;
+}
+
+.info-loja-foto:not(.tem-imagem)
+.info-loja-foto-acoes {
+  top: 50%;
+  right: 50%;
+  bottom: auto;
+  transform: translate(50%, -50%);
+}
+
+.info-loja-foto-btn {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  flex: 0 0 40px;
+  border: none;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #ffffff;
+  color: var(--cor-categoria);
+  font-family: inherit;
+  font-size: 0;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.28);
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease;
+}
+
+.info-loja-foto-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(0.94);
+}
+
+.info-loja-foto-remover {
+  background: #202020;
+  color: #ffffff;
+}
+
+.info-loja-foto-btn .sl-icon {
+  font-size: 17px;
+}
+
+body.dark
+.info-loja-foto-form {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+/* #endregion */
+
 /* #region icones */
 
 .info-voltar .sl-icon {

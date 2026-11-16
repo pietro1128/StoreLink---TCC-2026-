@@ -280,7 +280,7 @@
 
                   {% if loja.foto_estabelecimento %}
                     <img
-                      src="{{ loja.foto_estabelecimento }}"
+                      src="{{ loja.foto_estabelecimento.url }}"
                       alt="{{ loja.nome_loja }}"
                       class="resultado-card-imagem"
                     >
@@ -414,7 +414,7 @@
                   {% if produto.foto %}
 
                     <img
-                      src="{{ produto.foto }}"
+                      src="{{ produto.foto.url }}"
                       alt="{{ produto.nome_produto }}"
                       class="resultado-card-imagem"
                     >
@@ -530,7 +530,7 @@
                   {% if servico.foto %}
 
                     <img
-                      src="{{ servico.foto }}"
+                      src="{{ servico.foto.url }}"
                       alt="{{ servico.nome_servico }}"
                       class="resultado-card-imagem"
                     >

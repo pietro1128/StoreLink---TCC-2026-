@@ -248,32 +248,109 @@
           <div class="perfil-card-left">
 
             <!-- Foto principal da loja -->
-            <label
-              class="perfil-cover"
-              for="foto-estabelecimento"
-            >
+            {% if loja %}
 
-              <input type="file" id="foto-estabelecimento" name="foto_estabelecimento" form="formLoja" accept="image/jpeg,image/png,image/webp" hidden>
-
-              
-              <img
-                id="preview-estabelecimento"
-                class="perfil-cover-image"
-                alt="Imagem do estabelecimento"
-                {% if loja.foto_estabelecimento %}
-                  src="{{ loja.foto_estabelecimento.url }}"
-                {% endif %}
+              <div
+                class="perfil-cover {% if loja.foto_estabelecimento %}tem-imagem{% endif %}"
               >
 
-              <span id="texto-adicionar-imagem">
-                <span
-                  class="sl-icon sl-camera-plus"
-                  aria-hidden="true"
-                ></span>
-                Adicionar imagem
-              </span>
+                <img
+                  id="preview-estabelecimento"
+                  class="perfil-cover-image"
+                  alt="Imagem do estabelecimento"
+                  {% if loja.foto_estabelecimento %}
+                    src="{{ loja.foto_estabelecimento.url }}"
+                  {% endif %}
+                >
 
-            </label>
+                <form
+                  method="POST"
+                  action="{% url 'loja-foto-atualizar' loja.id_loja %}"
+                  enctype="multipart/form-data"
+                  class="perfil-foto-form"
+                >
+                  {% csrf_token %}
+
+                  <input
+                    type="file"
+                    id="foto-estabelecimento"
+                    name="foto_estabelecimento"
+                    class="loja-foto-input-auto"
+                    accept="image/jpeg,image/png,image/webp"
+                    hidden
+                  >
+
+                  <div class="perfil-foto-acoes">
+
+                    <label
+                      class="perfil-foto-btn"
+                      for="foto-estabelecimento"
+                      title="{% if loja.foto_estabelecimento %}Trocar imagem{% else %}Adicionar imagem{% endif %}"
+                      aria-label="{% if loja.foto_estabelecimento %}Trocar imagem{% else %}Adicionar imagem{% endif %}"
+                    >
+                      <span
+                        class="sl-icon {% if loja.foto_estabelecimento %}sl-camera{% else %}sl-camera-plus{% endif %}"
+                        aria-hidden="true"
+                      ></span>
+
+                      {% if loja.foto_estabelecimento %}
+                        Trocar imagem
+                      {% else %}
+                        Adicionar imagem
+                      {% endif %}
+                    </label>
+
+                    {% if loja.foto_estabelecimento %}
+                      <button
+                        type="submit"
+                        name="remover_foto"
+                        value="1"
+                        class="perfil-foto-btn perfil-foto-remover"
+                        data-confirm-click="Deseja remover a imagem desta loja?"
+                        title="Remover imagem"
+                        aria-label="Remover imagem"
+                      >
+                        <span
+                          class="sl-icon sl-trash"
+                          aria-hidden="true"
+                        ></span>
+                        Remover imagem
+                      </button>
+                    {% endif %}
+
+                  </div>
+
+                </form>
+
+              </div>
+
+            {% else %}
+
+              <label
+                class="perfil-cover"
+                for="foto-estabelecimento"
+              >
+
+                <input type="file" id="foto-estabelecimento" name="foto_estabelecimento" form="formLoja" accept="image/jpeg,image/png,image/webp" hidden>
+
+                
+                <img
+                  id="preview-estabelecimento"
+                  class="perfil-cover-image"
+                  alt="Imagem do estabelecimento"
+                >
+
+                <span id="texto-adicionar-imagem">
+                  <span
+                    class="sl-icon sl-camera-plus"
+                    aria-hidden="true"
+                  ></span>
+                  Adicionar imagem
+                </span>
+
+              </label>
+
+            {% endif %}
 
 
             <!-- Atalhos para editar produtos e serviços -->

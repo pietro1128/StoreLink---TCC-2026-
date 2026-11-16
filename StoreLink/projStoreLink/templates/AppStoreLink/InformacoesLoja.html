@@ -164,12 +164,12 @@
 
         <div class="info-loja-esquerda">
 
-          <div class="info-loja-foto">
+          <div class="info-loja-foto {% if loja.foto_estabelecimento %}tem-imagem{% endif %}">
 
             {% if loja.foto_estabelecimento %}
 
               <img
-                src="{{ loja.foto_estabelecimento }}"
+                src="{{ loja.foto_estabelecimento.url }}"
                 alt="{{ loja.nome_loja }}"
               >
 
@@ -185,6 +185,69 @@
               <div class="info-sem-imagem">
                 Sem imagem cadastrada
               </div>
+
+            {% endif %}
+
+            {% if eh_dono %}
+
+              <form
+                method="POST"
+                action="{% url 'loja-foto-atualizar' loja.id_loja %}"
+                enctype="multipart/form-data"
+                class="info-loja-foto-form"
+              >
+                {% csrf_token %}
+
+                <input
+                  type="file"
+                  id="foto-estabelecimento-info"
+                  name="foto_estabelecimento"
+                  class="loja-foto-input-auto"
+                  accept="image/jpeg,image/png,image/webp"
+                  hidden
+                >
+
+                <div class="info-loja-foto-acoes">
+
+                  <label
+                    class="info-loja-foto-btn"
+                    for="foto-estabelecimento-info"
+                    title="{% if loja.foto_estabelecimento %}Trocar imagem{% else %}Adicionar imagem{% endif %}"
+                    aria-label="{% if loja.foto_estabelecimento %}Trocar imagem{% else %}Adicionar imagem{% endif %}"
+                  >
+                    <span
+                      class="sl-icon {% if loja.foto_estabelecimento %}sl-camera{% else %}sl-camera-plus{% endif %}"
+                      aria-hidden="true"
+                    ></span>
+
+                    {% if loja.foto_estabelecimento %}
+                      Trocar imagem
+                    {% else %}
+                      Adicionar imagem
+                    {% endif %}
+                  </label>
+
+                  {% if loja.foto_estabelecimento %}
+                    <button
+                      type="submit"
+                      name="remover_foto"
+                      value="1"
+                      class="info-loja-foto-btn info-loja-foto-remover"
+                      data-confirm-click="Deseja remover a imagem desta loja?"
+                      title="Remover imagem"
+                      aria-label="Remover imagem"
+                    >
+                      <span
+                        class="sl-icon sl-trash"
+                        aria-hidden="true"
+                      ></span>
+                      Remover imagem
+                    </button>
+                  {% endif %}
+
+                </div>
+
+              </form>
 
             {% endif %}
 
@@ -244,8 +307,6 @@
                   <span class="sl-icon sl-trash" aria-hidden="true"></span> EXCLUIR LOJA
                 </button>
               </form>
-                <span class="sl-icon sl-trash" aria-hidden="true"></span> EXCLUIR LOJA
-              </button>
 
             </div>
 

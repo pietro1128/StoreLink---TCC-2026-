@@ -398,10 +398,21 @@ function abrirEdicaoItem(botao, tipo) {
   card.classList.add('editando');
 }
 
-function abrirEdicaoProduto(botao) { abrirEdicaoItem(botao, 'produto'); }
-function abrirEdicaoServico(botao) { abrirEdicaoItem(botao, 'servico'); }
-function cancelarEdicaoProduto(botao) { botao?.closest('.info-produto-card')?.classList.remove('editando'); }
-function cancelarEdicaoServico(botao) { botao?.closest('.info-servico-card')?.classList.remove('editando'); }
+function abrirEdicaoProduto(botao) {
+  abrirEdicaoItem(botao, 'produto');
+}
+
+function abrirEdicaoServico(botao) {
+  abrirEdicaoItem(botao, 'servico');
+}
+
+function cancelarEdicaoProduto(botao) {
+  botao?.closest('.info-produto-card')?.classList.remove('editando');
+}
+
+function cancelarEdicaoServico(botao) {
+  botao?.closest('.info-servico-card')?.classList.remove('editando');
+}
 //#endregion
 
 //#region FAVORITOS
@@ -430,15 +441,22 @@ async function carregarFavoritos() {
   if (!document.querySelector('form[action*="/favoritar/"]')) return;
 
   try {
-    const resposta = await fetch('/perfil-consumidor/', { method: 'GET', credentials: 'same-origin', cache: 'no-store' });
+    const resposta = await fetch('/perfil-consumidor/', {
+      method: 'GET',
+      credentials: 'same-origin',
+      cache: 'no-store'
+    });
+
     if (!resposta.ok) return;
 
     const documento = new DOMParser().parseFromString(await resposta.text(), 'text/html');
     const favoritos = [];
+
     documento.querySelectorAll('form[action*="/favoritar/"]').forEach(form => {
       const id = pegarIdLojaFavorito(form);
       if (id && !favoritos.includes(id)) favoritos.push(id);
     });
+
     atualizarCoracoesFavoritos(favoritos);
   } catch (_) {
     // Se não der para consultar, o coração fica no estado que veio do HTML.
@@ -462,6 +480,12 @@ function iniciarEventos() {
     const editarConsumidorBtn = alvo.closest('.consumidor-editar-btn');
     if (editarConsumidorBtn) {
       editarConsumidor(editarConsumidorBtn);
+      return;
+    }
+
+    const editarLoja = alvo.closest('.info-editar-loja');
+    if (editarLoja) {
+      abrirEdicaoLoja(editarLoja);
       return;
     }
 
@@ -540,6 +564,7 @@ function iniciarEventos() {
   document.addEventListener('change', evento => {
     const alvo = evento.target;
     if (!(alvo instanceof Element)) return;
+
     if (alvo.matches('.produto-categoria-select')) atualizarCategoriaProduto(alvo);
     if (alvo.matches('.servico-categoria-select')) atualizarCategoriaServico(alvo);
   });
@@ -547,6 +572,7 @@ function iniciarEventos() {
   document.addEventListener('submit', evento => {
     const form = evento.target;
     if (!(form instanceof HTMLFormElement) || !form.dataset.confirm) return;
+
     if (!confirm(form.dataset.confirm)) evento.preventDefault();
   });
 
@@ -562,7 +588,7 @@ function iniciarPagina() {
   iniciarTema();
   iniciarEventos();
   iniciarImagens();
-  iniciarEnvioAutomaticoFotos();   
+  iniciarEnvioAutomaticoFotos();
   iniciarClassificacaoLoja();
   iniciarCep();
   carregarFavoritos();
@@ -604,7 +630,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
 
-
 document.querySelectorAll('.info-comentario-card').forEach(function (card) {
   var edicao = card.querySelector('.info-comentario-edicao');
   if (!edicao) return; // comentário de outra pessoa, não tem botões
@@ -629,29 +654,27 @@ document.querySelectorAll('.info-comentario-card').forEach(function (card) {
   });
 });
 
-
 document.querySelectorAll('.info-servico-card').forEach(function (card) {
-    var editar = card.querySelector('.info-item-editar');
-    var cancelar = card.querySelector('.info-edicao-cancelar');
-    var visualizacao = card.querySelector('.info-item-visualizacao');
-    var edicao = card.querySelector('.info-item-edicao');
+  var editar = card.querySelector('.info-item-editar');
+  var cancelar = card.querySelector('.info-edicao-cancelar');
+  var visualizacao = card.querySelector('.info-item-visualizacao');
+  var edicao = card.querySelector('.info-item-edicao');
 
-    if (!editar || !edicao) return;
+  if (!editar || !edicao) return;
 
-    editar.addEventListener('click', function () {
-      visualizacao.style.display = 'none';   // esconde os textos
-      edicao.style.display = 'block';        // mostra os campos para editar
-    });
-
-    cancelar.addEventListener('click', function () {
-      edicao.reset();                        // desfaz o que foi digitado
-      edicao.style.display = '';             // volta ao padrão do CSS
-      visualizacao.style.display = '';
-    });
+  editar.addEventListener('click', function () {
+    visualizacao.style.display = 'none';   // esconde os textos
+    edicao.style.display = 'block';        // mostra os campos para editar
   });
 
+  cancelar.addEventListener('click', function () {
+    edicao.reset();                        // desfaz o que foi digitado
+    edicao.style.display = '';             // volta ao padrão do CSS
+    visualizacao.style.display = '';
+  });
+});
 
-  //#region SALVAR FOTO AUTOMATICAMENTE
+//#region SALVAR FOTO AUTOMATICAMENTE
 // Quando a pessoa escolhe uma foto numa tela de edição, o formulário é enviado na hora.
 function iniciarEnvioAutomaticoFotos() {
   // Foto do perfil do consumidor
@@ -672,5 +695,13 @@ function iniciarEnvioAutomaticoFotos() {
       if (input.files.length && input.form) input.form.submit();
     });
   });
+
+  // Foto principal da loja já cadastrada
+  document.querySelectorAll('.loja-foto-input-auto').forEach(function (input) {
+    input.addEventListener('change', function () {
+      if (input.files.length && input.form) input.form.submit();
+    });
+  });
 }
-//#endregion
+//#endregiongit restore --staged StoreLink/projStoreLink/AppStoreLink/__pycache__/urls.cpython-313.pyc
+git restore --staged StoreLink/projStoreLink/AppStoreLink/__pycache__/views.cpython-313.pyc

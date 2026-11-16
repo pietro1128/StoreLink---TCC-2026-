@@ -259,7 +259,7 @@
 
                 {% if favorito.id_loja.foto %}
                   <img
-                    src="{{ favorito.id_loja.foto_estabelecimento }}"
+                    src="{{ favorito.id_loja.foto_estabelecimento.url }}"
                     alt="{{ favorito.id_loja.nome_loja }}"
                   >
                 {% else %}
