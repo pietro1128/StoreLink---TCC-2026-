@@ -27,8 +27,6 @@ def _erro_foto(arquivo):
         return e.messages[0]
     return None
 
-
-
 def index(request):
     return render(request, 'AppStoreLink/index.html')
 
@@ -149,6 +147,7 @@ def perfil_loja(request):
             email_loja=email,
             telefone_loja=telefone,
             cnpj=cnpj,
+            foto_estabelecimento=foto,
             link=link
         )
 
@@ -185,10 +184,18 @@ def editar_consumidor(request):
 
     nome = request.POST.get('nome', '').strip()
     sobrenome = request.POST.get('sobrenome', '').strip() or None
+    foto = request.FILES.get('foto')
 
     if not nome:
         messages.error(request, 'O consumidor precisa ter um nome.')
         return redirect('perfil-consumidor')
+    
+    if foto:
+        erro_foto = _erro_foto(foto)
+    if erro_foto:
+        messages.error(request, erro_foto)
+        return redirect('perfil-consumidor')
+    usuario.foto = foto
 
     usuario.nome = nome
     usuario.sobrenome = sobrenome
@@ -575,8 +582,14 @@ def produto_criar(request):
     preco_txt = request.POST.get('preco_produto', '').strip().replace(',', '.')
     descricao = request.POST.get('descricao_produto', '').strip()
     id_categoria = request.POST.get('id_categoria', '')
+    foto = request.FILES.get('foto')
 
     erros, preco = _validar_nome_preco(nome, preco_txt)
+    
+    if foto:
+        erro_foto = _erro_foto(foto)
+    if erro_foto:
+        erros.append(erro_foto)
 
     # A categoria é obrigatória no model e o POST pode ser forjado, então confere no banco
     categoria = None
@@ -626,8 +639,14 @@ def produto_editar(request, id_produto):
     nome = request.POST.get('nome_produto', '').strip()
     preco_txt = request.POST.get('preco_produto', '').strip().replace(',', '.')
     descricao = request.POST.get('descricao_produto', '').strip()
+    foto = request.FILES.get('foto')
 
     erros, preco = _validar_nome_preco(nome, preco_txt)
+    
+    if foto:
+        erro_foto = _erro_foto(foto)
+    if erro_foto:
+        erros.append(erro_foto)
 
     if erros:
         for erro in erros:
@@ -638,6 +657,8 @@ def produto_editar(request, id_produto):
     produto.nome_produto = nome
     produto.preco = preco
     produto.descricao = descricao or None
+    if foto:
+        produto.foto = foto
     produto.save()
 
     messages.success(request, 'Produto atualizado com sucesso!')
@@ -659,9 +680,8 @@ def servicos_loja(request):
         # (o nome da variável mudou de 'preco' para 'preco_txt' porque aqui
         # ela ainda é TEXTO; o número de verdade fica na variável 'preco')
         preco_txt = request.POST.get('preco', '').strip().replace(',', '.')
-
         descricao = request.POST.get('descricao', '').strip()
-
+        foto = request.FILES.get('foto')
         # NOVO: lista que acumula os erros encontrados. Só salvamos no banco se ela terminar vazia.
         erros = []
 
@@ -691,11 +711,15 @@ def servicos_loja(request):
 
         except InvalidOperation:
             erros.append('Informe um preço válido (exemplo: 50,00).')
-
         # MANTIDO da versão original: pega a primeira loja do banco.
         # Atenção: isso coloca TODO serviço na mesma loja, não importa quem cadastrou.
         # É uma limitação conhecida, só dá para resolver quando existir o vínculo Usuario -> Loja no banco.
         # TODO: trocar pela loja do usuário logado.
+
+        if foto:
+            erro_foto = _erro_foto(foto)
+        if erro_foto:
+            erros.append(erro_foto)
 
         if loja is None:
             erros.append('Cadastre uma loja antes de cadastrar serviço.')
@@ -718,6 +742,7 @@ def servicos_loja(request):
             # ('') é salvo como None para manter o banco consistente.
             descricao=descricao or None,
             id_loja=loja,
+            foto=foto,
         )
 
         messages.success(request, 'Serviço cadastrado com sucesso!')
@@ -774,11 +799,18 @@ def loja_editar(request, id_loja):
     cnpj = request.POST.get('cnpj')
     link = request.POST.get('link_loja')
     nome_categoria = request.POST.get('categoria', '').strip() # -> era nescessario que o codigo pegue esse valor para conseguir comparar mais a frente no codigo
+    foto = request.FILES.get('foto_estabelecimento')
 
     erros = []
 
     if not nome:
         erros.append('O nome da loja é obrigatorio.')
+        
+    if foto:
+        erro_foto = _erro_foto(foto)
+    if erro_foto:
+        messages.error(request, erro_foto)
+        return redirect('InformacoesLoja', id_loja=loja.id_loja)
 
     try:
         dados_cep = consultar_cep(cep)
@@ -833,6 +865,12 @@ def loja_editar(request, id_loja):
         messages.error(request, 'Selecione uma categoria válida.')
         return render(request, 'AppStoreLink/perfil-loja.html')
 
+    if foto:
+        erro_foto = _erro_foto(foto)
+    if erro_foto:
+        messages.error(request, erro_foto)
+        return render(request, 'AppStoreLink/perfil-loja.html')
+    
     # Depois de todas as validações, edita endereço e loja:
     with transaction.atomic():
         endereco = loja.id_endereco
@@ -847,6 +885,8 @@ def loja_editar(request, id_loja):
         loja.telefone_loja = telefone
         loja.cnpj = cnpj
         loja.link = link
+        if foto:
+            loja.foto_estabelecimento = foto
         loja.save()
 
     messages.success(request, 'Sua loja foi atualizada com sucesso!')
@@ -870,8 +910,14 @@ def servico_editar(request, id_servico):
     nome = request.POST.get('nome_servico', '').strip()
     preco_txt = request.POST.get('preco', '').strip().replace(',', '.')
     descricao = request.POST.get('descricao', '').strip()
+    foto = request.FILES.get('foto')
 
     erros, preco = _validar_nome_preco(nome, preco_txt, 'servico') # -> puxa a função de validar preços
+
+    if foto:
+        erro_foto = _erro_foto(foto)
+    if erro_foto:
+        erros.append(erro_foto)
 
     if erros: # -> verifica erros da tal função
         for erro in erros:
@@ -882,6 +928,8 @@ def servico_editar(request, id_servico):
     servico.nome_servico = nome
     servico.preco = preco
     servico.descricao = descricao or None
+    if foto:
+        servico.foto = foto
     servico.save() # -> salva novamente os dados
 
     messages.success(request, 'Serviço atualizado com sucesso!')

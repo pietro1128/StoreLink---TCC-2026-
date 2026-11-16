@@ -562,6 +562,7 @@ function iniciarPagina() {
   iniciarTema();
   iniciarEventos();
   iniciarImagens();
+  iniciarEnvioAutomaticoFotos();   
   iniciarClassificacaoLoja();
   iniciarCep();
   carregarFavoritos();
@@ -648,3 +649,28 @@ document.querySelectorAll('.info-servico-card').forEach(function (card) {
       visualizacao.style.display = '';
     });
   });
+
+
+  //#region SALVAR FOTO AUTOMATICAMENTE
+// Quando a pessoa escolhe uma foto numa tela de edição, o formulário é enviado na hora.
+function iniciarEnvioAutomaticoFotos() {
+  // Foto do perfil do consumidor
+  const fotoConsumidor = document.getElementById('foto-consumidor');
+  const formConsumidor = document.getElementById('formEditarConsumidor');
+
+  if (fotoConsumidor && formConsumidor) {
+    fotoConsumidor.addEventListener('change', function () {
+      if (this.files.length) formConsumidor.submit();
+    });
+  }
+
+  // Produtos e serviços que já estão cadastrados
+  document.querySelectorAll(
+    '.produto-card-salvo .produto-imagem-input, .servico-card-salvo .servico-imagem-input'
+  ).forEach(function (input) {
+    input.addEventListener('change', function () {
+      if (input.files.length && input.form) input.form.submit();
+    });
+  });
+}
+//#endregion
