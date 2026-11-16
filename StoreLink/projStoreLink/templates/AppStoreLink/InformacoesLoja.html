@@ -238,10 +238,12 @@
                 <span class="sl-icon sl-pencil" aria-hidden="true"></span> EDITAR LOJA
               </button>
 
-              <button
-                type="button"
-                class="info-excluir-loja" data-confirm-click="Deseja excluir esta loja?"
-              >
+              <form method="POST" action="{% url 'loja-excluir' loja.id_loja %}" class="info-excluir-form">
+                {% csrf_token %}
+                <button type="submit" class="info-excluir-loja">
+                  <span class="sl-icon sl-trash" aria-hidden="true"></span> EXCLUIR LOJA
+                </button>
+              </form>
                 <span class="sl-icon sl-trash" aria-hidden="true"></span> EXCLUIR LOJA
               </button>
 

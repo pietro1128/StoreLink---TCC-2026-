@@ -465,12 +465,6 @@ function iniciarEventos() {
       return;
     }
 
-    const editarLoja = alvo.closest('.info-editar-loja');
-    if (editarLoja) {
-      abrirEdicaoLoja(editarLoja);
-      return;
-    }
-
     const cancelarLoja = alvo.closest('.info-loja-cancelar');
     if (cancelarLoja) {
       cancelarEdicaoLoja(cancelarLoja);
@@ -575,3 +569,36 @@ function iniciarPagina() {
 
 document.addEventListener('DOMContentLoaded', iniciarPagina);
 //#endregion
+
+document.addEventListener('DOMContentLoaded', function () {
+  // ---- Editar loja ----
+  var btnEditar = document.querySelector('.info-editar-loja');
+  var btnCancelar = document.querySelector('.info-loja-cancelar');
+  var visualizacao = document.querySelector('.info-loja-visualizacao');
+  var edicao = document.querySelector('.info-loja-edicao');
+
+  if (btnEditar && btnCancelar && visualizacao && edicao) {
+    edicao.style.display = 'none'; // começa escondido
+
+    btnEditar.addEventListener('click', function () {
+      visualizacao.style.display = 'none';
+      edicao.style.display = 'block';
+    });
+
+    btnCancelar.addEventListener('click', function () {
+      edicao.style.display = 'none';
+      visualizacao.style.display = '';
+    });
+  }
+
+  // ---- Excluir loja (pede confirmação) ----
+  var formExcluir = document.querySelector('.info-excluir-form');
+
+  if (formExcluir) {
+    formExcluir.addEventListener('submit', function (e) {
+      if (!confirm('Deseja excluir esta loja?')) {
+        e.preventDefault();
+      }
+    });
+  }
+});
