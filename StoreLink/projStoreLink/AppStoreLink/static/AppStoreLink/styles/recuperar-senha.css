@@ -1,6 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap");
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 :root {
   --bg-page: #e5e5e5;
@@ -21,7 +25,7 @@ body.dark {
 }
 
 body {
-  font-family: 'Segoe UI', Arial, sans-serif;
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
   background: var(--bg-page);
   color: var(--text-color);
   min-height: 100vh;
@@ -36,6 +40,7 @@ body {
   background: #2a2a2a;
   border: 1px solid #444;
   color: #fff;
+  font-family: inherit;
   font-size: 15px;
   padding: 8px 14px;
   border-radius: 20px;
@@ -103,17 +108,18 @@ body.dark .recuperar-card {
 }
 
 .recuperar-card h2 {
-  font-family: 'Yeseva One', Georgia, serif;
-  font-weight: 400;
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+  font-weight: 700;
   font-size: 32px;
   color: var(--text-color);
 }
 
 .recuperar-subtitle {
-  font-family: 'Yeseva One', Georgia, serif;
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
   font-weight: 400;
   font-size: 14px;
   color: var(--subtitle-color);
+  margin-top: 8px;
   margin-bottom: 40px;
 }
 
@@ -127,8 +133,14 @@ body.dark .recuperar-card {
   display: flex;
   align-items: center;
   gap: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--field-border);
   text-align: left;
   color: var(--field-placeholder);
+}
+
+.recuperar-field:focus-within {
+  border-bottom-color: var(--text-color);
 }
 
 .recuperar-field img {
@@ -156,6 +168,7 @@ body.dark .recuperar-field .field-icon-dark {
   border: none;
   background: transparent;
   outline: none;
+  font-family: inherit;
   font-size: 16px;
   color: var(--text-color);
 }
@@ -172,16 +185,21 @@ body.dark .recuperar-field .field-icon-dark {
   border-radius: 30px;
   background: transparent;
   color: var(--text-color);
+  font-family: inherit;
   font-weight: 700;
   font-size: 14px;
   letter-spacing: 1px;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .recuperar-submit-btn:hover {
   background: var(--text-color);
   color: var(--card-bg);
+  transform: translateY(-1px);
 }
 
 .recuperar-signup {
@@ -200,7 +218,13 @@ body.dark .recuperar-field .field-icon-dark {
 }
 
 @media (max-width: 560px) {
+
   .recuperar-card {
     padding: 34px 26px 36px;
   }
+
+  .recuperar-submit-btn {
+    width: 100%;
+  }
+
 }
