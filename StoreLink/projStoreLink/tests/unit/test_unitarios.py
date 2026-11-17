@@ -1,11 +1,12 @@
 from decimal import Decimal
+from types import SimpleNamespace 
 import pytest
 import requests
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 from AppStoreLink.models import FOTO_LADO_MAXIMO, FOTO_TAMANHO_MAXIMO, caminho_foto_usuario, validar_foto
 from AppStoreLink.services import CepInvalido, CepNaoEncontrado, ServicoCepIndisponivel, consultar_cep, limpar_cep
-from AppStoreLink.views import _validar_nome_preco
+from AppStoreLink.views import _eh_dono, _validar_nome_preco
 from tests.conftest import CORPO_VIACEP_SP, RespostaFalsa, gerar_imagem
 
 # ----------------------------- limpar_cep ---------------------------------- #
@@ -200,3 +201,20 @@ def test_ct019_preco_acima_do_limite_do_banco_gera_erro():
 def test_ct019_acumula_todos_os_erros_de_uma_vez():
     erros, _ = _validar_nome_preco("", "abc")
     assert len(erros) == 2
+    
+# ------------------- _eh_dono (CT-063: a verificação de dono) -------------------- #
+def _requisicao(usuario_id=None):
+    sessao = {} if usuario_id is None else {"usuario_id": usuario_id}
+    return SimpleNamespace(session=sessao)
+
+def test_ct063_eh_dono_verdadeiro_quando_o_usuario_logado_e_o_dono_da_loja():
+    assert _eh_dono(_requisicao(7), SimpleNamespace(id_dono_id=7)) is True
+
+def test_ct063_eh_dono_falso_quando_o_usuario_logado_e_outra_pessoa():
+    assert _eh_dono(_requisicao(8), SimpleNamespace(id_dono_id=7)) is False
+
+def test_ct063_eh_dono_falso_para_visitante_sem_login():
+    assert _eh_dono(_requisicao(None), SimpleNamespace(id_dono_id=7)) is False
+
+def test_ct063_eh_dono_falso_quando_a_loja_nao_tem_dono_cadastrado():
+    assert _eh_dono(_requisicao(7), SimpleNamespace(id_dono_id=None)) is False

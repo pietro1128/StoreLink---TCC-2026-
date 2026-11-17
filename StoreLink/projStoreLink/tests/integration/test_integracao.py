@@ -1175,3 +1175,211 @@ def test_ct024_excluir_servico_exige_login(client, servico):
 @pytest.mark.django_db
 def test_ct024_excluir_servico_inexistente_da_404(client_logado):
     assert client_logado.post(reverse("servico-excluir", args=[9999])).status_code == 404
+    
+# ===================== CT-059 a CT-066 — Verificação de DONO ===================== #
+@pytest.fixture
+def loja_do_dono(loja, usuario):
+    """Loja pertencente à Maria (a mesma que está logada em `client_logado`)."""
+    loja.id_dono = usuario
+    loja.save()
+    return loja
+
+@pytest.fixture
+def loja_alheia(loja, outro_usuario):
+    """Loja pertencente ao João: a Maria (logada) NÃO é a dona."""
+    loja.id_dono = outro_usuario
+    loja.save()
+    return loja
+
+# ------------------------------- CT-059 ------------------------------------ #
+@pytest.mark.django_db
+def test_ct059_dono_edita_a_propria_loja(client_logado, usuario, loja_do_dono, viacep):
+    assert loja_do_dono.id_dono_id == usuario.id_categoria          # pré-condição: é dono de verdade
+
+    resposta = client_logado.post(reverse("loja-editar", args=[loja_do_dono.id_loja]), DADOS_EDICAO)
+
+    assert resposta.status_code == 302
+    assert resposta.url == reverse("InformacoesLoja", args=[loja_do_dono.id_loja])
+    loja_do_dono.refresh_from_db()
+    assert loja_do_dono.nome_loja == "Padaria Nova Era"
+    assert Loja.objects.count() == 1                                # editou, não criou outra
+
+@pytest.mark.django_db
+def test_ct059_dono_exclui_a_propria_loja(client_logado, usuario, loja_do_dono):
+    assert loja_do_dono.id_dono_id == usuario.id_categoria
+
+    resposta = client_logado.post(reverse("loja-excluir", args=[loja_do_dono.id_loja]))
+
+    assert resposta.status_code == 302 and resposta.url == reverse("index")
+    assert any("foi excluída" in m for m in mensagens(resposta))
+    assert not Loja.objects.exists()
+
+# ------------------------------- CT-060 ------------------------------------ #
+@pytest.mark.django_db
+def test_ct060_dono_edita_o_proprio_produto(client_logado, usuario, loja_do_dono, produto):
+    assert produto.id_loja.id_dono_id == usuario.id_categoria
+
+    resposta = client_logado.post(reverse("produto-editar", args=[produto.id_produto]), {
+        "nome_produto": "Pão de Queijo", "preco_produto": "3,75", "descricao_produto": "Mineiro",
+    }, **REFERER_PRODUTOS)
+
+    assert resposta.status_code == 302
+    assert any("atualizado com sucesso" in m for m in mensagens(resposta))
+    produto.refresh_from_db()
+    assert (produto.nome_produto, produto.preco, produto.descricao) == ("Pão de Queijo", Decimal("3.75"), "Mineiro")
+
+@pytest.mark.django_db
+def test_ct060_dono_exclui_o_proprio_produto(client_logado, usuario, loja_do_dono, produto):
+    resposta = client_logado.post(reverse("produto-excluir", args=[produto.id_produto]), **REFERER_PRODUTOS)
+
+    assert resposta.status_code == 302
+    assert any('"Pão Francês" foi excluído' in m for m in mensagens(resposta))
+    assert not Produto.objects.filter(pk=produto.pk).exists()
+
+# ------------------------------- CT-061 ------------------------------------ #
+@pytest.mark.django_db
+def test_ct061_dono_edita_o_proprio_servico(client_logado, usuario, loja_do_dono, servico):
+    assert servico.id_loja.id_dono_id == usuario.id_categoria
+
+    resposta = client_logado.post(reverse("servico-editar", args=[servico.id_servico]), {
+        "nome_servico": "Entrega Super Rápida", "preco": "14,90", "descricao": "Em 15 minutos",
+    })
+
+    assert resposta.status_code == 302
+    assert resposta.url == reverse("InformacoesServico", args=[servico.id_loja_id])
+    servico.refresh_from_db()
+    assert (servico.nome_servico, servico.preco) == ("Entrega Super Rápida", Decimal("14.90"))
+
+@pytest.mark.django_db
+def test_ct061_dono_exclui_o_proprio_servico(client_logado, usuario, loja_do_dono, servico):
+    resposta = client_logado.post(reverse("servico-excluir", args=[servico.id_servico]))
+
+    assert resposta.status_code == 302 and resposta.url == reverse("servicos-loja")
+    assert any('"Entrega Express" foi excluído' in m for m in mensagens(resposta))
+    assert not Servico.objects.exists()
+
+# ------------------------------- CT-062 ------------------------------------ #
+@pytest.mark.django_db
+def test_ct062_dono_edita_o_proprio_comentario(client_logado, usuario, loja):
+    Avaliacao.objects.create(nota=3, comentario="Atendimento razoável", id_usuario=usuario, id_loja=loja)
+    original = Avaliacao.objects.get()
+
+    avaliar_loja(client_logado, loja, 5, "Mudei de ideia: excelente!")
+
+    assert Avaliacao.objects.count() == 1                           # editou, não criou outro
+    editado = Avaliacao.objects.get()
+    assert editado.pk == original.pk and editado.id_usuario == usuario
+    assert (editado.nota, editado.comentario) == (5, "Mudei de ideia: excelente!")
+
+@pytest.mark.django_db
+@pytest.mark.xfail(strict=True, raises=NoReverseMatch, reason=(
+    "FUNCIONALIDADE NÃO IMPLEMENTADA: o botão 'Excluir' do comentário só chama confirmarExclusao() no "
+    "JavaScript (que nem existe) e não há rota/view para excluir avaliação. Quando criar a rota "
+    "(sugestão: path('avaliacao/<int:id_avaliacao>/excluir/', views.avaliacao_excluir, name='avaliacao-excluir')) "
+    "este teste passa a valer."
+))
+def test_ct062_dono_exclui_o_proprio_comentario(client_logado, usuario, loja):
+    av = Avaliacao.objects.create(nota=4, comentario="Bom", id_usuario=usuario, id_loja=loja)
+
+    resposta = client_logado.post(reverse("avaliacao-excluir", args=[av.pk]))   # hoje: NoReverseMatch
+
+    assert resposta.status_code == 302
+    assert not Avaliacao.objects.filter(pk=av.pk).exists()
+
+# ------------------------------- CT-063 ------------------------------------ #
+@pytest.mark.django_db
+def test_ct063_nao_dono_nao_consegue_editar_a_loja_e_recebe_404(client_logado, loja_alheia, viacep):
+    resposta = client_logado.post(reverse("loja-editar", args=[loja_alheia.id_loja]), DADOS_EDICAO)
+
+    loja_alheia.refresh_from_db()
+    assert loja_alheia.nome_loja == "Padaria Central"               # nada mudou
+    assert resposta.status_code == 404
+
+@pytest.mark.django_db
+def test_ct063_nao_dono_nao_consegue_excluir_a_loja_e_recebe_404(client_logado, loja_alheia):
+    resposta = client_logado.post(reverse("loja-excluir", args=[loja_alheia.id_loja]))
+
+    assert Loja.objects.filter(pk=loja_alheia.pk).exists()          # continua existindo
+    assert resposta.status_code == 404
+
+# ------------------------------- CT-064 ------------------------------------ #
+@pytest.mark.django_db
+def test_ct064_nao_dono_nao_consegue_editar_o_produto_e_recebe_404(client_logado, loja_alheia, produto):
+    resposta = client_logado.post(reverse("produto-editar", args=[produto.id_produto]), {
+        "nome_produto": "Invadido", "preco_produto": "99", "descricao_produto": "x",
+    }, **REFERER_PRODUTOS)
+
+    produto.refresh_from_db()
+    assert (produto.nome_produto, produto.preco) == ("Pão Francês", Decimal("1.50"))
+    assert resposta.status_code == 404
+
+@pytest.mark.django_db
+def test_ct064_nao_dono_nao_consegue_excluir_o_produto_e_recebe_404(client_logado, loja_alheia, produto):
+    resposta = client_logado.post(reverse("produto-excluir", args=[produto.id_produto]), **REFERER_PRODUTOS)
+
+    assert Produto.objects.filter(pk=produto.pk).exists()
+    assert resposta.status_code == 404
+
+# ------------------------------- CT-065 ------------------------------------ #
+@pytest.mark.django_db
+def test_ct065_nao_dono_nao_consegue_editar_o_servico_e_recebe_404(client_logado, loja_alheia, servico):
+    resposta = client_logado.post(reverse("servico-editar", args=[servico.id_servico]), {
+        "nome_servico": "Invadido", "preco": "99", "descricao": "x",
+    })
+
+    servico.refresh_from_db()
+    assert (servico.nome_servico, servico.preco) == ("Entrega Express", Decimal("9.90"))
+    assert resposta.status_code == 404
+
+@pytest.mark.django_db
+def test_ct065_nao_dono_nao_consegue_excluir_o_servico_e_recebe_404(client_logado, loja_alheia, servico):
+    resposta = client_logado.post(reverse("servico-excluir", args=[servico.id_servico]))
+
+    assert Servico.objects.filter(pk=servico.pk).exists()
+    assert resposta.status_code == 404
+
+# ------------------------------- CT-066 ------------------------------------ #
+@pytest.mark.django_db
+def test_ct066_nao_dono_do_comentario_nao_altera_o_comentario_de_outro_usuario(client_logado, usuario, outro_usuario, loja):
+    """A Maria (logada) envia o formulário de avaliação: o comentário do João não pode ser tocado."""
+    do_joao = Avaliacao.objects.create(nota=2, comentario="Comentário do João", id_usuario=outro_usuario, id_loja=loja)
+
+    avaliar_loja(client_logado, loja, 5, "A Maria tentando sobrescrever")
+
+    do_joao.refresh_from_db()
+    assert (do_joao.nota, do_joao.comentario) == (2, "Comentário do João")      # intacto
+    assert Avaliacao.objects.filter(id_loja=loja).count() == 2                  # a Maria criou o PRÓPRIO comentário
+    assert Avaliacao.objects.get(id_usuario=usuario).comentario == "A Maria tentando sobrescrever"
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("rota, id_inexistente", [
+    ("avaliar-loja", 9999), ("avaliar-produto", 9999), ("avaliar-servico", 9999),
+])
+def test_ct066_get_object_or_404_item_inexistente_devolve_404(client_logado, rota, id_inexistente):
+    resposta = client_logado.post(reverse(rota, args=[id_inexistente]), {"nota": 5, "comentario": "x"})
+    assert resposta.status_code == 404
+    assert not Avaliacao.objects.exists()
+
+@pytest.mark.django_db
+def test_ct066_get_object_or_404_sessao_de_usuario_inexistente_devolve_404(client, loja):
+    sessao = client.session
+    sessao["usuario_id"] = 9999                                    # sessão apontando para quem não existe
+    sessao.save()
+
+    resposta = avaliar_loja(client, loja, 5, "x")
+
+    assert resposta.status_code == 404
+    assert not Avaliacao.objects.exists()
+
+@pytest.mark.django_db
+@pytest.mark.xfail(strict=True, raises=NoReverseMatch, reason=(
+    "FUNCIONALIDADE NÃO IMPLEMENTADA: não existe rota/view para excluir comentário "
+    "(veja o CT-062). Quando existir, quem NÃO é o autor deve receber 404 e o comentário continua salvo."
+))
+def test_ct066_nao_dono_nao_consegue_excluir_comentario_de_outro_e_recebe_404(client_logado, outro_usuario, loja):
+    do_joao = Avaliacao.objects.create(nota=2, comentario="Comentário do João", id_usuario=outro_usuario, id_loja=loja)
+
+    resposta = client_logado.post(reverse("avaliacao-excluir", args=[do_joao.pk]))   # hoje: NoReverseMatch
+
+    assert Avaliacao.objects.filter(pk=do_joao.pk).exists()
+    assert resposta.status_code == 404
