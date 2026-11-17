@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages # importa mensagens de erro e sucesso
 from django.contrib.auth.hashers import make_password, check_password
 from AppStoreLink.models import Usuario, Loja, Endereco, Produto, Servico, LojaFavoritas, TipoUsuario, Categoria, Avaliacao # importação das classes em models
-from django.contrib.auth.decorators import login_required # @login_required -> usado para privar apenas usuarios loggados
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden # ->
 import re # importação de Regex: biblioteca de validações
 from django.http import JsonResponse
