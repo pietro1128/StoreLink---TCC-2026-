@@ -130,6 +130,13 @@ def perfil_loja(request):
         if categoria is None:
             messages.error(request, 'Selecione uma categoria válida.')
             return render(request, 'AppStoreLink/perfil-loja.html')
+        
+        # Validação de Foto:
+        if foto:
+            erro_foto = _erro_foto(foto)
+            if erro_foto:
+                messages.error(request, erro_foto)
+                return render(request, 'AppStoreLink/perfil-loja.html')
 
         # Depois de todas as validações, cria endereço e loja:
         endereco = Endereco.objects.create(
@@ -193,9 +200,9 @@ def editar_consumidor(request):
     
     if foto:
         erro_foto = _erro_foto(foto)
-    if erro_foto:
-        messages.error(request, erro_foto)
-        return redirect('perfil-consumidor')
+        if erro_foto:
+            messages.error(request, erro_foto)
+            return redirect('perfil-consumidor')
     usuario.foto = foto
 
     usuario.nome = nome
@@ -590,8 +597,8 @@ def produto_criar(request):
     
     if foto:
         erro_foto = _erro_foto(foto)
-    if erro_foto:
-        erros.append(erro_foto)
+        if erro_foto:
+            erros.append(erro_foto)
 
     # A categoria é obrigatória no model e o POST pode ser forjado, então confere no banco
     categoria = None
@@ -649,8 +656,8 @@ def produto_editar(request, id_produto):
     
     if foto:
         erro_foto = _erro_foto(foto)
-    if erro_foto:
-        erros.append(erro_foto)
+        if erro_foto:
+            erros.append(erro_foto)
 
     if erros:
         for erro in erros:
@@ -723,8 +730,8 @@ def servicos_loja(request):
 
         if foto:
             erro_foto = _erro_foto(foto)
-        if erro_foto:
-            erros.append(erro_foto)
+            if erro_foto:
+                erros.append(erro_foto)
 
         if loja is None:
             erros.append('Cadastre uma loja antes de cadastrar serviço.')
@@ -814,9 +821,9 @@ def loja_editar(request, id_loja):
         
     if foto:
         erro_foto = _erro_foto(foto)
-    if erro_foto:
-        messages.error(request, erro_foto)
-        return redirect('InformacoesLoja', id_loja=loja.id_loja)
+        if erro_foto:
+            messages.error(request, erro_foto)
+            return redirect('InformacoesLoja', id_loja=loja.id_loja)
 
     try:
         dados_cep = consultar_cep(cep)
@@ -870,12 +877,6 @@ def loja_editar(request, id_loja):
     if categoria is None:
         messages.error(request, 'Selecione uma categoria válida.')
         return render(request, 'AppStoreLink/perfil-loja.html')
-
-    if foto:
-        erro_foto = _erro_foto(foto)
-    if erro_foto:
-        messages.error(request, erro_foto)
-        return render(request, 'AppStoreLink/perfil-loja.html')
     
     # Depois de todas as validações, edita endereço e loja:
     with transaction.atomic():
@@ -898,7 +899,7 @@ def loja_editar(request, id_loja):
     messages.success(request, 'Sua loja foi atualizada com sucesso!')
     return redirect('InformacoesLoja', id_loja=loja.id_loja)
 
-    # TODO: trocar pela loja do usuário logado quando existir o vínculo Usuario↔Loja
+    # TODO: trocar pela loja do usuário logado quando existir o vínculo Usuario <-> Loja
 
 
 @require_POST
@@ -923,8 +924,8 @@ def servico_editar(request, id_servico):
 
     if foto:
         erro_foto = _erro_foto(foto)
-    if erro_foto:
-        erros.append(erro_foto)
+        if erro_foto:
+            erros.append(erro_foto)
 
     if erros: # -> verifica erros da tal função
         for erro in erros:
