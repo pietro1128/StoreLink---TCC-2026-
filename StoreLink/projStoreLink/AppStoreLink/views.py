@@ -559,19 +559,17 @@ def produtos_loja(request):
 
 @require_POST
 def produto_excluir(request, id_produto):
-    produto = Produto.objects.filter(id_produto=id_produto).first()
-    
-    if not request.session.get('usuario_id'):
+    usuario_id = request.session.get('usuario_id')
+
+    if not usuario_id:
         messages.error(request, 'Você precisa fazer login para excluir o produto.')
         return redirect('login')
-    
-    if not _eh_dono(request, produto.id_loja):
-        messages.error(request, 'Você não tem permissão para excluir esse produto.')
-        return redirect('InformacoesProduto', id_loja=produto.id_loja_id)
 
-    if produto is None:
-        messages.error(request, 'Este produto não existe mais ou ja foi excluido.')
-        return _voltar(request)
+    produto = get_object_or_404(
+        Produto,
+        id_produto=id_produto,
+        id_loja__id_dono_id=usuario_id,
+    )
 
     nome = produto.nome_produto
     produto.delete()
@@ -636,16 +634,18 @@ def produto_criar(request):
 
 @require_POST
 def produto_editar(request, id_produto):
-    if not request.session.get('usuario_id'):
-        messages.error(request, 'Você precisa fazer login para excluir o produto.')
-        return redirect('login')
-    
-    produto = get_object_or_404(Produto, id_produto=id_produto)
-    
-    if not _eh_dono(request, produto.id_loja):
-        messages.error(request, 'Você não tem permissão para excluir esse produto.')
-        return redirect('InformacoesProduto', id_loja=produto.id_loja_id)
+    usuario_id = request.session.get('usuario_id')
 
+    if not usuario_id:
+        messages.error(request, 'Você precisa fazer login para editar o produto.')
+        return redirect('login')
+
+    produto = get_object_or_404(
+        Produto,
+        id_produto=id_produto,
+        id_loja__id_dono_id=usuario_id,
+    )
+    
     nome = request.POST.get('nome_produto', '').strip()
     preco_txt = request.POST.get('preco_produto', '').strip().replace(',', '.')
     descricao = request.POST.get('descricao_produto', '').strip()
@@ -790,15 +790,17 @@ def servicos_loja(request):
 
 @require_POST
 def loja_editar(request, id_loja):
-    loja = get_object_or_404(Loja.objects.select_related('id_endereco'), id_loja=id_loja)
-    
-    if not _eh_dono(request, loja):
-        messages.error(request, 'Você não tem permissão para editar esta loja.')
-        return redirect('InformacoesLoja', id_loja=loja.id_loja)
+    usuario_id = request.session.get('usuario_id')
 
-    if not request.session.get('usuario_id'):
+    if not usuario_id:
         messages.error(request, 'Você precisa fazer login para editar a loja.')
         return redirect('login')
+
+    loja = get_object_or_404(
+        Loja.objects.select_related('id_endereco'),
+        id_loja=id_loja,
+        id_dono_id=usuario_id,
+    )
 
     nome = request.POST.get('nome_loja') # -> cria uma variavel puxando o valor do banco
 #                                   L> este valor tem que ser exatamente igual ao 'name' em perfil-loja.html
@@ -904,15 +906,17 @@ def loja_editar(request, id_loja):
 
 @require_POST
 def servico_editar(request, id_servico):
-    if not request.session.get('usuario_id'):
+    usuario_id = request.session.get('usuario_id')
+
+    if not usuario_id:
         messages.error(request, 'Você precisa fazer login para editar o serviço.')
         return redirect('login')
 
-    servico = get_object_or_404(Servico, id_servico=id_servico)
-    
-    if not _eh_dono(request, servico.id_loja):
-        messages.error(request, 'Você não tem permissão para editar esse serviço.')
-        return redirect('InformacoesServico', id_loja=servico.id_loja_id)
+    servico = get_object_or_404(
+        Servico,
+        id_servico=id_servico,
+        id_loja__id_dono_id=usuario_id,
+    )
 
     nome = request.POST.get('nome_servico', '').strip()
     preco_txt = request.POST.get('preco', '').strip().replace(',', '.')
@@ -948,15 +952,17 @@ def servico_editar(request, id_servico):
 
 @require_POST
 def servico_excluir(request, id_servico):
-    if not request.session.get('usuario_id'):
+    usuario_id = request.session.get('usuario_id')
+
+    if not usuario_id:
         messages.error(request, 'Você precisa fazer login para excluir o serviço.')
         return redirect('login')
 
-    servico = get_object_or_404(Servico, id_servico=id_servico)
-    
-    if not _eh_dono(request, servico.id_loja):
-        messages.error(request, 'Você não tem permissão para excluir esse serviço.')
-        return redirect('InformacoesServico', id_loja=servico.id_loja_id)
+    servico = get_object_or_404(
+        Servico,
+        id_servico=id_servico,
+        id_loja__id_dono_id=usuario_id,
+    )
 
     nome = servico.nome_servico
     id_loja = servico.id_loja_id
@@ -991,15 +997,13 @@ def favoritar_loja(request, id_loja):
 
 @require_POST
 def loja_excluir(request, id_loja):
-    if not request.session.get('usuario_id'): # -> verifica se esta desconectado
+    usuario_id = request.session.get('usuario_id')
+
+    if not usuario_id:
         messages.error(request, 'Você precisa fazer login para excluir uma loja.')
         return redirect('login')
-    
-    loja = get_object_or_404(Loja, id_loja=id_loja)
-    
-    if not _eh_dono(request, loja):
-        messages.error(request, 'Você não tem permissão para excluir esta loja.')
-        return redirect('InformacoesLoja', id_loja=loja.id_loja)
+
+    loja = get_object_or_404(Loja, id_loja=id_loja, id_dono_id=usuario_id)
 
     # logado é o dono da loja antes de permitir a exclusão.
 
@@ -1035,15 +1039,13 @@ def _eh_dono(request, loja):
 
 @require_POST
 def loja_foto_atualizar(request, id_loja):
-    if not request.session.get('usuario_id'):
+    usuario_id = request.session.get('usuario_id')
+
+    if not usuario_id:
         messages.error(request, 'Você precisa fazer login para alterar a foto da loja.')
         return redirect('login')
 
-    loja = get_object_or_404(Loja, id_loja=id_loja)
-
-    if not _eh_dono(request, loja):
-        messages.error(request, 'Você não tem permissão para alterar a foto desta loja.')
-        return redirect('InformacoesLoja', id_loja=loja.id_loja)
+    loja = get_object_or_404(Loja, id_loja=id_loja, id_dono_id=usuario_id)
 
     if request.POST.get('remover_foto') == '1':
         if loja.foto_estabelecimento:
@@ -1135,12 +1137,12 @@ def avaliacao_excluir(request, id_avaliacao):
         messages.error(request, 'Você precisa fazer login para excluir o comentário.')
         return redirect('login')
 
-    avaliacao = get_object_or_404(Avaliacao, pk=id_avaliacao)
-
-    if avaliacao.id_usuario_id != usuario_id: # -> só quem escreveu o comentário pode apagar
-        messages.error(request, 'Você não tem permissão para excluir este comentário.')
-        return _voltar(request)
-
+    avaliacao = get_object_or_404(
+        Avaliacao,
+        pk=id_avaliacao,
+        id_usuario_id=usuario_id,
+    )
+    
     avaliacao.delete()
 
     messages.success(request, 'Comentário excluído com sucesso!')
