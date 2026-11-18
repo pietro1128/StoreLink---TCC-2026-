@@ -135,3 +135,8 @@ LOGIN_URL = 'login'
 # Pillow para validação de fotos
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# E-mail (em desenvolvimento, o e-mail aparece no terminal)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'StoreLink <nao-responda@storelink.com>'
+PASSWORD_RESET_TIMEOUT = 3600  # link válido por 1 hora (em segundos)

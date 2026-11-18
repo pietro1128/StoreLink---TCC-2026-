@@ -34,7 +34,9 @@ urlpatterns = [
 
     path('cadastro/', cadastro, name='cadastro'),
     path('login/', login, name='login'),
-    path('recuperar-senha/', recuperar_senha, name='recuperar-senha'),
+    
+    path('recuperar-senha/', views.recuperar_senha, name='recuperar-senha'),
+    path('redefinir-senha/<uidb64>/<token>/', views.redefinir_senha, name='redefinir-senha'),
 
     path('buscar/', views.buscar, name='buscar'),
 

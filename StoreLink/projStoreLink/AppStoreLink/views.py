@@ -1,4 +1,9 @@
-from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils.http import url_has_allowed_host_and_scheme, urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+from django.core.mail import send_mail
+from django.urls import reverse
+from AppStoreLink.tokens import token_recuperacao
+# ^ Recuperação de senha usando Tokens
 from django.db import transaction
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
@@ -317,31 +322,70 @@ def login(request):
 
 
 def recuperar_senha(request):
+    # Passo 1 (Usuario.email -> Pag.Redefinição)
     if request.method == 'POST':
         email = request.POST.get('email', '').strip()
+        usuario = Usuario.objects.filter(email=email).first()
+
+        if usuario:
+            uid = urlsafe_base64_encode(force_bytes(usuario.pk))
+            token = token_recuperacao.make_token(usuario)
+            link = request.build_absolute_uri(
+                reverse('redefinir-senha', kwargs={'uidb64': uid, 'token': token})
+            )
+
+            send_mail(
+                subject='StoreLink - Redefinição de senha',
+                message=(
+                    f'Olá, {usuario.nome}!\n\n'
+                    f'Para criar uma nova senha, acesse o link abaixo:\n{link}\n\n'
+                    'O link expira em 1 hora. Se não foi você, ignore este e-mail.'
+                ),
+                from_email=None,  # usa o DEFAULT_FROM_EMAIL
+                recipient_list=[usuario.email],
+            )
+
+        # Mesma mensagem existindo ou não o e-mail (não revela quem tem conta)
+        messages.success(request, 'Se este e-mail estiver cadastrado, enviamos um link para redefinir a senha.')
+        return redirect('login')
+
+    return render(request, 'registration/recuperar-senha.html')
+
+
+def redefinir_senha(request, uidb64, token):
+    # Passo 2 (Link(Pag.Recuperar_senha) -> Usuario(Pag.Redefinição))
+    try:
+        id_usuario = urlsafe_base64_decode(uidb64).decode()
+        usuario = Usuario.objects.filter(pk=id_usuario).first()
+    except (TypeError, ValueError, OverflowError):
+        usuario = None
+
+    # Link adulterado, expirado ou já usado
+    if usuario is None or not token_recuperacao.check_token(usuario, token):
+        messages.error(request, 'Este link é inválido ou expirou. Solicite um novo.')
+        return redirect('recuperar-senha')
+
+    if request.method == 'POST':
         nova_senha = request.POST.get('nova_senha', '')
         confirmar_senha = request.POST.get('confirmar_senha', '')
 
         if nova_senha != confirmar_senha:
             messages.error(request, 'As senhas não estão iguais nos dois campos.')
-            return render(request, 'registration/recuperar-senha.html')
+            return render(request, 'registration/redefinir-senha.html')
 
-        try:
-            usuario = Usuario.objects.get(email=email) # -> procura no banco quem é o usuario com o e-mail digitado
-        except Usuario.DoesNotExist: # -> Caso o e-mail não tenha correspondido como cadastrado
-            messages.error(request, 'Não encontramos um usuario cadastrado com este e-mail.')
-            return render(request, 'registration/recuperar-senha.html')
+        # Mesma regra do cadastro
+        padrao_senha = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}'
+        if not re.match(padrao_senha, nova_senha):
+            messages.error(request, 'A senha precisa conter no mínimo 8 caracteres, letra maiúscula, minúscula e número.')
+            return render(request, 'registration/redefinir-senha.html')
 
-        usuario.senha = make_password(nova_senha) # -> Ele transforma a senha em um Hash e atribui ao valor 'senha' do banco
-        #                     L> 'make_password()': transforma uma string em um Hash
-        #                        'Hash': Transforma a string 'normal' em uma string 'criptografada'
-        usuario.save()
+        usuario.senha = make_password(nova_senha)
+        usuario.save()  # a senha mudou, então o token deste link deixa de valer
 
-        messages.success(request, 'Senha alterada com sucesso!')
+        messages.success(request, 'Senha alterada com sucesso! Faça login.')
         return redirect('login')
 
-    return render(request, 'registration/recuperar-senha.html')
-
+    return render(request, 'registration/redefinir-senha.html')
 
 def buscar(request):
     query = request.GET.get('q', '').strip()

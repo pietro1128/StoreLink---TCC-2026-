@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StoreLink - Redefinir Senha</title>
+<link rel="icon" type="image/png" href="{% static 'AppStoreLink/images/icon-dark.png' %}">
+
+<link rel="stylesheet" href="{% static 'AppStoreLink/styles/recuperar-senha.css' %}">
+<link rel="stylesheet" href="{% static 'AppStoreLink/styles/mensagens.css' %}">
+
+  <link rel="stylesheet" href="{% static 'AppStoreLink/styles/icons.css' %}">
+
+</head>
+
+<!-- #region modo escuro -->
+<body>
+
+  <button class="theme-toggle"><span class="sl-icon sl-moon" aria-hidden="true"></span><span class="theme-label">Modo escuro</span></button>
+  <a class="recuperar-page-icon" href="{% url 'index' %}" aria-label="Voltar para a tela inicial">
+    <img class="icon-light" src="{% static 'AppStoreLink/images/icon.png' %}" alt="StoreLink">
+    <img class="icon-dark" src="{% static 'AppStoreLink/images/icon-dark.png' %}" alt="StoreLink">
+  </a>
+
+  <!-- #endregion -->
+
+<!-- #region mensagens -->
+  {% if messages %}
+    <div class="messages-container">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+  <!-- #endregion -->
+
+<!-- #region recuperar senha -->
+  <div class="recuperar-wrapper">
+
+    <div class="recuperar-card">
+      <h2>Redefinir senha</h2>
+      <p class="recuperar-subtitle">Digite e confirme sua nova senha</p>
+
+        <form class="recuperar-form" method="post" action="">
+        {% csrf_token %}
+
+        <label class="recuperar-field">
+            <img class="field-icon-light" src="{% static 'AppStoreLink/images/bloqueado.png' %}" alt=""><img class="field-icon-dark" src="{% static 'AppStoreLink/images/bloqueado-dark.png' %}" alt="">
+            <input type="password" name="nova_senha" placeholder="Nova Senha" required>
+        </label>
+
+        <label class="recuperar-field">
+            <img class="field-icon-light" src="{% static 'AppStoreLink/images/bloqueado.png' %}" alt=""><img class="field-icon-dark" src="{% static 'AppStoreLink/images/bloqueado-dark.png' %}" alt="">
+            <input type="password" name="confirmar_senha" placeholder="Confirmar Nova Senha" required>
+        </label>
+
+        <button type="submit" class="recuperar-submit-btn">SALVAR</button>
+        </form>
+    </div>
+
+  </div>
+
+  <!-- #endregion -->
+  <!-- JS geral do projeto -->
+  <script src="{% static 'AppStoreLink/scripts/index.js' %}"></script>
+</body>
+</html>

@@ -40,7 +40,7 @@
 
     <div class="recuperar-card">
       <h2>Recuperar senha</h2>
-      <p class="recuperar-subtitle">Insira suas informações para realizar a alteração da senha</p>
+      <p class="recuperar-subtitle">Informe seu e-mail para receber o link de redefinição de senha</p>
 
       <form class="recuperar-form" method="post" action="">
         {% csrf_token %}
@@ -50,17 +50,7 @@
           <input type="email" name="email" placeholder="E-mail" required>
         </label>
 
-        <label class="recuperar-field">
-          <img class="field-icon-light" src="{% static 'AppStoreLink/images/bloqueado.png' %}" alt=""><img class="field-icon-dark" src="{% static 'AppStoreLink/images/bloqueado-dark.png' %}" alt="">
-          <input type="password" name="nova_senha" placeholder="Nova Senha" required>
-        </label>
-
-        <label class="recuperar-field">
-          <img class="field-icon-light" src="{% static 'AppStoreLink/images/bloqueado.png' %}" alt=""><img class="field-icon-dark" src="{% static 'AppStoreLink/images/bloqueado-dark.png' %}" alt="">
-          <input type="password" name="confirmar_senha" placeholder="Confirmar Nova Senha" required>
-        </label>
-
-        <button type="submit" class="recuperar-submit-btn">SALVAR</button>
+        <button type="submit" class="recuperar-submit-btn">ENVIAR LINK</button>
 
         <div class="recuperar-signup">
           Não tem uma conta ? <a href="{% url 'cadastro' %}">Cadastre-se</a>
