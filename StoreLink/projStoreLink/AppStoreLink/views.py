@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 from django.urls import reverse
 from AppStoreLink.tokens import token_recuperacao
 # ^ Recuperação de senha usando Tokens
-from django.db import transaction
+from django.db import transaction, connection
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.db.models import Q
@@ -70,6 +70,7 @@ def perfil_loja(request):
         cnpj = request.POST.get('cnpj')
         link = request.POST.get('link_loja')
         nome_categoria = request.POST.get('categoria', '').strip() # -> era nescessario que o codigo pegue esse valor para conseguir comparar mais a frente no codigo
+        nome_categoria = request.POST.get('categoria', '').strip()
         foto = request.FILES.get('foto_estabelecimento')
 
         try:
@@ -178,7 +179,7 @@ def perfil_consumidor(request):
         messages.error(request, 'Você precisa fazer login para acessar esta página.')
         return redirect('login')
 
-    usuario = get_object_or_404(Usuario, id_categoria=usuario_id)
+    usuario = get_object_or_404(Usuario, id_usuario=usuario_id)
     loja_fav = LojaFavoritas.objects.filter(id_usuario=usuario).select_related('id_loja')
 
     return render(
@@ -312,7 +313,7 @@ def login(request):
             return render(request, 'registration/login.html')
 
         if check_password(senha, usuario.senha):
-            request.session['usuario_id'] = usuario.id_categoria
+            request.session['usuario_id'] = usuario.id_usuario
             messages.success(request, f'Bem-vindo, {usuario.nome}!')
             return redirect('perfil-consumidor')
         else:
@@ -857,6 +858,9 @@ def loja_editar(request, id_loja):
     cnpj = request.POST.get('cnpj')
     link = request.POST.get('link_loja')
     nome_categoria = request.POST.get('categoria', '').strip() # -> era nescessario que o codigo pegue esse valor para conseguir comparar mais a frente no codigo
+    print('RECEBIDA:', repr(nome_categoria))
+    print('NO BANCO:', list(Categoria.objects.values_list('tipo_categoria', flat=True)))
+    
     foto = request.FILES.get('foto_estabelecimento')
     erro_foto = None
 
@@ -1024,7 +1028,7 @@ def favoritar_loja(request, id_loja):
         messages.error(request, 'Você precisa fazer login para favorizar uma loja.')
         return redirect('login')
 
-    usuario = get_object_or_404(Usuario, id_categoria=usuario_id) # -> procura o usuario registrado no banco e guarda o valor na variavel 'usuario'
+    usuario = get_object_or_404(Usuario, id_usuario=usuario_id) # -> procura o usuario registrado no banco e guarda o valor na variavel 'usuario'
     loja = get_object_or_404(Loja, id_loja=id_loja)
 
     favorita, criada = LojaFavoritas.objects.get_or_create( # -> verifica de o usuario ja favoritou ou não a loja

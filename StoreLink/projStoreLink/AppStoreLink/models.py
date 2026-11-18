@@ -96,7 +96,7 @@ class Categoria(models.Model):
 # 2. USUÁRIO E LOJA
 
 class Usuario(models.Model):
-    id_categoria = models.AutoField(primary_key=True)
+    id_usuario = models.AutoField(primary_key=True)
     nome = models.CharField(max_length=50)
     sobrenome = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField(max_length=100, unique=True)
