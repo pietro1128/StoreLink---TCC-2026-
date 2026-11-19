@@ -1145,7 +1145,7 @@ def avaliacao_criar(request, tipo, id_alvo):
     usuario = get_object_or_404(Usuario, pk=usuario_id) #???(pk): funciona mesmo com as chaves primárias customizadas (id_loja, id_produto...), então não depende do nome delas.
     alvo = get_object_or_404(modelo, pk=id_alvo)
 
-    comentario = request.POST.get('comentario', '').strip()
+    comentario = request.POST.get('comentario' or '(Sem comentário)').strip()
 
     try:
         nota = int(request.POST.get('nota', ''))
@@ -1171,7 +1171,7 @@ def avaliacao_criar(request, tipo, id_alvo):
     Avaliacao.objects.update_or_create(
         id_usuario=usuario,
         **{campo: alvo},
-        defaults={'nota': nota, 'comentario': comentario or None},
+        defaults={'nota': nota, 'comentario': comentario or '(Sem comentário)'},
     )
 
     messages.success(request, 'Avaliação salva com sucesso!')
@@ -1211,10 +1211,6 @@ def InformacoesLoja(request, id_loja):
         id_loja=loja
     ).select_related(
         'id_usuario'
-    ).exclude(
-        comentario__isnull=True
-    ).exclude(
-        comentario=''
     ).order_by(
         '-id'
     )
