@@ -101,51 +101,51 @@ def test_ct011_resposta_inesperada_vira_servico_indisponivel(viacep, resposta):
     with pytest.raises(ServicoCepIndisponivel):
         consultar_cep("01001000")
 
-# --------------------------- validar_foto (CT-013 / CT-052) ----------------- #
+# --------------------------- validar_foto (CT-013 / CT-051) ----------------- #
 @pytest.mark.parametrize("nome, formato", [
     ("foto.png", "PNG"), ("foto.jpg", "JPEG"), ("foto.jpeg", "JPEG"), ("foto.webp", "WEBP"),
     ("FOTO.PNG", "PNG"),  # extensão em maiúsculas também vale
 ])
-def test_ct052_foto_valida_e_aceita(nome, formato):
+def test_ct051_foto_valida_e_aceita(nome, formato):
     validar_foto(gerar_imagem(nome, formato))  # não pode levantar erro
 
 
-def test_ct052_foto_acima_de_2mb_e_recusada():
+def test_ct051_foto_acima_de_2mb_e_recusada():
     arquivo = SimpleUploadedFile("grande.png", b"x" * (FOTO_TAMANHO_MAXIMO + 1))
     with pytest.raises(ValidationError, match="2 MB"):
         validar_foto(arquivo)
 
 
 @pytest.mark.parametrize("nome", ["documento.pdf", "foto.gif", "foto.bmp", "foto"])
-def test_ct052_extensao_nao_permitida_e_recusada(nome):
+def test_ct051_extensao_nao_permitida_e_recusada(nome):
     with pytest.raises(ValidationError, match="Formato não permitido"):
         validar_foto(SimpleUploadedFile(nome, b"qualquer coisa"))
 
 
-def test_ct052_texto_renomeado_para_jpg_e_recusado():
+def test_ct051_texto_renomeado_para_jpg_e_recusado():
     """O conteúdo é conferido de verdade: um .txt renomeado para .jpg não passa."""
     with pytest.raises(ValidationError, match="não é uma imagem válida"):
         validar_foto(SimpleUploadedFile("falsa.jpg", b"isto e so texto"))
 
 
-def test_ct052_formato_real_diferente_da_extensao_e_recusado():
+def test_ct051_formato_real_diferente_da_extensao_e_recusado():
     """GIF verdadeiro com extensão .png: extensão ok, mas o formato real não é permitido."""
     with pytest.raises(ValidationError, match="Formato não permitido"):
         validar_foto(gerar_imagem("gif_disfarcado.png", "GIF"))
 
 
-def test_ct052_imagem_com_lado_maior_que_4000px_e_recusada():
+def test_ct051_imagem_com_lado_maior_que_4000px_e_recusada():
     with pytest.raises(ValidationError, match="grande demais"):
         validar_foto(gerar_imagem("larga.png", "PNG", (FOTO_LADO_MAXIMO + 1, 10)))
 
 
-def test_ct052_ponteiro_do_arquivo_volta_ao_inicio_para_poder_salvar():
+def test_ct051_ponteiro_do_arquivo_volta_ao_inicio_para_poder_salvar():
     arquivo = gerar_imagem()
     validar_foto(arquivo)
     assert arquivo.tell() == 0
 
 
-def test_ct052_nome_do_arquivo_salvo_e_aleatorio_e_mantem_a_extensao():
+def test_ct051_nome_do_arquivo_salvo_e_aleatorio_e_mantem_a_extensao():
     nome1 = caminho_foto_usuario(None, "Minha Foto.PNG")
     nome2 = caminho_foto_usuario(None, "Minha Foto.PNG")
     assert nome1.startswith("usuarios/") and nome1.endswith(".png")
@@ -202,19 +202,19 @@ def test_ct019_acumula_todos_os_erros_de_uma_vez():
     erros, _ = _validar_nome_preco("", "abc")
     assert len(erros) == 2
     
-# ------------------- _eh_dono (CT-063: a verificação de dono) -------------------- #
+# ------------------- _eh_dono (CT-062: a verificação de dono) -------------------- #
 def _requisicao(usuario_id=None):
     sessao = {} if usuario_id is None else {"usuario_id": usuario_id}
     return SimpleNamespace(session=sessao)
 
-def test_ct063_eh_dono_verdadeiro_quando_o_usuario_logado_e_o_dono_da_loja():
+def test_ct062_eh_dono_verdadeiro_quando_o_usuario_logado_e_o_dono_da_loja():
     assert _eh_dono(_requisicao(7), SimpleNamespace(id_dono_id=7)) is True
 
-def test_ct063_eh_dono_falso_quando_o_usuario_logado_e_outra_pessoa():
+def test_ct062_eh_dono_falso_quando_o_usuario_logado_e_outra_pessoa():
     assert _eh_dono(_requisicao(8), SimpleNamespace(id_dono_id=7)) is False
 
-def test_ct063_eh_dono_falso_para_visitante_sem_login():
+def test_ct062_eh_dono_falso_para_visitante_sem_login():
     assert _eh_dono(_requisicao(None), SimpleNamespace(id_dono_id=7)) is False
 
-def test_ct063_eh_dono_falso_quando_a_loja_nao_tem_dono_cadastrado():
+def test_ct062_eh_dono_falso_quando_a_loja_nao_tem_dono_cadastrado():
     assert _eh_dono(_requisicao(7), SimpleNamespace(id_dono_id=None)) is False
