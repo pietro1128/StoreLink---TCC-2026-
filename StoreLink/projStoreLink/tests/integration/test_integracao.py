@@ -1,11 +1,15 @@
 import re
 from decimal import Decimal
+from urllib.parse import urlparse
 import pytest
 import requests
 from playwright.sync_api import expect
 from django.contrib.auth.hashers import check_password
 from django.contrib.staticfiles import finders
-from django.urls import NoReverseMatch, reverse
+from django.test import Client
+from django.urls import NoReverseMatch, resolve, reverse
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 from AppStoreLink.models import Avaliacao, Endereco, Loja, LojaFavoritas, Produto, Servico, Usuario
 from tests.conftest import CATEGORIAS, RespostaFalsa, SENHA_VALIDA, mensagens
 
@@ -74,7 +78,7 @@ def test_ct053_login_credenciais_validas_autentica_e_vai_para_o_perfil(client, u
 
     assert resposta.status_code == 302
     assert resposta.url == reverse("perfil-consumidor")
-    assert client.session["usuario_id"] == usuario.id_categoria
+    assert client.session["usuario_id"] == usuario.pk
 
 
 @pytest.mark.django_db
@@ -151,55 +155,157 @@ def test_ct052_logout_so_aceita_post(client_logado):
 
 
 
-# CT-025 a CT-030 (Recuperar senha)
+# CT-025 a CT-030 (Recuperar senha: e-mail -> link enviado por e-mail -> nova senha)
 URL = "recuperar-senha"
+NOVA_SENHA = "NovaSenha456"
+
+def trecho_do_campo(html, campo):
+    """Devolve o pedaço do HTML em volta de name="campo" (onde fica o atributo required)."""
+    pos = html.index(f'name="{campo}"')
+    return html[pos - 80: pos + 80]
+
+@pytest.fixture
+def link_de_redefinicao(client, usuario, mailoutbox):
+    """Passo 1 feito: pede o link e devolve o caminho (/redefinir-senha/...) lido do e-mail enviado."""
+    client.post(reverse(URL), {"email": usuario.email})
+    link = re.search(r"https?://\S+", mailoutbox[-1].body).group(0)
+    return urlparse(link).path
+
+
+# ------------------------------- CT-025 ------------------------------------ #
+@pytest.mark.django_db
+def test_ct025_pedir_o_link_envia_um_email_ao_usuario_cadastrado(client, usuario, mailoutbox):
+    resposta = client.post(reverse(URL), {"email": usuario.email})
+
+    assert resposta.status_code == 302 and resposta.url == reverse("login")
+    assert any("enviamos um link" in m for m in mensagens(resposta))
+    assert len(mailoutbox) == 1
+    assert mailoutbox[0].to == [usuario.email]
+    assert "Redefinição de senha" in mailoutbox[0].subject
+    link = re.search(r"https?://\S+", mailoutbox[0].body).group(0)
+    assert resolve(urlparse(link).path).url_name == "redefinir-senha"   # o link aponta para a tela de nova senha
 
 @pytest.mark.django_db
-def test_ct025_recuperar_senha_com_dados_validos_troca_a_senha(client, usuario):
-    resposta = client.post(reverse(URL), {
-        "email": usuario.email, "nova_senha": "NovaSenha456", "confirmar_senha": "NovaSenha456",
-    })
+def test_ct025_link_do_email_abre_a_tela_de_nova_senha(client, link_de_redefinicao):
+    resposta = client.get(link_de_redefinicao)
+
+    html = resposta.content.decode()
+    assert resposta.status_code == 200
+    assert 'name="nova_senha"' in html and 'name="confirmar_senha"' in html
+
+@pytest.mark.django_db
+def test_ct025_redefinir_senha_com_dados_validos_troca_a_senha(client, usuario, link_de_redefinicao):
+    resposta = client.post(link_de_redefinicao, {"nova_senha": NOVA_SENHA, "confirmar_senha": NOVA_SENHA})
 
     assert resposta.status_code == 302 and resposta.url == reverse("login")
     assert any("Senha alterada com sucesso" in m for m in mensagens(resposta))
     usuario.refresh_from_db()
-    assert check_password("NovaSenha456", usuario.senha)
+    assert check_password(NOVA_SENHA, usuario.senha)
     assert not check_password(SENHA_VALIDA, usuario.senha)
 
     # "A nova senha deve permitir o acesso à conta"
-    login = client.post(reverse("login"), {"email": usuario.email, "senha": "NovaSenha456"})
-    assert login.status_code == 302 and client.session["usuario_id"] == usuario.id_categoria
+    login = client.post(reverse("login"), {"email": usuario.email, "senha": NOVA_SENHA})
+    assert login.status_code == 302 and client.session["usuario_id"] == usuario.pk
 
 @pytest.mark.django_db
-def test_ct026_email_nao_cadastrado_nao_altera_nada(client, usuario):
-    senha_antes = usuario.senha
-    resposta = client.post(reverse(URL), {
-        "email": "naoexiste@gmail.com", "nova_senha": "NovaSenha456", "confirmar_senha": "NovaSenha456",
-    })
+def test_ct025_o_link_so_vale_uma_vez(client, usuario, link_de_redefinicao):
+    client.post(link_de_redefinicao, {"nova_senha": NOVA_SENHA, "confirmar_senha": NOVA_SENHA})
+    senha_depois = Usuario.objects.get(pk=usuario.pk).senha
 
-    assert resposta.status_code == 200
-    assert any("Não encontramos um usuario" in m for m in mensagens(resposta))
+    # a senha mudou, então o token do mesmo link deixa de valer
+    segunda = client.post(link_de_redefinicao, {"nova_senha": "OutraSenha789", "confirmar_senha": "OutraSenha789"})
+
+    assert segunda.status_code == 302 and segunda.url == reverse(URL)
+    assert any("inválido ou expirou" in m for m in mensagens(segunda))
+    assert Usuario.objects.get(pk=usuario.pk).senha == senha_depois
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("uid, token", [
+    ("uid-que-nao-e-base64-@@", "abc-123"),                        # uid adulterado
+    (urlsafe_base64_encode(force_bytes(999999)), "abc-123"),       # usuário que não existe
+])
+def test_ct025_link_adulterado_ou_de_usuario_inexistente_e_recusado(client, usuario, uid, token):
+    senha_antes = usuario.senha
+    link = reverse("redefinir-senha", kwargs={"uidb64": uid, "token": token})
+
+    resposta = client.post(link, {"nova_senha": NOVA_SENHA, "confirmar_senha": NOVA_SENHA})
+
+    assert resposta.status_code == 302 and resposta.url == reverse(URL)
+    assert any("inválido ou expirou" in m for m in mensagens(resposta))
     usuario.refresh_from_db()
     assert usuario.senha == senha_antes
 
 @pytest.mark.django_db
-def test_ct027_senhas_diferentes_nao_alteram_a_senha(client, usuario):
+def test_ct025_token_errado_para_usuario_existente_e_recusado(client, usuario):
+    uid = urlsafe_base64_encode(force_bytes(usuario.pk))
+    link = reverse("redefinir-senha", kwargs={"uidb64": uid, "token": "abc-123"})
+
+    resposta = client.get(link)
+
+    assert resposta.status_code == 302 and resposta.url == reverse(URL)
+
+
+# ------------------------------- CT-026 ------------------------------------ #
+@pytest.mark.django_db
+def test_ct026_email_nao_cadastrado_nao_envia_link_nem_altera_nada(client, usuario, mailoutbox):
     senha_antes = usuario.senha
-    resposta = client.post(reverse(URL), {
-        "email": usuario.email, "nova_senha": "NovaSenha456", "confirmar_senha": "OutraSenha789",
-    })
+
+    resposta = client.post(reverse(URL), {"email": "naoexiste@gmail.com"})
+
+    assert resposta.status_code == 302 and resposta.url == reverse("login")
+    assert mailoutbox == []                       # nenhum e-mail com link foi enviado
+    usuario.refresh_from_db()
+    assert usuario.senha == senha_antes
+
+@pytest.mark.django_db
+def test_ct026_resposta_e_igual_para_email_cadastrado_e_nao_cadastrado(usuario):
+    """A view responde igual nos dois casos de propósito: não revela quem tem conta no site."""
+    existente = Client().post(reverse(URL), {"email": usuario.email})          # um navegador para cada pedido,
+    inexistente = Client().post(reverse(URL), {"email": "naoexiste@gmail.com"})  # senão as mensagens se acumulam
+
+    assert (existente.status_code, existente.url) == (inexistente.status_code, inexistente.url)
+    assert mensagens(existente) == mensagens(inexistente)
+
+
+# ------------------------------- CT-027 ------------------------------------ #
+@pytest.mark.django_db
+def test_ct027_senhas_diferentes_nao_alteram_a_senha(client, usuario, link_de_redefinicao):
+    senha_antes = usuario.senha
+
+    resposta = client.post(link_de_redefinicao, {"nova_senha": NOVA_SENHA, "confirmar_senha": "OutraSenha789"})
 
     assert resposta.status_code == 200
     assert any("não estão iguais" in m for m in mensagens(resposta))
     usuario.refresh_from_db()
     assert usuario.senha == senha_antes
+    assert client.get(link_de_redefinicao).status_code == 200       # o link continua valendo para tentar de novo
+
+
+# ------------------------------- CT-028 ------------------------------------ #
+@pytest.mark.django_db
+def test_ct028_sem_email_nao_envia_link(client, usuario, mailoutbox):
+    senha_antes = usuario.senha
+
+    resposta = client.post(reverse(URL), {"email": ""})
+
+    assert resposta.status_code == 302
+    assert mailoutbox == []
+    usuario.refresh_from_db()
+    assert usuario.senha == senha_antes
 
 @pytest.mark.django_db
-def test_ct028_sem_email_nao_altera_senha_de_ninguem(client, usuario):
+def test_ct028_html_marca_o_email_como_obrigatorio(client):
+    html = client.get(reverse(URL)).content.decode()
+
+    assert "required" in trecho_do_campo(html, "email")      # é o navegador que pede o preenchimento
+
+
+# ------------------------------- CT-029 ------------------------------------ #
+@pytest.mark.django_db
+def test_ct029_sem_nova_senha_nao_altera_a_senha(client, usuario, link_de_redefinicao):
     senha_antes = usuario.senha
-    resposta = client.post(reverse(URL), {
-        "email": "", "nova_senha": "NovaSenha456", "confirmar_senha": "NovaSenha456",
-    })
+
+    resposta = client.post(link_de_redefinicao, {"nova_senha": "", "confirmar_senha": NOVA_SENHA})
 
     assert resposta.status_code == 200
     assert mensagens(resposta)
@@ -207,43 +313,45 @@ def test_ct028_sem_email_nao_altera_senha_de_ninguem(client, usuario):
     assert usuario.senha == senha_antes
 
 @pytest.mark.django_db
-def test_ct029_sem_nova_senha_nao_altera_a_senha(client, usuario):
+def test_ct029_ct030_html_marca_os_dois_campos_de_senha_como_obrigatorios(client, link_de_redefinicao):
+    html = client.get(link_de_redefinicao).content.decode()
+
+    for campo in ("nova_senha", "confirmar_senha"):
+        assert "required" in trecho_do_campo(html, campo)
+
+@pytest.mark.django_db
+def test_extra_redefinir_senha_nao_aceita_senha_vazia(client, usuario, link_de_redefinicao):
     senha_antes = usuario.senha
-    resposta = client.post(reverse(URL), {
-        "email": usuario.email, "nova_senha": "", "confirmar_senha": "NovaSenha456",
-    })
+
+    resposta = client.post(link_de_redefinicao, {"nova_senha": "", "confirmar_senha": ""})
 
     assert resposta.status_code == 200
+    assert any("A senha precisa conter" in m for m in mensagens(resposta))
     usuario.refresh_from_db()
     assert usuario.senha == senha_antes
 
 @pytest.mark.django_db
-def test_ct030_sem_confirmar_a_nova_senha_nao_altera_a_senha(client, usuario):
+@pytest.mark.parametrize("senha", ["Abc123", "senha1234", "SENHA1234", "SenhaForte"])   # curta, sem maiúscula, sem minúscula, sem número
+def test_extra_nova_senha_fora_da_regra_do_cadastro_e_recusada(client, usuario, link_de_redefinicao, senha):
     senha_antes = usuario.senha
-    resposta = client.post(reverse(URL), {
-        "email": usuario.email, "nova_senha": "NovaSenha456", "confirmar_senha": "",
-    })
+
+    resposta = client.post(link_de_redefinicao, {"nova_senha": senha, "confirmar_senha": senha})
 
     assert resposta.status_code == 200
+    assert any("A senha precisa conter" in m for m in mensagens(resposta))
     usuario.refresh_from_db()
     assert usuario.senha == senha_antes
 
-@pytest.mark.django_db
-def test_ct029_ct030_html_marca_os_tres_campos_como_obrigatorios(client):
-    html = client.get(reverse(URL)).content.decode()
-    for campo in ("email", "nova_senha", "confirmar_senha"):
-        trecho = html[html.index(f'name="{campo}"') - 80: html.index(f'name="{campo}"') + 80]
-        assert "required" in trecho
 
+# ------------------------------- CT-030 ------------------------------------ #
 @pytest.mark.django_db
-@pytest.mark.xfail(strict=True, reason=(
-    "DEFEITO ENCONTRADO: a view recuperar_senha não valida senha vazia/fraca. "
-    "Com e-mail válido e os dois campos vazios, ela grava uma senha vazia."
-))
-
-def test_extra_recuperar_senha_nao_aceita_senha_vazia(client, usuario):
+def test_ct030_sem_confirmar_a_nova_senha_nao_altera_a_senha(client, usuario, link_de_redefinicao):
     senha_antes = usuario.senha
-    client.post(reverse(URL), {"email": usuario.email, "nova_senha": "", "confirmar_senha": ""})
+
+    resposta = client.post(link_de_redefinicao, {"nova_senha": NOVA_SENHA, "confirmar_senha": ""})
+
+    assert resposta.status_code == 200
+    assert mensagens(resposta)
     usuario.refresh_from_db()
     assert usuario.senha == senha_antes
 
@@ -407,7 +515,7 @@ def test_ct044_um_unico_comentario_por_usuario_em_cada_item(request, client_loga
 def test_ct044_usuarios_diferentes_podem_comentar_o_mesmo_item(client, usuario, outro_usuario, loja):
     for u in (usuario, outro_usuario):
         sessao = client.session
-        sessao["usuario_id"] = u.id_categoria
+        sessao["usuario_id"] = u.pk
         sessao.save()
         avaliar_loja(client, loja, 5, f"comentário de {u.nome}")
     assert Avaliacao.objects.filter(id_loja=loja).count() == 2
@@ -1183,7 +1291,7 @@ def loja_alheia(loja, outro_usuario):
 # ------------------------------- CT-058 ------------------------------------ #
 @pytest.mark.django_db
 def test_ct058_dono_edita_a_propria_loja(client_logado, usuario, loja_do_dono, viacep):
-    assert loja_do_dono.id_dono_id == usuario.id_categoria          # pré-condição: é dono de verdade
+    assert loja_do_dono.id_dono_id == usuario.pk          # pré-condição: é dono de verdade
 
     resposta = client_logado.post(reverse("loja-editar", args=[loja_do_dono.id_loja]), DADOS_EDICAO)
 
@@ -1195,7 +1303,7 @@ def test_ct058_dono_edita_a_propria_loja(client_logado, usuario, loja_do_dono, v
 
 @pytest.mark.django_db
 def test_ct058_dono_exclui_a_propria_loja(client_logado, usuario, loja_do_dono):
-    assert loja_do_dono.id_dono_id == usuario.id_categoria
+    assert loja_do_dono.id_dono_id == usuario.pk
 
     resposta = client_logado.post(reverse("loja-excluir", args=[loja_do_dono.id_loja]))
 
@@ -1206,7 +1314,7 @@ def test_ct058_dono_exclui_a_propria_loja(client_logado, usuario, loja_do_dono):
 # ------------------------------- CT-059 ------------------------------------ #
 @pytest.mark.django_db
 def test_ct059_dono_edita_o_proprio_produto(client_logado, usuario, loja_do_dono, produto):
-    assert produto.id_loja.id_dono_id == usuario.id_categoria
+    assert produto.id_loja.id_dono_id == usuario.pk
 
     resposta = client_logado.post(reverse("produto-editar", args=[produto.id_produto]), {
         "nome_produto": "Pão de Queijo", "preco_produto": "3,75", "descricao_produto": "Mineiro",
@@ -1228,7 +1336,7 @@ def test_ct059_dono_exclui_o_proprio_produto(client_logado, usuario, loja_do_don
 # ------------------------------- CT-060 ------------------------------------ #
 @pytest.mark.django_db
 def test_ct060_dono_edita_o_proprio_servico(client_logado, usuario, loja_do_dono, servico):
-    assert servico.id_loja.id_dono_id == usuario.id_categoria
+    assert servico.id_loja.id_dono_id == usuario.pk
 
     resposta = client_logado.post(reverse("servico-editar", args=[servico.id_servico]), {
         "nome_servico": "Entrega Super Rápida", "preco": "14,90", "descricao": "Em 15 minutos",

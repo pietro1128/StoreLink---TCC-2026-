@@ -77,7 +77,7 @@ def outro_usuario(db):
 def client_logado(client, usuario):
     """Client do Django já 'logado'. O projeto usa login manual: guarda usuario_id na sessão."""
     sessao = client.session
-    sessao["usuario_id"] = usuario.id_categoria  # a PK de Usuario se chama id_categoria
+    sessao["usuario_id"] = usuario.pk  # .pk serve qualquer que seja o nome da chave primária de Usuario
     sessao.save()
     return client
 
