@@ -35,8 +35,8 @@ def test_ct005_cadastro_valido_cria_usuario_e_redireciona_para_login(client):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("campo, valor, trecho_da_mensagem", [
-    ("email", "ana@hotmail.com", "Gmail válido"),
-    ("email", "", "Gmail válido"),
+    ("email", "ana@exemplo.com", "serviço de email"),     # domínio fora da lista aceita
+    ("email", "", "serviço de email"),
     ("senha", "curta1A", "mínimo 8 caracteres"),
     ("senha", "semnumeroAAA", "mínimo 8 caracteres"),
     ("senha", "SEMMINUSCULA1", "mínimo 8 caracteres"),
@@ -50,6 +50,14 @@ def test_ct005_cadastro_com_dados_invalidos_nao_cria_usuario(client, campo, valo
     assert resposta.status_code == 200                   # volta para o formulário (não redireciona)
     assert Usuario.objects.count() == 0
     assert any(trecho_da_mensagem in m for m in mensagens(resposta))
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("dominio", ["gmail.com", "hotmail.com", "outlook.com", "yahoo.com", "ymail.com"])
+def test_ct005_cadastro_aceita_os_provedores_de_email_permitidos(client, dominio):
+    resposta = client.post(reverse("cadastro"), {**DADOS_CADASTRO, "email": f"ana@{dominio}"})
+
+    assert resposta.status_code == 302 and resposta.url == reverse("login")
+    assert Usuario.objects.filter(email=f"ana@{dominio}").exists()
 
 
 @pytest.mark.django_db
@@ -481,9 +489,11 @@ def test_ct043_loja_sem_comentarios_mostra_aviso(client, loja):
     assert "Nenhum comentário cadastrado" in client.get(reverse("InformacoesLoja", args=[loja.id_loja])).content.decode()
 
 @pytest.mark.django_db
-def test_ct043_nota_sem_texto_nao_aparece_na_lista_de_comentarios(client, usuario, loja):
-    Avaliacao.objects.create(nota=5, comentario=None, id_usuario=usuario, id_loja=loja)
-    assert list(client.get(reverse("InformacoesLoja", args=[loja.id_loja])).context["avaliacoes"]) == []
+def test_ct043_nota_sem_texto_aparece_com_o_texto_padrao(client_logado, loja):
+    avaliar_loja(client_logado, loja, 5, "")
+
+    avaliacoes = client_logado.get(reverse("InformacoesLoja", args=[loja.id_loja])).context["avaliacoes"]
+    assert [(a.nota, a.comentario) for a in avaliacoes] == [(5, "(Sem comentário)")]
 
 @pytest.mark.django_db
 @pytest.mark.xfail(strict=True, reason=(
@@ -707,8 +717,9 @@ def test_ct049_perfil_lista_apenas_as_lojas_favoritadas_pelo_usuario(client_loga
 
 @pytest.mark.django_db
 def test_ct049_sem_favoritas_mostra_mensagem_de_lista_vazia(client_logado):
-    html = client_logado.get(reverse("perfil-consumidor")).content.decode()
-    assert "Nenhuma loja favoritada" in html
+    resposta = client_logado.get(reverse("perfil-consumidor"))
+    assert list(resposta.context["loja_fav"]) == []                 # nenhuma loja favorita na lista
+    assert "Procurar lojas" in resposta.content.decode()            # a tela oferece o botão para buscar lojas
 
 # ------------------------------- CT-051 ------------------------------------ #
 @pytest.mark.django_db
@@ -780,7 +791,7 @@ def test_ct007_informacoes_cadastradas_aparecem_no_perfil(client_logado, categor
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("campo, valor, trecho", [
-    ("email_loja", "mercado@hotmail.com", "Gmail válido"),
+    ("email_loja", "mercado@exemplo.com", "serviço de email"),
     ("cnpj", "123", "14 números"),
     ("telefone_loja", "123", "11 números"),
     ("categoria", "Inexistente", "categoria válida"),
@@ -906,11 +917,6 @@ def test_ct012_categoria_escolhida_permanece_no_perfil(client_logado, categorias
 
 # ------------------------------- CT-013 ------------------------------------ #
 @pytest.mark.django_db
-@pytest.mark.xfail(strict=True, reason=(
-    "FUNCIONALIDADE NÃO IMPLEMENTADA: a tela tem o campo de foto da loja, mas a view perfil_loja não "
-    "lê o arquivo enviado e Loja.foto_estabelecimento é só um texto (CharField), sem validação. "
-    "As regras de foto (JPG/PNG/WEBP, 2 MB) só existem em Usuario.foto — veja CT-051."
-))
 def test_ct013_foto_da_loja_enviada_fica_associada_a_loja(client_logado, categorias, viacep, imagem):
     client_logado.post(reverse("perfil-loja"), {**DADOS_LOJA, "foto_estabelecimento": imagem("loja.png")})
     assert Loja.objects.get().foto_estabelecimento
@@ -926,7 +932,7 @@ def test_ct016_excluir_loja_apaga_loja_endereco_e_dados_ligados(
 
     resposta = client_logado.post(reverse("loja-excluir", args=[loja.id_loja]))
 
-    assert resposta.status_code == 302 and resposta.url == reverse("index")
+    assert resposta.status_code == 302 and resposta.url == reverse("perfil-loja")
     assert any("foi excluída" in m for m in mensagens(resposta))
     assert not Loja.objects.exists()
     assert not Endereco.objects.filter(pk=id_endereco).exists()    # endereço órfão removido
@@ -946,27 +952,14 @@ def test_ct016_excluir_so_aceita_post(client_logado, loja):
     assert Loja.objects.count() == 1
 
 @pytest.mark.django_db
-@pytest.mark.xfail(strict=True, reason=(
-    "DEFEITO ENCONTRADO: loja_excluir não confere se há alguém logado (nem se é o dono). "
-    "Um visitante sem login consegue apagar qualquer loja só enviando o POST. "
-    "O próprio código tem um TODO sobre isso."
-))
 def test_ct016_visitante_sem_login_nao_pode_excluir_loja(client, loja):
     client.post(reverse("loja-excluir", args=[loja.id_loja]))
     assert Loja.objects.filter(pk=loja.pk).exists()
 
 # ------------------------------- CT-018 ------------------------------------ #
-SEM_VALIDACAO_NA_VIEW = pytest.mark.xfail(strict=True, reason=(
-    "DEFEITO ENCONTRADO: a view perfil_loja não valida este campo. Com ele vazio a loja é "
-    "criada mesmo assim (o HTML também não tem o atributo `required`)."
-))
-
 @pytest.mark.django_db
 @pytest.mark.parametrize("campo_vazio", [
-    "cep", "email_loja", "telefone_loja", "cnpj", "categoria",
-    pytest.param("nome_loja", marks=SEM_VALIDACAO_NA_VIEW),
-    pytest.param("rua", marks=SEM_VALIDACAO_NA_VIEW),
-    pytest.param("numero", marks=SEM_VALIDACAO_NA_VIEW),
+    "cep", "email_loja", "telefone_loja", "cnpj", "categoria", "nome_loja", "rua", "numero",
 ])
 def test_ct018_loja_com_campo_obrigatorio_vazio_nao_e_salva(client_logado, categorias, viacep, campo_vazio):
     resposta = client_logado.post(reverse("perfil-loja"), {**DADOS_LOJA, campo_vazio: ""})
@@ -989,8 +982,8 @@ def test_ct004_as_10_categorias_previstas_existem_no_teste():
 @pytest.mark.parametrize("nome, rota", ROTAS_CATEGORIA.items())
 def test_ct004_barra_lateral_exibe_cada_categoria_com_o_link_certo(client, nome, rota):
     html = client.get(reverse("index")).content.decode()
-    padrao = rf'<a class="cat-btn [^"]*"\s+href="{re.escape(reverse(rota))}">{nome}</a>'
-    assert re.search(padrao, html), f"categoria {nome} não aparece na barra lateral"
+    padrao = rf'<a[^>]*class="cat-btn [^"]*"[^>]*href="{re.escape(reverse(rota))}"[^>]*>(?:(?!</a>).)*{nome}'
+    assert re.search(padrao, html, re.S), f"categoria {nome} não aparece na barra lateral"
 
 @pytest.mark.django_db
 def test_ct004_barra_lateral_tem_exatamente_10_categorias(client):
@@ -1010,7 +1003,8 @@ def test_ct004_pagina_da_categoria_lista_so_lojas_dela(client, loja, categorias,
 @pytest.mark.django_db
 def test_ct006_inicio_tem_botao_sua_loja_apontando_para_o_perfil_da_loja(client):
     html = client.get(reverse("index")).content.decode()
-    assert f'href="{reverse("perfil-loja")}">Sua loja</a>' in html
+    padrao = rf'href="{re.escape(reverse("perfil-loja"))}"[^>]*>(?:(?!</a>).)*Sua loja'
+    assert re.search(padrao, html, re.S | re.I)
 
 @pytest.mark.django_db
 def test_ct006_usuario_autenticado_ve_a_tela_de_gerenciamento_da_loja(client_logado):
@@ -1032,10 +1026,11 @@ def test_ct006_loja_ja_cadastrada_aparece_para_ser_gerenciada(client_logado, loj
     assert "Excluir loja" in html
 
 @pytest.mark.django_db
-def test_ct006_visitante_nao_autenticado_recebe_convite_para_login(client):
-    html = client.get(reverse("perfil-loja")).content.decode()
-    assert "Para criar sua loja você precisa fazer login" in html
-    assert 'id="formLoja"' not in html
+def test_ct006_visitante_nao_autenticado_e_enviado_para_o_login(client):
+    resposta = client.get(reverse("perfil-loja"))
+
+    assert resposta.status_code == 302 and resposta.url == reverse("login")
+    assert any("precisa fazer login" in m for m in mensagens(resposta))
 
 # ------------------------------- CT-045 ------------------------------------ #
 @pytest.mark.django_db
@@ -1059,11 +1054,6 @@ def test_ct046_tutorial_mostra_8_fotos_na_ordem_prevista(client):
     assert _imagens_do_tutorial(client) == [f"tutorial {n}.png" for n in range(1, 9)]
 
 @pytest.mark.django_db
-@pytest.mark.xfail(strict=False, reason=(
-    "No ZIP enviado só existem 'tutorial 1.png' e 'tutorial 2.png' na pasta static; "
-    "as fotos 3 a 8 são citadas no HTML mas os arquivos não estão lá. "
-    "Se elas existem no seu computador, este teste passa (XPASS)."
-))
 def test_ct046_todos_os_arquivos_de_foto_do_tutorial_existem(client):
     ausentes = [nome for nome in _imagens_do_tutorial(client)
                 if finders.find(f"AppStoreLink/images/{nome}") is None]
@@ -1123,10 +1113,6 @@ def test_ct019_sem_loja_cadastrada_nao_cadastra_produto(client_logado, categoria
     assert any("Cadastre uma loja" in m for m in mensagens(resposta))
 
 @pytest.mark.django_db
-@pytest.mark.xfail(strict=True, reason=(
-    "DEFEITO ENCONTRADO: produto_criar (e produto_editar) não conferem se há usuário logado — "
-    "diferente de produto_excluir, que confere. Um visitante consegue cadastrar produto."
-))
 def test_ct019_visitante_sem_login_nao_pode_cadastrar_produto(client, loja, categorias):
     client.post(reverse("produto-criar"), dados_produto(categorias))
     assert Produto.objects.count() == 0
@@ -1180,10 +1166,9 @@ def test_ct021_excluir_exige_login(client, produto):
     assert Produto.objects.filter(pk=produto.pk).exists()
 
 @pytest.mark.django_db
-def test_ct021_excluir_produto_que_nao_existe_mais_avisa_sem_quebrar(client_logado):
+def test_ct021_excluir_produto_que_nao_existe_mais_devolve_404(client_logado):
     resposta = client_logado.post(reverse("produto-excluir", args=[9999]), **REFERER_PRODUTOS)
-    assert resposta.status_code == 302
-    assert any("não existe mais" in m for m in mensagens(resposta))
+    assert resposta.status_code == 404
 
 DADOS_SERVICO = {"nome_servico": "Corte de Cabelo", "preco": "45,00", "descricao": "Corte masculino"}
 
@@ -1242,11 +1227,6 @@ def test_ct023_editar_servico_exige_login(client, servico):
     assert servico.nome_servico == "Entrega Express"
 
 @pytest.mark.django_db
-@pytest.mark.xfail(strict=True, raises=NoReverseMatch, reason=(
-    "DEFEITO ENCONTRADO: em servico_editar, quando a validação falha o código faz "
-    "redirect('InformacoesServico', id_loja=servico.id_loja) — passa o OBJETO Loja em vez de "
-    "servico.id_loja_id (o número). Resultado: NoReverseMatch (erro 500) em vez de mensagem de erro."
-))
 def test_ct023_edicao_invalida_mostra_erro_sem_quebrar(client_logado, servico):
     resposta = client_logado.post(reverse("servico-editar", args=[servico.id_servico]), {"nome_servico": "", "preco": "abc"})
     assert resposta.status_code == 302
@@ -1258,7 +1238,8 @@ def test_ct023_edicao_invalida_mostra_erro_sem_quebrar(client_logado, servico):
 def test_ct024_excluir_servico_remove_da_lista(client_logado, servico):
     resposta = client_logado.post(reverse("servico-excluir", args=[servico.id_servico]))
 
-    assert resposta.status_code == 302 and resposta.url == reverse("servicos-loja")
+    assert resposta.status_code == 302
+    assert resposta.url == reverse("InformacoesServico", args=[servico.id_loja_id])
     assert any('"Entrega Express" foi excluído' in m for m in mensagens(resposta))
     assert not Servico.objects.exists()
     assert servico not in client_logado.get(reverse("servicos-loja")).context["servicos"]
@@ -1307,7 +1288,7 @@ def test_ct058_dono_exclui_a_propria_loja(client_logado, usuario, loja_do_dono):
 
     resposta = client_logado.post(reverse("loja-excluir", args=[loja_do_dono.id_loja]))
 
-    assert resposta.status_code == 302 and resposta.url == reverse("index")
+    assert resposta.status_code == 302 and resposta.url == reverse("perfil-loja")
     assert any("foi excluída" in m for m in mensagens(resposta))
     assert not Loja.objects.exists()
 
@@ -1351,7 +1332,8 @@ def test_ct060_dono_edita_o_proprio_servico(client_logado, usuario, loja_do_dono
 def test_ct060_dono_exclui_o_proprio_servico(client_logado, usuario, loja_do_dono, servico):
     resposta = client_logado.post(reverse("servico-excluir", args=[servico.id_servico]))
 
-    assert resposta.status_code == 302 and resposta.url == reverse("servicos-loja")
+    assert resposta.status_code == 302
+    assert resposta.url == reverse("InformacoesServico", args=[servico.id_loja_id])
     assert any('"Entrega Express" foi excluído' in m for m in mensagens(resposta))
     assert not Servico.objects.exists()
 
@@ -1369,12 +1351,6 @@ def test_ct061_dono_edita_o_proprio_comentario(client_logado, usuario, loja):
     assert (editado.nota, editado.comentario) == (5, "Mudei de ideia: excelente!")
 
 @pytest.mark.django_db
-@pytest.mark.xfail(strict=True, raises=NoReverseMatch, reason=(
-    "FUNCIONALIDADE NÃO IMPLEMENTADA: o botão 'Excluir' do comentário só chama confirmarExclusao() no "
-    "JavaScript (que nem existe) e não há rota/view para excluir avaliação. Quando criar a rota "
-    "(sugestão: path('avaliacao/<int:id_avaliacao>/excluir/', views.avaliacao_excluir, name='avaliacao-excluir')) "
-    "este teste passa a valer."
-))
 def test_ct061_dono_exclui_o_proprio_comentario(client_logado, usuario, loja):
     av = Avaliacao.objects.create(nota=4, comentario="Bom", id_usuario=usuario, id_loja=loja)
 
@@ -1469,10 +1445,6 @@ def test_ct065_get_object_or_404_sessao_de_usuario_inexistente_devolve_404(clien
     assert not Avaliacao.objects.exists()
 
 @pytest.mark.django_db
-@pytest.mark.xfail(strict=True, raises=NoReverseMatch, reason=(
-    "FUNCIONALIDADE NÃO IMPLEMENTADA: não existe rota/view para excluir comentário "
-    "(veja o CT-061). Quando existir, quem NÃO é o autor deve receber 404 e o comentário continua salvo."
-))
 def test_ct065_nao_dono_nao_consegue_excluir_comentario_de_outro_e_recebe_404(client_logado, outro_usuario, loja):
     do_joao = Avaliacao.objects.create(nota=2, comentario="Comentário do João", id_usuario=outro_usuario, id_loja=loja)
 
@@ -1645,7 +1617,8 @@ def test_ct039_sem_estrelas_o_navegador_nao_deixa_enviar(page, live_server, usua
 # ------------------------------- CT-001 ------------------------------------ #
 @pytest.mark.django_db(transaction=True)
 @pytest.mark.parametrize("origem", ["/suporte/", "/tutorial/", "/perfil-loja/"])
-def test_ct001_botao_inicio_leva_para_a_pagina_inicial(ir, page, live_server, origem):
+def test_ct001_botao_inicio_leva_para_a_pagina_inicial(ir, page, live_server, usuario, entrar, origem):
+    entrar(usuario)                                  # com login, as três telas abrem normalmente
     ir(origem)
 
     page.locator(".topbar").get_by_role("link", name="Início", exact=True).click()   # botão da barra superior
