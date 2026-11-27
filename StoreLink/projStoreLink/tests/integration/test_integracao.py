@@ -719,7 +719,7 @@ def test_ct049_perfil_lista_apenas_as_lojas_favoritadas_pelo_usuario(client_loga
 def test_ct049_sem_favoritas_mostra_mensagem_de_lista_vazia(client_logado):
     resposta = client_logado.get(reverse("perfil-consumidor"))
     assert list(resposta.context["loja_fav"]) == []                 # nenhuma loja favorita na lista
-    assert "Procurar lojas" in resposta.content.decode()            # a tela oferece o botão para buscar lojas
+    assert "favorito-card" not in resposta.content.decode()         # e nenhum cartão de loja favorita aparece na tela
 
 # ------------------------------- CT-051 ------------------------------------ #
 @pytest.mark.django_db
@@ -1680,7 +1680,7 @@ def test_ct015_botao_servicos_abre_o_gerenciamento_de_servicos(ir, page, live_se
 def test_ct050_botao_adicionar_loja_favorita_leva_a_tela_inicial_com_a_busca(ir, page, live_server, usuario, entrar):
     entrar(usuario)                              # já cai no perfil do consumidor, sem favoritas
 
-    page.get_by_role("button", name="Procurar lojas").click()
+    page.get_by_role("button", name="Encontrar lojas").click()
 
     expect(page).to_have_url(live_server.url + "/")
     expect(page.locator('input[name="q"]')).to_be_visible()

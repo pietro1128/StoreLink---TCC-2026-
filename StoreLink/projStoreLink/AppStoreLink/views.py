@@ -193,7 +193,7 @@ def perfil_consumidor(request):
 def editar_consumidor(request):
     usuario_id = request.session.get('usuario_id') # -> busca o 'id' que o usuario esta usando
                                                    # -> ele precisa buscar o 'id' para que ele saiba exatamente qual é o usuario
-    usuario = get_object_or_404(Usuario, id_categoria=usuario_id) # -> busca um registro no banco, se não achar ele da 'erro 404'
+    usuario = get_object_or_404(Usuario, id_usuario=usuario_id) # -> busca um registro no banco, se não achar ele da 'erro 404'
 
     nome = request.POST.get('nome', '').strip()
     sobrenome = request.POST.get('sobrenome', '').strip() or None
